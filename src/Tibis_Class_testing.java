@@ -5,8 +5,7 @@ public class Tibis_Class_testing {
 		// TODO Auto-generated method stub
 		
 		//Comment by nathan
-		//natans Comment
-		//Nivs comment
+		
 		//Matans comment
 
 	}
