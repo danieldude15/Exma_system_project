@@ -4,7 +4,7 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-College Mini-project Built by an amazing team of 4: Daniel Tibi, Niv Mizrahi, Itzik Mizrachi and Nathan Kuthorskoy
+College Mini-project Built by an amazing team of 4: Daniel Tibi, Niv Mizrahi, Itzik Mizrachi and Nathan Khuthorskoy
 The project is about a college exam building system that manages questions and allows students take exams on a computer in realtime.
 * Version 0.0: No code in project currently
 
