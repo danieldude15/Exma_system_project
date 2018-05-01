@@ -5,58 +5,53 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Logic.*;
+
 public class MySQLConnection {
+	private static Connection conn;
 	
-	public static void main(String[] args) 
-	{
+	public MySQLConnection() {
+		if (!setConn()) {
+			System.out.println("SHIT!");
+		}
+	}
+	
+	public static ResultSet runGeneralQuary(String quary) {
 		try 
 		{
+			Statement stmt = getConn().createStatement();
+			return stmt.executeQuery(quary);
+		} catch (SQLException e) {e.printStackTrace();}
+		return null;
+	}
+	
+	public static boolean addExamQuary(Exam e) {
+		
+		
+		return false;
+	}
+
+	public static Connection getConn() {
+		return conn;
+	}
+
+	public boolean setConn() {
+		try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
         	System.out.println("Error connectig to driver");
         }
         
-        try 
-        {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","Braude");
-            //Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.3.68/test","root","Root");
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","Nathan0");
             System.out.println("SQL connection succeed");
-            //createTableCourses(conn);
-            printCourses(conn);
-     	} catch (SQLException ex) 
-     	    {/* handle any errors*/
+            return true;
+        } catch (SQLException ex) {/* handle any errors*/
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-            }
-   	}
-	
-	public static void printCourses(Connection con)
-	{
-		Statement stmt;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM courses;");
-	 		while(rs.next())
-	 		{
-				 // Print out the values
-				 System.out.println(rs.getString(1)+"  " +rs.getString(2));
-			} 
-			rs.close();
-			//stmt.executeUpdate("UPDATE course SET semestr=\"W08\" WHERE num=61309");
-		} catch (SQLException e) {e.printStackTrace();}
+ 	    }
+        return false;
 	}
 
-	
-	public static void createTableCourses(Connection con1){
-		Statement stmt;
-		try {
-			stmt = con1.createStatement();
-			stmt.executeUpdate("create table courses(num int, name VARCHAR(40), semestr VARCHAR(10));");
-			stmt.executeUpdate("load data local infile \"courses.txt\" into table courses");
-	 		
-		} catch (SQLException e) {	e.printStackTrace();}
-		 		
-	}
 }
