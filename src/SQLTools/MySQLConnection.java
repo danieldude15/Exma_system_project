@@ -10,6 +10,11 @@ import Logic.*;
 public class MySQLConnection {
 	private static Connection conn;
 	
+	public static void main(String[] args) {
+		MySQLConnection mysql = new MySQLConnection();
+		
+	}
+	
 	public MySQLConnection() {
 		if (!setConn()) {
 			System.out.println("SHIT!");
@@ -44,7 +49,7 @@ public class MySQLConnection {
         }
         
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","Nathan0");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","1234");
             System.out.println("SQL connection succeed");
             return true;
         } catch (SQLException ex) {/* handle any errors*/
