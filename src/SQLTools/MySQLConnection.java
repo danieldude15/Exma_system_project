@@ -5,7 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.mysql.jdbc.Driver;
+
 public class MySQLConnection {
+	
+	static final String DB_URL = "jdbc:mysql://localhost/test";
+	   //  Database credentials
+	static final String USER = "root";
+	static final String PASS = "1234";
+	
 	
 	public static void main(String[] args) 
 	{
@@ -18,7 +26,7 @@ public class MySQLConnection {
         
         try 
         {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","Braude");
+            Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
             //Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.3.68/test","root","Root");
             System.out.println("SQL connection succeed");
             //createTableCourses(conn);
