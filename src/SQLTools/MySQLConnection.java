@@ -4,8 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import Logic.*;
+
 
 public class MySQLConnection {
 	private static Connection conn;
@@ -17,6 +17,7 @@ public class MySQLConnection {
 	}
 	
 	public static ResultSet runGeneralQuary(String quary) {
+
 		try 
 		{
 			Statement stmt = getConn().createStatement();

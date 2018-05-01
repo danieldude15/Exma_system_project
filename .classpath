@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
@@ -5,3 +6,12 @@
 	<classpathentry kind="lib" path="C:/Users/TB-Family/git/automatic_exam_system/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/natan/git/automatic_exam_system/mysql-connector-java-3.1.11-bin.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+>>>>>>> refs/remotes/origin/master
