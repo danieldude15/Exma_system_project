@@ -18,4 +18,9 @@ public class Question {
 	public boolean updateQuestion(int qid, int correctIndex) {
 		
 	}
+
+	public String getQuestionString() {
+		// TODO Auto-generated method stub
+		return question;
+	}
 }

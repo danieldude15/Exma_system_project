@@ -19,8 +19,8 @@ public class DBMain {
 		this.user=user;
 		this.pass=pass;
 		this.host=host;
-	    conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","1234");
-	    updateAnswer = conn.prepareStatement("UPDATE Questions SET possibleAnswer = ? WHERE QID = ?");
+	    conn = DriverManager.getConnection("jdbc:mysql://"+this.host,this.user,this.pass);
+	    updateAnswer = conn.prepareStatement("UPDATE questions SET possibleAnswer = ? WHERE QID = ?");
 	}
 	
 	public boolean updateCorrectAnswer(int qid, int index) {
