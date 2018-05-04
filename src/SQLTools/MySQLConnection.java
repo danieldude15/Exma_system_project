@@ -31,7 +31,7 @@ public class MySQLConnection {
 		return null;
 	}
 	
-	public static boolean addExamQuary(Exam e) {
+	public static boolean addQuestionQuary(Question e) {
 		
 		
 		return false;
