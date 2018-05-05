@@ -7,20 +7,45 @@ public class Question {
 	private String[] Answers;
 	private int CorrectAnswerIndex;
 	
-	public Question(int id, int autherid, String question, String[] answers) {
+	public Question(int id, int autherid, String question, String[] answers,int correctindex) {
 		ID=id;
 		AutherID=autherid;
 		this.question = new String(question);
 		Answers = answers;
-		CorrectAnswerIndex=-1;
+		setCorrectAnswerIndex(correctindex);
 	}
 
 	public boolean updateQuestion(int qid, int correctIndex) {
+		return false;
 		
 	}
 
 	public String getQuestionString() {
 		// TODO Auto-generated method stub
 		return question;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public String getAnswer(int i) {
+		return Answers[i];
+	}
+	
+	public String[] getAnswers() {
+		return Answers;
+	}
+
+	public int getCorrectAnswerIndex() {
+		return CorrectAnswerIndex;
+	}
+
+	public void setCorrectAnswerIndex(int correctAnswerIndex) {
+		CorrectAnswerIndex = correctAnswerIndex;
+	}
+
+	public int getAutherID() {
+		return AutherID;
 	}
 }

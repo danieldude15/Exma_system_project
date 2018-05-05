@@ -1,31 +1,42 @@
 package prototype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class SelectQuestionController {
-	private UpdateAnswerController sfc;	
-	private static int itemIndex = 3;
-		
-	@FXML
-	private Button btnExit = null;
-		
-	public void StudentInfo(ActionEvent event) throws Exception {
+	
+	private Vector<Question> questions;
+	public static Question selectedQuestion = null;
+	
+	@FXML private ListView<String> questionsListView;
+	@FXML private Label chooseLabel1;
+	@FXML private Button continueButton1;
+	@FXML private Button cancelButton1;
+	
+	
+	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
-		Pane root = loader.load(getClass().getResource("/prototype/UpdateQuestion.fxml").openStream());
+		Pane root = loader.load(getClass().getResource("/prototype/UpdateAnswer.fxml").openStream());
 		
-		UpdateAnswerController UpdateAnswerController = loader.getController();		
-		UpdateAnswerController.loadQuestions(pType.students.get(itemIndex));
-		
+		UpdateAnswerController UAC= loader.getController();		
+		UAC.loadQuestion(selectedQuestion);
 		Scene scene = new Scene(root);			
 		
 		primaryStage.setScene(scene);		
@@ -34,7 +45,7 @@ public class SelectQuestionController {
 
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/prototype/SelectQuestion.fxml"));
-				
+		
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Question Selection Window");
 		primaryStage.setScene(scene);
@@ -42,12 +53,41 @@ public class SelectQuestionController {
 		primaryStage.show();		
 	}
 	
+	public void initialize() {
+		try {
+			DBMain sql = new DBMain();
+			questions = sql.getQuestions();
+		} catch (Exception e) {
+			System.out.println("shit!");
+			return;
+		}
+		ArrayList<String> al = new ArrayList<String>();	
+		for(Question q:questions){
+			al.add("Question ID: "+q.getID()+" "+q.getQuestionString());
+		}
+		
+		
+		ObservableList<String> list = FXCollections.observableArrayList(al);
+		questionsListView.setItems(list);
+	}
+	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Select Question Window");
-		//System.exit(0);			
+		System.exit(0);			
 	}
 		
-	public void presentQuestionsList() {
-		
+	@FXML 
+	public void handleMouseClick(MouseEvent arg0) {
+	   String selectedItemID = questionsListView.getSelectionModel().getSelectedItem().split(" ")[2];
+	   int id = Integer.parseInt(selectedItemID);
+	   selectedQuestion = findQuestion(id);
+	}
+	
+	private Question findQuestion(int ID) {
+		for(Question q:questions){
+			if (q.getID()==ID)
+				return q;
+		}
+		return null;
 	}
 }
