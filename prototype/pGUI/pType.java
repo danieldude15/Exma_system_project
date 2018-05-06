@@ -1,6 +1,4 @@
-package prototype;
-
-import java.util.Vector;
+package pGUI;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

@@ -1,10 +1,9 @@
-package prototype;
+package pGUI;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import pLogic.Question;
+import pSQLTools.DBMain;
 
 public class SelectQuestionController {
 	
@@ -33,7 +34,7 @@ public class SelectQuestionController {
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
-		Pane root = loader.load(getClass().getResource("/prototype/UpdateAnswer.fxml").openStream());
+		Pane root = loader.load(getClass().getResource("\\prototype\\UpdateAnswer.fxml").openStream());
 		
 		UpdateAnswerController UAC= loader.getController();		
 		UAC.loadQuestion(selectedQuestion);
@@ -44,8 +45,15 @@ public class SelectQuestionController {
 	}
 
 	public void start(Stage primaryStage) throws Exception {	
-		Parent root = FXMLLoader.load(getClass().getResource("/prototype/SelectQuestion.fxml"));
-		
+		File tmpDir = new File("\\prototype\\SelectQuestion.fxml");
+		boolean exists = tmpDir.exists();
+		Parent root = null;
+		if (exists) {
+		root = FXMLLoader.load(getClass().getResource("\\prototype\\SelectQuestion.fxml"));
+		} else {
+			System.out.println("File does not exist in "+tmpDir);
+			throw new Exception();
+		}
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Question Selection Window");
 		primaryStage.setScene(scene);

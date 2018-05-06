@@ -1,25 +1,19 @@
-package prototype;
+package pGUI;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
+import pLogic.Question;
+import pSQLTools.DBMain;
 
 
 public class UpdateAnswerController {
@@ -69,7 +63,7 @@ public class UpdateAnswerController {
 	
 	public void backToSelectingQuestionGUI(ActionEvent event) {
 		try {
-			backB.getScene().setRoot(FXMLLoader.load(getClass().getResource("/prototype/SelectQuestion.fxml")));
+			backB.getScene().setRoot(FXMLLoader.load(getClass().getResource("\\prototype\\SelectQuestion.fxml")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

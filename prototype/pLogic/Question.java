@@ -1,4 +1,4 @@
-package prototype;
+package pLogic;
 
 public class Question {
 	private int ID;
