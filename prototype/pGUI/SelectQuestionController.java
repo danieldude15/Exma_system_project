@@ -1,6 +1,8 @@
 package pGUI;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -31,29 +33,50 @@ public class SelectQuestionController {
 	
 	
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-		Pane root = loader.load(getClass().getResource("\\prototype\\UpdateAnswer.fxml").openStream());
+		//((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+	    try
+	    {
+	    	Stage primaryStage = new Stage();
+			FXMLLoader loader = new FXMLLoader();
+			String sceneFile = "UpdateAnswer.fxml";
+	        InputStream url  = getClass().getResource( sceneFile ).openStream();
+	        Parent root = loader.load( url );
+	        //System.out.println( "  fxmlResource = " + sceneFile );
+	        UpdateAnswerController UAC= loader.getController();		
+			UAC.loadQuestion(selectedQuestion);
+			Scene scene = new Scene(root);			
+			scene.getStylesheets().add(getClass().getResource(sceneFile).toExternalForm());
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+	    }
+	    catch ( Exception ex )
+	    {
+	        System.out.println( "Exception on FXMLLoader.load()" );
+	        System.out.println( "  * " + ex );
+	        System.out.println( "    ----------------------------------------\n" );
+	        throw ex;
+	    }
 		
-		UpdateAnswerController UAC= loader.getController();		
-		UAC.loadQuestion(selectedQuestion);
-		Scene scene = new Scene(root);			
-		
-		primaryStage.setScene(scene);		
-		primaryStage.show();
 	}
 
 	public void start(Stage primaryStage) throws Exception {	
-		File tmpDir = new File("\\prototype\\SelectQuestion.fxml");
-		boolean exists = tmpDir.exists();
-		Parent root = null;
-		if (exists) {
-		root = FXMLLoader.load(getClass().getResource("\\prototype\\SelectQuestion.fxml"));
-		} else {
-			System.out.println("File does not exist in "+tmpDir);
-			throw new Exception();
-		}
+		String sceneFile = "SelectQuestion.fxml";
+	    Parent root = null;
+	    URL    url  = null;
+	    try
+	    {
+	        url  = getClass().getResource( sceneFile );
+	        root = FXMLLoader.load( url );
+	        //System.out.println( "  fxmlResource = " + sceneFile );
+	    }
+	    catch ( Exception ex )
+	    {
+	        System.out.println( "Exception on FXMLLoader.load()" );
+	        System.out.println( "  * url: " + url );
+	        System.out.println( "  * " + ex );
+	        System.out.println( "    ----------------------------------------\n" );
+	        throw ex;
+	    }
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Question Selection Window");
 		primaryStage.setScene(scene);

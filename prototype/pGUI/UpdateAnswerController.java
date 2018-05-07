@@ -63,7 +63,7 @@ public class UpdateAnswerController {
 	
 	public void backToSelectingQuestionGUI(ActionEvent event) {
 		try {
-			backB.getScene().setRoot(FXMLLoader.load(getClass().getResource("\\prototype\\SelectQuestion.fxml")));
+			backB.getScene().setRoot(FXMLLoader.load(getClass().getResource("SelectQuestion.fxml")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
