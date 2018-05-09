@@ -1,5 +1,6 @@
 package pGUI;
 
+import java.awt.List;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -20,10 +21,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import pLogic.Question;
 import pSQLTools.DBMain;
+import pSQLTools.client.PrototypeClient;
 
 public class SelectQuestionController {
 	
-	private Vector<Question> questions;
+	private Vector<Question> questions = new Vector<Question>();
 	public static Question selectedQuestion = null;
 	
 	@FXML private ListView<String> questionsListView;
@@ -31,6 +33,7 @@ public class SelectQuestionController {
 	@FXML private Button continueButton1;
 	@FXML private Button cancelButton1;
 	
+	PrototypeClient client;
 	
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
 		//((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -48,6 +51,7 @@ public class SelectQuestionController {
 			scene.getStylesheets().add(getClass().getResource(sceneFile).toExternalForm());
 			primaryStage.setScene(scene);		
 			primaryStage.show();
+			((Node)(event.getSource())).getScene().getWindow().hide();
 	    }
 	    catch ( Exception ex )
 	    {
@@ -60,6 +64,10 @@ public class SelectQuestionController {
 	}
 
 	public void start(Stage primaryStage) throws Exception {	
+		/**
+		 * this code opens the .fxml file that hold the GUI properties. 
+		 * we make sure to understand the error in case the file does not open for any reason.
+		 */
 		String sceneFile = "SelectQuestion.fxml";
 	    Parent root = null;
 	    URL    url  = null;
@@ -67,7 +75,7 @@ public class SelectQuestionController {
 	    {
 	        url  = getClass().getResource( sceneFile );
 	        root = FXMLLoader.load( url );
-	        //System.out.println( "  fxmlResource = " + sceneFile );
+	        System.out.println( "  fxmlResource = " + sceneFile );
 	    }
 	    catch ( Exception ex )
 	    {
@@ -86,15 +94,18 @@ public class SelectQuestionController {
 	
 	public void initialize() {
 		try {
-			DBMain sql = new DBMain();
-			questions = sql.getQuestions();
+			client = new PrototypeClient("localhost", 12345);
+			client.openConnection();
+			client.sendToServer("getquestions");
+			while(client.questions.size()!=3);
 		} catch (Exception e) {
-			System.out.println("shit!");
+			System.out.println(e);
 			return;
 		}
 		ArrayList<String> al = new ArrayList<String>();	
-		for(Question q:questions){
+		for(Question q:client.questions){
 			al.add("Question ID: "+q.getID()+" "+q.getQuestionString());
+			questions.add(q);
 		}
 		
 		

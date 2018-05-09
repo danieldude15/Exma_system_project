@@ -83,6 +83,7 @@ public class SimpleClient extends AbstractClient
     liste.add("--Connection established");
     liste.makeVisible(liste.getItemCount()-1);
     liste.setBackground(Color.green);
+    
   }
 
   /**

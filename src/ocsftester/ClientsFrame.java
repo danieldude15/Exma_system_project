@@ -182,7 +182,7 @@ public class ClientsFrame extends Frame implements Runnable
   {
     ClientsFrame sf;
     if (arg.length==0)
-     sf = new ClientsFrame("localhost",12345);
+     sf = new ClientsFrame("localhost",55555);
     if (arg.length==1)
      sf = new ClientsFrame("localhost",Integer.parseInt(arg[0]));
     if (arg.length==2)
