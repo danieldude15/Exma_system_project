@@ -29,36 +29,7 @@ public class DBMain {
 	    updateAnswer = conn.prepareStatement("UPDATE questions SET correctindex = ? WHERE idquestions = ?");
 	}
 	
-	public boolean updateCorrectAnswer(int qid, int index) {
-		try {
-			updateAnswer.setInt(1, index);
-			updateAnswer.setInt(2, qid);
-			updateAnswer.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public Vector<Question> getQuestions() {
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet uprs = stmt.executeQuery("SELECT * FROM Questions");
-			Vector<Question> questions = new Vector<Question>();
-			
-			while(uprs.next())
-	 		{
-				 // Print out the values for debug
-				 //System.out.println(uprs.getInt(1)+"  " +uprs.getString(2)+"  " +uprs.getString(3)+"  " +uprs.getString(4)+"  " +uprs.getString(5)+"  " +uprs.getString(6)+"  " +uprs.getString(7)+"  " +uprs.getString(8));
-				 String[] answers = new String[]{uprs.getString(4),uprs.getString(5),uprs.getString(6),uprs.getString(7)};
-				 questions.add(new Question(uprs.getInt(1),uprs.getInt(2),uprs.getString(3),answers,Integer.parseInt(uprs.getString(8))));
-			} 
-			return questions;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
+	public Connection getConn() {
+		return conn;
 	}
 }

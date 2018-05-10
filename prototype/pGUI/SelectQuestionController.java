@@ -1,7 +1,5 @@
 package pGUI;
 
-import java.awt.List;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,12 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import pLogic.Question;
-import pSQLTools.DBMain;
 import pSQLTools.client.PrototypeClient;
 
 public class SelectQuestionController {
@@ -96,8 +94,10 @@ public class SelectQuestionController {
 		try {
 			client = new PrototypeClient("localhost", 12345);
 			client.openConnection();
-			client.sendToServer("getquestions");
-			while(client.questions.size()!=3);
+			client.sendToServer("GetQuestions");
+			while(!client.msgSent) {
+				Thread.sleep(10);
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 			return;

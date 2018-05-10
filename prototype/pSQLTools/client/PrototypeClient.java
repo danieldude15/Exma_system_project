@@ -11,15 +11,10 @@
  */
 package pSQLTools.client;
 
-import java.awt.List;
 import java.io.IOException;
 import java.util.Vector;
 
-import javafx.stage.Stage;
-
-import java.awt.Color;
-import ocsf.client.*;
-import pGUI.SelectQuestionController;
+import ocsf.client.AbstractClient;
 import pLogic.Question;
 
 /**
@@ -40,6 +35,7 @@ import pLogic.Question;
 public class PrototypeClient extends AbstractClient
 {
 	public Vector<Question> questions = new Vector<Question>();
+	public boolean msgSent=false;
   public PrototypeClient(String host, int port) {
 		super(host, port);
 		// TODO Auto-generated constructor stub
@@ -53,17 +49,21 @@ public class PrototypeClient extends AbstractClient
    */
   protected void handleMessageFromServer(Object msg)
   {
-    System.out.println("Client got from server: "+msg);
+    System.out.println("Client recieved msg from server:\n"+msg);
     if(msg.getClass().equals(Question.class)) {
     	questions.add((Question) msg);
     }
-    if(msg.getClass().equals(String.class) && ((String)msg).equals("DONE")) {
-    	try {
-			this.closeConnection();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    if(msg.getClass().equals(String.class)) {
+    	String command = (String)msg;
+    	if(command.equals("Done")) {
+	    	try {
+				this.closeConnection();
+				msgSent=true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
   }
 }

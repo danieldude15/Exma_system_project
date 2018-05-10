@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import pLogic.Question;
-import pSQLTools.DBMain;
+import pSQLTools.client.PrototypeClient;
 
 
 public class UpdateAnswerController {
@@ -31,8 +31,16 @@ public class UpdateAnswerController {
 	@FXML private Button updateB;
 
 	private ToggleGroup group = new ToggleGroup();
+	private PrototypeClient client;
 	
 	public void initialize() {
+		client = new PrototypeClient("localhost", 12345);
+		try {
+			client.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+			this.backToSelectingQuestionGUI(null);
+		}
 		aRadio.setToggleGroup(group);
 		bRadio.setToggleGroup(group);
 		cRadio.setToggleGroup(group);
@@ -41,22 +49,25 @@ public class UpdateAnswerController {
 	
 	public void excecudeUpdateCorrectAnswer(ActionEvent event) {
 		try {
-			DBMain sql = new DBMain();
+
 			int index=-1;
 			if(aRadio.isSelected())index=1;
 			if(bRadio.isSelected())index=2;
 			if(cRadio.isSelected())index=3;
 			if(dRadio.isSelected())index=4;
-			if(sql.updateCorrectAnswer(q2push.getID(), index)) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Update Question Successfull");
-				alert.setHeaderText(null);
-				alert.setContentText("QuestionID:"+q2push.getID()+"\nWas updated with answer: "+index);
-
-				alert.showAndWait();
+			client.sendToServer("UpdateQuestionAnswer "+q2push.getID()+" "+index);
+			while (!client.msgSent) {
+				Thread.sleep(10);
 			}
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Update Question Successfull");
+			alert.setHeaderText(null);
+			alert.setContentText("QuestionID:"+q2push.getID()+"\nWas updated with answer: "+index);
+
+			alert.showAndWait();
 		} catch (Exception e) {
-			System.out.println("shit!");
+			System.out.println(e.getClass().getName());
+			e.printStackTrace();
 			return;
 		}
 	}
@@ -65,7 +76,6 @@ public class UpdateAnswerController {
 		try {
 			backB.getScene().setRoot(FXMLLoader.load(getClass().getResource("SelectQuestion.fxml")));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
