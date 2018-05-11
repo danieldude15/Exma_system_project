@@ -1,5 +1,6 @@
 package pGUI;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class SelectQuestionController {
 	@FXML private Button continueButton1;
 	@FXML private Button cancelButton1;
 	
-	PrototypeClient client;
 	
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
 		//((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -47,7 +47,16 @@ public class SelectQuestionController {
 			UAC.loadQuestion(selectedQuestion);
 			Scene scene = new Scene(root);			
 			scene.getStylesheets().add(getClass().getResource(sceneFile).toExternalForm());
-			primaryStage.setScene(scene);		
+			primaryStage.setScene(scene);	
+			primaryStage.setOnCloseRequest(closeUpdate ->
+		    {
+		        try {
+					gui_globals.client.closeConnection();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		        System.exit(0);
+		    });
 			primaryStage.show();
 			((Node)(event.getSource())).getScene().getWindow().hide();
 	    }
@@ -60,12 +69,12 @@ public class SelectQuestionController {
 	    }
 		
 	}
-
+	/**
+	 * this code opens the .fxml file that hold the GUI properties. 
+	 * we make sure to understand the error in case the file does not open for any reason.
+	 **/
 	public void start(Stage primaryStage) throws Exception {	
-		/**
-		 * this code opens the .fxml file that hold the GUI properties. 
-		 * we make sure to understand the error in case the file does not open for any reason.
-		 */
+		
 		String sceneFile = "SelectQuestion.fxml";
 	    Parent root = null;
 	    URL    url  = null;
@@ -86,14 +95,21 @@ public class SelectQuestionController {
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Question Selection Window");
 		primaryStage.setScene(scene);
-		
+		primaryStage.setOnCloseRequest(closeSelect ->
+	    {
+	        try {
+				gui_globals.client.closeConnection();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	        System.exit(0);
+	    });
 		primaryStage.show();		
 	}
 	
 	public void initialize() {
+		PrototypeClient client = gui_globals.client;
 		try {
-			client = new PrototypeClient("localhost", 12345);
-			client.openConnection();
 			client.sendToServer("GetQuestions");
 			while(!client.msgSent) {
 				Thread.sleep(10);
@@ -115,6 +131,7 @@ public class SelectQuestionController {
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Select Question Window");
+		gui_globals.client.closeConnection();
 		System.exit(0);			
 	}
 		

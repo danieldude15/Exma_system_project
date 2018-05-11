@@ -2,6 +2,7 @@ package pGUI;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import pSQLTools.client.PrototypeClient;
 
 
 public class pType extends Application {
@@ -13,9 +14,10 @@ public class pType extends Application {
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
-		//Vector<Student> questions=new Vector<Student>();				
-				SelectQuestionController aFrame = new SelectQuestionController(); // create StudentFrame
-				aFrame.start(arg0);
+		gui_globals.client = new PrototypeClient("localhost", 12345);
+		gui_globals.client.openConnection();
+		SelectQuestionController aFrame = new SelectQuestionController(); // create StudentFrame
+		aFrame.start(arg0);
 	}
 
 

@@ -31,16 +31,8 @@ public class UpdateAnswerController {
 	@FXML private Button updateB;
 
 	private ToggleGroup group = new ToggleGroup();
-	private PrototypeClient client;
 	
 	public void initialize() {
-		client = new PrototypeClient("localhost", 12345);
-		try {
-			client.openConnection();
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.backToSelectingQuestionGUI(null);
-		}
 		aRadio.setToggleGroup(group);
 		bRadio.setToggleGroup(group);
 		cRadio.setToggleGroup(group);
@@ -48,8 +40,8 @@ public class UpdateAnswerController {
 	}
 	
 	public void excecudeUpdateCorrectAnswer(ActionEvent event) {
+		PrototypeClient client = gui_globals.client;
 		try {
-
 			int index=-1;
 			if(aRadio.isSelected())index=1;
 			if(bRadio.isSelected())index=2;
@@ -104,4 +96,5 @@ public class UpdateAnswerController {
 	public void handleRadioClick(ActionEvent event) {
 
 	}
+	
 }

@@ -17,11 +17,6 @@ public class Question implements Serializable  {
 		setCorrectAnswerIndex(correctindex);
 	}
 
-	public boolean updateQuestion(int qid, int correctIndex) {
-		return false;
-		
-	}
-
 	public String getQuestionString() {
 		// TODO Auto-generated method stub
 		return question;

@@ -11,7 +11,6 @@
  */
 package pSQLTools.client;
 
-import java.io.IOException;
 import java.util.Vector;
 
 import ocsf.client.AbstractClient;
@@ -56,13 +55,7 @@ public class PrototypeClient extends AbstractClient
     if(msg.getClass().equals(String.class)) {
     	String command = (String)msg;
     	if(command.equals("Done")) {
-	    	try {
-				this.closeConnection();
-				msgSent=true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			msgSent=true;
     	}
     }
   }
