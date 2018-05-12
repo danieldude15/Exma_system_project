@@ -14,7 +14,7 @@ package pSQLTools.client;
 import java.util.Vector;
 
 import ocsf.client.AbstractClient;
-import pLogic.Question;
+import pLogic.pQuestion;
 
 /**
 * The <code> SimpleClient </code> class is a simple subclass
@@ -33,7 +33,7 @@ import pLogic.Question;
 */
 public class PrototypeClient extends AbstractClient
 {
-	public Vector<Question> questions = new Vector<Question>();
+	public Vector<pQuestion> questions = new Vector<pQuestion>();
 	public boolean msgSent=false;
   public PrototypeClient(String host, int port) {
 		super(host, port);
@@ -49,8 +49,8 @@ public class PrototypeClient extends AbstractClient
   protected void handleMessageFromServer(Object msg)
   {
     System.out.println("Client recieved msg from server:\n"+msg);
-    if(msg.getClass().equals(Question.class)) {
-    	questions.add((Question) msg);
+    if(msg.getClass().equals(pQuestion.class)) {
+    	questions.add((pQuestion) msg);
     }
     if(msg.getClass().equals(String.class)) {
     	String command = (String)msg;
@@ -58,5 +58,9 @@ public class PrototypeClient extends AbstractClient
 			msgSent=true;
     	}
     }
+  }
+
+  protected void connectionClosed() {
+	  System.out.println("connection Closed!");
   }
 }

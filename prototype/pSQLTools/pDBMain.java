@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class DBMain {
+public class pDBMain {
 	private static String host="localhost/prototype";
-	private static String user="root";
+	private static String user="protorypeUser";
 	private static String pass="1234";
 	private Connection conn;
 	
-	public DBMain() throws SQLException {
+	public pDBMain() throws SQLException {
 		try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {

@@ -2,14 +2,14 @@ package pLogic;
 
 import java.io.Serializable;
 
-public class Question implements Serializable  {
+public class pQuestion implements Serializable  {
 	private int ID;
 	private int AutherID;
 	private String question;
 	private String[] Answers;
 	private int CorrectAnswerIndex;
 	
-	public Question(int id, int autherid, String question, String[] answers,int correctindex) {
+	public pQuestion(int id, int autherid, String question, String[] answers,int correctindex) {
 		ID=id;
 		AutherID=autherid;
 		this.question = new String(question);

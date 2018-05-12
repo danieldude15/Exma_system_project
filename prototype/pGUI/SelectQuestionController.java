@@ -1,31 +1,28 @@
 package pGUI;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import pLogic.Question;
+import pLogic.pQuestion;
 import pSQLTools.client.PrototypeClient;
 
-public class SelectQuestionController {
+public class SelectQuestionController implements Initializable, pControlledScreen{
 	
-	private Vector<Question> questions = new Vector<Question>();
-	public static Question selectedQuestion = null;
+	private Vector<pQuestion> questions;
+	pScreensController myController;
 	
 	@FXML private ListView<String> questionsListView;
 	@FXML private Label chooseLabel1;
@@ -34,99 +31,16 @@ public class SelectQuestionController {
 	
 	
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
-		//((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-	    try
-	    {
-	    	Stage primaryStage = new Stage();
-			FXMLLoader loader = new FXMLLoader();
-			String sceneFile = "UpdateAnswer.fxml";
-	        InputStream url  = getClass().getResource( sceneFile ).openStream();
-	        Parent root = loader.load( url );
-	        //System.out.println( "  fxmlResource = " + sceneFile );
-	        UpdateAnswerController UAC= loader.getController();		
-			UAC.loadQuestion(selectedQuestion);
-			Scene scene = new Scene(root);			
-			scene.getStylesheets().add(getClass().getResource(sceneFile).toExternalForm());
-			primaryStage.setScene(scene);	
-			primaryStage.setOnCloseRequest(closeUpdate ->
-		    {
-		        try {
-					gui_globals.client.closeConnection();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		        System.exit(0);
-		    });
-			primaryStage.show();
-			((Node)(event.getSource())).getScene().getWindow().hide();
-	    }
-	    catch ( Exception ex )
-	    {
-	        System.out.println( "Exception on FXMLLoader.load()" );
-	        System.out.println( "  * " + ex );
-	        System.out.println( "    ----------------------------------------\n" );
-	        throw ex;
-	    }
-		
-	}
-	/**
-	 * this code opens the .fxml file that hold the GUI properties. 
-	 * we make sure to understand the error in case the file does not open for any reason.
-	 **/
-	public void start(Stage primaryStage) throws Exception {	
-		
-		String sceneFile = "SelectQuestion.fxml";
-	    Parent root = null;
-	    URL    url  = null;
-	    try
-	    {
-	        url  = getClass().getResource( sceneFile );
-	        root = FXMLLoader.load( url );
-	        System.out.println( "  fxmlResource = " + sceneFile );
-	    }
-	    catch ( Exception ex )
-	    {
-	        System.out.println( "Exception on FXMLLoader.load()" );
-	        System.out.println( "  * url: " + url );
-	        System.out.println( "  * " + ex );
-	        System.out.println( "    ----------------------------------------\n" );
-	        throw ex;
-	    }
-		Scene scene = new Scene(root);
-		primaryStage.setTitle("Question Selection Window");
-		primaryStage.setScene(scene);
-		primaryStage.setOnCloseRequest(closeSelect ->
-	    {
-	        try {
-				gui_globals.client.closeConnection();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	        System.exit(0);
-	    });
-		primaryStage.show();		
-	}
-	
-	public void initialize() {
-		PrototypeClient client = gui_globals.client;
-		try {
-			client.sendToServer("GetQuestions");
-			while(!client.msgSent) {
-				Thread.sleep(10);
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-			return;
+		if (gui_globals.selectedQuestion != null) {
+			myController.setScreen(pType.UpdateAnswerScreenID);
+		} else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Question Selected");
+			alert.setHeaderText(null);
+			alert.setContentText("You must select question in order to continue to next screen");
+
+			alert.showAndWait();
 		}
-		ArrayList<String> al = new ArrayList<String>();	
-		for(Question q:client.questions){
-			al.add("Question ID: "+q.getID()+" "+q.getQuestionString());
-			questions.add(q);
-		}
-		
-		
-		ObservableList<String> list = FXCollections.observableArrayList(al);
-		questionsListView.setItems(list);
 	}
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
@@ -137,16 +51,59 @@ public class SelectQuestionController {
 		
 	@FXML 
 	public void handleMouseClick(MouseEvent arg0) {
-	   String selectedItemID = questionsListView.getSelectionModel().getSelectedItem().split(" ")[2];
-	   int id = Integer.parseInt(selectedItemID);
-	   selectedQuestion = findQuestion(id);
+		if (questionsListView.hasProperties()) {
+		   String selectedItemID = questionsListView.getSelectionModel().getSelectedItem().split(" ")[2];
+		   int id = Integer.parseInt(selectedItemID);
+		   gui_globals.selectedQuestion = findQuestion(id);
+		} else {
+			gui_globals.selectedQuestion = null;
+		}
 	}
 	
-	private Question findQuestion(int ID) {
-		for(Question q:questions){
+	private pQuestion findQuestion(int ID) {
+		for(pQuestion q:questions){
 			if (q.getID()==ID)
 				return q;
 		}
 		return null;
+	}
+	@Override
+	public void setScreenParent(pScreensController screenParent) {
+		myController = screenParent;
+	}
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		PrototypeClient client = gui_globals.client;
+		questions = new Vector<pQuestion>();
+		questionsListView.getItems().clear();
+		try {
+			client.sendToServer("GetQuestions");
+			while(!client.msgSent) {
+				Thread.sleep(10);
+			}
+			client.msgSent=false;
+		} catch (Exception e) {
+			System.out.println(e);
+			return;
+		}
+		ArrayList<String> al = new ArrayList<String>();	
+		if (client.questions.size()==0) {
+			System.out.println("No Questions pulled from database clients.questions=" + client.questions);
+		}
+		for(pQuestion q:client.questions){
+			al.add("Question ID: "+q.getID()+" "+q.getQuestionString());
+			questions.add(q);
+		}
+		client.questions.clear();
+		
+		
+		ObservableList<String> list = FXCollections.observableArrayList(al);
+		questionsListView.setItems(list);
+	}
+
+	@Override
+	public void runOnScreenChange() {
+		initialize(null, null);
+		
 	}
 }
