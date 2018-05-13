@@ -21,7 +21,7 @@ import pSQLTools.client.PrototypeClient;
 
 public class SelectQuestionController implements Initializable, pControlledScreen{
 	
-	private Vector<pQuestion> questions;
+	private Vector<pQuestion> questions  = new Vector<pQuestion>();
 	pScreensController myController;
 	
 	@FXML private ListView<String> questionsListView;
@@ -74,7 +74,7 @@ public class SelectQuestionController implements Initializable, pControlledScree
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		PrototypeClient client = gui_globals.client;
-		questions = new Vector<pQuestion>();
+		questions.clear();
 		questionsListView.getItems().clear();
 		try {
 			client.sendToServer("GetQuestions");
