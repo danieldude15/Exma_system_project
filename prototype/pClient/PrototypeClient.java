@@ -9,7 +9,7 @@
  * All Rights Reserved.
  *
  */
-package pSQLTools.client;
+package pClient;
 
 import java.util.Vector;
 

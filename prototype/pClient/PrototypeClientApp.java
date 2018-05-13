@@ -1,15 +1,16 @@
-package pGUI;
+package pClient;
 
 import java.io.IOException;
 
+import Controllers.pScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pSQLTools.client.PrototypeClient;
+import pGUI.pClientGlobals;
 
 
-public class pType extends Application {
+public class PrototypeClientApp extends Application {
 	
 	public static String SelectQuestionScreenID = "SelectQuestionScreen";
 	public static String SelectQuestionScreenFilePath = "SelectQuestion.fxml";
@@ -25,20 +26,20 @@ public class pType extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			gui_globals.client = new PrototypeClient("localhost", 12345);
-			gui_globals.client.openConnection();
+			pClientGlobals.client = new PrototypeClient("localhost", 12345);
+			pClientGlobals.client.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
-		if (!pType.mainContainer.loadScreen(pType.UpdateAnswerScreenID, pType.UpdateAnswerScreenFilePath)) {
-        	System.out.println("failed to load "+ pType.UpdateAnswerScreenID);
+		if (!PrototypeClientApp.mainContainer.loadScreen(PrototypeClientApp.UpdateAnswerScreenID, PrototypeClientApp.UpdateAnswerScreenFilePath)) {
+        	System.out.println("failed to load "+ PrototypeClientApp.UpdateAnswerScreenID);
         }
-        if(!mainContainer.loadScreen(pType.SelectQuestionScreenID, pType.SelectQuestionScreenFilePath)) {
+        if(!mainContainer.loadScreen(PrototypeClientApp.SelectQuestionScreenID, PrototypeClientApp.SelectQuestionScreenFilePath)) {
         	System.out.println("failed to load "+ SelectQuestionScreenID);
         }
         
-        mainContainer.setScreen(pType.SelectQuestionScreenID);
+        mainContainer.setScreen(PrototypeClientApp.SelectQuestionScreenID);
         
         Group root = new Group();
         root.getChildren().addAll(mainContainer);
@@ -47,7 +48,7 @@ public class pType extends Application {
         primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
 	        try {
-				gui_globals.client.closeConnection();
+				pClientGlobals.client.closeConnection();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

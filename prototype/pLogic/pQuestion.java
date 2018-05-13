@@ -1,6 +1,7 @@
 package pLogic;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 public class pQuestion implements Serializable  {
 	private int ID;
@@ -15,6 +16,22 @@ public class pQuestion implements Serializable  {
 		this.question = new String(question);
 		Answers = answers;
 		setCorrectAnswerIndex(correctindex);
+	}
+	
+	public pQuestion(pQuestion question) {
+		ID = question.ID;
+		AutherID = question.AutherID;
+		this.question = new String(question.question);
+		Answers = question.Answers.clone();
+		CorrectAnswerIndex = question.CorrectAnswerIndex;
+	}
+	
+	public static Vector<pQuestion> clone(Vector<pQuestion> questions) {
+		Vector<pQuestion> questionsRes = new Vector<pQuestion>();
+		for (pQuestion q:questions) {
+			questionsRes.add(new pQuestion(q));
+		}
+		return questionsRes;
 	}
 
 	public String getQuestionString() {

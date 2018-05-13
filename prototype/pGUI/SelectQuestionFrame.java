@@ -5,24 +5,29 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import Controllers.pControlledScreen;
+import Controllers.pQuestionsController;
+import Controllers.pScreensController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import pClient.PrototypeClientApp;
 import pLogic.pQuestion;
-import pSQLTools.client.PrototypeClient;
 
-public class SelectQuestionController implements Initializable, pControlledScreen{
+public class SelectQuestionFrame implements Initializable, pControlledScreen{
 	
 	private Vector<pQuestion> questions  = new Vector<pQuestion>();
 	pScreensController myController;
+	UpdateAnswerFrame questionFrame;
+	pQuestionsController questionsController;
 	
 	@FXML private ListView<String> questionsListView;
 	@FXML private Label chooseLabel1;
@@ -31,8 +36,9 @@ public class SelectQuestionController implements Initializable, pControlledScree
 	
 	
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
-		if (gui_globals.selectedQuestion != null) {
-			myController.setScreen(pType.UpdateAnswerScreenID);
+		
+	    if(questionFrame.getQuestion()!=null) {
+			myController.setScreen(PrototypeClientApp.UpdateAnswerScreenID);
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("No Question Selected");
@@ -45,18 +51,16 @@ public class SelectQuestionController implements Initializable, pControlledScree
 	
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Select Question Window");
-		gui_globals.client.closeConnection();
+		pClientGlobals.client.closeConnection();
 		System.exit(0);			
 	}
 		
 	@FXML 
 	public void handleMouseClick(MouseEvent arg0) {
 		if (questionsListView.hasProperties()) {
-		   String selectedItemID = questionsListView.getSelectionModel().getSelectedItem().split(" ")[2];
+		   String selectedItemID = questionsListView.getSelectionModel().getSelectedItem().split(" ")[1];
 		   int id = Integer.parseInt(selectedItemID);
-		   gui_globals.selectedQuestion = findQuestion(id);
-		} else {
-			gui_globals.selectedQuestion = null;
+		   questionFrame.setQuestion(findQuestion(id));
 		}
 	}
 	
@@ -73,37 +77,31 @@ public class SelectQuestionController implements Initializable, pControlledScree
 	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		questionsController = new pQuestionsController();
 	}
 
 	@Override
 	public void runOnScreenChange() {
-		PrototypeClient client = gui_globals.client;
-		questions.clear();
-		questionsListView.getItems().clear();
-		try {
-			client.sendToServer("GetQuestions");
-			while(!client.msgSent) {
-				Thread.sleep(10);
-			}
-			client.msgSent=false;
-		} catch (Exception e) {
-			System.out.println(e);
+		questionFrame = (UpdateAnswerFrame) myController.getController(PrototypeClientApp.UpdateAnswerScreenID);
+		questions = pQuestionsController.getQuestions();
+		 
+		if (questions.size()==0) {
+			System.out.println("No Questions pulled from database clients.questions=" + questions);
+			ArrayList<String> al = new ArrayList<String>();
+			al.add("No Questions pulled from database questions= " + questions);
+			ObservableList<String> list = FXCollections.observableArrayList(al);
+			questionsListView.setItems(list);
 			return;
 		}
+		
 		ArrayList<String> al = new ArrayList<String>();	
-		if (client.questions.size()==0) {
-			System.out.println("No Questions pulled from database clients.questions=" + client.questions);
+		for (pQuestion q : questions) {
+			al.add("QuestionID: "+ q.getID()+ " " + q.getQuestionString());
 		}
-		for(pQuestion q:client.questions){
-			al.add("Question ID: "+q.getID()+" "+q.getQuestionString());
-			questions.add(q);
-		}
-		client.questions.clear();
 		
-		
+		questionsListView.getItems().clear();
 		ObservableList<String> list = FXCollections.observableArrayList(al);
 		questionsListView.setItems(list);
-
 		
 	}
 }

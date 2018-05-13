@@ -9,7 +9,7 @@
  * All Rights Reserved.
  *
  */
-package pSQLTools.server;
+package pServer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
