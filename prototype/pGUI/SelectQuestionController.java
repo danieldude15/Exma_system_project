@@ -73,6 +73,10 @@ public class SelectQuestionController implements Initializable, pControlledScree
 	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+	}
+
+	@Override
+	public void runOnScreenChange() {
 		PrototypeClient client = gui_globals.client;
 		questions.clear();
 		questionsListView.getItems().clear();
@@ -99,11 +103,7 @@ public class SelectQuestionController implements Initializable, pControlledScree
 		
 		ObservableList<String> list = FXCollections.observableArrayList(al);
 		questionsListView.setItems(list);
-	}
 
-	@Override
-	public void runOnScreenChange() {
-		initialize(null, null);
 		
 	}
 }

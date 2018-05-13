@@ -130,6 +130,7 @@ public class pScreensController  extends StackPane {
             } else {
                 setOpacity(0.0);
                 getChildren().add(screens.get(name));       //no one else been displayed, then just show
+                controllers.get(name).runOnScreenChange();
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                         new KeyFrame(new Duration(600), new KeyValue(opacity, 1.0)));

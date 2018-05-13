@@ -106,6 +106,7 @@ public class UpdateAnswerController implements Initializable, pControlledScreen{
 			if (correct == 4) dRadio.setSelected(true);
 		} else {
 			System.out.println("selectedQuestion is null? " +gui_globals.selectedQuestion);
+			this.backToSelectingQuestionGUI(null);
 		}
 	}
 	
