@@ -11,10 +11,7 @@
  */
 package pServer;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
 import ocsf.server.AbstractServer;
@@ -37,11 +34,18 @@ import pSQLTools.pDBMain;
 */
 public class PrototypeServer extends AbstractServer
 {
-  public Vector<pQuestion> questions;
-  PreparedStatement updateAnswer;
+	pDBMain sqlcon;
+	public Vector<pQuestion> questions;
   public PrototypeServer(int port) {
 		super(port);
 		// TODO Auto-generated constructor stub
+		try {
+			sqlcon = new pDBMain();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 /**
@@ -58,7 +62,7 @@ public class PrototypeServer extends AbstractServer
 		  String command = (String)msg;
 		  if(command.equals("GetQuestions")) {
 	  		try {
-	  			questions = this.getQuestions();
+	  			questions = sqlcon.getQuestions();
 	  			for (pQuestion q:questions) {
 					  client.sendToClient(q);
 					  System.out.println("sendint client " + client + " " + q);
@@ -74,7 +78,7 @@ public class PrototypeServer extends AbstractServer
 			  int qid = Integer.parseInt(updateQuestionCommand[1]);
 			  int answerIndex = Integer.parseInt(updateQuestionCommand[2]);
 			  try {
-				  this.updateCorrectAnswer(qid,answerIndex);
+				  sqlcon.updateCorrectAnswer(qid,answerIndex);
 				  client.sendToClient("Done");
 				  return;
 			  } catch (Exception e1) {
@@ -85,27 +89,4 @@ public class PrototypeServer extends AbstractServer
 	  }
   }
   
-	private Vector<pQuestion> getQuestions() throws SQLException {
-		pDBMain sqlcon = new pDBMain();
-		Statement stmt = sqlcon.getConn().createStatement();
-		ResultSet uprs = stmt.executeQuery("SELECT * FROM Questions");
-		Vector<pQuestion> questions = new Vector<pQuestion>();
-		
-		while(uprs.next())
- 		{
-			 // Print out the values for debug
-			 //System.out.println(uprs.getInt(1)+"  " +uprs.getString(2)+"  " +uprs.getString(3)+"  " +uprs.getString(4)+"  " +uprs.getString(5)+"  " +uprs.getString(6)+"  " +uprs.getString(7)+"  " +uprs.getString(8));
-			 String[] answers = new String[]{uprs.getString(4),uprs.getString(5),uprs.getString(6),uprs.getString(7)};
-			 questions.add(new pQuestion(uprs.getInt(1),uprs.getInt(2),uprs.getString(3),answers,Integer.parseInt(uprs.getString(8))));
-		} 
-		return questions;
-	}
-	
-	public void updateCorrectAnswer(int qid, int index) throws SQLException {
-		pDBMain sqlcon = new pDBMain();
-		updateAnswer = sqlcon.getConn().prepareStatement("UPDATE questions SET correctindex = ? WHERE idquestions = ?");
-		updateAnswer.setInt(1, index);
-		updateAnswer.setInt(2, qid);
-		updateAnswer.executeUpdate();
-	}
 }
