@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class PrototypeServerApp extends Application {
 
 	public static void main(String args[]) throws IOException {
-		launch();
+		launch(args);
 	}
 
 	@Override

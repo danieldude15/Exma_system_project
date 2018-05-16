@@ -29,6 +29,7 @@ public class pQuestionsController {
 		questions = pQuestion.clone(client.questions);
 		client.questions.clear();
 		return questions;
+
 	}
 	
 	public void updateQuestionIndex(pQuestion question) {

@@ -26,8 +26,9 @@ public class SelectQuestionFrame implements Initializable, pControlledScreen{
 	
 	private Vector<pQuestion> questions  = new Vector<pQuestion>();
 	pScreensController myController;
-	UpdateAnswerFrame questionFrame;
 	pQuestionsController questionsController;
+	
+	UpdateAnswerFrame questionFrame;
 	
 	@FXML private ListView<String> questionsListView;
 	@FXML private Label chooseLabel1;
