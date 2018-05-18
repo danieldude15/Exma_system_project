@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import pClient.PrototypeClient;
 import pClient.PrototypeClientApp;
+import pClient.pClientGlobals;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -25,7 +26,6 @@ public class UpdateAnswerFrame implements Initializable, pControlledScreen{
 	pScreensController myController;
 	pQuestionsController questionsController;
 	
-	ObservableList<String> list;
 	private pQuestion q2push = null;
 	private ToggleGroup group = new ToggleGroup();
 	
@@ -54,7 +54,7 @@ public class UpdateAnswerFrame implements Initializable, pControlledScreen{
 	
 	public void backToSelectingQuestionGUI(ActionEvent event) {
 		q2push=null;
-		myController.setScreen(PrototypeClientApp.SelectQuestionScreenID);
+		myController.setScreen(pClientGlobals.SelectQuestionScreenID);
 	}
 	
 	@FXML 

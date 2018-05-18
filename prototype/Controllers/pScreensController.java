@@ -77,9 +77,15 @@ public class pScreensController  extends StackPane {
         return screens.get(name);
     }
     
+    //returns the controller of the id name
     public pControlledScreen getController(String name) {
     	return controllers.get(name);
     }
+    
+    
+    private void addController(String name, pControlledScreen myScreenControler) {
+    	controllers.put(name, myScreenControler);
+	}
 
     //Loads the fxml file, add the screen to the screens collection and
     //finally injects the screenPane to the controller.
@@ -99,10 +105,6 @@ public class pScreensController  extends StackPane {
         }
     }
 
-    private void addController(String name, pControlledScreen myScreenControler) {
-		// TODO Auto-generated method stub
-    	controllers.put(name, myScreenControler);
-	}
 
 	//This method tries to displayed the screen with a predefined name.
     //First it makes sure the screen has been already loaded.  Then if there is more than

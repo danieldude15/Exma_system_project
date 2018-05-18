@@ -9,7 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pClient.PrototypeClientApp;
-import pGUI.pClientGlobals;
+import pClient.pClientGlobals;
 
 public class ClientApplicationTibi extends Application {
 

@@ -12,9 +12,9 @@ import pLogic.pQuestion;
 
 
 public class pDBMain {
-	private static String host="localhost/prototype";
-	private static String user="protorypeUser";
-	private static String pass="1234";
+	private static String host="166.62.10.47/aesprototype";
+	private static String user="prototypeuser";
+	private static String pass="7wJ1MLuZ!t35";
 	private Connection conn;
 	PreparedStatement updateAnswer;
 	
@@ -26,6 +26,7 @@ public class pDBMain {
         	throw new SQLException();
         }
 	    conn = DriverManager.getConnection("jdbc:mysql://"+host,user,pass);
+	    updateAnswer = conn.prepareStatement("UPDATE questions SET correctindex = ? WHERE idquestions = ?");
 	}
 	
 	public Connection getConn() {
@@ -34,7 +35,7 @@ public class pDBMain {
 	
 	public Vector<pQuestion> getQuestions() throws SQLException {
 		Statement stmt = conn.createStatement();
-		ResultSet uprs = stmt.executeQuery("SELECT * FROM Questions");
+		ResultSet uprs = stmt.executeQuery("SELECT * FROM questions");
 		Vector<pQuestion> questions = new Vector<pQuestion>();
 		
 		while(uprs.next())
@@ -48,7 +49,6 @@ public class pDBMain {
 	}
 	
 	public void updateCorrectAnswer(int qid, int index) throws SQLException {
-		updateAnswer = conn.prepareStatement("UPDATE questions SET correctindex = ? WHERE idquestions = ?");
 		updateAnswer.setInt(1, index);
 		updateAnswer.setInt(2, qid);
 		updateAnswer.executeUpdate();

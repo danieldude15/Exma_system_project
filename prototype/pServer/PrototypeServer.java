@@ -38,7 +38,6 @@ public class PrototypeServer extends AbstractServer
 	public Vector<pQuestion> questions;
   public PrototypeServer(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
 		try {
 			sqlcon = new pDBMain();
 		} catch (SQLException e) {
