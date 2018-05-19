@@ -6,19 +6,14 @@ import java.util.ResourceBundle;
 import Controllers.pControlledScreen;
 import Controllers.pQuestionsController;
 import Controllers.pScreensController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import pClient.PrototypeClient;
-import pClient.PrototypeClientApp;
-import pClient.pClientGlobals;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import pClient.pClientGlobals;
 import pLogic.pQuestion;
 
 
@@ -48,7 +43,7 @@ public class UpdateAnswerFrame implements Initializable, pControlledScreen{
 		if(cRadio.isSelected())index=3;
 		if(dRadio.isSelected())index=4;
 		q2push.setCorrectAnswerIndex(index);
-		questionsController.updateQuestionIndex(q2push);
+		questionsController.updateQuestionIndex(q2push); 
 		
 	}
 	

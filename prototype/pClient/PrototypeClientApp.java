@@ -6,6 +6,8 @@ import Controllers.pScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 
@@ -17,11 +19,17 @@ public class PrototypeClientApp extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		System.out.println("Connecting to server");
 		try {
-			pClientGlobals.client = new PrototypeClient("127.0.0.1", 12345);
+			pClientGlobals.client = new PrototypeClient("localhost", 12345);
 			pClientGlobals.client.openConnection();
+			if(pClientGlobals.client.isConnected())System.out.println("Client Connected");
 		} catch (IOException e) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Connection Error");
+			alert.setHeaderText(null);
+			alert.setContentText("Could Not Connect To Server!\nERROR:\n" + e.toString() +"\n\nTip:Maybe Server is not Listening?");
+
+			alert.showAndWait();
 			e.printStackTrace();
 			return;
 		}

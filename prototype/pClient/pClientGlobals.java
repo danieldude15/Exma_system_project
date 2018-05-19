@@ -1,7 +1,6 @@
 package pClient;
 
 import Controllers.pScreensController;
-import pLogic.pQuestion;
 
 public class pClientGlobals {
 	public static PrototypeClient client = null;

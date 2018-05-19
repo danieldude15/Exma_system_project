@@ -3,6 +3,7 @@ package pLogic;
 import java.io.Serializable;
 import java.util.Vector;
 
+@SuppressWarnings("serial")
 public class pQuestion implements Serializable  {
 	private int ID;
 	private int AutherID;
