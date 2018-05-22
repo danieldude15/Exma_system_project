@@ -5,20 +5,20 @@ public class Exam
 {
  private int ID;
  private int Duration;
- private Teacher Auther;
+ private Teacher Author;
  private ArrayList<Question> Questions;
 	
  
- public Exam(int id,int duration,Teacher autherid)
+ public Exam(int id,int duration,Teacher authorid)
  {
  setID(id);
  setDuration(duration);
- setAuther(autherid);
+ setAuther(authorid);
  }
 
 	public Exam(Exam exam) {
 		ID = exam.ID;
-		Auther = exam.Auther;
+		Author = exam.Author;
 		
 	}
 	
