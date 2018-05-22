@@ -1,5 +1,7 @@
 package ocsf.client;
 
+import logic.iMessage;
+
 public class AESClient extends AbstractClient{
 	
 	

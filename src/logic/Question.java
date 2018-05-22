@@ -11,23 +11,21 @@ public class Question{
 	private int CorrectAnswerIndex;
 	private ArrayList<Note> Notes;
 	
-	public Question(int id, Teacher auther, String question, String[] answers,int correctindex,ArrayList<Note> notes) {
+	public Question(int id, Teacher a, String q, String[] answers,int correctindex,ArrayList<Note> notes) {
 		ID=id;
-		Auther = auther;
-		this.question = new String(question);
+		Auther = a;
+		question = q;
 		Answers = answers;
-		setCorrectAnswerIndex(correctindex);
-		setNotes(new ArrayList<Note>());
-		setNotes(notes);
-		
+		CorrectAnswerIndex = correctindex;
+		Notes = notes;		
 	}
 	
-	public Question(Question question) {
-		ID = question.ID;
-		Auther = question.Auther;
-		this.question = new String(question.question);
-		Answers = question.Answers.clone();
-		CorrectAnswerIndex = question.CorrectAnswerIndex;
+	public Question(Question q) {
+		ID = q.getID();
+		Auther = new Teacher(q.getAuther());
+		question = new String(q.getQuestionString());
+		Answers = q.Answers.clone();
+		CorrectAnswerIndex = q.getCorrectAnswerIndex();
 	}
 	
 	public static Vector<Question> clone(Vector<Question> questions) {
@@ -59,17 +57,9 @@ public class Question{
 		return CorrectAnswerIndex;
 	}
 
-	public void setCorrectAnswerIndex(int correctAnswerIndex) {
-		CorrectAnswerIndex = correctAnswerIndex;
-	}
-
 
 	public ArrayList<Note> getNotes() {
 		return Notes;
-	}
-
-	public void setNotes(ArrayList<Note> notes) {
-		Notes = notes;
 	}
 
 	public Teacher getAuther() {

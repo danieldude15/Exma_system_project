@@ -1,6 +1,6 @@
 package ocsf.server;
 
-import ocsf.client.iMessage;
+import logic.iMessage;
 
 public class AESServer extends AbstractServer {
 

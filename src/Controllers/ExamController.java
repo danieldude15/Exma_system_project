@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import logic.Exam;
 import logic.Teacher;
+import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-import ocsf.client.iMessage;
 
 @SuppressWarnings("unchecked")
 public class ExamController {

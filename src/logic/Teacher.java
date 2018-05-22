@@ -16,6 +16,14 @@ public class Teacher extends User {
 		exams = es;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Teacher(Teacher t) {
+		super(t.getUserName(),t.getPassword(),t.getName());
+		fields = (ArrayList<Field>) t.getFiels().clone();
+		questions = (ArrayList<Question>) t.getQuestions().clone();
+		exams = (ArrayList<Exam>) t.getExams().clone();
+	}
+
 	public ArrayList<Field> getFiels() {
 		return fields;
 	}
@@ -28,12 +36,29 @@ public class Teacher extends User {
 		return exams;
 	}
 
-	public Exam getExam(int examID) {
-		for (Exam e:exams) {
-			if (e.getID()==examID) {
-				return e;
+	public boolean examExists(Exam e) {
+		int examID = e.getID();
+		for (Exam exam:exams) {
+			if (exam.getID()==examID) {
+				return true;
 			}
 		}
-		return null;
+		return false;
+	}
+	
+	public boolean fieldExists(Field f) {
+		String fieldName = f.getName();
+		for(Field field:fields) {
+			if(fieldName.equals(field.getName())) return true;
+		}
+		return false;
+	}
+	
+	public boolean questionExists(Question q) {
+		int QuestionID = q.getID();
+		for(Question question:questions) {
+			if (QuestionID==question.getID()) return true;
+		}
+		return false;
 	}
 }

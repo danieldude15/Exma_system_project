@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-import ocsf.client.iMessage;
 
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
