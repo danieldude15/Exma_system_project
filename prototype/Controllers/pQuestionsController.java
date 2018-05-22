@@ -5,7 +5,7 @@ import java.util.Vector;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import pClient.PrototypeClient;
-import pGUI.pClientGlobals;
+import pClient.pClientGlobals;
 import pLogic.pQuestion;
 
 public class pQuestionsController {
@@ -29,6 +29,7 @@ public class pQuestionsController {
 		questions = pQuestion.clone(client.questions);
 		client.questions.clear();
 		return questions;
+
 	}
 	
 	public void updateQuestionIndex(pQuestion question) {

@@ -43,9 +43,9 @@ package Controllers;
  *
  * @author Angie
  */
-public interface pControlledScreen {
+public interface ControlledScreen {
     
     //This method will allow the injection of the Parent ScreenPane
-    public void setScreenParent(pScreensController screensController);
+    public void setScreenParent(ScreensController screenPage);
     public void runOnScreenChange();
 }

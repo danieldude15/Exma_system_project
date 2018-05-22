@@ -16,12 +16,27 @@ public class DBMain {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
         	System.out.println("Error connectig to driver");
-        	throw new SQLException();
+        	System.exit(1);
         }
-	    conn = DriverManager.getConnection("jdbc:mysql://"+host,user,pass);
+	    connect();
 	}
 	
+	private boolean connect() {
+		// TODO Auto-generated method stub
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://"+host,user,pass);
+			return (conn.isValid(20));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public Connection getConn() {
 		return conn;
+	}
+
+	public boolean reconnect() {
+		return connect();
 	}
 }

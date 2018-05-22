@@ -6,18 +6,14 @@ import java.util.ResourceBundle;
 import Controllers.pControlledScreen;
 import Controllers.pQuestionsController;
 import Controllers.pScreensController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import pClient.PrototypeClient;
-import pClient.PrototypeClientApp;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import pClient.pClientGlobals;
 import pLogic.pQuestion;
 
 
@@ -25,7 +21,6 @@ public class UpdateAnswerFrame implements Initializable, pControlledScreen{
 	pScreensController myController;
 	pQuestionsController questionsController;
 	
-	ObservableList<String> list;
 	private pQuestion q2push = null;
 	private ToggleGroup group = new ToggleGroup();
 	
@@ -48,13 +43,13 @@ public class UpdateAnswerFrame implements Initializable, pControlledScreen{
 		if(cRadio.isSelected())index=3;
 		if(dRadio.isSelected())index=4;
 		q2push.setCorrectAnswerIndex(index);
-		questionsController.updateQuestionIndex(q2push);
+		questionsController.updateQuestionIndex(q2push); 
 		
 	}
 	
 	public void backToSelectingQuestionGUI(ActionEvent event) {
 		q2push=null;
-		myController.setScreen(PrototypeClientApp.SelectQuestionScreenID);
+		myController.setScreen(pClientGlobals.SelectQuestionScreenID);
 	}
 	
 	@FXML 

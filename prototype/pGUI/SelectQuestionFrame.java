@@ -19,7 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import pClient.PrototypeClientApp;
+import pClient.pClientGlobals;
 import pLogic.pQuestion;
 
 public class SelectQuestionFrame implements Initializable, pControlledScreen{
@@ -27,18 +27,17 @@ public class SelectQuestionFrame implements Initializable, pControlledScreen{
 	private Vector<pQuestion> questions  = new Vector<pQuestion>();
 	pScreensController myController;
 	UpdateAnswerFrame questionFrame;
-	pQuestionsController questionsController;
 	
 	@FXML private ListView<String> questionsListView;
 	@FXML private Label chooseLabel1;
 	@FXML private Button continueButton1;
 	@FXML private Button cancelButton1;
 	
-	
+	@FXML
 	public void moveOnToUpdateQuestionAnswer(ActionEvent event) throws Exception {
 		
 	    if(questionFrame.getQuestion()!=null) {
-			myController.setScreen(PrototypeClientApp.UpdateAnswerScreenID);
+			myController.setScreen(pClientGlobals.UpdateAnswerScreenID);
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("No Question Selected");
@@ -49,6 +48,7 @@ public class SelectQuestionFrame implements Initializable, pControlledScreen{
 		}
 	}
 	
+	@FXML
 	public void getExitBtn(ActionEvent event) throws Exception {
 		System.out.println("exit Select Question Window");
 		pClientGlobals.client.closeConnection();
@@ -71,18 +71,20 @@ public class SelectQuestionFrame implements Initializable, pControlledScreen{
 		}
 		return null;
 	}
-	@Override
+	
+	@Override	
 	public void setScreenParent(pScreensController screenParent) {
 		myController = screenParent;
 	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		questionsController = new pQuestionsController();
+	
 	}
 
 	@Override
 	public void runOnScreenChange() {
-		questionFrame = (UpdateAnswerFrame) myController.getController(PrototypeClientApp.UpdateAnswerScreenID);
+		questionFrame = (UpdateAnswerFrame) myController.getController(pClientGlobals.UpdateAnswerScreenID);
 		questions = pQuestionsController.getQuestions();
 		 
 		if (questions.size()==0) {

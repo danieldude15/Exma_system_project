@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
@@ -13,8 +14,9 @@ import pLogic.pQuestion;
 
 public class pDBMain {
 	private static String host="localhost/prototype";
-	private static String user="prototypeUser";
 	private static String pass="1234";
+	private static String user="prototypeuser";
+	private static String pass="7wJ1MLuZ!t35";
 	private Connection conn;
 	PreparedStatement updateAnswer;
 	

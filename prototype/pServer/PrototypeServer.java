@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
+import pGUI.ServerFrame;
 import pLogic.pQuestion;
 import pSQLTools.pDBMain;
 
@@ -38,14 +39,7 @@ public class PrototypeServer extends AbstractServer
 	public Vector<pQuestion> questions;
   public PrototypeServer(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
-		try {
-			sqlcon = new pDBMain();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
+		sqlcon = new pDBMain();
 	}
 
 /**
@@ -89,4 +83,11 @@ public class PrototypeServer extends AbstractServer
 	  }
   }
   
+  protected void clientConnected(ConnectionToClient client) {
+
+  }
+
+  synchronized protected void clientDisconnected(ConnectionToClient client) {
+
+  }
 }

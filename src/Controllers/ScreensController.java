@@ -39,7 +39,7 @@ package Controllers;
  * holder.
  */ 
 import java.util.HashMap;
-
+import GUI.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -56,13 +56,13 @@ import javafx.util.Duration;
  *
  * @author Angie
  */
-public class pScreensController  extends StackPane {
+public class ScreensController  extends StackPane {
     //Holds the screens to be displayed
 
     private HashMap<String, Node> screens = new HashMap<>();
-    private HashMap<String, pControlledScreen> controllers = new HashMap<>();
+    private HashMap<String, ControlledScreen> controllers = new HashMap<>();
     
-    public pScreensController() {
+    public ScreensController() {
         super();
     }
 
@@ -76,15 +76,9 @@ public class pScreensController  extends StackPane {
         return screens.get(name);
     }
     
-    //returns the controller of the id name
-    public pControlledScreen getController(String name) {
+    public ControlledScreen getController(String name) {
     	return controllers.get(name);
     }
-    
-    
-    private void addController(String name, pControlledScreen myScreenControler) {
-    	controllers.put(name, myScreenControler);
-	}
 
     //Loads the fxml file, add the screen to the screens collection and
     //finally injects the screenPane to the controller.
@@ -92,7 +86,7 @@ public class pScreensController  extends StackPane {
         try {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = (Parent) myLoader.load();
-            pControlledScreen myScreenControler = ((pControlledScreen) myLoader.getController());
+            ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
             myScreenControler.setScreenParent(this);
             addScreen(name, loadScreen);
             addController(name, myScreenControler);
@@ -104,6 +98,10 @@ public class pScreensController  extends StackPane {
         }
     }
 
+    private void addController(String name, ControlledScreen myScreenControler) {
+		// TODO Auto-generated method stub
+    	controllers.put(name, myScreenControler);
+	}
 
 	//This method tries to displayed the screen with a predefined name.
     //First it makes sure the screen has been already loaded.  Then if there is more than
