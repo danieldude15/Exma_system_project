@@ -5,25 +5,26 @@ import java.util.Vector;
 
 public class Question{
 	private int ID;
-	private int AutherID;
+	private Teacher Auther;
 	private String question;
 	private String[] Answers;
 	private int CorrectAnswerIndex;
-	private ArrayList<Note> notes;
+	private ArrayList<Note> Notes;
 	
-	public Question(int id, int autherid, String question, String[] answers,int correctindex,ArrayList<Note> notes) {
+	public Question(int id, Teacher auther, String question, String[] answers,int correctindex,ArrayList<Note> notes) {
 		ID=id;
-		AutherID=autherid;
+		Auther = auther;
 		this.question = new String(question);
 		Answers = answers;
 		setCorrectAnswerIndex(correctindex);
-		notes =new ArrayList<Note>();
+		setNotes(new ArrayList<Note>());
+		setNotes(notes);
 		
 	}
 	
 	public Question(Question question) {
 		ID = question.ID;
-		AutherID = question.AutherID;
+		Auther = question.Auther;
 		this.question = new String(question.question);
 		Answers = question.Answers.clone();
 		CorrectAnswerIndex = question.CorrectAnswerIndex;
@@ -62,7 +63,16 @@ public class Question{
 		CorrectAnswerIndex = correctAnswerIndex;
 	}
 
-	public int getAutherID() {
-		return AutherID;
+
+	public ArrayList<Note> getNotes() {
+		return Notes;
+	}
+
+	public void setNotes(ArrayList<Note> notes) {
+		Notes = notes;
+	}
+
+	public Teacher getAuther() {
+		return Auther;
 	}
 }
