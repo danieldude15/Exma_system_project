@@ -6,7 +6,7 @@ public class User {
 	private String name;
 	
 	
-	public User(String userName,String Password,String Name)
+	public User(String userName,String Password,String Name)/*Constructor/*/
 	{
 		this.userName=userName;
 		this.password=Password;

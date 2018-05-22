@@ -6,14 +6,14 @@ public class Exam
  private int ID;
  private int Duration;
  private Teacher Author;
- private ArrayList<Question> Questions;
+ private ArrayList<QuestionInExam> questionsInExam;
 	
  
  public Exam(int id,int duration,Teacher authorid)
  {
- setID(id);
- setDuration(duration);
- setAuther(authorid);
+	 setID(id);
+	 setDuration(duration);
+	 setAuther(authorid);
  }
 
 	public Exam(Exam exam) {
@@ -51,21 +51,30 @@ public void setDuration(int duration) {
 
 
 public Teacher getAuther() {
-	return Auther;
+	return this.Author;
 }
 
 
 public void setAuther(Teacher auther) {
-	Auther = auther;
+	this.Author = auther;
 }
 
 
-public ArrayList<Question> getQuestions() {
-	return Questions;
+public ArrayList<QuestionInExam> getQuestions() {
+	return this.questionsInExam;
 }
 
 
-public void setQuestions(ArrayList<Question> questions) {
-	Questions = questions;
+public void AddQuestionToExam(QuestionInExam q) {
+	/*Add new question to exam/*/
+	int PointsInExam=0;
+	for(int i=0;i<questionsInExam.size();i++)
+	{
+		PointsInExam+=questionsInExam.get(i).getPointsValue();
+	}
+	if(PointsInExam+q.getPointsValue()<=100)
+		this.questionsInExam.add(q);
 }
+
+
 }
