@@ -1,14 +1,7 @@
-package ocsf.client;
+package ocsf.server;
 
-public class ClientGlobals {
-	public static AESClient client = null;
-
-	public static void handleIOException() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+public class ServerGlobals {
+	AESServer server = null;
 	
 	/*
 	#####################   NIV's Globals!    #########################
@@ -67,5 +60,5 @@ public class ClientGlobals {
 	#####################  END OF DANIEL's Globals!    #########################
 	*/
 	
-	
+
 }

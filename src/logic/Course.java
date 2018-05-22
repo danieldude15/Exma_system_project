@@ -42,7 +42,7 @@ public class Course {
 	}
 	public void setQuestions(ArrayList<Question> questions)
 	{
-		this.questions=questions
+		this.questions=questions;
 	}
 	public ArrayList<Student> getStudents()
 	{

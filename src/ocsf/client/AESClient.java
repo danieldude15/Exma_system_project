@@ -17,7 +17,26 @@ public class AESClient extends AbstractClient{
 	 * @param msg   this will always be an iMessage type of object 
 	 */
 	protected void handleMessageFromServer(Object msg){
-	 
+		if(!(msg instanceof iMessage)) {
+			return;
+		}
+		iMessage m = (iMessage) msg;
+		String cmd = new String(m.getCommand());
+		switch(cmd) {
+		case "setTeachersQuestions":
+			//code here
+			break;
+		case "setTeachersExams":
+			//code here
+			break;
+		case "setTeachersFields":
+			//code here
+			break;
+			
+		default:
+			
+		}
+		
 	}
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
@@ -37,7 +56,16 @@ public class AESClient extends AbstractClient{
 				e.printStackTrace();
 			}
 			count++;
-			if(count>=50);
+			if(count>=50) {
+				ClientGlobals.handleIOException();
+				break;
+			}
 		}
+	}
+
+
+	public void cleanMsg() {
+		msg=null;
+		stopWaiting=false;
 	}
 }
