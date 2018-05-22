@@ -36,7 +36,6 @@ public class pDBMain {
 		Statement stmt = conn.createStatement();
 		ResultSet uprs = stmt.executeQuery("SELECT * FROM Questions");
 		Vector<pQuestion> questions = new Vector<pQuestion>();
-		
 		while(uprs.next())
  		{
 			 // Print out the values for debug
