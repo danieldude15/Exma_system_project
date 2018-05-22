@@ -1,0 +1,16 @@
+.list-view {
+	-fx-background-radius: 10px;
+}
+
+.label {
+	-fx-background-color: white;
+}
+
+.button {
+	-fx-background-radius:5px;
+	-fx-background-color: green;
+	-fx-border-width: 2px;
+	-fx-border-color: black;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}

@@ -13,7 +13,7 @@ import pLogic.pQuestion;
 
 public class pDBMain {
 	private static String host="localhost/prototype";
-	private static String user="protorypeUser";
+	private static String user="prototypeUser";
 	private static String pass="1234";
 	private Connection conn;
 	PreparedStatement updateAnswer;
