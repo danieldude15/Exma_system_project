@@ -1,4 +1,4 @@
-package ocsf.client;
+package logic;
 
 public class iMessage {
 	

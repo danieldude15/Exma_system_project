@@ -12,5 +12,21 @@ public class Field {
 	public Field(Field f) {
 		
 	}
+
+	public String getName() {
+		return fName;
+	}
+	
+	public int getID() {
+		return fID;
+	}
+	
+	public ArrayList<Course> getCoursesInField(){
+		return courses;
+	}
+	
+	public ArrayList<Teacher> getTeachersInField(){
+		return teachers;
+	}
  
 }
