@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
 import Controllers.ScreensController;
-import Controllers.pScreensController;
 import javafx.fxml.Initializable;
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {

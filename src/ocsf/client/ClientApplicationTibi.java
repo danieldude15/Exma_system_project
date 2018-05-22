@@ -3,13 +3,11 @@ package ocsf.client;
 import java.io.IOException;
 
 import Controllers.ScreensController;
-import Controllers.pScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pClient.PrototypeClientApp;
-import pClient.pClientGlobals;
+
 
 public class ClientApplicationTibi extends Application {
 

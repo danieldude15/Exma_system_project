@@ -1,25 +1,27 @@
-package pLogic;
+package logic;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
-@SuppressWarnings("serial")
-public class pQuestion implements Serializable  {
+public class Question{
 	private int ID;
 	private int AutherID;
 	private String question;
 	private String[] Answers;
 	private int CorrectAnswerIndex;
+	private ArrayList<Note> notes;
 	
-	public pQuestion(int id, int autherid, String question, String[] answers,int correctindex) {
+	public Question(int id, int autherid, String question, String[] answers,int correctindex,ArrayList<Note> notes) {
 		ID=id;
 		AutherID=autherid;
 		this.question = new String(question);
 		Answers = answers;
 		setCorrectAnswerIndex(correctindex);
+		notes =new ArrayList<Note>();
+		
 	}
 	
-	public pQuestion(pQuestion question) {
+	public Question(Question question) {
 		ID = question.ID;
 		AutherID = question.AutherID;
 		this.question = new String(question.question);
@@ -27,10 +29,10 @@ public class pQuestion implements Serializable  {
 		CorrectAnswerIndex = question.CorrectAnswerIndex;
 	}
 	
-	public static Vector<pQuestion> clone(Vector<pQuestion> questions) {
-		Vector<pQuestion> questionsRes = new Vector<pQuestion>();
-		for (pQuestion q:questions) {
-			questionsRes.add(new pQuestion(q));
+	public static Vector<Question> clone(Vector<Question> questions) {
+		Vector<Question> questionsRes = new Vector<Question>();
+		for (Question q:questions) {
+			questionsRes.add(new Question(q));
 		}
 		return questionsRes;
 	}

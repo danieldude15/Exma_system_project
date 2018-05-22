@@ -3,7 +3,6 @@ package Controllers;
 import java.sql.SQLException;
 
 import SQLTools.DBMain;
-import pServer.pServerGlobals;
 
 public class AesSQLException extends SQLException {
 
