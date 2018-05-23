@@ -1,6 +1,7 @@
 package ocsf.server;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import SQLTools.DBMain;
@@ -63,6 +64,14 @@ public class AESServer extends AbstractServer {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	protected void serverClosed() {
+		try {
+			sqlcon.getConn().close();
+		} catch (SQLException e) {
+			Globals.handleException(e);
 		}
 	}
 

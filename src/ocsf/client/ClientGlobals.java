@@ -21,7 +21,6 @@ public class ClientGlobals {
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
-		
 	}
 	
 	
