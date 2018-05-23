@@ -3,11 +3,13 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import logic.Field;
+import logic.SolvedExam;
+import logic.Student;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+@SuppressWarnings("unchecked")
 public class SolvedExamController {
 
 	
@@ -20,11 +22,11 @@ public class SolvedExamController {
 				client.sendToServer(msg);
 				client.waitForResponse();
 				Object o = msg.getObj();
-				solved = new ArrayList<SolvedExams>();
+				solved = new ArrayList<SolvedExam>();
 				if(o instanceof ArrayList) {
-					ArrayList<SolvedExams> StudentsSolvedExams = (ArrayList<SolvedExams>) o;
-					for (Field se: StudentsSolvedExams) {
-						SolvedExams sExam = new SolvedExams(se);
+					ArrayList<SolvedExam> StudentsSolvedExams = (ArrayList<SolvedExam>) o;
+					for (SolvedExam se: StudentsSolvedExams) {
+						SolvedExam sExam = new SolvedExam(se);
 						solved.add(sExam);
 					}
 				}

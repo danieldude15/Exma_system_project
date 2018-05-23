@@ -1,10 +1,7 @@
 package logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
 
 public class Student extends User{
 	
