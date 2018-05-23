@@ -1,10 +1,7 @@
 package logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
 
 public class Student extends User{
 	
@@ -19,9 +16,10 @@ public class Student extends User{
 		return solved;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Student(Student s) {
 		super(new String(s.getName()),new String(s.getPassword()),new String(s.getName()));
-		solved = s.getAllSolvedExams().clone();
+		solved = (ArrayList<SolvedExam>) s.getAllSolvedExams().clone();
 	}
 	
 	public SolvedExam getSolvedExam(Exam e) {

@@ -6,7 +6,7 @@ import logic.Exam;
 import logic.ExamReport;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-import ocsf.client.iMessage;
+import logic.iMessage;
 
 public class ReportController {
 	
