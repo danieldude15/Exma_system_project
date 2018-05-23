@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
@@ -12,18 +13,112 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
+<AnchorPane prefHeight="607.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
    <children>
-      <Pane>
+      <HBox prefHeight="636.0" prefWidth="806.0">
          <children>
-            <HBox>
+            <Pane prefHeight="638.0" prefWidth="806.0">
                <children>
-                  <VBox alignment="TOP_CENTER">
+                  <HBox layoutX="228.0" layoutY="14.0" prefHeight="408.0" prefWidth="576.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="Active Exams:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ListView fx:id="ActiveExamsList">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </ListView>
+                              <HBox alignment="TOP_CENTER" prefHeight="54.0" prefWidth="248.0">
+                                 <children>
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lock Exam">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Separator orientation="VERTICAL" prefHeight="200.0">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button minWidth="-Infinity" mnemonicParsing="false" text="Request Time Change">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="20.0" layoutY="20.0">
+                           <children>
+                              <Label text="Completed Exams:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ListView fx:id="CompletedExamsList">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </ListView>
+                              <HBox alignment="TOP_CENTER" prefHeight="62.0" prefWidth="248.0">
+                                 <children>
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Generate Report">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Separator orientation="VERTICAL" prefHeight="200.0">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Check Exams">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox layoutX="7.0" layoutY="426.0" prefHeight="215.0" prefWidth="796.0">
+                     <children>
+                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="My Info">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="177.0" prefWidth="796.0" />
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="14.0" layoutY="14.0" prefHeight="402.0" prefWidth="197.0">
                      <children>
                         <Button mnemonicParsing="false" text="Manage Questions">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                              <Insets bottom="50.0" left="5.0" top="50.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -31,7 +126,7 @@
                         </Button>
                         <Button mnemonicParsing="false" text="Manage Exams">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" />
+                              <Insets bottom="50.0" left="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -39,7 +134,7 @@
                         </Button>
                         <Button layoutX="60.0" layoutY="190.0" mnemonicParsing="false" text="Initiate Exam">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" />
+                              <Insets bottom="50.0" left="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -47,90 +142,9 @@
                         </Button>
                      </children>
                   </VBox>
-                  <VBox>
-                     <children>
-                        <ListView>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </ListView>
-                        <HBox alignment="TOP_CENTER">
-                           <children>
-                              <Button mnemonicParsing="false" text="Lock Exam">
-                                 <HBox.margin>
-                                    <Insets left="50.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Separator orientation="VERTICAL">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
-                                 </HBox.margin>
-                              </Separator>
-                              <Button mnemonicParsing="false" text="Request Time Change">
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                     </children>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </VBox>
-                  <VBox layoutX="20.0" layoutY="20.0">
-                     <children>
-                        <ListView>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </ListView>
-                        <HBox alignment="TOP_CENTER">
-                           <children>
-                              <Button mnemonicParsing="false" text="Generate Report">
-                                 <HBox.margin>
-                                    <Insets left="50.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Separator orientation="VERTICAL">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
-                                 </HBox.margin>
-                              </Separator>
-                              <Button mnemonicParsing="false" text="Check Exams">
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </VBox>
                </children>
-            </HBox>
-            <VBox layoutX="7.0" layoutY="426.0">
-               <children>
-                  <TabPane tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                      <Tab text="My Info">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="223.0" prefWidth="1113.0" />
-                        </content>
-                      </Tab>
-                    </tabs>
-                  </TabPane>
-               </children>
-            </VBox>
+            </Pane>
          </children>
-      </Pane>
+      </HBox>
    </children>
-</HBox>
+</AnchorPane>

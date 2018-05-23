@@ -1,7 +1,15 @@
 package ocsf.server;
 
+import java.sql.SQLException;
+
 public class ServerGlobals {
 	AESServer server = null;
+	
+	public static void handleSQLException(SQLException e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	/*
 	#####################   NIV's Globals!    #########################
