@@ -15,7 +15,7 @@ public class ClientGlobals {
 	 */
 	public static final String TeacherMainID = "TeacherMain";
 	public static final String TeacherMainPath = "TeacherMain.fxml";
-	public static final String ClientConnectionScreenPath = "ClientGui.fxml";
+	public static final String ClientConnectionScreenPath = "/GUI/ClientGui.fxml";
 	public static final String LogInID = "LogIn";
 	public static final String LogInPath = "Login.fxml";
 

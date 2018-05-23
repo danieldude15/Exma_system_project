@@ -1,4 +1,4 @@
-package GUI;
+package ocsf.client;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Globals;
-import ocsf.client.ClientGlobals;
 
 
 public class ClientApplication extends Application {
