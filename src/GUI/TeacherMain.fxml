@@ -15,11 +15,11 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
    <children>
-      <HBox prefHeight="702.0" prefWidth="1138.0">
+      <HBox prefHeight="702.0" prefWidth="806.0">
          <children>
-            <Pane prefHeight="702.0" prefWidth="1138.0">
+            <Pane prefHeight="702.0" prefWidth="819.0">
                <children>
-                  <HBox layoutX="363.0" layoutY="14.0" prefHeight="408.0">
+                  <HBox layoutX="228.0" layoutY="14.0" prefHeight="408.0" prefWidth="576.0">
                      <children>
                         <VBox>
                            <children>
@@ -101,24 +101,24 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox layoutX="7.0" layoutY="426.0" prefHeight="267.0" prefWidth="1125.0">
+                  <VBox layoutX="7.0" layoutY="426.0" prefHeight="267.0" prefWidth="796.0">
                      <children>
                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="My Info">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="223.0" prefWidth="1113.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="171.0" prefWidth="751.0" />
                               </content>
                             </Tab>
                           </tabs>
                         </TabPane>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="402.0" prefWidth="342.0">
+                  <VBox layoutX="14.0" layoutY="14.0" prefHeight="402.0" prefWidth="197.0">
                      <children>
                         <Button mnemonicParsing="false" text="Manage Questions">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                              <Insets bottom="50.0" left="5.0" top="50.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -126,7 +126,7 @@
                         </Button>
                         <Button mnemonicParsing="false" text="Manage Exams">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" />
+                              <Insets bottom="50.0" left="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -134,7 +134,7 @@
                         </Button>
                         <Button layoutX="60.0" layoutY="190.0" mnemonicParsing="false" text="Initiate Exam">
                            <VBox.margin>
-                              <Insets bottom="50.0" left="50.0" right="50.0" />
+                              <Insets bottom="50.0" left="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />

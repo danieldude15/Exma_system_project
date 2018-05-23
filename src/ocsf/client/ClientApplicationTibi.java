@@ -1,7 +1,5 @@
 package ocsf.client;
 
-import java.io.IOException;
-
 import Controllers.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
