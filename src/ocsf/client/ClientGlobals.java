@@ -1,7 +1,17 @@
 package ocsf.client;
 
+import Controllers.ScreensController;
+
 public class ClientGlobals {
 	public static AESClient client = null;
+	public static ScreensController mainContainer;
+	
+	/*
+	 * Screen Controllers ID's and Paths!
+	 */
+	public static final String TeacherMainID = "TeacherMain";
+	public static final String TeacherMainPath = "TeacherMain.fxml";
+	public static final String ClientConnectionScreenPath = "ClientGui.fxml";
 
 	public static void handleIOException() {
 		// TODO Auto-generated method stub

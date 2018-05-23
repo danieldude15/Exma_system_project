@@ -8,9 +8,9 @@ import logic.Globals;
 
 
 public class DBMain {
-	private static String host="localhost/aes";
-	private static String user="aesUser";
-	private static String pass="QxU&v&HMm0t&";
+	private String host;
+	private String user;
+	private String pass;
 	private Connection conn;
 	
 	/**
@@ -43,7 +43,7 @@ public class DBMain {
 		// TODO Auto-generated method stub
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://"+host,user,pass);
-			return (conn.isValid(20));
+			return true;
 		} catch (SQLException e) {
 			Globals.handleException(e);
 		}
@@ -64,11 +64,6 @@ public class DBMain {
 	 * @return true if connection is valid otherwise returns false
 	 */
 	public boolean reconnect() {
-		try {
-			if (this.getConn().isValid(20)) return true;
-		} catch (SQLException e) {
-			Globals.handleException(e);
-		}
 		return connect();
 	}
 }

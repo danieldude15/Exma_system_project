@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ClientFrame">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" text="Client Connection" textAlignment="CENTER" underline="true">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <HBox alignment="TOP_CENTER">
+         <children>
+            <Label text="Server Host:">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="hostval" text="localhost">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="80.0" maxHeight="-Infinity">
+         <children>
+            <Label text="Server port:">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="portval" text="55555">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity">
+         <children>
+            <Label text="Client Status:">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="clientStatus" layoutX="143.0" layoutY="15.0" text="&lt;Disconnected&gt;" textFill="RED">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="112.0">
+         <children>
+            <Button fx:id="connectB" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#ConnectToServer" text="Connect">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="disconnectB" mnemonicParsing="false" onAction="#DisconnectFromServer" text="Disconnect">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="142.0">
+         <children>
+            <Button fx:id="launchapp" disable="true" mnemonicParsing="false" onAction="#LaunchApp" text="Launch AES App">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

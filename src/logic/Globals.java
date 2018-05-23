@@ -1,5 +1,7 @@
 package logic;
 
+import ocsf.client.AESClient;
+
 public class Globals {
 	public enum Type {
 		VISIBLE,HIDDEN;

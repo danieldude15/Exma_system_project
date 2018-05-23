@@ -1,12 +1,13 @@
 package ocsf.server;
 
+import SQLTools.DBMain;
 import logic.iMessage;
 
 public class AESServer extends AbstractServer {
-
+	private DBMain sqlcon;
 	public AESServer(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
+		DBMain sqlcon = new DBMain(ServerGlobals.dbHost, ServerGlobals.dbuser, ServerGlobals.dbpass);
 	}
 
 	@Override
