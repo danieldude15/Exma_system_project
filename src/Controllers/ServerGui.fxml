@@ -6,24 +6,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="268.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ServerFrame">
+<AnchorPane prefHeight="320.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ServerFrame">
    <children>
-      <Button fx:id="StartListenBotton" layoutX="43.0" layoutY="70.0" mnemonicParsing="false" onAction="#StartListening" text="Start Server (Listen)" />
-      <Button fx:id="closeConnectionBotton" layoutX="43.0" layoutY="113.0" mnemonicParsing="false" onAction="#closeConnectionsBotton" text="Kill Server" />
-      <Label layoutX="29.0" layoutY="163.0" prefHeight="78.0" prefWidth="235.0" text="ServerStatus:">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Label fx:id="statusLabel" layoutX="264.0" layoutY="176.0" text="Status">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <TextField fx:id="portnum" layoutX="173.0" layoutY="29.0" prefHeight="25.0" prefWidth="68.0" text="55555" />
-      <Label layoutX="43.0" layoutY="28.0" text="listen on port:">
+      <Button fx:id="StartListenBotton" layoutX="42.0" layoutY="121.0" mnemonicParsing="false" onAction="#StartListening" text="Start Server (Listen)" />
+      <Button fx:id="closeConnectionBotton" layoutX="42.0" layoutY="164.0" mnemonicParsing="false" onAction="#closeConnectionsBotton" text="Kill Server" />
+      <Label layoutX="28.0" layoutY="214.0" prefHeight="78.0" prefWidth="235.0" text="ServerStatus:">
          <font>
             <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="statusLabel" layoutX="182.0" layoutY="240.0" text="Status">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="portnum" layoutX="172.0" layoutY="80.0" prefHeight="25.0" prefWidth="68.0" text="55555" />
+      <Label layoutX="42.0" layoutY="79.0" text="listen on port:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="42.0" layoutY="14.0" text="Server Admin Panel" underline="true">
+         <font>
+            <Font size="36.0" />
          </font>
       </Label>
    </children>

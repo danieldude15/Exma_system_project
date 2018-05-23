@@ -31,7 +31,6 @@ public class ServerFrame implements ControlledScreen,Initializable {
 
 	@Override
 	public void runOnScreenChange() {
-		statusLabel.setText("<Status>");
 	}
 	
 	@FXML
@@ -41,9 +40,11 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		try {
 			ServerGlobals.server.listen();
 			statusLabel.setText("Listening");
+			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#00FF00"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			statusLabel.setText("Failed To Listen Try Again");
+			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 		}
 	}
 	
@@ -53,15 +54,19 @@ public class ServerFrame implements ControlledScreen,Initializable {
 			ServerGlobals.server.close();
 			ServerGlobals.server.stopListening();
 			statusLabel.setText("Server Down");
+			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			portnum.setDisable(false);			
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusLabel.setText("Failed To close connection");
+			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		statusLabel.setText("<Status>");
+		statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 	}
 	
 	public void addClient(ConnectionToClient client) {
