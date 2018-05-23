@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
+<AnchorPane prefHeight="607.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
    <children>
-      <HBox prefHeight="702.0" prefWidth="806.0">
+      <HBox prefHeight="636.0" prefWidth="806.0">
          <children>
-            <Pane prefHeight="702.0" prefWidth="819.0">
+            <Pane prefHeight="638.0" prefWidth="806.0">
                <children>
                   <HBox layoutX="228.0" layoutY="14.0" prefHeight="408.0" prefWidth="576.0">
                      <children>
@@ -33,11 +33,11 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </ListView>
-                              <HBox alignment="TOP_CENTER">
+                              <HBox alignment="TOP_CENTER" prefHeight="54.0" prefWidth="248.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Lock Exam">
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lock Exam">
                                        <HBox.margin>
-                                          <Insets left="50.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                     <Separator orientation="VERTICAL" prefHeight="200.0">
@@ -45,9 +45,9 @@
                                           <Insets left="10.0" right="10.0" />
                                        </HBox.margin>
                                     </Separator>
-                                    <Button mnemonicParsing="false" text="Request Time Change">
+                                    <Button minWidth="-Infinity" mnemonicParsing="false" text="Request Time Change">
                                        <HBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>
@@ -72,11 +72,11 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </ListView>
-                              <HBox alignment="TOP_CENTER">
+                              <HBox alignment="TOP_CENTER" prefHeight="62.0" prefWidth="248.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Generate Report">
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Generate Report">
                                        <HBox.margin>
-                                          <Insets left="50.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                     <Separator orientation="VERTICAL" prefHeight="200.0">
@@ -84,9 +84,9 @@
                                           <Insets left="10.0" right="10.0" />
                                        </HBox.margin>
                                     </Separator>
-                                    <Button mnemonicParsing="false" text="Check Exams">
+                                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Check Exams">
                                        <HBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>
@@ -101,13 +101,13 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox layoutX="7.0" layoutY="426.0" prefHeight="267.0" prefWidth="796.0">
+                  <VBox layoutX="7.0" layoutY="426.0" prefHeight="215.0" prefWidth="796.0">
                      <children>
                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="My Info">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="171.0" prefWidth="751.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="177.0" prefWidth="796.0" />
                               </content>
                             </Tab>
                           </tabs>
