@@ -12,7 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import logic.Globals;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
@@ -65,6 +67,7 @@ public class ClientFrame implements Initializable {
 	public void LaunchApp(ActionEvent event) {
 		Stage primaryStage = new Stage();
 		ClientGlobals.mainContainer = new ScreensController();
+		Globals.primaryStage = primaryStage;
 		ScreensController mainContainer = ClientGlobals.mainContainer;
 		if (!mainContainer.loadScreen(ClientGlobals.LogInID, ClientGlobals.LogInPath)) {
         	System.out.println("failed to load "+ ClientGlobals.LogInID);
@@ -75,8 +78,15 @@ public class ClientFrame implements Initializable {
         	return;
         }
 		mainContainer.setScreen(ClientGlobals.LogInID);
-        Group root = new Group();
-        root.getChildren().addAll(mainContainer);
+		
+		AnchorPane root = new AnchorPane();
+		root.getChildren().addAll(mainContainer);
+		root.setTopAnchor(mainContainer, 0.0);
+		root.setRightAnchor(mainContainer, 0.0);
+		root.setBottomAnchor(mainContainer, 0.0);
+		root.setLeftAnchor(mainContainer, 0.0);
+        //Group root = new Group();
+        //root.getChildren().addAll(mainContainer);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(closeUpdate ->

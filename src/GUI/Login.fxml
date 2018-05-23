@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginFrame">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -51,7 +50,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="passwordfield" alignment="TOP_RIGHT">
+            <PasswordField fx:id="passwordfield">
                <font>
                   <Font size="18.0" />
                </font>
@@ -63,7 +62,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="10.0" layoutY="189.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#logInClicked" text="Log In">
+            <Button fx:id="loginB" mnemonicParsing="false" onAction="#logInClicked" text="Log In">
                <HBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin>

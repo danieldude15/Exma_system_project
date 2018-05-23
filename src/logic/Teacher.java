@@ -1,9 +1,10 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Teacher extends User {
+public class Teacher extends User implements Serializable{
 	
 	private ArrayList<Field> fields;
 	private ArrayList<Question> questions;
@@ -19,9 +20,6 @@ public class Teacher extends User {
 	@SuppressWarnings("unchecked")
 	public Teacher(Teacher t) {
 		super(t.getID(),new String(t.getUserName()),new String(t.getPassword()),new String(t.getName()));
-		fields = (ArrayList<Field>) t.getFiels().clone();
-		questions = (ArrayList<Question>) t.getQuestions().clone();
-		exams = (ArrayList<Exam>) t.getExams().clone();
 	}
 
 	public ArrayList<Field> getFiels() {

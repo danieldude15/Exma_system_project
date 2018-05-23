@@ -5,11 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.sql.ResultSet;
 
-import logic.ActiveExam;
-import logic.Globals;
-import logic.Teacher;
+import logic.*;
 import ocsf.server.ServerGlobals;
 
 
@@ -18,9 +17,29 @@ public class DBMain {
 	private String user;
 	private String pass;
 	private Connection conn;
+	PreparedStatement prst;
 	ResultSet rs;
-	private String getActiveEams = new String("SELECT * FROM (SELECT * FROM aes.activatedexams WHERE teacherid=?) B INNER JOIN aes.teachers ON teachers.teacherid=B.teacherid") ;
-	
+	private String tableA = "";
+	private String tableB= "";
+	private String columnA= "";
+	private String columnB= "";
+	private String getActiveEams = new String(
+			"SELECT * FROM "
+			+ "(SELECT * FROM aes.activatedexams WHERE teacherid=?) B "
+			+ "INNER JOIN aes.teachers ON teachers.teacherid=B.teacherid") ;
+	private String getAllUsers = new String(
+			"Select * FROM aes.users"
+			);
+	private String getAllTeachers = new String(
+			"Select * FROM aes.users,aes.teachers WHERE userid=teacherid"
+			);
+	private String getAllStudents = new String(
+			"Select * FROM aes.users,aes.students WHERE userid=teacherid"
+			);
+	private String getAllPrinciples = new String(
+			"Select * FROM aes.users,aes.principles WHERE userid=teacherid"
+			);
+	private String login;
 	/**
 	 * creating a Database Class creates a connection to an SQLServer
 	 * @param h the host address - could be a domain name or ip address (ex. "localhost/schema" or "192.168.1.15/schema")
@@ -41,6 +60,13 @@ public class DBMain {
 		user=u;
 		pass=p;
 	    connect();
+	}
+	
+	private void setLogin() {
+		login = new String(
+				"SELECT * " + 
+				"FROM aes."+tableA+" , aes.users " + 
+				"WHERE "+columnA+"=userid AND username=?");
 	}
 	
 	/**
@@ -76,7 +102,6 @@ public class DBMain {
 	}
 
 	public void getTeachersActiveExams(Teacher t) {
-		PreparedStatement prst;
 		try {
 			prst = conn.prepareStatement(getActiveEams);
 			prst.setInt(1, t.getID());
@@ -98,5 +123,65 @@ public class DBMain {
 			ServerGlobals.handleSQLException(e);
 		}
 		
+	}
+
+	public User UserLogIn(User u) {
+		String type = null;
+		try {
+			tableA= "students";
+			columnA = "studentid";
+			setLogin();
+			prst = conn.prepareStatement(login);
+			prst.setString(1,u.getUserName());
+			System.out.println("About to excecute:"+prst);
+			if (prst.execute()) {
+				rs = prst.getResultSet();
+				if (rs.next()) {
+					int userid = rs.getInt(2);
+					String username = rs.getString(3);
+					String password = rs.getString(4);
+					String fullname = rs.getString(5);
+					if (!password.equals(u.getPassword())) return null;
+					return new Student(userid,username,password,fullname,null);
+				}
+			}
+			tableA= "teachers";
+			columnA = "teacherid";
+			setLogin();
+			prst = conn.prepareStatement(login);
+			prst.setString(1,u.getUserName());
+			if (prst.execute()) {
+				rs = prst.getResultSet();
+				if (rs.next()) {
+					int userid = rs.getInt(2);
+					String username = rs.getString(3);
+					String password = rs.getString(4);
+					String fullname = rs.getString(5);
+					if (!password.equals(u.getPassword())) return null;
+					return new Teacher(userid,username,password,fullname,null,null,null);
+				}
+			}
+			tableA= "principles";
+			columnA = "principleid";
+			setLogin();
+			prst = conn.prepareStatement(login);
+			prst.setString(1,u.getUserName());
+			if (prst.execute()) {
+				rs = prst.getResultSet();
+				if (rs.next()) {
+					int userid = rs.getInt(2);
+					String username = rs.getString(3);
+					String password = rs.getString(4);
+					String fullname = rs.getString(5);
+					if (!password.equals(u.getPassword())) return null;
+					return new Principle(userid,username,password,fullname);
+				}
+			}
+			System.out.println(type);
+			return null;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
 	}
 }

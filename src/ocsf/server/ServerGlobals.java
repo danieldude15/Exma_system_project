@@ -14,8 +14,8 @@ public class ServerGlobals {
 	public static final String dbpass="QxU&v&HMm0t&";
 	
 	public static void handleSQLException(SQLException e) {
-		// TODO Auto-generated method stub
-		
+		e.printStackTrace();
+		System.exit(1);
 	}
 	
 	

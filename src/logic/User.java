@@ -1,6 +1,8 @@
 package logic;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 	private int id;
 	private String userName;
 	private String password;
@@ -29,6 +31,10 @@ public class User {
 	
 	public int getID() {
 		return id;
+	}
+	
+	public String toString() {
+		return new String("ID:"+id+" UserName:"+userName+" Password:"+password+" FullName:"+name);
 	}
 }
 

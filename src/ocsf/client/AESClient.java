@@ -1,6 +1,9 @@
 package ocsf.client;
 
 import logic.Globals;
+import logic.Principle;
+import logic.Student;
+import logic.Teacher;
 import logic.User;
 import logic.iMessage;
 
@@ -20,16 +23,28 @@ public class AESClient extends AbstractClient{
 	 *
 	 * @param msg   this will always be an iMessage type of object 
 	 */
-	protected void handleMessageFromServer(Object msg){
-		if(!(msg instanceof iMessage)) {
+	protected void handleMessageFromServer(Object ServerMsg){
+		if(!(ServerMsg instanceof iMessage)) {
+			System.out.println("Server msg not of iMessage type");
 			return;
 		}
-		iMessage m = (iMessage) msg;
-		String cmd = new String(m.getCommand());
+		this.msg = (iMessage) ServerMsg;
+		System.out.println("Got msg from Server:" + msg);
+		String cmd = new String(msg.getCommand());
 		switch(cmd) {
+		case "login":
+			if (msg.getObj()==null) {
+				msg.setCommand("none");
+			} else if (msg.getObj() instanceof Teacher) {
+				msg.setCommand("Teacher");
+			} else if(msg.getObj() instanceof Principle) {
+				msg.setCommand("Principle");
+			} else if(msg.getObj() instanceof Student) {
+				msg.setCommand("Student");
+			}
+			break;
 		case "gotTeachersActiveExams":
-			System.out.println("got msg from server gotTeachersActiveExams");
-			
+			//code here
 			break;
 		case "setTeachersQuestions":
 			//code here
@@ -44,6 +59,7 @@ public class AESClient extends AbstractClient{
 		default:
 			
 		}
+		stopWaiting=true;
 		
 	}
 	protected void connectionClosed() {
@@ -65,7 +81,8 @@ public class AESClient extends AbstractClient{
 			}
 			count++;
 			if(count>=50) {
-				Globals.handleException(new Exception("Waited for tooo long for server response!"));
+				System.out.println("Server Taking Long Time To Respond...");
+				//Globals.handleException(new Exception("Waited for tooo long for server response!"));
 				break;
 			}
 		}

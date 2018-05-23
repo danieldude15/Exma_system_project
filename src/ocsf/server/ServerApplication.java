@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.Globals;
 
 public class ServerApplication extends Application {
 
@@ -16,6 +17,7 @@ public class ServerApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		ServerGlobals.mainContainer = new ScreensController();
+		Globals.primaryStage = new Stage();
         if(!ServerGlobals.mainContainer.loadScreen(ServerGlobals.ServerGuiID, ServerGlobals.ServerGuiPath)) {
         	System.out.println("failed to load "+ ServerGlobals.ServerGuiID);
         }
@@ -29,7 +31,8 @@ public class ServerApplication extends Application {
         primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
 	        try {
-	        	ServerGlobals.server.close();
+	        	if (ServerGlobals.server!=null)
+	        		ServerGlobals.server.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

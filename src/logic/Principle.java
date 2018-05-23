@@ -1,8 +1,9 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Principle extends User {
+public class Principle extends User implements Serializable{
 
 	private ArrayList<TimeChangeRequest> timeChangeList;
 	

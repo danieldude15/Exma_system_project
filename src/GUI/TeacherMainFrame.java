@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import logic.Globals;
 import ocsf.client.ClientGlobals;
 
 
@@ -39,7 +40,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		ActiveExamController.getTeachersActiveExams(ClientGlobals.client.getUser());
-		
+		Globals.primaryStage.setHeight(700);
+		Globals.primaryStage.setWidth(800);
 	}
 	
 	@FXML

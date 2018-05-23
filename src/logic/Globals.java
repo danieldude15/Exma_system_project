@@ -1,11 +1,14 @@
 package logic;
 
+import javafx.stage.Stage;
 import ocsf.client.AESClient;
 
 public class Globals {
 	public enum Type {
 		VISIBLE,HIDDEN;
 	}
+
+	public static Stage primaryStage = null;
 	
 	/**
 	 * handle a core exception when the program cannot continue to function after this type of exception

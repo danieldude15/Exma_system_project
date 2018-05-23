@@ -1,6 +1,8 @@
 package logic;
 
-public class iMessage {
+import java.io.Serializable;
+
+public class iMessage implements Serializable{
 	
 	private String command;
 	private Object obj;
@@ -17,5 +19,16 @@ public class iMessage {
 	public String getCommand() {
 		return command;
 	}
+	
+	public void setObj(Object o) {
+		obj=o;
+	}
+	
+	public void setCommand(String cmd) {
+		command = cmd;
+	}
 
+	public String toString() {
+		return new String("command:"+command + " --- Object:" + obj);
+	}
 }
