@@ -7,8 +7,8 @@ public class Student extends User{
 	
 	private ArrayList<SolvedExam> solved;
 	
-	public Student(String userName, String Password, String Name,ArrayList<SolvedExam> s) {
-		super(userName, Password, Name);
+	public Student(int id,String userName, String Password, String Name,ArrayList<SolvedExam> s) {
+		super(id,userName, Password, Name);
 		solved = s;
 	}
 	
@@ -18,7 +18,7 @@ public class Student extends User{
 
 	@SuppressWarnings("unchecked")
 	public Student(Student s) {
-		super(new String(s.getName()),new String(s.getPassword()),new String(s.getName()));
+		super(s.getID(),new String(s.getName()),new String(s.getPassword()),new String(s.getName()));
 		solved = (ArrayList<SolvedExam>) s.getAllSolvedExams().clone();
 	}
 	

@@ -32,7 +32,7 @@ public class QuestionController {
 				client.cleanMsg();
 				return questions;
 			} catch (IOException e) {
-				ClientGlobals.handleIOException();
+				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 				return null;
 			}

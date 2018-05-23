@@ -33,7 +33,7 @@ public class SolvedExamController {
 				client.cleanMsg();
 				return solved;
 			} catch (IOException e) {
-				ClientGlobals.handleIOException();
+				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 				return null;
 			}

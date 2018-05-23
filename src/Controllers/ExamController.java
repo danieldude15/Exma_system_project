@@ -32,7 +32,7 @@ public class ExamController {
 				client.cleanMsg();
 				return exams;
 			} catch (IOException e) {
-				ClientGlobals.handleIOException();
+				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 				return null;
 			}

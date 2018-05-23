@@ -1,7 +1,7 @@
 package ocsf.server;
 
 import SQLTools.DBMain;
-import logic.iMessage;
+import logic.*;
 
 public class AESServer extends AbstractServer {
 	private DBMain sqlcon;
@@ -17,7 +17,15 @@ public class AESServer extends AbstractServer {
 		}
 		iMessage m = (iMessage) msg;
 		String cmd = new String(m.getCommand());
+		Object o = m.getObj();
 		switch(cmd) {
+		case "getTeachersActiveExams":
+			System.out.println("got msg from client getTeachersActiveExams");
+			if (o instanceof Teacher) {
+				Teacher t = (Teacher) o;
+				sqlcon.getTeachersActiveExams(t);
+			}
+			break;
 		case "getTeachersQuestions":
 			//code here
 			break;

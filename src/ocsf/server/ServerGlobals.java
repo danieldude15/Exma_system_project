@@ -2,7 +2,7 @@ package ocsf.server;
 
 import java.sql.SQLException;
 
-import Controllers.ScreensController;
+import GUI.ScreensController;
 
 public class ServerGlobals {
 	public static final String ServerGuiID = "ServerGui";

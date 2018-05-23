@@ -1,4 +1,4 @@
-package Controllers;
+package GUI;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -39,6 +39,8 @@ package Controllers;
  * holder.
  */ 
 import java.util.HashMap;
+
+import Controllers.ControlledScreen;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

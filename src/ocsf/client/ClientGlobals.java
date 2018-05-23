@@ -1,6 +1,8 @@
 package ocsf.client;
 
-import Controllers.ScreensController;
+import java.io.IOException;
+
+import GUI.ScreensController;
 
 public class ClientGlobals {
 	public static AESClient client = null;
@@ -12,8 +14,10 @@ public class ClientGlobals {
 	public static final String TeacherMainID = "TeacherMain";
 	public static final String TeacherMainPath = "TeacherMain.fxml";
 	public static final String ClientConnectionScreenPath = "ClientGui.fxml";
+	public static final String LogInID = "LogIn";
+	public static final String LogInPath = "Login.fxml";
 
-	public static void handleIOException() {
+	public static void handleIOException(IOException e) {
 		// TODO Auto-generated method stub
 		
 	}

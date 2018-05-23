@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import Controllers.ClientApplication;
-import Controllers.ScreensController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,11 +66,15 @@ public class ClientFrame implements Initializable {
 		Stage primaryStage = new Stage();
 		ClientGlobals.mainContainer = new ScreensController();
 		ScreensController mainContainer = ClientGlobals.mainContainer;
+		if (!mainContainer.loadScreen(ClientGlobals.LogInID, ClientGlobals.LogInPath)) {
+        	System.out.println("failed to load "+ ClientGlobals.LogInID);
+        	return;
+        }
 		if (!mainContainer.loadScreen(ClientGlobals.TeacherMainID, ClientGlobals.TeacherMainPath)) {
         	System.out.println("failed to load "+ ClientGlobals.TeacherMainID);
         	return;
         }
-		mainContainer.setScreen(ClientApplication.TeacherMainID);
+		mainContainer.setScreen(ClientGlobals.LogInID);
         Group root = new Group();
         root.getChildren().addAll(mainContainer);
         Scene scene = new Scene(root);

@@ -6,15 +6,15 @@ public class Principle extends User {
 
 	private ArrayList<TimeChangeRequest> timeChangeList;
 	
-	public Principle(String userName, String Password, String Name) /*Constructor/*/
+	public Principle(int id,String userName, String Password, String Name) /*Constructor/*/
 	{
-		super(userName, Password, Name);
+		super(id,userName, Password, Name);
 		this.timeChangeList=new ArrayList<TimeChangeRequest>();
 		// TODO Auto-generated constructor stub
 	}
 	public Principle(Principle p)/*Copy constructor/*/ 
 	{
-		super(p.getUserName(),p.getPassword(),p.getName());
+		super(p.getID(),new String(p.getUserName()),new String(p.getPassword()),new String(p.getName()));
 		timeChangeList = new ArrayList<TimeChangeRequest>();
 		timeChangeList=p.timeChangeList;
 	}

@@ -30,7 +30,7 @@ public class CourseFieldController {
 				client.cleanMsg();
 				return fields;
 			} catch (IOException e) {
-				ClientGlobals.handleIOException();
+				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 				return null;
 			}

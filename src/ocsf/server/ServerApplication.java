@@ -2,7 +2,7 @@ package ocsf.server;
 
 import java.io.IOException;
 
-import Controllers.ScreensController;
+import GUI.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;

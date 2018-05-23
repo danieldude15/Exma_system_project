@@ -1,10 +1,12 @@
 package ocsf.client;
 
+import logic.Globals;
+import logic.User;
 import logic.iMessage;
 
 public class AESClient extends AbstractClient{
 	
-	
+	User me;
 	private iMessage msg;
 	public boolean stopWaiting=false;
 	public AESClient(String host, int port) {
@@ -25,6 +27,10 @@ public class AESClient extends AbstractClient{
 		iMessage m = (iMessage) msg;
 		String cmd = new String(m.getCommand());
 		switch(cmd) {
+		case "gotTeachersActiveExams":
+			System.out.println("got msg from server gotTeachersActiveExams");
+			
+			break;
 		case "setTeachersQuestions":
 			//code here
 			break;
@@ -59,7 +65,7 @@ public class AESClient extends AbstractClient{
 			}
 			count++;
 			if(count>=50) {
-				ClientGlobals.handleIOException();
+				Globals.handleException(new Exception("Waited for tooo long for server response!"));
 				break;
 			}
 		}
@@ -69,5 +75,10 @@ public class AESClient extends AbstractClient{
 	public void cleanMsg() {
 		msg=null;
 		stopWaiting=false;
+	}
+
+
+	public User getUser() {
+		return me;
 	}
 }

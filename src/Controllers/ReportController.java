@@ -24,8 +24,7 @@ public class ReportController {
 				client.cleanMsg();
 				return report;
 			} catch (IOException ex) {
-				ClientGlobals.handleIOException();
-				ex.printStackTrace();
+				ClientGlobals.handleIOException(ex);
 				return null;
 			}
 		} else {

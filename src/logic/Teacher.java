@@ -9,8 +9,8 @@ public class Teacher extends User {
 	private ArrayList<Question> questions;
 	private ArrayList<Exam> exams;
 	
-	public Teacher(String userName, String Password, String Name, ArrayList<Field> fs, ArrayList<Question> qs, ArrayList<Exam> es) {
-		super(userName, Password, Name);
+	public Teacher(int id,String userName, String Password, String Name, ArrayList<Field> fs, ArrayList<Question> qs, ArrayList<Exam> es) {
+		super(id,userName, Password, Name);
 		fields = fs;
 		questions = qs;
 		exams = es;
@@ -18,7 +18,7 @@ public class Teacher extends User {
 	
 	@SuppressWarnings("unchecked")
 	public Teacher(Teacher t) {
-		super(t.getUserName(),t.getPassword(),t.getName());
+		super(t.getID(),new String(t.getUserName()),new String(t.getPassword()),new String(t.getName()));
 		fields = (ArrayList<Field>) t.getFiels().clone();
 		questions = (ArrayList<Question>) t.getQuestions().clone();
 		exams = (ArrayList<Exam>) t.getExams().clone();

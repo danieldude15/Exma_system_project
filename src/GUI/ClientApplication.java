@@ -1,4 +1,4 @@
-package Controllers;
+package GUI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,10 +10,6 @@ import ocsf.client.ClientGlobals;
 
 
 public class ClientApplication extends Application {
-
-	public static String TeacherMainID = "TeacherMain";
-	public static String TeacherMainPath = "TeacherMain.fxml";
-	public static ScreensController mainContainer = new ScreensController();
 	
 	public static void main(String args[]) {
 		launch(args);
