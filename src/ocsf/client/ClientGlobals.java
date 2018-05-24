@@ -2,6 +2,7 @@ package ocsf.client;
 
 import java.io.IOException;
 
+import GUI.ClientFrame;
 import GUI.ScreensController;
 import javafx.stage.Stage;
 
@@ -16,6 +17,7 @@ public class ClientGlobals {
 	public static final String TeacherMainID = "TeacherMain";
 	public static final String TeacherMainPath = "TeacherMain.fxml";
 	public static final String ClientConnectionScreenPath = "/GUI/ClientGui.fxml";
+	public static ClientFrame ClientConnectionController;
 	public static final String LogInID = "LogIn";
 	public static final String LogInPath = "Login.fxml";
 

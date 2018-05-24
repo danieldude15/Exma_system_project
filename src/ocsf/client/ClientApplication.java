@@ -1,5 +1,7 @@
 package ocsf.client;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -7,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Globals;
+import logic.iMessage;
 
 
 public class ClientApplication extends Application {
@@ -17,13 +20,20 @@ public class ClientApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource(ClientGlobals.ClientConnectionScreenPath));
-		
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Client Connection");
 		primaryStage.setScene(scene);
 		primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
-	        System.exit(0);
+	        try {
+				if(ClientGlobals.client!=null) {
+					ClientGlobals.client.sendToServer(new iMessage("logout",null));
+					ClientGlobals.client.closeConnection();
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+			}
+	    	System.exit(0);
 	    });
 		primaryStage.show();	
 	}

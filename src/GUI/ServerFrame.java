@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import logic.iMessage;
 import ocsf.server.AESServer;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ServerGlobals;
@@ -50,6 +51,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 	@FXML
 	public void closeConnectionsBotton(ActionEvent event) {
 		try {
+			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 			ServerGlobals.server.close();
 			ServerGlobals.server.stopListening();
 			statusLabel.setText("Server Down");

@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Globals;
+import logic.iMessage;
 
 public class ServerApplication extends Application {
 
@@ -32,6 +33,7 @@ public class ServerApplication extends Application {
 	    {
 	        try {
 	        	if (ServerGlobals.server!=null)
+	        		ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 	        		ServerGlobals.server.close();
 			} catch (IOException e) {
 				e.printStackTrace();

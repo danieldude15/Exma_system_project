@@ -9,9 +9,11 @@ import logic.*;
 
 public class AESServer extends AbstractServer {
 	private DBMain sqlcon;
+	HashMap<String,User> connectedUsers;
 	public AESServer(int port) {
 		super(port);
 		sqlcon = new DBMain(ServerGlobals.dbHost, ServerGlobals.dbuser, ServerGlobals.dbpass);
+		connectedUsers = new HashMap<String,User>();
 	}
 
 	@Override
@@ -26,18 +28,30 @@ public class AESServer extends AbstractServer {
 		Object o = m.getObj();
 		try {
 			switch(cmd) {
+			case "logout":
+				User logoutUser = (User) o;
+				connectedUsers.remove(logoutUser.getUserName());
+				break;
 			case "login":
-				User user = sqlcon.UserLogIn((User)o);
+				User user = (User) o;
 				iMessage result=null;
 				String login = "login";
-				if (user==null) {
-					result = new iMessage(login,null);
-				} else if (user instanceof Teacher) {
-					result = new iMessage(login,new Teacher((Teacher) user));
-				} else if(user instanceof Principle) {
-					result = new iMessage(login,new Principle((Principle) user));
-				} else if(user instanceof Student) {
-					result = new iMessage(login,new Student((Student) user));
+				if (connectedUsers.get(user.getUserName())!=null) {
+					result = new iMessage("login",o);
+				} else {
+					user = sqlcon.UserLogIn((User)o);
+					if (user==null) {
+						result = new iMessage(login,null);
+					} else {
+						if (user instanceof Teacher) {
+							result = new iMessage(login,new Teacher((Teacher) user));
+						} else if(user instanceof Principle) {
+							result = new iMessage(login,new Principle((Principle) user));
+						} else if(user instanceof Student) {
+							result = new iMessage(login,new Student((Student) user));
+						}
+						connectedUsers.put(user.getUserName(), user);
+					}
 				}
 				client.sendToClient(result);
 				break;
@@ -71,7 +85,7 @@ public class AESServer extends AbstractServer {
 		try {
 			sqlcon.getConn().close();
 		} catch (SQLException e) {
-			Globals.handleException(e);
+			Globals.handleException(e); 
 		}
 	}
 

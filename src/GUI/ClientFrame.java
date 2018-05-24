@@ -29,14 +29,14 @@ public class ClientFrame implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-
+		ClientGlobals.ClientConnectionController = this;
 	}
 
 	@FXML
 	public void DisconnectFromServer(ActionEvent event) {
 		try {
-			ClientGlobals.client.closeConnection();
+			if (event!=null)ClientGlobals.client.closeConnection();
+			ClientGlobals.client=null;
 			clientStatus.setText("<Disconnected>");
 			clientStatus.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			launchapp.setDisable(true);

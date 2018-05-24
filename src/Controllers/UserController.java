@@ -20,9 +20,10 @@ public class UserController {
 			ClientGlobals.client.waitForResponse();
 			String usertype = ClientGlobals.client.getMsg().getCommand();
 			u = (User)ClientGlobals.client.getMsg().getObj();
+			Alert alert;
 			switch (usertype) {
 			case "none":
-				Alert alert = new Alert(AlertType.INFORMATION);
+				alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Login Failed");
 				alert.setHeaderText(null);
 				alert.setContentText("Username or Password was incorrect\nPlease try again");
@@ -36,6 +37,13 @@ public class UserController {
 				break;
 			case "Principle":
 				System.out.println("Principle!!!");
+				break;
+			case "AlreadyLoggedIn":
+				alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Failed to Log-In");
+				alert.setHeaderText(null);
+				alert.setContentText("You Are Already Logged In From Another Computer!\n Please LogOut And Then Try Again.");
+				alert.showAndWait();
 				break;
 			}
 			ClientGlobals.client.cleanMsg();

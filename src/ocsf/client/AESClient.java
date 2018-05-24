@@ -1,5 +1,10 @@
 package ocsf.client;
 
+import java.io.IOException;
+
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import logic.Globals;
 import logic.Principle;
 import logic.Student;
@@ -41,8 +46,20 @@ public class AESClient extends AbstractClient{
 				msg.setCommand("Principle");
 			} else if(msg.getObj() instanceof Student) {
 				msg.setCommand("Student");
+			} else if(msg.getObj() instanceof User) {
+				msg.setCommand("AlreadyLoggedIn");
 			}
 			break;
+		case "closing Connection":
+			Platform.runLater(() -> { 
+				Globals.primaryStage.close();
+				ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Server Disconnected");
+				alert.setHeaderText(null);
+				alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
+				alert.showAndWait();
+				});
 		case "gotTeachersActiveExams":
 			//code here
 			break;
@@ -70,6 +87,10 @@ public class AESClient extends AbstractClient{
 		return msg;
 	}
 	
+	/**
+	 * this method should be called right after sending a msg to the server
+	 * that needs to get a response
+	 */
 	public void waitForResponse() {
 		int count=0;
 		while(!stopWaiting) {
@@ -87,7 +108,18 @@ public class AESClient extends AbstractClient{
 			}
 		}
 	}
-
+	
+	/**
+	* Hook method called each time an exception is thrown by the
+	* client's thread that is waiting for messages from the server.
+	* The method may be overridden by subclasses.
+	*
+	* @param exception the exception raised.
+	*/
+	protected void connectionException(Exception exception) {
+		IOException e = new IOException(exception);
+		ClientGlobals.handleIOException(e);
+	}
 
 	public void cleanMsg() {
 		msg=null;
