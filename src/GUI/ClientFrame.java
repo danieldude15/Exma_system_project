@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -66,9 +65,9 @@ public class ClientFrame implements Initializable {
 	
 	public void LaunchApp(ActionEvent event) {
 		Stage primaryStage = new Stage();
-		ClientGlobals.mainContainer = new ScreensController();
+		Globals.mainContainer = new ScreensController();
 		Globals.primaryStage = primaryStage;
-		ScreensController mainContainer = ClientGlobals.mainContainer;
+		ScreensController mainContainer = Globals.mainContainer;
 		if (!mainContainer.loadScreen(ClientGlobals.LogInID, ClientGlobals.LogInPath)) {
         	System.out.println("failed to load "+ ClientGlobals.LogInID);
         	return;
@@ -81,10 +80,10 @@ public class ClientFrame implements Initializable {
 		
 		AnchorPane root = new AnchorPane();
 		root.getChildren().addAll(mainContainer);
-		root.setTopAnchor(mainContainer, 0.0);
-		root.setRightAnchor(mainContainer, 0.0);
-		root.setBottomAnchor(mainContainer, 0.0);
-		root.setLeftAnchor(mainContainer, 0.0);
+		//root.setTopAnchor(mainContainer, 0.0);
+		//root.setRightAnchor(mainContainer, 0.0);
+		//root.setBottomAnchor(mainContainer, 0.0);
+		//root.setLeftAnchor(mainContainer, 0.0);
         //Group root = new Group();
         //root.getChildren().addAll(mainContainer);
         Scene scene = new Scene(root);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class Teacher extends User implements Serializable{
 	
 	private ArrayList<Field> fields;
@@ -17,7 +18,6 @@ public class Teacher extends User implements Serializable{
 		exams = es;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Teacher(Teacher t) {
 		super(t.getID(),new String(t.getUserName()),new String(t.getPassword()),new String(t.getName()));
 	}

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class Student extends User implements Serializable{
 	
 	private ArrayList<SolvedExam> solved;

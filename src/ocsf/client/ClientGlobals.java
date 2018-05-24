@@ -3,13 +3,9 @@ package ocsf.client;
 import java.io.IOException;
 
 import GUI.ClientFrame;
-import GUI.ScreensController;
-import javafx.stage.Stage;
 
 public class ClientGlobals {
 	public static AESClient client = null;
-	public static ScreensController mainContainer;
-	public static Stage primaryStage;
 	
 	/*
 	 * Screen Controllers ID's and Paths!

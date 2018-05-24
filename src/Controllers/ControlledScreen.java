@@ -39,19 +39,11 @@
  */ 
 package Controllers;
 
-import GUI.ScreensController;
-
 /**
  *
  * @author Angie
  */
 public interface ControlledScreen {
-    
-    /**
-     * This method will allow the injection of the Parent ScreenPane
-     * @param screenPage
-     */
-    public void setScreenParent(ScreensController screenPage);
     
     /**
      * This method will run everytime this conrolled screen is about to be set

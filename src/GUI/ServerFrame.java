@@ -18,16 +18,11 @@ import ocsf.server.ServerGlobals;
 
 public class ServerFrame implements ControlledScreen,Initializable {
 
-	ScreensController myController;
 	@FXML Button closeConnectionBotton;
 	@FXML Button StartListenBotton;
 	@FXML Label statusLabel;
 	@FXML TextField portnum;
 
-	@Override
-	public void setScreenParent(ScreensController screenParent) {
-		myController = screenParent;
-	}
 
 	@Override
 	public void runOnScreenChange() {

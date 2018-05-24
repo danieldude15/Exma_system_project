@@ -3,6 +3,7 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class Principle extends User implements Serializable{
 
 	private ArrayList<TimeChangeRequest> timeChangeList;

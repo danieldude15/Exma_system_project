@@ -1,7 +1,7 @@
 package logic;
 
+import GUI.ScreensController;
 import javafx.stage.Stage;
-import ocsf.client.AESClient;
 
 public class Globals {
 	public enum Type {
@@ -9,7 +9,7 @@ public class Globals {
 	}
 
 	public static Stage primaryStage = null;
-	
+	public static ScreensController mainContainer;
 	/**
 	 * handle a core exception when the program cannot continue to function after this type of exception
 	 * this function should show and alert with exception details and than System.exit(1) at the end of it.

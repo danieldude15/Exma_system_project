@@ -25,12 +25,6 @@ public class LoginFrame implements ControlledScreen, Initializable {
 	}
 
 	@Override
-	public void setScreenParent(ScreensController screenPage) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
 

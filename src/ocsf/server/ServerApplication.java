@@ -17,16 +17,16 @@ public class ServerApplication extends Application {
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		ServerGlobals.mainContainer = new ScreensController();
+		Globals.mainContainer = new ScreensController();
 		Globals.primaryStage = new Stage();
-        if(!ServerGlobals.mainContainer.loadScreen(ServerGlobals.ServerGuiID, ServerGlobals.ServerGuiPath)) {
+        if(!Globals.mainContainer.loadScreen(ServerGlobals.ServerGuiID, ServerGlobals.ServerGuiPath)) {
         	System.out.println("failed to load "+ ServerGlobals.ServerGuiID);
         }
         
-        ServerGlobals.mainContainer.setScreen(ServerGlobals.ServerGuiID);
+        Globals.mainContainer.setScreen(ServerGlobals.ServerGuiID);
         
         Group root = new Group();
-        root.getChildren().addAll(ServerGlobals.mainContainer);
+        root.getChildren().addAll(Globals.mainContainer);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(closeUpdate ->

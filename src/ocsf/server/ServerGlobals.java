@@ -2,13 +2,10 @@ package ocsf.server;
 
 import java.sql.SQLException;
 
-import GUI.ScreensController;
-
 public class ServerGlobals {
 	public static final String ServerGuiID = "ServerGui";
 	public static final String ServerGuiPath = "ServerGui.fxml";
 	public static AESServer server = null;
-	public static ScreensController mainContainer;
 	public static final String dbHost = "84.108.116.235/aes";
 	public static final String dbuser="aesUser";
 	public static final String dbpass="QxU&v&HMm0t&";

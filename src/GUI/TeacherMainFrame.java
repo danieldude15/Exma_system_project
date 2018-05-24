@@ -14,7 +14,6 @@ import ocsf.client.ClientGlobals;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
-	private ScreensController myController;
 	@FXML Button manageQuestionsB;
 	@FXML Button manageExamsB;
 	@FXML Button initiateExamB;
@@ -30,11 +29,6 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void setScreenParent(ScreensController parent) {
-		myController = parent;
 	}
 
 	@Override

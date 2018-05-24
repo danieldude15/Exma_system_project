@@ -3,12 +3,16 @@ package SQLTools;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.sql.ResultSet;
 
-import logic.*;
+import logic.ActiveExam;
+import logic.Globals;
+import logic.Principle;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
 import ocsf.server.ServerGlobals;
 
 

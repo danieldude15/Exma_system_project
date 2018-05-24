@@ -52,6 +52,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import logic.Globals;
 
 /**
  *
@@ -65,6 +66,7 @@ public class ScreensController  extends StackPane {
     
     public ScreensController() {
         super();
+        Globals.mainContainer=this;
     }
 
     //Add the screen to the collection
@@ -88,7 +90,6 @@ public class ScreensController  extends StackPane {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = (Parent) myLoader.load();
             ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
-            myScreenControler.setScreenParent(this);
             addScreen(name, loadScreen);
             addController(name, myScreenControler);
             return true;
