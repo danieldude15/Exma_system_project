@@ -22,6 +22,10 @@ public class Teacher extends User implements Serializable{
 		super(t.getID(),new String(t.getUserName()),new String(t.getPassword()),new String(t.getName()));
 	}
 
+	public Teacher(User o) {
+		super(o);
+	}
+
 	public ArrayList<Field> getFiels() {
 		return fields;
 	}

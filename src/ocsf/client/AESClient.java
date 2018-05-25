@@ -19,6 +19,7 @@ public class AESClient extends AbstractClient{
 	public boolean stopWaiting=false;
 	public AESClient(String host, int port) {
 		super(host, port);
+		me=null;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -36,17 +37,21 @@ public class AESClient extends AbstractClient{
 		this.msg = (iMessage) ServerMsg;
 		System.out.println("Got msg from Server:" + msg);
 		String cmd = new String(msg.getCommand());
+		Object o = msg.getObj();
 		switch(cmd) {
 		case "login":
-			if (msg.getObj()==null) {
+			if (o==null) {
 				msg.setCommand("none");
-			} else if (msg.getObj() instanceof Teacher) {
+			} else if (o instanceof Teacher) {
 				msg.setCommand("Teacher");
-			} else if(msg.getObj() instanceof Principle) {
+				me = new Teacher((User)o);
+			} else if(o instanceof Principle) {
 				msg.setCommand("Principle");
-			} else if(msg.getObj() instanceof Student) {
+				me = new Principle((User)o);
+			} else if(o instanceof Student) {
 				msg.setCommand("Student");
-			} else if(msg.getObj() instanceof User) {
+				me = new Student((User)o);
+			} else if(o instanceof User) {
 				msg.setCommand("AlreadyLoggedIn");
 			}
 			break;

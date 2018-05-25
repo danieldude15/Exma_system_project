@@ -19,6 +19,15 @@ public class ClientGlobals {
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
+		try {
+			if (client!=null && !client.isConnected()) {
+				System.out.println("trying to reconnect");
+				client.openConnection();
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 	}
 	
 	

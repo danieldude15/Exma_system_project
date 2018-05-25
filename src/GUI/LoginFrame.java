@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import logic.Globals;
 
 public class LoginFrame implements ControlledScreen, Initializable {
 	
@@ -26,10 +27,15 @@ public class LoginFrame implements ControlledScreen, Initializable {
 
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
+		Globals.primaryStage.setHeight(400);
+		Globals.primaryStage.setWidth(400);
 
 	}
-
+	
+	@FXML
+	public void enterKeyPressed(ActionEvent event) {
+		logInClicked(event);
+	}
 	@FXML
 	public void logInClicked(ActionEvent event) {
 		loginB.setDisable(true);

@@ -25,7 +25,8 @@ public class ClientApplication extends Application {
 	    {
 	        try {
 				if(ClientGlobals.client!=null) {
-					ClientGlobals.client.sendToServer(new iMessage("logout",null));
+					if (ClientGlobals.client.me!=null)
+						ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.me));
 					ClientGlobals.client.closeConnection();
 				}
 			} catch (IOException e) {

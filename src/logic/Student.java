@@ -24,6 +24,10 @@ public class Student extends User implements Serializable{
 		solved = (ArrayList<SolvedExam>) s.getAllSolvedExams().clone();
 	}
 	
+	public Student(User o) {
+		super(o);
+	}
+
 	public SolvedExam getSolvedExam(Exam e) {
 		int examID = e.getID();
 		for (SolvedExam solvedExam:solved) {

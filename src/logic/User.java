@@ -18,6 +18,13 @@ public class User implements Serializable{
 		this.name=Name;
 	}
 	
+	public User(User u) {
+		this.id = u.getID();
+		this.userName=new String(u.getUserName());
+		this.password=new String(u.getPassword());
+		this.name=new String(u.getName());
+	}
+
 	public String getUserName() {
 		return this.userName;
 	}

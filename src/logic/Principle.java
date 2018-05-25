@@ -22,6 +22,9 @@ public class Principle extends User implements Serializable{
 	}
 
 	
+	public Principle(User o) {
+		super(o);
+	}
 	public ArrayList<TimeChangeRequest> getTimeChangeList() {
 		/*Getter for all time change requests/*/
 		return timeChangeList;

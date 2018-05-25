@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import logic.Globals;
+import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
@@ -90,7 +91,16 @@ public class ClientFrame implements Initializable {
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
-	        System.exit(0);
+	        try {
+				if(ClientGlobals.client!=null) {
+					if (ClientGlobals.client.getUser()!=null)
+						ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
+					ClientGlobals.client.closeConnection();
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+			}
+	    	System.exit(0);
 	    });
         primaryStage.show();
 	}

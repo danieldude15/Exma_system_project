@@ -1,5 +1,6 @@
 package GUI;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import logic.Globals;
+import logic.iMessage;
 import ocsf.client.ClientGlobals;
 
 
@@ -34,8 +36,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		ActiveExamController.getTeachersActiveExams(ClientGlobals.client.getUser());
-		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(800);
+		Globals.primaryStage.setHeight(750);
+		Globals.primaryStage.setWidth(820);
 	}
 	
 	@FXML
@@ -81,6 +83,18 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML
 	public void activeExamsListViewClicked(ActionEvent event) {
 		
+	}
+	
+	@FXML
+	public void logout(ActionEvent event) {
+		try {
+			if (ClientGlobals.client!=null)
+				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
 	}
 
 }
