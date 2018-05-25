@@ -105,7 +105,13 @@ public class DBMain {
 		return connect();
 	}
 
-	public void getTeachersActiveExams(Teacher t) {
+	/**
+	 * gets all teachers active exams
+	 * still needs to be implemented will not return anything yet
+	 * @param t
+	 * @return ArrayList of ActiveExams of this Teacher
+	 */
+	public ArrayList<ActiveExam> getTeachersActiveExams(Teacher t) {
 		try {
 			prst = conn.prepareStatement(getActiveEams);
 			prst.setInt(1, t.getID());
@@ -121,12 +127,12 @@ public class DBMain {
 				int active = rs.getInt(6);
 				int studentCount = rs.getInt(7);
 				int zerocount = rs.getInt(8);
-				ae.add(new ActiveExam(0, getActiveEams, getActiveEams, 0, 0, null));
+				//ae.add(new ActiveExam(code,type,));
 			}
 		} catch (SQLException e) {
 			ServerGlobals.handleSQLException(e);
 		}
-		
+		return null;
 	}
 
 	public User UserLogIn(User u) {
@@ -146,7 +152,7 @@ public class DBMain {
 					String password = rs.getString(4);
 					String fullname = rs.getString(5);
 					if (!password.equals(u.getPassword())) return null;
-					return new Student(userid,username,password,fullname,null);
+					return new Student(userid,username,password,fullname);
 				}
 			}
 			tableA= "teachers";
@@ -162,7 +168,7 @@ public class DBMain {
 					String password = rs.getString(4);
 					String fullname = rs.getString(5);
 					if (!password.equals(u.getPassword())) return null;
-					return new Teacher(userid,username,password,fullname,null,null,null);
+					return new Teacher(userid,username,password,fullname);
 				}
 			}
 			tableA= "principles";

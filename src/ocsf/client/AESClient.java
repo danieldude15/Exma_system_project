@@ -44,13 +44,13 @@ public class AESClient extends AbstractClient{
 				msg.setCommand("none");
 			} else if (o instanceof Teacher) {
 				msg.setCommand("Teacher");
-				me = new Teacher((User)o);
+				me = new Teacher((Teacher)o);
 			} else if(o instanceof Principle) {
 				msg.setCommand("Principle");
-				me = new Principle((User)o);
+				me = new Principle((Principle)o);
 			} else if(o instanceof Student) {
 				msg.setCommand("Student");
-				me = new Student((User)o);
+				me = new Student((Student)o);
 			} else if(o instanceof User) {
 				msg.setCommand("AlreadyLoggedIn");
 			}

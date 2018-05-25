@@ -20,15 +20,21 @@ public class TimeChangeRequest {
 		this.activeExam=activeExam;
 		this.teacher=t;
 	}
+	
+	/**
+	 * copy constructor
+	 * @param time change request to copy
+	 */
 	public TimeChangeRequest(TimeChangeRequest t)/*Copy constructor/*/
 	{
 		id=t.id;
 		newTime=t.newTime;
-		reasonForTimeChange=t.reasonForTimeChange;
+		reasonForTimeChange=new String(t.reasonForTimeChange);
 		status=t.status;
-		activeExam=t.activeExam;
-		teacher=t.teacher;
+		activeExam=new ActiveExam(t.activeExam);
+		teacher=new Teacher(t.teacher);
 	}
+	
 	public int getId()
 	{
 		return this.id;

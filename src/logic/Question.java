@@ -1,33 +1,39 @@
 package logic;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class Question{
 	private int ID;
 	private Teacher Auther;
-	private String question;
+	private String questionString;
 	private String[] Answers;
+	private Field field;
 	private int CorrectAnswerIndex;
-	private ArrayList<Note> Notes;
 	
-	public Question(int id, Teacher a, String q, String[] answers,int correctindex,ArrayList<Note> notes) {
-		ID=id;
-		Auther = a;
-		question = q;
+	public Question(int iD, Teacher auther, String question, String[] answers, Field field, int correctAnswerIndex) {
+		super();
+		ID = iD;
+		Auther = auther;
+		this.questionString = question;
 		Answers = answers;
-		CorrectAnswerIndex = correctindex;
-		Notes = notes;		
+		this.field = field;
+		CorrectAnswerIndex = correctAnswerIndex;
 	}
-	
+
 	public Question(Question q) {
+		super();
 		ID = q.getID();
 		Auther = new Teacher(q.getAuther());
-		question = new String(q.getQuestionString());
+		questionString = new String(q.getQuestionString());
 		Answers = q.Answers.clone();
 		CorrectAnswerIndex = q.getCorrectAnswerIndex();
+		field = new Field(q.getField());
 	}
-	
+
+	public Field getField() {
+		return field;
+	}
+
 	public static Vector<Question> clone(Vector<Question> questions) {
 		Vector<Question> questionsRes = new Vector<Question>();
 		for (Question q:questions) {
@@ -38,7 +44,7 @@ public class Question{
 
 	public String getQuestionString() {
 		// TODO Auto-generated method stub
-		return question;
+		return questionString;
 	}
 
 	public int getID() {
@@ -57,12 +63,26 @@ public class Question{
 		return CorrectAnswerIndex;
 	}
 
-
-	public ArrayList<Note> getNotes() {
-		return Notes;
-	}
-
 	public Teacher getAuther() {
 		return Auther;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Question q=null;
+		if (obj instanceof Question) {
+			q = (Question)obj;
+		}else {return false;}
+		if (q.getID()!=ID ||
+			q.getAuther().getID()!=Auther.getID() ||
+			q.getCorrectAnswerIndex()!=CorrectAnswerIndex||
+			q.getField().getID()!=field.getID() ||
+			!q.getQuestionString().equals(questionString)) 
+			return false;
+		for(int i=0;i<4;i++) {
+			if(!q.getAnswer(i).equals(getAnswer(i))) return false;
+		}
+		return true;
+	}
+	
 }
