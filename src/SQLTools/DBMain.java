@@ -29,7 +29,7 @@ public class DBMain {
 	private String columnB= "";
 	private String getActiveEams = new String(
 			"SELECT * FROM "
-			+ "(SELECT * FROM aes.activatedexams WHERE teacherid=?) B "
+			+ "(SELECT * FROM aes.activated_exams WHERE teacherid=?) B "
 			+ "INNER JOIN aes.teachers ON teachers.teacherid=B.teacherid") ;
 	private String getAllUsers = new String(
 			"Select * FROM aes.users"

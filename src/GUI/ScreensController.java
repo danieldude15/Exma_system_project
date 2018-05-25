@@ -96,6 +96,7 @@ public class ScreensController  extends StackPane {
         } catch (Exception e) {
         	e.printStackTrace();
             System.out.println(e.getMessage());
+            System.exit(1);
             return false;
         }
     }
