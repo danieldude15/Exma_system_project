@@ -10,10 +10,12 @@ public class ClientGlobals {
 	/*
 	 * Screen Controllers ID's and Paths!
 	 */
-	public static final String TeacherMainID = "TeacherMain";
-	public static final String TeacherMainPath = "/fxml/TeacherMain.fxml";
 	public static final String ClientConnectionScreenPath = "/fxml/ClientGui.fxml";
 	public static ClientFrame ClientConnectionController;
+	
+	public static final String TeacherMainID = "TeacherMain";
+	public static final String TeacherMainPath = "/fxml/TeacherMain.fxml";
+	
 	public static final String LogInID = "LogIn";
 	public static final String LogInPath = "/fxml/Login.fxml";
 
