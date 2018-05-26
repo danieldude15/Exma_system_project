@@ -12,6 +12,26 @@ import ocsf.client.ClientGlobals;
 @SuppressWarnings("unchecked")
 public class SolvedExamController {
 
+	/**
+	 * Send to server a request to pull the specific solved exam from database.
+	 * @param 
+	 * @return SolvedExam
+	 */
+	public static SolvedExam getSolvedExam(String SolvedExamId) {//itzik's methood.. I didn't finished yet! Do not touch!
+		// TODO Auto-generated method stub
+		AESClient client = ClientGlobals.client;
+		SolvedExam solved;
+		if(client.isConnected()) {
+			try {
+				client.sendToServer(SolvedExamId);//Daniel call me about this line!
+				client.waitForResponse();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	public static ArrayList<SolvedExam> getStudentsSolvedExams(Student s) {
 		AESClient client = ClientGlobals.client;
@@ -41,4 +61,6 @@ public class SolvedExamController {
 			return null;
 		}
 	}
+
+	
 }

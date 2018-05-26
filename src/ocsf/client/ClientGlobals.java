@@ -19,7 +19,16 @@ public class ClientGlobals {
 
 	public static final String TeacherManageQuestionsID = "TeacherManageQuestions";
 	public static final String TeacherManageQuestionsPath = "/fxml/TeacherManageQuestions.fxml";
+	
+	public static final String StudentMainID = "StudentMain";
+	public static final String StudentMainPath = "/fxml/StudentMain.fxml";
+	
+	
+	public static final String StudentStartExamID = "StudentStartExam";
+	public static final String StudentStartExamPath = "/fxml/StudentStartExam.fxml";
+	
 
+	
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
 		try {
