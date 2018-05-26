@@ -1,16 +1,29 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Field {
+@SuppressWarnings("serial")
+public class Field implements Serializable{
 	
 	private int fID;
 	private String fName;
-	private ArrayList<Course> courses;
-	private ArrayList<Teacher> teachers;
 	
+	
+	public Field(int fID, String fName) {
+		super();
+		this.fID = fID;
+		this.fName = fName;
+	}
+	
+	/**
+	 * copy constructior
+	 * @param Field object
+	 */
 	public Field(Field f) {
-		
+		super();
+		fID=f.getID();
+		fName=f.getName();
 	}
 
 	public String getName() {
@@ -21,12 +34,26 @@ public class Field {
 		return fID;
 	}
 	
+	/**
+	 * This function will return all courses in this field
+	 * @return ArrayList of courses in field
+	 */
 	public ArrayList<Course> getCoursesInField(){
-		return courses;
+		return null;
 	}
 	
+	/**
+	 * this function will return all Teachers in this field
+	 * @return ArrayList of Teachers in field
+	 */
 	public ArrayList<Teacher> getTeachersInField(){
-		return teachers;
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return new String(fID + " - " + fName);
 	}
  
+	
 }

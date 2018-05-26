@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 import logic.ActiveExam;
+import logic.Course;
+import logic.Field;
 import logic.Globals;
 import logic.Principle;
 import logic.Student;
@@ -29,8 +32,12 @@ public class DBMain {
 	private String columnB= "";
 	private String getActiveEams = new String(
 			"SELECT * FROM "
-			+ "(SELECT * FROM aes.activatedexams WHERE teacherid=?) B "
+			+ "(SELECT * FROM aes.activated_exams WHERE teacherid=?) B "
 			+ "INNER JOIN aes.teachers ON teachers.teacherid=B.teacherid") ;
+	private String teacherFields = new String(
+			"SELECT distinct (f.fieldid),f.fieldname "
+			+ "FROM aes.teacher_fields as tf,fields as f "
+			+ "WHERE tf.fieldid=f.fieldid and tf.teacherid=?;;");
 	private String getAllUsers = new String(
 			"Select * FROM aes.users"
 			);
@@ -105,10 +112,17 @@ public class DBMain {
 		return connect();
 	}
 
-	public void getTeachersActiveExams(Teacher t) {
+	/**
+	 * gets all teachers active exams
+	 * still needs to be implemented will not return anything yet
+	 * @param t
+	 * @return ArrayList of ActiveExams of this Teacher
+	 */
+	public ArrayList<ActiveExam> getTeachersActiveExams(Teacher t) {
 		try {
 			prst = conn.prepareStatement(getActiveEams);
 			prst.setInt(1, t.getID());
+			System.out.println("About to excecute:"+prst);
 			if (prst.execute())
 				rs = prst.getResultSet();
 			ArrayList<ActiveExam> ae = new ArrayList<ActiveExam>();
@@ -121,12 +135,12 @@ public class DBMain {
 				int active = rs.getInt(6);
 				int studentCount = rs.getInt(7);
 				int zerocount = rs.getInt(8);
-				ae.add(new ActiveExam(0, getActiveEams, getActiveEams, 0, 0, null));
+				//ae.add(new ActiveExam(code,type,));
 			}
 		} catch (SQLException e) {
 			ServerGlobals.handleSQLException(e);
 		}
-		
+		return null;
 	}
 
 	public User UserLogIn(User u) {
@@ -146,7 +160,7 @@ public class DBMain {
 					String password = rs.getString(4);
 					String fullname = rs.getString(5);
 					if (!password.equals(u.getPassword())) return null;
-					return new Student(userid,username,password,fullname,null);
+					return new Student(userid,username,password,fullname);
 				}
 			}
 			tableA= "teachers";
@@ -162,7 +176,7 @@ public class DBMain {
 					String password = rs.getString(4);
 					String fullname = rs.getString(5);
 					if (!password.equals(u.getPassword())) return null;
-					return new Teacher(userid,username,password,fullname,null,null,null);
+					return new Teacher(userid,username,password,fullname);
 				}
 			}
 			tableA= "principles";
@@ -170,6 +184,7 @@ public class DBMain {
 			setLogin();
 			prst = conn.prepareStatement(login);
 			prst.setString(1,u.getUserName());
+			System.out.println("About to excecute:"+prst);
 			if (prst.execute()) {
 				rs = prst.getResultSet();
 				if (rs.next()) {
@@ -183,6 +198,53 @@ public class DBMain {
 			}
 			System.out.println(type);
 			return null;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
+	public ArrayList<Field> getTeacherFields(Teacher o) {
+		ArrayList<Field> fields = new ArrayList<Field>();
+		try {
+			prst = conn.prepareStatement(teacherFields);
+			prst.setInt(1, o.getID());
+			System.out.println("About to excecute:"+prst);
+			if (prst.execute()) {
+				rs = prst.getResultSet();
+				if (rs.next()) {
+					int fieldsid = rs.getInt(1);
+					String fieldName = rs.getString(2);
+					fields.add(new Field(fieldsid,fieldName));
+				}
+				return fields;
+			}
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<Course> getFieldsCourses(Object o) {
+		ArrayList<Field> fields = (ArrayList<Field>) o;
+		String sqlQuery = new String("select distinct (courseid),coursename,fieldid,fieldname from courses as c, fields as f where c.coursefieldid=f.fieldid and (");
+		for(Field f:fields) {
+			sqlQuery = sqlQuery+"f.fieldid="+f.getID()+" or ";
+		}
+		sqlQuery = sqlQuery + "0)";
+		try {
+			PreparedStatement statement = conn.prepareStatement(sqlQuery);
+			rs = statement.executeQuery();
+			ArrayList<Course> result = new ArrayList<>();
+			while(rs.next()) {
+				int courseid = rs.getInt(1);
+				String coursename = rs.getString(2);
+				int fieldsid = rs.getInt(3);
+				String fieldName = rs.getString(4);
+				result.add(new Course(courseid,coursename,new Field(fieldsid,fieldName)));
+			}
+			return result;
 		} catch (SQLException e) {
 			ServerGlobals.handleSQLException(e);
 		}

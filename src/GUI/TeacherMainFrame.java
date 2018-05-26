@@ -42,7 +42,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@FXML
 	public void gotToManageQuestions(ActionEvent event) {
-		
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
 	
 	@FXML

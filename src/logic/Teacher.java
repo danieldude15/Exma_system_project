@@ -1,65 +1,67 @@
 package logic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
-@SuppressWarnings("serial")
-public class Teacher extends User implements Serializable{
+public class Teacher extends User{
 	
-	private ArrayList<Field> fields;
-	private ArrayList<Question> questions;
-	private ArrayList<Exam> exams;
-	
-	public Teacher(int id,String userName, String Password, String Name, ArrayList<Field> fs, ArrayList<Question> qs, ArrayList<Exam> es) {
+	public Teacher(int id,String userName, String Password, String Name) {
 		super(id,userName, Password, Name);
-		fields = fs;
-		questions = qs;
-		exams = es;
 	}
 	
+	/**
+	 * copy constructor
+	 * @param Teacher to copy
+	 */
 	public Teacher(Teacher t) {
 		super(t.getID(),new String(t.getUserName()),new String(t.getPassword()),new String(t.getName()));
 	}
 
-	public Teacher(User o) {
-		super(o);
-	}
-
+	/**
+	 * get Dields
+	 * @return all Fields that this teacher is associated with
+	 */
 	public ArrayList<Field> getFiels() {
-		return fields;
+		return null;
 	}
 	
+	/**
+	 *  get Questions
+	 * @return all Questions written by this teacher
+	 */
 	public ArrayList<Question> getQuestions() {
-		return questions;
+		return null;
 	}
 
+	/**
+	 * get Exams
+	 * @return all Exams written by this Teacher
+	 */
 	public ArrayList<Exam> getExams() {
-		return exams;
-	}
-
-	public boolean examExists(Exam e) {
-		int examID = e.getID();
-		for (Exam exam:exams) {
-			if (exam.getID()==examID) {
-				return true;
-			}
-		}
-		return false;
+		return null;
 	}
 	
+	/**
+	 * check if this teacher is in a field
+	 * @param field to check if teacher is part of
+	 * @return true if he is in this field otherwise false
+	 */
 	public boolean fieldExists(Field f) {
 		String fieldName = f.getName();
-		for(Field field:fields) {
+		for(Field field:getFiels()) {
 			if(fieldName.equals(field.getName())) return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * checks if a question is wrotten by this teacher
+	 * @param question to check
+	 * @return true if question is written by this teacher otherwise false
+	 */
 	public boolean questionExists(Question q) {
-		int QuestionID = q.getID();
-		for(Question question:questions) {
-			if (QuestionID==question.getID()) return true;
+		for(Question question:getQuestions()) {
+			if (question.equals(q)) return true;
 		}
 		return false;
 	}

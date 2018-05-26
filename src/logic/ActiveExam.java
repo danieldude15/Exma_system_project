@@ -1,36 +1,61 @@
 package logic;
 
-public class ActiveExam {
+import java.io.Serializable;
+import java.sql.Date;
 
-	private int code;
+@SuppressWarnings("serial")
+public class ActiveExam implements Serializable{
+
+	private String code;
 	private String type;
-	private String dateTime;
-	private int studentTaking;
-	private int zeroStudent;
+	private Date dateActivated;
+	private Teacher activator;
 	private Exam exam;
-	private TimeChangeRequest timeChangeRequest; //Not in constructor, but only on setter if teacher wants to ask it
+	private boolean active;
 	
-	public ActiveExam(int code,String type,String dateT,int takingS,int zeroS,Exam e)/*Constructor/*/
+	public ActiveExam(String code,String type,Date dayActivated,Exam e,Teacher activator, boolean currentlyactive)/*Constructor/*/
 	{
 		this.code=code;
 		this.type=type;
-		this.dateTime=dateT;
-		this.setStudentTaking(takingS);
-		this.setZeroStudent(zeroS);
+		this.dateActivated=dayActivated;
+		this.activator=activator;
 		this.exam=e;
-	}
-
-	public ActiveExam(ActiveExam e)/*Copy constructor/*/
-	{
-		code=e.code;
-		type=e.type;
-		dateTime=e.dateTime;
-		studentTaking=e.studentTaking;
-		zeroStudent=e.zeroStudent;
-		exam=e.exam;
+		this.active=currentlyactive;
 		
 	}
-	public int getCode() {
+	
+	/**
+	 *  copy constructor
+	 * @param e is the Active Exam we want to copy
+	 */
+	public ActiveExam(ActiveExam e)/*Copy constructor/*/
+	{
+		code=e.getCode();
+		type=e.getType();
+		dateActivated=e.getDate();
+		activator=new Teacher(e.getActivator());
+		exam=new Exam(e.getExam());
+		active=e.isActive();
+		
+	}
+	
+	/**
+	 * this function returns if an ActiveExam is currently active or no
+	 * @return true for active exam and false for non-active exams
+	 */
+	private boolean isActive() {
+		return active;
+	}
+
+	private Teacher getActivator() {
+		return activator;
+	}
+
+	private Date getDate() {
+		return dateActivated;
+	}
+
+	public String getCode() {
 		/*Code getter/*/
 		return this.code;
 	}
@@ -39,45 +64,21 @@ public class ActiveExam {
 		return this.type;
 	}
 
-	
-	public int getStudentTaking() {
-		/*Students who takes the exam getter/*/
-		return this.studentTaking;
-	}
-
-	public void setStudentTaking(int studentTaking) {
-		/*Students who takes the exam setter/*/
-		this.studentTaking = studentTaking;
-	}
-
-
-	public int getZeroStudent() {
-		/*Students who gets 0 on exam getter/*/
-		return zeroStudent;
-	}
-
-
-	public void setZeroStudent(int zeroStudent) {
-		/*Students who gets 0 on exam setter/*/
-		this.zeroStudent = zeroStudent;
-	}
-
 	public Exam getExam()
 	{
 		/*Exam getter/*/
 		return this.exam;
 	}
 
-
+	/**
+	 * this function should get time change requests from database in case there are any
+	 * currently returns null need to implement
+	 * @return TimeChangeRequest
+	 */
 	public TimeChangeRequest getTimeChangeRequest() {
 		/*Request for time change request setter/*/
-		return timeChangeRequest;
+		return null;
 	}
 
-
-	public void setTimeChangeRequest(TimeChangeRequest timeChangeRequest) {
-		/*Time change request setter /*/
-		this.timeChangeRequest = timeChangeRequest;
-	}
 	
 }

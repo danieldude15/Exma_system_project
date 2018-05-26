@@ -1,25 +1,36 @@
 package logic;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
-public class Exam 
-{
- private int ID;
- private int Duration;
- private Teacher Author;
- private ArrayList<QuestionInExam> questionsInExam;
-	
- 
- public Exam(int id,int duration,Teacher authorid)
- {
-	 setID(id);
-	 setDuration(duration);
-	 setAuther(authorid);
- }
+@SuppressWarnings("serial")
+public class Exam implements Serializable{
+	private int ID;
+	private int courseid;
+	private int fieldid;
+	private int Duration;
+	private Teacher Author;
+	private ArrayList<Question> questionsInExam;
 
+	
+	public Exam(int iD, int courseid, int fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
+		super();
+		ID = iD;
+		this.courseid = courseid;
+		this.fieldid = fieldid;
+		Duration = duration;
+		Author = author;
+		this.questionsInExam = questionsInExam;
+	}
+
+	@SuppressWarnings("unchecked")
 	public Exam(Exam exam) {
-		ID = exam.ID;
-		Author = exam.Author;
-		
+		super();
+		ID = exam.getID();
+		courseid = exam.getCourseid();
+		fieldid = exam.getFieldid();
+		Duration = exam.getDuration();
+		Author = new Teacher(exam.getAuthor());
+		questionsInExam=(ArrayList<Question>) exam.getQuestionsInExam().clone();		
 	}
 	
 	public static Vector<Exam> clone(Vector<Exam> exam) {
@@ -30,51 +41,32 @@ public class Exam
 		return  ExamRes;
 	}
 
-public int getID() {
-	return ID;
-}
-
-
-public void setID(int iD) {
-	ID = iD;
-}
-
-
-public int getDuration() {
-	return Duration;
-}
-
-
-public void setDuration(int duration) {
-	Duration = duration;
-}
-
-
-public Teacher getAuther() {
-	return this.Author;
-}
-
-
-public void setAuther(Teacher auther) {
-	this.Author = auther;
-}
-
-
-public ArrayList<QuestionInExam> getQuestions() {
-	return this.questionsInExam;
-}
-
-
-public void AddQuestionToExam(QuestionInExam q) {
-	/*Add new question to exam/*/
-	int PointsInExam=0;
-	for(int i=0;i<questionsInExam.size();i++)
-	{
-		PointsInExam+=questionsInExam.get(i).getPointsValue();
+	public int getID() {
+		return ID;
 	}
-	if(PointsInExam+q.getPointsValue()<=100)
-		this.questionsInExam.add(q);
-}
 
+	public int getCourseid() {
+		return courseid;
+	}
+
+	public int getFieldid() {
+		return fieldid;
+	}
+
+	public int getDuration() {
+		return Duration;
+	}
+
+	public Teacher getAuthor() {
+		return Author;
+	}
+
+	public ArrayList<Question> getQuestionsInExam() {
+		return questionsInExam;
+	}
+	
+	public Exam getExam() {
+		return new Exam(this);
+	}
 
 }

@@ -39,4 +39,34 @@ public class CourseFieldController {
 		}
 		
 	}
+
+	public static ArrayList<Course> getFieldsCourses(ArrayList<Field> f) {
+		AESClient client = ClientGlobals.client;
+		ArrayList<Course> courses;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getFieldsCourses",f);
+			try {
+				client.sendToServer(msg);
+				client.waitForResponse();
+				Object o = msg.getObj();
+				courses = new ArrayList<Course>();
+				if(o instanceof ArrayList) {
+					ArrayList<Course> TeacherCourses = (ArrayList<Course>) o;
+					for (Course c: TeacherCourses) {
+						Course course = new Course(c);
+						courses.add(course);
+					}
+				}
+				client.cleanMsg();
+				return courses;
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+				return null;
+			}
+		} else {
+			return null;
+		}
+		
+	}
 }

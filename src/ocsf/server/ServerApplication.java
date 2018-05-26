@@ -32,13 +32,15 @@ public class ServerApplication extends Application {
         primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
 	        try {
-	        	if (ServerGlobals.server!=null)
+	        	if (ServerGlobals.server!=null) {
 	        		ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 	        		ServerGlobals.server.close();
+	        	}
 			} catch (IOException e) {
 				e.printStackTrace();
+				System.exit(0);
 			}
-	        System.exit(0);
+	        
 	    });
         primaryStage.show();
 

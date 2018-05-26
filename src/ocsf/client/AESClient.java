@@ -38,44 +38,21 @@ public class AESClient extends AbstractClient{
 		System.out.println("Got msg from Server:" + msg);
 		String cmd = new String(msg.getCommand());
 		Object o = msg.getObj();
+		if (o==null) return;
 		switch(cmd) {
 		case "login":
-			if (o==null) {
-				msg.setCommand("none");
-			} else if (o instanceof Teacher) {
-				msg.setCommand("Teacher");
-				me = new Teacher((User)o);
-			} else if(o instanceof Principle) {
-				msg.setCommand("Principle");
-				me = new Principle((User)o);
-			} else if(o instanceof Student) {
-				msg.setCommand("Student");
-				me = new Student((User)o);
-			} else if(o instanceof User) {
-				msg.setCommand("AlreadyLoggedIn");
-			}
+			Login(o);
 			break;
 		case "closing Connection":
-			Platform.runLater(() -> { 
-				Globals.primaryStage.close();
-				ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Server Disconnected");
-				alert.setHeaderText(null);
-				alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
-				alert.showAndWait();
-				});
-		case "gotTeachersActiveExams":
-			//code here
+			closeAESApplication();
+		case "TeachersActiveExams":
+			// TO DO
 			break;
-		case "setTeachersQuestions":
-			//code here
+		case "TeacherFields":
+			teacherFields(ServerMsg);
 			break;
-		case "setTeachersExams":
-			//code here
-			break;
-		case "setTeachersFields":
-			//code here
+		case "FieldsCourses":
+			fieldsCourses(ServerMsg);
 			break;
 			
 		default:
@@ -84,6 +61,8 @@ public class AESClient extends AbstractClient{
 		stopWaiting=true;
 		
 	}
+
+
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
 	}
@@ -106,7 +85,7 @@ public class AESClient extends AbstractClient{
 				e.printStackTrace();
 			}
 			count++;
-			if(count>=50) {
+			if(count>=500) {
 				System.out.println("Server Taking Long Time To Respond...");
 				//Globals.handleException(new Exception("Waited for tooo long for server response!"));
 				break;
@@ -135,4 +114,54 @@ public class AESClient extends AbstractClient{
 	public User getUser() {
 		return me;
 	}
+	
+	//  ################################################# Team Start Adding Functions From Here ############################
+	
+	
+	
+	private void Login(Object o) {
+		if (o==null) {
+			msg.setCommand("none");
+		} else if (o instanceof Teacher) {
+			msg.setCommand("Teacher");
+			me = new Teacher((Teacher)o);
+		} else if(o instanceof Principle) {
+			msg.setCommand("Principle");
+			me = new Principle((Principle)o);
+		} else if(o instanceof Student) {
+			msg.setCommand("Student");
+			me = new Student((Student)o);
+		} else if(o instanceof User) {
+			msg.setCommand("AlreadyLoggedIn");
+		}
+		
+	}
+
+
+	private void closeAESApplication() {
+		Platform.runLater(() -> { 
+			Globals.primaryStage.close();
+			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Server Disconnected");
+			alert.setHeaderText(null);
+			alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
+			alert.showAndWait();
+			});
+		
+	}
+
+	
+
+	private void fieldsCourses(Object o) {
+		msg = new iMessage(o);
+		
+	}
+	
+	private void teacherFields(Object o) {
+		msg = new iMessage(o);
+	}
+
+
+
 }

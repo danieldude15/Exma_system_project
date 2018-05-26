@@ -36,7 +36,10 @@ public class User implements Serializable{
 	public String getName() {
 		return name;
 	}
-	
+	/**
+	 * returns user id
+	 * @return int of user id
+	 */
 	public int getID() {
 		return id;
 	}

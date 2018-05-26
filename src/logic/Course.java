@@ -1,35 +1,27 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course {
+@SuppressWarnings("serial")
+public class Course implements Serializable{
 
 	private int id;
 	private String name;
 	private Field field;
-	private ArrayList<Question> questions;
-	private ArrayList<Student> students;
-	private ArrayList<Exam> exams;
 	
-	public Course(String name,Field field,ArrayList<Student> students)/*Constructor/*/
+	public Course(int id,String name,Field field)/*Constructor/*/
 	{
+		this.id=id;
 		this.name=name;
-		this.field=field;
-		questions=new ArrayList<Question>();
-		students=new ArrayList<Student>();
-		this.students=students;
-		exams=new ArrayList<Exam>();
-		
+		this.field=field;		
 	}
 	
 	public Course(Course c)/*Copy constructor/*/
 	{
-		name=c.name;
-		field=c.field;
-		questions=c.questions;
-		students=c.students;
-		exams=new ArrayList<Exam>();
-		exams=c.exams;
+		name=c.getName();
+		field=c.getField();
+		id=c.getId();
 	}
 	public int getId()
 	{
@@ -46,31 +38,41 @@ public class Course {
 		/*Field getter/*/
 		return this.field;
 	}
+	/**
+	 * this function will get all questions in databse that belong to this course
+	 * currently returns null needs implementation
+	 * @return
+	 */
 	public ArrayList<Question> getQuestins()
 	{
-		/*Getter for all questions on course/*/
-		return this.questions;
+		return null;
 	}
-	public void AddQuestion(Question q)
-	{
-		/*Questions setter(if Teacher create new question we update it on database and add it to the specific course/*/
-		this.questions.add(q);
-	}
+	
+	/**
+	 * this function will return all students that belong to this course
+	 * @return ArrayList of Students that belong to course
+	 */
 	public ArrayList<Student> getStudents()
 	{
 		/*Getter for all students on course/*/
-		return this.students;
+		return null;
 	}
 	
+	/**
+	 * this function will return all exams that belong to this course
+	 * @return arraylist of exams in this course
+	 */
 	public ArrayList<Exam> GetAllExams()
 	{
-		/*Getter for all exams in course/*/
-		return this.exams;
+		return null;
 	}
-	
+	/**
+	 * returns all solved exams in this course
+	 * @return array list of solved exams
+	 */
 	public ArrayList<SolvedExam> GetAllSolvedExams()
 	{
-		/*Return all solved exams in course/*/
+		/*Return all solved exams in course/
 		ArrayList<SolvedExam> returnSolvedExamsList=new ArrayList<SolvedExam>();
 		for(int i=0;i<exams.size();i++)
 		{
@@ -78,55 +80,50 @@ public class Course {
 				returnSolvedExamsList.add((SolvedExam) exams.get(i));
 		}
 		return returnSolvedExamsList;
+		*/
+		return null;
 	}
 	
-	public ArrayList<Exam> GetAllUnsolvedExams()
+	/**
+	 * inserts an exam to this course
+	 * @param s the exam to be inserted
+	 */
+	public void insertExam(Exam s)
 	{
-		/*Return all unsolved exams in course/*/
-		ArrayList<Exam> returnExamsList=new ArrayList<Exam>();
-		for(int i=0;i<exams.size();i++)
-		{
-			if(!(exams.get(i) instanceof SolvedExam))
-				returnExamsList.add(exams.get(i));
-		}
-		return returnExamsList;
+		
 	}
 	
-	public void AddExamToExamsList(Exam s)
-	{
-		/*Add new Solved Exam to the list of SolvedExams/*/
-		this.exams.add(s);
-	}
-	
-	public void AddSolvedExamToExamsList(SolvedExam s)
-	{
-		/*Add new Solved Exam to the list of SolvedExams/*/
-		this.exams.add((SolvedExam)s);
-	}
-	public void AddNewQuestionToQuestionsList(Question q)
-	{
-		/*Add new question to the list of questions/*/
-		this.questions.add(q);
-	}
-	
+	/**
+	 * this will check if a student is in this course
+	 * @param StudentUsername
+	 * @return Student object if exists otherwise returns null
+	 */
 	public Student StudentExist(String StudentUsername)
 	{
-		/*When principle wants to check if some student is on course/*/
+		/*When principle wants to check if some student is on course/
 		for(int i=0;i<students.size();i++)
 		{
 			if(students.get(i).getUserName()==StudentUsername)
 				return students.get(i);
 		}
+		*/
 		return null;
 	}
+	
+	/**
+	 * check if a question exists in this course
+	 * @param QuestionId is an int representing question id
+	 * @return Question if it exists otherwise returns null
+	 */
 	public Question QuestionExist(int QuestionId)
 	{
-		/*When principle wants to check if some question is on course/*/
+		/*When principle wants to check if some question is on course/
 		for(int i=0;i<questions.size();i++)
 		{
 			if(questions.get(i).getID()==QuestionId)
 				return questions.get(i);
 		}
+		*/
 		return null;
 	}
 	
