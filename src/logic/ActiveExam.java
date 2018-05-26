@@ -1,8 +1,10 @@
 package logic;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class ActiveExam {
+@SuppressWarnings("serial")
+public class ActiveExam implements Serializable{
 
 	private String code;
 	private String type;

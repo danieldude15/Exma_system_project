@@ -77,16 +77,14 @@ public class ClientFrame implements Initializable {
         	System.out.println("failed to load "+ ClientGlobals.TeacherMainID);
         	return;
         }
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherManageQuestionsID, ClientGlobals.TeacherManageQuestionsPath)) {
+        	System.out.println("failed to load "+ ClientGlobals.TeacherManageQuestionsID);
+        	return;
+        }
 		mainContainer.setScreen(ClientGlobals.LogInID);
 		
 		AnchorPane root = new AnchorPane();
 		root.getChildren().addAll(mainContainer);
-		//root.setTopAnchor(mainContainer, 0.0);
-		//root.setRightAnchor(mainContainer, 0.0);
-		//root.setBottomAnchor(mainContainer, 0.0);
-		//root.setLeftAnchor(mainContainer, 0.0);
-        //Group root = new Group();
-        //root.getChildren().addAll(mainContainer);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(closeUpdate ->

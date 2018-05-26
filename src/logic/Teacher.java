@@ -1,11 +1,9 @@
 package logic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
-@SuppressWarnings("serial")
-public class Teacher extends User implements Serializable{
+public class Teacher extends User{
 	
 	public Teacher(int id,String userName, String Password, String Name) {
 		super(id,userName, Password, Name);

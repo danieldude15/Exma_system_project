@@ -1,8 +1,10 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Question{
+@SuppressWarnings("serial")
+public class Question implements Serializable{
 	private int ID;
 	private Teacher Auther;
 	private String questionString;

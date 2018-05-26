@@ -1,10 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExamReport{
+@SuppressWarnings("serial")
+public class ExamReport implements Serializable{
 
 	int reportid;
 	int meadian;

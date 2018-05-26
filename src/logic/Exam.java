@@ -1,7 +1,9 @@
 package logic;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
-public class Exam {
+@SuppressWarnings("serial")
+public class Exam implements Serializable{
 	private int ID;
 	private int courseid;
 	private int fieldid;

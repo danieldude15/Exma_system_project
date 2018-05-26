@@ -1,8 +1,10 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Field {
+@SuppressWarnings("serial")
+public class Field implements Serializable{
 	
 	private int fID;
 	private String fName;
@@ -47,5 +49,11 @@ public class Field {
 	public ArrayList<Teacher> getTeachersInField(){
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return new String(fID + " - " + fName);
+	}
  
+	
 }

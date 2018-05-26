@@ -17,6 +17,9 @@ public class ClientGlobals {
 	public static final String LogInID = "LogIn";
 	public static final String LogInPath = "/fxml/Login.fxml";
 
+	public static final String TeacherManageQuestionsID = "TeacherManageQuestions";
+	public static final String TeacherManageQuestionsPath = "/fxml/TeacherManageQuestions.fxml";
+
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
 		try {

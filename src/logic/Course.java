@@ -1,8 +1,10 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course {
+@SuppressWarnings("serial")
+public class Course implements Serializable{
 
 	private int id;
 	private String name;

@@ -1,6 +1,7 @@
 package logic;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class iMessage implements Serializable{
@@ -13,6 +14,17 @@ public class iMessage implements Serializable{
 		obj=o;
 	}
 	
+	public iMessage(Object obj) {
+		super();
+		if(obj instanceof iMessage) {
+			command = new String(((iMessage)obj).getCommand());
+			Object o = ((iMessage)obj).getObj();
+			if (o instanceof ArrayList<?>) {
+				obj = ((ArrayList<?>) o).clone();
+			}
+		}
+	}
+
 	public Object getObj() {
 		return obj;
 	}
