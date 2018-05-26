@@ -29,7 +29,7 @@
          </font>
       </Label>
       <Button layoutX="416.0" layoutY="339.0" mnemonicParsing="false" text="View exam" />
-      <Button layoutX="734.0" layoutY="549.0" mnemonicParsing="false" text="log out" />
+      <Button layoutX="734.0" layoutY="549.0" mnemonicParsing="false" text="LogOut" />
       <TabPane layoutX="6.0" layoutY="374.0" prefHeight="200.0" prefWidth="685.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="My info" />
