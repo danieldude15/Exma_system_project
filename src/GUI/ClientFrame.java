@@ -81,6 +81,10 @@ public class ClientFrame implements Initializable {
         	System.out.println("failed to load "+ ClientGlobals.TeacherManageQuestionsID);
         	return;
         }
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherEditAddQuestionID, ClientGlobals.TeacherEditAddQuestionPath)) {
+        	System.out.println("failed to load "+ ClientGlobals.TeacherEditAddQuestionID);
+        	return;
+        }
 		mainContainer.setScreen(ClientGlobals.LogInID);
 		
 		AnchorPane root = new AnchorPane();

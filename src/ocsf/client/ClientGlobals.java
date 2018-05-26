@@ -28,8 +28,8 @@ public class ClientGlobals {
 	public static final String StudentStartExamID = "StudentStartExam";
 	public static final String StudentStartExamPath = "/fxml/StudentStartExam.fxml";
 	
-	public static final String TeacherEditQuestionID = "TeacherEditQuestion";
-	public static final String TeacherEditQuestionPath = "/fxml/TeacherEditQuestion.fxml";
+	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
+	public static final String TeacherEditAddQuestionPath = "/fxml/TeacherEditAddQuestion.fxml";
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();

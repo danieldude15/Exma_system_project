@@ -150,7 +150,6 @@ public class AESClient extends AbstractClient{
 
 	private void TeacherQuestions(Object serverMsg) {
 		msg = new iMessage(serverMsg);
-		System.out.println("Debug:"+msg);
 	}
 
 	private void closeAESApplication() {
@@ -170,13 +169,10 @@ public class AESClient extends AbstractClient{
 
 	private void fieldsCourses(Object o) {
 		msg = new iMessage(o);
-		System.out.println("Debug:"+msg);
-		
 	}
 	
 	private void teacherFields(Object o) {
 		msg = new iMessage(o);
-		System.out.println("Debug:"+msg);
 	}
 
 }

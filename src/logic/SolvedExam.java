@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressWarnings("serial")
 public class SolvedExam extends Exam{
 	int score;
 	boolean teacherApproved;

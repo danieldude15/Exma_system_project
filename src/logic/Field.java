@@ -54,6 +54,10 @@ public class Field implements Serializable{
 	public String toString() {
 		return new String(fID + " - " + fName);
 	}
+	
+	public String fieldIdToSdting() {
+		return new String(String.format("%02d", getID()));
+	}
  
 	
 }

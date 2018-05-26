@@ -132,7 +132,9 @@ public class Course implements Serializable{
 		return new String(getId() + " - " + getName());
 	}
 	
-	
+	public String courseIdToString() {
+		return new String(String.format("%02d", getId()));
+	}
 	
 	
 }
