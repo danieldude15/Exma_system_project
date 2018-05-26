@@ -86,5 +86,12 @@ public class Question implements Serializable{
 		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return new String("QuestionID:"+getID()+"\nQuestion:" + getQuestionString() + "\nA:"+Answers[0]+"\nB:"+Answers[0]+"\nC:"+Answers[0]+"\nD:"+Answers[0]+"\nCorrectIndex:"+getCorrectAnswerIndex()+"\nField:"+getField());
+	}
+	
+	
 	
 }

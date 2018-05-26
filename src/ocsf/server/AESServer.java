@@ -48,8 +48,8 @@ public class AESServer extends AbstractServer {
 			case "getFieldsCourses":
 				getFieldsCourses(client,o);
 				break;
-			case "getTeachersExams":
-				//code here
+			case "getTeachersQuestions":
+				getTeacherQuestions(client,o);
 				break;
 				
 			default:
@@ -61,6 +61,7 @@ public class AESServer extends AbstractServer {
 		}
 	}
 	
+
 	/**
 	 * Hook Method executed after server closes
 	 * this is part of AbstractServer functionality
@@ -104,6 +105,12 @@ public class AESServer extends AbstractServer {
 	
 	public void logOutAllUsers() {
 		connectedUsers.clear();
+	}
+	
+	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
+		iMessage im = new iMessage("TeachersQuestions", questions);
+		client.sendToClient(im);
 	}
 	
 	private void loginFunctionality(ConnectionToClient client,Object o) throws IOException {

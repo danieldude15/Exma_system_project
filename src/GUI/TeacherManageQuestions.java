@@ -7,8 +7,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.scene.input.MouseEvent;
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
+import Controllers.QuestionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +22,7 @@ import javafx.scene.control.ListView;
 import logic.Course;
 import logic.Field;
 import logic.Globals;
+import logic.Question;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
@@ -32,7 +35,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@FXML Button newQuestionB;
 	@FXML ComboBox<String> fieldComboB;
 	@FXML ComboBox<String> courseComboB;
-	@FXML ListView<String> questionList;
+	@FXML ListView<String> questionsList;
 	@FXML Button home;
 	
 	@Override
@@ -73,6 +76,16 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		}
 		list = FXCollections.observableArrayList(courseStrings);
 		courseComboB.setItems(list);
+		
+		
+		ArrayList<Question> questions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
+		System.out.println(questions);
+		ArrayList<String> questionStrings = new ArrayList<>();
+		for(Question q:questions) {
+			questionStrings.add(new String(q.toString()));
+		}
+		list = FXCollections.observableArrayList(questionStrings);
+		questionsList.setItems(list);
 	}
 
 	@Override
@@ -83,11 +96,11 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	@FXML
 	public void newQuestionButtonPressed(ActionEvent event) {
-		
+		//Globals.mainContainer.setScreen(ClientGlobals.)
 	}
 	@FXML
-	public void activeExamsListViewClicked(ActionEvent event) {
-		
+	public void handleMouseClick(MouseEvent arg0) {
+		System.out.println("clicked");
 	}
 	
 	@FXML void BackToMainMenu(ActionEvent event) {

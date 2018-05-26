@@ -13,6 +13,7 @@ import logic.Course;
 import logic.Field;
 import logic.Globals;
 import logic.Principle;
+import logic.Question;
 import logic.Student;
 import logic.Teacher;
 import logic.User;
@@ -27,9 +28,7 @@ public class DBMain {
 	PreparedStatement prst;
 	ResultSet rs;
 	private String tableA = "";
-	private String tableB= "";
 	private String columnA= "";
-	private String columnB= "";
 	private String getActiveEams = new String(
 			"SELECT * FROM "
 			+ "(SELECT * FROM aes.activated_exams WHERE teacherid=?) B "
@@ -38,17 +37,8 @@ public class DBMain {
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
 			+ "WHERE tf.fieldid=f.fieldid and tf.teacherid=?;;");
-	private String getAllUsers = new String(
-			"Select * FROM aes.users"
-			);
-	private String getAllTeachers = new String(
-			"Select * FROM aes.users,aes.teachers WHERE userid=teacherid"
-			);
-	private String getAllStudents = new String(
-			"Select * FROM aes.users,aes.students WHERE userid=teacherid"
-			);
-	private String getAllPrinciples = new String(
-			"Select * FROM aes.users,aes.principles WHERE userid=teacherid"
+	private String teachersQuestions = new String(
+			"select * from questions as q, fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
 	private String login;
 	/**
@@ -249,6 +239,35 @@ public class DBMain {
 				int fieldsid = rs.getInt(3);
 				String fieldName = rs.getString(4);
 				result.add(new Course(courseid,coursename,new Field(fieldsid,fieldName)));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
+	public ArrayList<Question> getTeachersQuestions(Teacher o) {
+		Teacher t = (Teacher) o;
+		try {
+			prst = conn.prepareStatement(teachersQuestions);
+			prst.setInt(1,t.getID());
+			System.out.println("SQL:" + prst);
+			rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Question> result = new ArrayList<>();
+			while(rs.next()) {
+				int questionid = rs.getInt(1);
+				String questionString = rs.getString(2);
+				String answerA = rs.getString(3);
+				String answerB = rs.getString(4);
+				String answerC = rs.getString(5);
+				String answerD = rs.getString(6);
+				String answers[] = new String[]{answerA,answerB,answerC,answerD};
+				int answerIndex = rs.getInt(7);
+				int fieldsid = rs.getInt(8);
+				String fieldName = rs.getString(11);
+				result.add(new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex));
 			}
 			return result;
 		} catch (SQLException e) {

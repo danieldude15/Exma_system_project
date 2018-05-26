@@ -2,6 +2,7 @@ package ocsf.client;
 
 import java.io.IOException;
 
+import GUI.TeacherManageQuestions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -45,8 +46,8 @@ public class AESClient extends AbstractClient{
 			break;
 		case "closing Connection":
 			closeAESApplication();
-		case "TeachersActiveExams":
-			// TO DO
+		case "TeachersQuestions":
+			TeacherQuestions(ServerMsg);
 			break;
 		case "TeacherFields":
 			teacherFields(ServerMsg);
@@ -63,6 +64,7 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
+
 
 
 	protected void connectionClosed() {
@@ -144,6 +146,12 @@ public class AESClient extends AbstractClient{
 		
 	}
 
+	
+
+	private void TeacherQuestions(Object serverMsg) {
+		msg = new iMessage(serverMsg);
+		System.out.println("Debug:"+msg);
+	}
 
 	private void closeAESApplication() {
 		Platform.runLater(() -> { 

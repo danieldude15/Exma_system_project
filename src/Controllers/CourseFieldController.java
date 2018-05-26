@@ -10,6 +10,11 @@ import ocsf.client.ClientGlobals;
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
 	
+	/**
+	 * this function will give us all the fields of a teacher.
+	 * @param Teacher object of witch we want to know what fields he belongs to
+	 * @return ArrayList of Fields
+	 */
 	public static ArrayList<Field> getTeacherFields(Teacher t) {
 		AESClient client = ClientGlobals.client;
 		ArrayList<Field> fields;
@@ -38,6 +43,11 @@ public class CourseFieldController {
 		
 	}
 
+	/**
+	 * This function will get from database all courses that are part of any of the fields given in the arraylist
+	 * @param ArrayList<Field> fields, the list of fields we want to get courses of
+	 * @return ArrayList<Course> courses , an arraylist of all the courses in @param fields.
+	 */
 	public static ArrayList<Course> getFieldsCourses(ArrayList<Field> f) {
 		AESClient client = ClientGlobals.client;
 		ArrayList<Course> courses;

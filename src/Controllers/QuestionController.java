@@ -20,7 +20,7 @@ public class QuestionController {
 			try {
 				client.sendToServer(msg);
 				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getMsg().getObj();
 				questions = new ArrayList<Question>();
 				if(o instanceof ArrayList) {
 					ArrayList<Question> TeacherQuestions = (ArrayList<Question>) o;
