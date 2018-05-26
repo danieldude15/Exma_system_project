@@ -16,7 +16,7 @@ public class AESClient extends AbstractClient{
 	
 	User me;
 	private iMessage msg;
-	public boolean stopWaiting=false;
+	public Integer stopWaiting=0;
 	public AESClient(String host, int port) {
 		super(host, port);
 		me=null;
@@ -58,7 +58,9 @@ public class AESClient extends AbstractClient{
 		default:
 			
 		}
-		stopWaiting=true;
+		synchronized (stopWaiting) {
+			stopWaiting=1;	
+		}
 		
 	}
 
@@ -77,7 +79,7 @@ public class AESClient extends AbstractClient{
 	 */
 	public void waitForResponse() {
 		int count=0;
-		while(!stopWaiting) {
+		while(true) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -89,6 +91,9 @@ public class AESClient extends AbstractClient{
 				System.out.println("Server Taking Long Time To Respond...");
 				//Globals.handleException(new Exception("Waited for tooo long for server response!"));
 				break;
+			}
+			synchronized (stopWaiting) {
+				if (stopWaiting==1) break;
 			}
 		}
 	}
@@ -107,7 +112,9 @@ public class AESClient extends AbstractClient{
 
 	public void cleanMsg() {
 		msg=null;
-		stopWaiting=false;
+		synchronized (stopWaiting) {
+			stopWaiting=0;	
+		}
 	}
 
 
@@ -155,13 +162,13 @@ public class AESClient extends AbstractClient{
 
 	private void fieldsCourses(Object o) {
 		msg = new iMessage(o);
+		System.out.println("Debug:"+msg);
 		
 	}
 	
 	private void teacherFields(Object o) {
 		msg = new iMessage(o);
+		System.out.println("Debug:"+msg);
 	}
-
-
 
 }

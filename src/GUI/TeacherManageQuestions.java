@@ -71,7 +71,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 			courseStrings.remove(0);
 			courseStrings.add("You Have No Assigned Courses...");
 		}
-		list = FXCollections.observableArrayList(fieldStrings);
+		list = FXCollections.observableArrayList(courseStrings);
 		courseComboB.setItems(list);
 	}
 

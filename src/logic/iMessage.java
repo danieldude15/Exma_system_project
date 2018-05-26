@@ -20,7 +20,7 @@ public class iMessage implements Serializable{
 			command = new String(((iMessage)obj).getCommand());
 			Object o = ((iMessage)obj).getObj();
 			if (o instanceof ArrayList<?>) {
-				obj = ((ArrayList<?>) o).clone();
+				this.obj = ((ArrayList<?>) o).clone();
 			}
 		}
 	}

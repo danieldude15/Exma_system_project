@@ -65,13 +65,12 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 	}
 	
-	public void addClient(ConnectionToClient client) {
-
-	}
-
-	public void removeClient(ConnectionToClient client) {
-		// TODO Auto-generated method stub
-		
+	
+	@FXML
+	public void disconnectUsers(ActionEvent event) {
+		if (ServerGlobals.server!=null) {
+			ServerGlobals.server.logOutAllUsers();
+		}
 	}
 	
 }

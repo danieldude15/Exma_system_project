@@ -126,6 +126,13 @@ public class Course implements Serializable{
 		*/
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return new String(getId() + " - " + getName());
+	}
+	
+	
 	
 	
 }

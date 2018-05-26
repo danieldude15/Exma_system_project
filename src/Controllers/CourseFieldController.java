@@ -18,14 +18,12 @@ public class CourseFieldController {
 			try {
 				client.sendToServer(msg);
 				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = ClientGlobals.client.getMsg().getObj();
 				fields = new ArrayList<Field>();
-				if(o instanceof ArrayList) {
-					ArrayList<Field> TeacherFields = (ArrayList<Field>) o;
-					for (Field f: TeacherFields) {
-						Field field = new Field(f);
-						fields.add(field);
-					}
+				ArrayList<Field> TeacherFields = (ArrayList<Field>) o;
+				for (Field f: TeacherFields) {
+					Field field = new Field(f);
+					fields.add(field);
 				}
 				client.cleanMsg();
 				return fields;
@@ -48,7 +46,7 @@ public class CourseFieldController {
 			try {
 				client.sendToServer(msg);
 				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getMsg().getObj();
 				courses = new ArrayList<Course>();
 				if(o instanceof ArrayList) {
 					ArrayList<Course> TeacherCourses = (ArrayList<Course>) o;

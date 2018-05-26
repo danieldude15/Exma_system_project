@@ -122,11 +122,12 @@ public class DBMain {
 		try {
 			prst = conn.prepareStatement(getActiveEams);
 			prst.setInt(1, t.getID());
-			System.out.println("About to excecute:"+prst);
+			System.out.println("SQL:\t"+prst);
 			if (prst.execute())
 				rs = prst.getResultSet();
 			ArrayList<ActiveExam> ae = new ArrayList<ActiveExam>();
 			while (rs.next()) {
+				System.out.println(rs);
 				int examid = rs.getInt(1);
 				int courseid = rs.getInt(2);
 				int fieldid = rs.getInt(3);
@@ -151,9 +152,10 @@ public class DBMain {
 			setLogin();
 			prst = conn.prepareStatement(login);
 			prst.setString(1,u.getUserName());
-			System.out.println("About to excecute:"+prst);
+			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				rs = prst.getResultSet();
+				System.out.println(rs);
 				if (rs.next()) {
 					int userid = rs.getInt(2);
 					String username = rs.getString(3);
@@ -184,9 +186,10 @@ public class DBMain {
 			setLogin();
 			prst = conn.prepareStatement(login);
 			prst.setString(1,u.getUserName());
-			System.out.println("About to excecute:"+prst);
+			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				rs = prst.getResultSet();
+				System.out.println(rs);
 				if (rs.next()) {
 					int userid = rs.getInt(2);
 					String username = rs.getString(3);
@@ -209,8 +212,9 @@ public class DBMain {
 		try {
 			prst = conn.prepareStatement(teacherFields);
 			prst.setInt(1, o.getID());
-			System.out.println("About to excecute:"+prst);
+			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
+				System.out.println(rs);
 				rs = prst.getResultSet();
 				if (rs.next()) {
 					int fieldsid = rs.getInt(1);
@@ -235,7 +239,9 @@ public class DBMain {
 		sqlQuery = sqlQuery + "0)";
 		try {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
+			System.out.println("SQL:" + statement);
 			rs = statement.executeQuery();
+			System.out.println(rs);
 			ArrayList<Course> result = new ArrayList<>();
 			while(rs.next()) {
 				int courseid = rs.getInt(1);

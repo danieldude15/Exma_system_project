@@ -102,6 +102,9 @@ public class AESServer extends AbstractServer {
 			System.out.println("Logged out User: "+ o );
 	}
 	
+	public void logOutAllUsers() {
+		connectedUsers.clear();
+	}
 	
 	private void loginFunctionality(ConnectionToClient client,Object o) throws IOException {
 		User user = (User) o;
