@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.QuestionController;
+import GUI.TeacherEditAddQuestion.windowType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,7 +55,8 @@ import ocsf.client.ClientGlobals;
 public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	HashMap<String,Question> questions = new HashMap<>();
-	
+	ArrayList<Field> teachersFields;
+	ArrayList<Course> teachersCourses;
 	@FXML Button newQuestionB;
 	@FXML ComboBox<String> fieldComboB;
 	@FXML ComboBox<String> courseComboB;
@@ -69,10 +71,11 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		 * Setting comboBox of fields base on teachers assigned fields
 		 */
 		questions.clear();
-		ArrayList<Field> fields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
+		questionsList.getChildren().clear();
+		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		ArrayList<String> fieldStrings = new ArrayList<>();
 		fieldStrings.add("All");
-		for (Field f:fields) {
+		for (Field f:teachersFields) {
 			fieldStrings.add(f.toString());
 		}
 		ObservableList<String> list;
@@ -88,10 +91,10 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		 * setting Course comboBox values by teachers assigned fields
 		 * this comboBox is used to filter out different Questions from the ListView.
 		 */
-		ArrayList<Course> courses = CourseFieldController.getFieldsCourses(fields);;
+		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields);;
 		ArrayList<String> courseStrings = new ArrayList<>();
 		courseStrings.add("All");
-		for (Course c:courses) {
+		for (Course c:teachersCourses) {
 			courseStrings.add(c.toString());
 		}
 		if (courseStrings.size()==1) {
@@ -149,6 +152,8 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
         public void handle(Event evt) {
            Question question = questions.get(((Control)evt.getSource()).getId());
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setQuestion(question);
+           ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
+           ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.EDIT);
            Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
         }
     }
@@ -169,6 +174,8 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	@FXML
 	public void newQuestionButtonPressed(ActionEvent event) {
+		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
+		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
 		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
 	}
 	@FXML
