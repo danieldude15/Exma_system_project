@@ -13,7 +13,7 @@ public class SolvedExam extends Exam{
 	int CompletedTimeInMinutes;
 	
 	
-	public SolvedExam(int iD, int courseid, int fieldid, int duration, Teacher author,
+	public SolvedExam(int iD, Course courseid, Field fieldid, int duration, Teacher author,
 			ArrayList<Question> questionsInExam, int score, boolean teacherApproved,
 			HashMap<Question, Integer> studentsAnswers, int examReportID, Student examSolver,
 			String teachersScoreChangeNote, int completedTimeInMinutes) {
