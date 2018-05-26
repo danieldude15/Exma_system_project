@@ -1,1 +1,8 @@
 /bin/
+
+# Intelij IDE specific files
+/.idea/
+*.iml
+
+# .class compile generated files
+*.class
