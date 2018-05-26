@@ -5,18 +5,18 @@ import java.util.Vector;
 @SuppressWarnings("serial")
 public class Exam implements Serializable{
 	private int ID;
-	private int courseid;
-	private int fieldid;
+	private Course course;
+	private Field field;
 	private int Duration;
 	private Teacher Author;
 	private ArrayList<Question> questionsInExam;
 
 	
-	public Exam(int iD, int courseid, int fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
+	public Exam(int iD, Course courseid, Field fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
 		super();
 		ID = iD;
-		this.courseid = courseid;
-		this.fieldid = fieldid;
+		course = courseid;
+		field = fieldid;
 		Duration = duration;
 		Author = author;
 		this.questionsInExam = questionsInExam;
@@ -26,8 +26,8 @@ public class Exam implements Serializable{
 	public Exam(Exam exam) {
 		super();
 		ID = exam.getID();
-		courseid = exam.getCourseid();
-		fieldid = exam.getFieldid();
+		course = new Course(exam.getCourseid());
+		field = new Field(exam.getFieldid());
 		Duration = exam.getDuration();
 		Author = new Teacher(exam.getAuthor());
 		questionsInExam=(ArrayList<Question>) exam.getQuestionsInExam().clone();		
@@ -45,12 +45,12 @@ public class Exam implements Serializable{
 		return ID;
 	}
 
-	public int getCourseid() {
-		return courseid;
+	public Course getCourseid() {
+		return course;
 	}
 
-	public int getFieldid() {
-		return fieldid;
+	public Field getFieldid() {
+		return field;
 	}
 
 	public int getDuration() {
@@ -67,6 +67,10 @@ public class Exam implements Serializable{
 	
 	public Exam getExam() {
 		return new Exam(this);
+	}
+	
+	public String examIdToString() {
+		return new String(String.format("%02d%02d%02d", field.getID(),course.getId(),ID));
 	}
 
 }
