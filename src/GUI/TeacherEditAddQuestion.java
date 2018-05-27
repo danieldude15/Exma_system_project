@@ -133,6 +133,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	public void userSetField(ActionEvent event) {
 		courseVbox.getChildren().clear();
 		String Fieldid = fields.getSelectionModel().getSelectedItem().toString().split(" - ")[0];
+		//System.out.println(Fieldid + " -- " + Fieldid);
 		ArrayList<Course> arr = coursesInField.get(Integer.parseInt(Fieldid));
 		if(arr!=null) {
 			for (Course c:arr) {
