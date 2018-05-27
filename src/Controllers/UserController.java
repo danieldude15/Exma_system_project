@@ -35,7 +35,7 @@ public class UserController {
 				Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 				break;
 			case "Principle":
-				System.out.println("Principle!!!");
+				Globals.mainContainer.setScreen(ClientGlobals.PrincipalMainID);
 				break;
 			case "AlreadyLoggedIn":
 				alert = new Alert(AlertType.INFORMATION);
