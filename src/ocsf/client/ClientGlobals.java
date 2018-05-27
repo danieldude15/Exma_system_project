@@ -1,8 +1,11 @@
 package ocsf.client;
 
+import javafx.event.ActionEvent;
 import java.io.IOException;
 
 import GUI.ClientFrame;
+import logic.Globals;
+import logic.iMessage;
 
 public class ClientGlobals {
 	public static AESClient client = null;
@@ -30,6 +33,9 @@ public class ClientGlobals {
 	
 	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
 	public static final String TeacherEditAddQuestionPath = "/fxml/TeacherEditAddQuestion.fxml";
+
+	public static final String PrincipalMainID = "PrincipalMain";
+	public static final String PrincipalMainPath = "/fxml/PrincipalMain";
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
@@ -80,8 +86,20 @@ public class ClientGlobals {
 	#####################   NATHAN's Globals!    #########################
 	*/
 
-
-
+	/**
+	 * 	method logs the user out of the system and presents the login screen again
+	 * @param event - logout event upon which user returns to login screen
+	 */
+	public static void logout(ActionEvent event){
+		try {
+			if (ClientGlobals.client!=null)
+				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
+	}
 
 	/*
 	#####################  END OF NATHAN's Globals!    #########################
