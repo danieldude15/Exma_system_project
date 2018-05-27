@@ -16,7 +16,7 @@ public class Question implements Serializable{
 	private ArrayList<Course> courses = null;
 	private int CorrectAnswerIndex;
 	
-	public Question(int iD, Teacher Author, String question, String[] answers, Field field, int correctAnswerIndex) {
+	public Question(int iD, Teacher Author, String question, String[] answers, Field field, int correctAnswerIndex,ArrayList<Course> courses ) {
 		super();
 		ID = iD;
 		this.Author = Author;
@@ -24,10 +24,6 @@ public class Question implements Serializable{
 		Answers = answers;
 		this.field = field;
 		CorrectAnswerIndex = correctAnswerIndex;
-	}
-	
-	public Question(int iD, Teacher Author, String question, String[] answers, Field field, int correctAnswerIndex,ArrayList<Course> courses ) {
-		this(iD,Author,question,answers, field,correctAnswerIndex);
 		this.courses= courses;
 	}
 
@@ -106,14 +102,27 @@ public class Question implements Serializable{
 	}
 	
 	public ArrayList<Course> getCourses() {
-		if (courses!=null)
-			return courses;
-		else 
-			return QuestionController.getQuestionCourses(this);
+		return courses;
 	}
 
 	public void setCourses(ArrayList<Course> courses) {
 		this.courses = courses;
+	}
+	
+	public static String questionIDToString(int qid,int fid) {
+		return new String(String.format("%02d%03d", fid,qid));
+	}
+	
+	public static int[] parseID(String id) {
+		try {
+			int[] result = {Integer.parseInt(id.substring(0, 2)),Integer.parseInt(id.substring(2,5))};
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			int[] res = {-1,-1};
+			return res;
+		}
+		
 	}
 
 	@Override

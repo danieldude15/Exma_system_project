@@ -206,8 +206,7 @@ public class DBMain {
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
 				String fieldName = rs.getString(11);
-				Question question = new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex);
-				question.setCourses(getQuestionCourses(question));
+				Question question = new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
 			return result;
@@ -218,11 +217,17 @@ public class DBMain {
 	}
 
 	public ArrayList<Course> getQuestionCourses(Object o) {
-		Question question = (Question) o;
 		try {
 			PreparedStatement prst = conn.prepareStatement(questionCourses);
-			prst.setInt(1,question.getID());
-			prst.setInt(2, question.getField().getID());
+			if (o instanceof Question) {
+				Question question = (Question) o;
+				prst.setInt(1,question.getID());
+				prst.setInt(2, question.getField().getID());
+			} else if (o instanceof String) {
+				String id = (String)o; 
+				prst.setInt(1, Question.parseID(id)[1]);
+				prst.setInt(2, Question.parseID(id)[0]);
+			} else return null;
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			System.out.println(rs);
