@@ -40,7 +40,7 @@
             <VBox>
                <children>
                   <Label text="Filter list by field" />
-                  <ComboBox fx:id="fieldComboB" minHeight="-Infinity" minWidth="-Infinity" promptText="Field" />
+                  <ComboBox fx:id="fieldComboB" minHeight="-Infinity" minWidth="-Infinity" onAction="#filterByField" promptText="Field" />
                </children>
                <HBox.margin>
                   <Insets left="30.0" />
@@ -50,7 +50,7 @@
             <VBox>
                <children>
                   <Label text="Filter list by course" />
-                  <ComboBox fx:id="courseComboB" minHeight="-Infinity" minWidth="-Infinity" promptText="Course" />
+                  <ComboBox fx:id="courseComboB" minHeight="-Infinity" minWidth="-Infinity" onAction="#filterByCourse" promptText="Course" />
                </children>
                <HBox.margin>
                   <Insets left="30.0" />

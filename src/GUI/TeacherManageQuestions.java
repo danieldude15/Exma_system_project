@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -57,6 +58,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	HashMap<String,Question> questions = new HashMap<>();
 	ArrayList<Field> teachersFields;
 	ArrayList<Course> teachersCourses;
+	ArrayList<Question> DBquestions;
 	@FXML Button newQuestionB;
 	@FXML ComboBox<String> fieldComboB;
 	@FXML ComboBox<String> courseComboB;
@@ -71,7 +73,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		 * Setting comboBox of fields base on teachers assigned fields
 		 */
 		questions.clear();
-		questionsList.getChildren().clear();
+		
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		ArrayList<String> fieldStrings = new ArrayList<>();
 		fieldStrings.add("All");
@@ -105,19 +107,18 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		courseComboB.setItems(list);
 		
 		
-		ArrayList<Question> DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
-		System.out.println(DBquestions);
-		for(Question q:DBquestions) {
-			questions.put(q.questionIDToString(),q);
-			questionsList.getChildren().add(questionAdder(q));
-		}
+		DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
+		setQuestionsListInVBox();
 	}
 
 	private Node questionAdder(Question q) {
+		//HBox main question container
 		HBox hbox = new HBox();
 		hbox.setStyle("-fx-border-color:black;"
 					+ "-fx-border-radius:10px;"
 					+ "-fx-padding:10px;");
+		
+		//This VBox holds the question details
 		VBox questionInfo = new VBox();
 		Label questionString = new Label("Question: "+q.getQuestionString());
 		questionString.setWrapText(true);
@@ -130,8 +131,10 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 			r.setWrapText(true);
 			questionInfo.getChildren().add(r);
 		}
+		
+		// this HBox will hold the EditDelete buttons
 		HBox questionEditDelete = new HBox();
-		questionEditDelete.setAlignment(Pos.CENTER_RIGHT);
+		questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
 		questionEditDelete.setStyle("-fx-margin:20px");
 		Button edit = new Button("Edit");
 		edit.setId(q.questionIDToString());
@@ -141,7 +144,22 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		delete.setId(q.questionIDToString());
 		questionEditDelete.getChildren().add(edit);
 		questionEditDelete.getChildren().add(delete);
-		hbox.getChildren().addAll(questionInfo,questionEditDelete);
+		questionInfo.getChildren().add(questionEditDelete);
+		// this VBox holds the course list assigned to this question
+		VBox assignedCourses = new VBox();
+		ListView<String> courselist = new ListView<>();
+		courselist.setMaxWidth(120);
+		courselist.setMaxHeight(100);
+		courselist.setDisable(true);
+		ArrayList<String> al = new ArrayList<>();
+		for(Course c : q.getCourses()) {
+			al.add(c.toString());
+		}
+		ObservableList<String> list = FXCollections.observableArrayList(al);
+		courselist.setItems(list);
+		assignedCourses.getChildren().add(courselist);
+		
+		hbox.getChildren().addAll(questionInfo,assignedCourses);
 		
 		
 		return hbox;
@@ -178,6 +196,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
 		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
 	}
+	
 	@FXML
 	public void handleMouseClick(MouseEvent event) {
 		System.out.println("clicked");
@@ -207,4 +226,45 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	}
 
+	@FXML void filterByField(ActionEvent event) {
+		if(fieldComboB.getSelectionModel()!=null) {
+			String selectedField = fieldComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
+			courseComboB.getItems().clear();
+			ArrayList<String> al = new ArrayList<>();
+			ObservableList<String> list;
+			if(selectedField.equals("All")) {
+				for(Course c : teachersCourses) {
+					 al.add(c.toString());
+				}
+				setQuestionsListInVBox();
+			} else {
+				int fieldid = Integer.parseInt(selectedField);
+				for(Course c: teachersCourses) {
+					if(c.getId()==fieldid) {
+						al.add(c.toString());
+					}
+				}
+				questionsList.getChildren().clear();
+				for(Question q:DBquestions) {
+					if(q.getField().getID()==fieldid) {
+						questions.put(q.questionIDToString(),q);
+						questionsList.getChildren().add(questionAdder(q));
+					}
+				}
+			}
+			list = FXCollections.observableArrayList(al);
+			courseComboB.setItems(list);
+		}
+	}
+	
+	@FXML public void filterByCourse(ActionEvent event) {
+		
+	}
+	private void setQuestionsListInVBox() {
+		questionsList.getChildren().clear();
+		for(Question q:DBquestions) {
+			questions.put(q.questionIDToString(),q);
+			questionsList.getChildren().add(questionAdder(q));
+		}
+	}
 }

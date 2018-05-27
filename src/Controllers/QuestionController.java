@@ -3,9 +3,7 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import logic.Question;
-import logic.Teacher;
-import logic.iMessage;
+import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
@@ -21,16 +19,39 @@ public class QuestionController {
 				client.sendToServer(msg);
 				client.waitForResponse();
 				Object o = client.getMsg().getObj();
-				questions = new ArrayList<Question>();
+				ArrayList<Question> TeacherQuestions = null;
 				if(o instanceof ArrayList) {
-					ArrayList<Question> TeacherQuestions = (ArrayList<Question>) o;
-					for (Question q: TeacherQuestions) {
-						Question question = new Question(q);
-						questions.add(question);
-					}
+					TeacherQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
 				}
+				questions = TeacherQuestions;
 				client.cleanMsg();
 				return questions;
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static ArrayList<Course> getQuestionCourses(Question question) {
+		AESClient client = ClientGlobals.client;
+		ArrayList<Course> courses;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getQuestionCourses",question);
+			try {
+				client.sendToServer(msg);
+				client.waitForResponse();
+				Object o = client.getMsg().getObj();
+				ArrayList<Course> QuestionCourses = null;
+				if(o instanceof ArrayList) {
+					QuestionCourses = (ArrayList<Course>) ((ArrayList<Course>) o).clone();
+				}
+				courses = QuestionCourses;
+				client.cleanMsg();
+				return courses;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

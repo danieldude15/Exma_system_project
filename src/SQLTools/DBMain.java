@@ -31,6 +31,10 @@ public class DBMain {
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
 			+ "WHERE tf.fieldid=f.fieldid and tf.teacherid=?");
+	private String questionCourses = new String(""
+			+ "SELECT f.fieldid,f.fieldname,qic.courseid,c.coursename "
+			+ "FROM aes.fields as f,aes.questions_in_course as qic, aes.courses as c "
+			+ "WHERE c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=?");
 	private String teachersQuestions = new String(
 			"select * from questions as q, fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
@@ -141,7 +145,7 @@ public class DBMain {
 			if (prst.execute()) {
 				System.out.println(rs);
 				rs = prst.getResultSet();
-				if (rs.next()) {
+				while (rs.next()) {
 					int fieldsid = rs.getInt(1);
 					String fieldName = rs.getString(2);
 					fields.add(new Field(fieldsid,fieldName));
@@ -157,7 +161,7 @@ public class DBMain {
 	@SuppressWarnings("unchecked")
 	public ArrayList<Course> getFieldsCourses(Object o) {
 		ArrayList<Field> fields = (ArrayList<Field>) o;
-		String sqlQuery = new String("select distinct (courseid),coursename,fieldid,fieldname from courses as c, fields as f where c.coursefieldid=f.fieldid and (");
+		String sqlQuery = new String("select distinct (courseid),coursename,f.fieldid,fieldname from courses as c, fields as f where c.fieldid=f.fieldid and (");
 		for(Field f:fields) {
 			sqlQuery = sqlQuery+"f.fieldid="+f.getID()+" or ";
 		}
@@ -202,7 +206,33 @@ public class DBMain {
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
 				String fieldName = rs.getString(11);
-				result.add(new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex));
+				Question question = new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex);
+				question.setCourses(getQuestionCourses(question));
+				result.add(question);
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
+	public ArrayList<Course> getQuestionCourses(Object o) {
+		Question question = (Question) o;
+		try {
+			PreparedStatement prst = conn.prepareStatement(questionCourses);
+			prst.setInt(1,question.getID());
+			prst.setInt(2, question.getField().getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Course> result = new ArrayList<>();
+			while(rs.next()) {
+				int fieldid = rs.getInt(1);
+				String fieldName = rs.getString(2);
+				int courseid = rs.getInt(3);
+				String courseName = rs.getString(4);
+				result.add(new Course(courseid,courseName, new Field(fieldid,fieldName)));
 			}
 			return result;
 		} catch (SQLException e) {

@@ -58,6 +58,9 @@ public class AESClient extends AbstractClient{
 		case "TeacherFields":
 			teacherFields(ServerMsg);
 			break;
+		case "QuestionCourses":
+			questionCourses(ServerMsg);
+			break;
 		case "FieldsCourses":
 			fieldsCourses(ServerMsg);
 			break;
@@ -70,6 +73,8 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
+
+
 
 
 	protected void connectionClosed() {
@@ -175,6 +180,16 @@ public class AESClient extends AbstractClient{
 	}
 	
 
+	/**
+	 * this function handles the recieved course information on a question
+	 * this will happen after the client requested to get an arraylist of courses that belong to a question
+	 * it copys msg from server to be used by controller
+	 * @param serverMsg 
+	 */
+	private void questionCourses(Object serverMsg) {
+		msg = new iMessage(serverMsg);
+	}
+	
 	private void TeacherQuestions(Object serverMsg) {
 		msg = new iMessage(serverMsg);
 	}
