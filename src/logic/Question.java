@@ -98,7 +98,7 @@ public class Question implements Serializable{
 	}
 	
 	public String questionToString() {
-		return new String("QuestionID:"+getID()+"\nQuestion:" + getQuestionString() + "\nA:"+Answers[0]+"\nB:"+Answers[1]+"\nC:"+Answers[2]+"\nD:"+Answers[3]+"\nCorrectIndex:"+getCorrectAnswerIndex()+"\nField:"+getField());
+		return new String("QuestionID:"+questionIDToString()+"\nQuestion:" + getQuestionString() + "\nA:"+Answers[0]+"\nB:"+Answers[1]+"\nC:"+Answers[2]+"\nD:"+Answers[3]+"\nCorrectIndex:"+getCorrectAnswerIndex()+"\nField:"+getField());
 	}
 	
 	public ArrayList<Course> getCourses() {

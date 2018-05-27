@@ -93,43 +93,10 @@ public class Course implements Serializable{
 		
 	}
 	
-	/**
-	 * this will check if a student is in this course
-	 * @param StudentUsername
-	 * @return Student object if exists otherwise returns null
-	 */
-	public Student StudentExist(String StudentUsername)
-	{
-		/*When principle wants to check if some student is on course/
-		for(int i=0;i<students.size();i++)
-		{
-			if(students.get(i).getUserName()==StudentUsername)
-				return students.get(i);
-		}
-		*/
-		return null;
-	}
-	
-	/**
-	 * check if a question exists in this course
-	 * @param QuestionId is an int representing question id
-	 * @return Question if it exists otherwise returns null
-	 */
-	public Question QuestionExist(int QuestionId)
-	{
-		/*When principle wants to check if some question is on course/
-		for(int i=0;i<questions.size();i++)
-		{
-			if(questions.get(i).getID()==QuestionId)
-				return questions.get(i);
-		}
-		*/
-		return null;
-	}
 
 	@Override
 	public String toString() {
-		return new String(getId() + " - " + getName());
+		return new String(String.format("%02d - %s", getId() , getName()));
 	}
 	
 	@Override

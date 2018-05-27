@@ -227,7 +227,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	}
 
 	@FXML void filterByField(ActionEvent event) {
-		if(fieldComboB.getSelectionModel()!=null) {
+		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
 			String selectedField = fieldComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
 			courseComboB.getItems().clear();
 			ArrayList<String> al = new ArrayList<>();
@@ -239,6 +239,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 				setQuestionsListInVBox();
 			} else {
 				int fieldid = Integer.parseInt(selectedField);
+				al.add("All");
 				for(Course c: teachersCourses) {
 					if(c.getId()==fieldid) {
 						al.add(c.toString());
@@ -255,10 +256,39 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 			list = FXCollections.observableArrayList(al);
 			courseComboB.setItems(list);
 		}
+		System.out.println(courseComboB.getItems().toString());
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	@FXML public void filterByCourse(ActionEvent event) {
-		
+		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
+			String selectedCourse = courseComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
+			courseComboB.getItems().clear();
+			ArrayList<String> al = new ArrayList<>();
+			ObservableList<String> list;
+			if(selectedCourse.equals("All")) {
+				for(String c : courseComboB.getItems().toString().replaceAll("[", "").replaceAll("]", "").split(",")) {
+					 int courseid = Integer.parseInt(c.split(" - ")[0]);
+					 String courseName = c.split(" - ")[1];
+					 for (Question q: DBquestions) {
+						 //if(q.inCourse(c))
+					 }
+				}
+			} else {
+				/**
+				int courseid = Integer.parseInt(selectedCourse);
+				String courseName = courseComboB.getSelectionModel().getSelectedItem().toString().split(" ")[1];
+				questionsList.getChildren().clear();
+				for(Question q:DBquestions) {
+					if(q.getCourses().contains(new Field(courseid,courseName))) {
+						questions.put(q.questionIDToString(),q);
+						questionsList.getChildren().add(questionAdder(q));
+					}
+				}**/
+			}
+			list = FXCollections.observableArrayList(al);
+			courseComboB.setItems(list);
+		}
 	}
 	private void setQuestionsListInVBox() {
 		questionsList.getChildren().clear();

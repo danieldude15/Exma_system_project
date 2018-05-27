@@ -52,7 +52,7 @@ public class Field implements Serializable{
 
 	@Override
 	public String toString() {
-		return new String(fID + " - " + fName);
+		return new String(String.format("%02d - %s", getID() , getName()));
 	}
 	
 	public String fieldIdToSdting() {
