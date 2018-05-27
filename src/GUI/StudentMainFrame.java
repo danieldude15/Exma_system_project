@@ -64,14 +64,8 @@ public class StudentMainFrame implements ControlledScreen {
 	/**
 	 * In case that view exam button was pressed by student the chosen solved exam opens.
 	 */
-	public void ViewExamButtonPressed(ActionEvent event)//Itzik.this methood is not finished yet! Do not touch!
+	public void ViewExamButtonPressed(ActionEvent event)
 	{
-		/*
-		String chosenSolvedExam;
-		SolvedExam viewExamFromDatabase;
-		if(solvedExamsList.getSelectionModel().getSelectedItem()!=null)
-			viewExamFromDatabase=SolvedExamController.getSolvedExam((String)solvedExamsList.getSelectionModel().getSelectedItem());
-		/*/
 		SolvedExam chosenViewExam;
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		for (SolvedExam s:mySolvedExam)
