@@ -119,12 +119,12 @@ public class AESServer extends AbstractServer {
 		String login = "login";
 		if (connectedUsers.get(user.getUserName())!=null) {
 			//sending back same user to indicate user is already logged in!
-			result = new iMessage("login",o);
+			result = new iMessage("loggedInAlready",o);
 		} else {
 			user = sqlcon.UserLogIn((User)o);
 			if (user==null) {
 				//user login authentication failed
-				result = new iMessage(login,null);
+				result = new iMessage("loginFailedAuthentication",null);
 			} else {
 				if (user instanceof Teacher) {
 					result = new iMessage(login,new Teacher((Teacher) user));

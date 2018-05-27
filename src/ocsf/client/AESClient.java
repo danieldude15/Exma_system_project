@@ -6,6 +6,7 @@ import GUI.TeacherManageQuestions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.ConstraintsBase;
 import logic.Globals;
 import logic.Principle;
 import logic.Student;
@@ -44,6 +45,12 @@ public class AESClient extends AbstractClient{
 		case "login":
 			Login(o);
 			break;
+		case "loginFailedAuthentication":
+			showFailedAuth();
+			break;
+		case "loggedInAlready":
+			alreadyLoggedIn();
+			break;
 		case "closing Connection":
 			closeAESApplication();
 		case "TeachersQuestions":
@@ -64,7 +71,6 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
-
 
 
 	protected void connectionClosed() {
@@ -130,7 +136,7 @@ public class AESClient extends AbstractClient{
 	
 	private void Login(Object o) {
 		if (o==null) {
-			msg.setCommand("none");
+			msg.setCommand("ERROR");
 		} else if (o instanceof Teacher) {
 			msg.setCommand("Teacher");
 			me = new Teacher((Teacher)o);
@@ -140,12 +146,22 @@ public class AESClient extends AbstractClient{
 		} else if(o instanceof Student) {
 			msg.setCommand("Student");
 			me = new Student((Student)o);
-		} else if(o instanceof User) {
-			msg.setCommand("AlreadyLoggedIn");
 		}
 		
 	}
 
+
+
+	private void showFailedAuth() {
+		msg.setCommand("failedAuth");
+		me = null;
+	}
+
+
+	private void alreadyLoggedIn() {
+		msg.setCommand("AlreadyLoggedIn");
+		me = null;
+	}
 	
 
 	private void TeacherQuestions(Object serverMsg) {
