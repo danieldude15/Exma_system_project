@@ -132,7 +132,17 @@ public class Course implements Serializable{
 		return new String(getId() + " - " + getName());
 	}
 	
-	
+	@Override
+	public boolean equals(Object c) {
+		if (c instanceof Course) {
+			Course course = (Course) c;
+			if(course.getId()==getId() && course.getName().equals(getName()) && course.getField().equals(getField())) return true;
+		}
+		return false;
+	}
+	public String courseIdToString() {
+		return new String(String.format("%02d", getId()));
+	}
 	
 	
 }

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import Controllers.UserController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -87,14 +88,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@FXML
 	public void logout(ActionEvent event) {
-		try {
-			if (ClientGlobals.client!=null)
-				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
+		UserController.logout();
 	}
 
 }

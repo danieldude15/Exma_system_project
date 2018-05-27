@@ -6,6 +6,7 @@ import GUI.TeacherManageQuestions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.ConstraintsBase;
 import logic.Globals;
 import logic.Principle;
 import logic.Student;
@@ -39,10 +40,15 @@ public class AESClient extends AbstractClient{
 		System.out.println("Got msg from Server:" + msg);
 		String cmd = new String(msg.getCommand());
 		Object o = msg.getObj();
-		if (o==null) return;
 		switch(cmd) {
 		case "login":
 			Login(o);
+			break;
+		case "loginFailedAuthentication":
+			showFailedAuth();
+			break;
+		case "loggedInAlready":
+			alreadyLoggedIn();
 			break;
 		case "closing Connection":
 			closeAESApplication();
@@ -66,7 +72,6 @@ public class AESClient extends AbstractClient{
 	}
 
 
-
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
 	}
@@ -75,6 +80,18 @@ public class AESClient extends AbstractClient{
 		return msg;
 	}
 	
+	
+	
+	public User getMe() {
+		return me;
+	}
+
+
+	public void setMe(User me) {
+		this.me = me;
+	}
+
+
 	/**
 	 * this method should be called right after sending a msg to the server
 	 * that needs to get a response
@@ -130,7 +147,7 @@ public class AESClient extends AbstractClient{
 	
 	private void Login(Object o) {
 		if (o==null) {
-			msg.setCommand("none");
+			msg.setCommand("ERROR");
 		} else if (o instanceof Teacher) {
 			msg.setCommand("Teacher");
 			me = new Teacher((Teacher)o);
@@ -140,17 +157,26 @@ public class AESClient extends AbstractClient{
 		} else if(o instanceof Student) {
 			msg.setCommand("Student");
 			me = new Student((Student)o);
-		} else if(o instanceof User) {
-			msg.setCommand("AlreadyLoggedIn");
 		}
 		
 	}
 
+
+
+	private void showFailedAuth() {
+		msg.setCommand("failedAuth");
+		me = null;
+	}
+
+
+	private void alreadyLoggedIn() {
+		msg.setCommand("AlreadyLoggedIn");
+		me = null;
+	}
 	
 
 	private void TeacherQuestions(Object serverMsg) {
 		msg = new iMessage(serverMsg);
-		System.out.println("Debug:"+msg);
 	}
 
 	private void closeAESApplication() {
@@ -170,13 +196,10 @@ public class AESClient extends AbstractClient{
 
 	private void fieldsCourses(Object o) {
 		msg = new iMessage(o);
-		System.out.println("Debug:"+msg);
-		
 	}
 	
 	private void teacherFields(Object o) {
 		msg = new iMessage(o);
-		System.out.println("Debug:"+msg);
 	}
 
 }

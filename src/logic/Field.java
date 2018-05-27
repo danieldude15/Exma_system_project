@@ -54,6 +54,19 @@ public class Field implements Serializable{
 	public String toString() {
 		return new String(fID + " - " + fName);
 	}
+	
+	public String fieldIdToSdting() {
+		return new String(String.format("%02d", getID()));
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Field) {
+			Field field = (Field) obj;
+			if (field.getID()==getID() && field.getName().equals(getName())) return true;
+		}
+		return false;
+	}
  
 	
 }

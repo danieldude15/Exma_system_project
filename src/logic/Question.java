@@ -87,11 +87,17 @@ public class Question implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return new String("QuestionID:"+getID()+"\nQuestion:" + getQuestionString() + "\nA:"+Answers[0]+"\nB:"+Answers[0]+"\nC:"+Answers[0]+"\nD:"+Answers[0]+"\nCorrectIndex:"+getCorrectAnswerIndex()+"\nField:"+getField());
+	public String questionIDToString() {
+		return new String(String.format("%02d%03d", getField().getID(),getID()));
 	}
 	
+	public String questionToString() {
+		return new String("QuestionID:"+getID()+"\nQuestion:" + getQuestionString() + "\nA:"+Answers[0]+"\nB:"+Answers[1]+"\nC:"+Answers[2]+"\nD:"+Answers[3]+"\nCorrectIndex:"+getCorrectAnswerIndex()+"\nField:"+getField());
+	}
+	@Override
+	public String toString() {
+		return new String(getID()+" "+getQuestionString()+" "+Answers+" "+getCorrectAnswerIndex()+" "+getField());
+	}
 	
 	
 }
