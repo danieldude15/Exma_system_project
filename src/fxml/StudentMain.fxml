@@ -32,7 +32,10 @@
       <Button layoutX="734.0" layoutY="549.0" mnemonicParsing="false" onAction="#LogoutButtonPressed" text="LogOut" />
       <TabPane layoutX="6.0" layoutY="374.0" prefHeight="200.0" prefWidth="685.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab fx:id="studentInfo" text="My info" />
+          <Tab text="My info">
+               <content>
+                  <Label fx:id="studentInfo" prefHeight="53.0" prefWidth="685.0" />
+               </content></Tab>
         </tabs>
       </TabPane>
       <ScrollBar layoutX="692.0" layoutY="97.0" orientation="VERTICAL" prefHeight="228.0" prefWidth="14.0" />

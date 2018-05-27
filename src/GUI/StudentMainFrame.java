@@ -10,6 +10,7 @@ import Controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import logic.Field;
@@ -23,12 +24,12 @@ import ocsf.client.ClientGlobals;
 public class StudentMainFrame implements ControlledScreen {
 
 	@FXML ListView<String> solvedExamsList;
-	@FXML Tab studentInfo;
+	@FXML Label studentInfo;
 	
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(750);
+		Globals.primaryStage.setHeight(630);
 		Globals.primaryStage.setWidth(820);
 		
 		/*Get all student solved exams from database and set it to the ListView field on window/*/
@@ -50,7 +51,7 @@ public class StudentMainFrame implements ControlledScreen {
 		
 		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
 		Student s=(Student)ClientGlobals.client.getUser();
-		studentInfo.setText("Hello "+s.getUserName()+"\n"+"Name: "+s.getName()+"\n"+"Id: "+s.getID());
+		studentInfo.setText("Hello "+s.getUserName()+"!\n"+"Name: "+s.getName()+"\n"+"Id: "+s.getID());
 	}
 	
 	/**

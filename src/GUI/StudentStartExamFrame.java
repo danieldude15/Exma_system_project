@@ -1,8 +1,7 @@
 package GUI;
 
-import java.awt.event.ActionEvent;
-
 import Controllers.ControlledScreen;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import logic.Globals;
@@ -20,7 +19,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 		
 		
 	}
-
+	@FXML
 	public void StartExamButtonPressed(ActionEvent event)
 	{
 		boolean flag=false;
@@ -33,7 +32,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 		
 	}
 	
-	public void BackButtonPressed(ActionEvent event)
+	@FXML
+	public void HomeButtonPressed(ActionEvent event)
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}

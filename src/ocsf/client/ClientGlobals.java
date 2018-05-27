@@ -32,8 +32,8 @@ public class ClientGlobals {
 	public static final String StudentStartExamPath = "/fxml/StudentStartExam.fxml";
 	
 
-	public static final String StudentViewExamID = "StudentViewExam";
-	public static final String StudentViewExamPath = "/fxml/StudentViewExam.fxml";
+	public static final String StudentViewExamID = "StudentExamView";
+	public static final String StudentViewExamPath = "/fxml/StudentExamView.fxml";
 
 	
 
