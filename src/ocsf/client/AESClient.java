@@ -40,7 +40,6 @@ public class AESClient extends AbstractClient{
 		System.out.println("Got msg from Server:" + msg);
 		String cmd = new String(msg.getCommand());
 		Object o = msg.getObj();
-		if (o==null) return;
 		switch(cmd) {
 		case "login":
 			Login(o);
@@ -81,6 +80,18 @@ public class AESClient extends AbstractClient{
 		return msg;
 	}
 	
+	
+	
+	public User getMe() {
+		return me;
+	}
+
+
+	public void setMe(User me) {
+		this.me = me;
+	}
+
+
 	/**
 	 * this method should be called right after sending a msg to the server
 	 * that needs to get a response

@@ -53,4 +53,15 @@ public class UserController {
 		
 	}
 
+	public static void logout() {
+		try {
+			if (ClientGlobals.client!=null)
+				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
+	}
+
 }
