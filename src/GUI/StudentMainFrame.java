@@ -65,17 +65,22 @@ public class StudentMainFrame implements ControlledScreen {
 	 */
 	public void ViewExamButtonPressed(ActionEvent event)
 	{
-		SolvedExam chosenViewExam;
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
+		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		for (SolvedExam s:mySolvedExam)
 		{
 			String examId = Integer.toString(s.getID());
 			if(examId==(String)solvedExamsList.getSelectionModel().getSelectedItem())
 			{
-				chosenViewExam=new SolvedExam(s);
+				studentViewExam.SetSolvedExam(s);
+				break;
 			}
 		}
+		
+		Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
+		
 	}
+	
 	
 	/**
 	 * In case that Logout button was pressed by student the main window is open so the user will put his username and password again.

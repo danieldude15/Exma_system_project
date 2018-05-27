@@ -23,7 +23,7 @@ public class UserController {
 			Alert alert;
 			switch (usertype) {
 			case "Student":
-				System.out.println("Student!!!");
+				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 				break;
 			case "Teacher":
 				Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);

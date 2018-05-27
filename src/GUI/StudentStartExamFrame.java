@@ -1,18 +1,12 @@
 package GUI;
 
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
 import Controllers.ControlledScreen;
-import Controllers.SolvedExamController;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import logic.Globals;
-import logic.SolvedExam;
-import logic.Student;
 import ocsf.client.ClientGlobals;
-import Controllers.ActiveExamController;
-import Controllers.UserController;
 
 public class StudentStartExamFrame implements ControlledScreen{
 
