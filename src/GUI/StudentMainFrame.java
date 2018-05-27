@@ -2,11 +2,9 @@ package GUI;
 
 
 import javafx.event.ActionEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
 import Controllers.SolvedExamController;
 import Controllers.UserController;
 import javafx.collections.FXCollections;

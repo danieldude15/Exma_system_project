@@ -32,6 +32,9 @@ public class ClientGlobals {
 	public static final String StudentStartExamPath = "/fxml/StudentStartExam.fxml";
 	
 
+	public static final String StudentViewExamID = "StudentViewExam";
+	public static final String StudentViewExamPath = "/fxml/StudentViewExam.fxml";
+
 	
 
 	//Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
@@ -40,8 +43,6 @@ public class ClientGlobals {
 	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
 	public static final String TeacherEditAddQuestionPath = "/fxml/TeacherEditAddQuestion.fxml";
 	
-	public static final String StudentViewExamID = "StudentViewExam";
-	public static final String StudentViewExamPath = "/fxml/StudentViewExam.fxml";
 
 	
 	public static final String PrincipalMainID = "PrincipalMain";
