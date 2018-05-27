@@ -1,13 +1,14 @@
 package GUI;
 
 
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.SolvedExamController;
+import Controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -78,15 +79,7 @@ public class StudentMainFrame implements ControlledScreen {
 	 */
 	public void LogoutButtonPressed(ActionEvent event)
 	{
-		
-		try {
-			if (ClientGlobals.client!=null)
-				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
+		UserController.logout();
 	}
 
 	

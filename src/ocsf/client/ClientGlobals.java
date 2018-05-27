@@ -1,8 +1,11 @@
 package ocsf.client;
 
+import javafx.event.ActionEvent;
 import java.io.IOException;
 
 import GUI.ClientFrame;
+import logic.Globals;
+import logic.iMessage;
 
 public class ClientGlobals {
 	public static AESClient client = null;
@@ -30,6 +33,9 @@ public class ClientGlobals {
 	
 	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
 	public static final String TeacherEditAddQuestionPath = "/fxml/TeacherEditAddQuestion.fxml";
+
+	public static final String PrincipalMainID = "PrincipalMain";
+	public static final String PrincipalMainPath = "/fxml/PrincipalMain";
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
@@ -79,8 +85,6 @@ public class ClientGlobals {
 	/*
 	#####################   NATHAN's Globals!    #########################
 	*/
-
-
 
 
 	/*
