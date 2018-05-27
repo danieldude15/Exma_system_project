@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import logic.SolvedExam;
 import logic.Student;
+import logic.Teacher;
+import logic.User;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -17,35 +19,23 @@ public class SolvedExamController {
 	 * @param 
 	 * @return SolvedExam
 	 */
-	public static SolvedExam getSolvedExam(String SolvedExamId) {//itzik's methood.. I didn't finished yet! Do not touch!
-		// TODO Auto-generated method stub
-		AESClient client = ClientGlobals.client;
-		SolvedExam solved;
-		if(client.isConnected()) {
-			try {
-				client.sendToServer(SolvedExamId);//Daniel call me about this line!
-				client.waitForResponse();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-	
-	public static ArrayList<SolvedExam> getStudentsSolvedExams(Student s) {
+	public static ArrayList<SolvedExam> getSolvedExams(User u) {
 		AESClient client = ClientGlobals.client;
 		ArrayList<SolvedExam> solved;
+		iMessage msg;
 		if(client.isConnected()) {
-			iMessage msg= new iMessage("getStudentsSolvedExams",s);
+			if(u instanceof Student)
+				msg= new iMessage("getStudentsSolvedExams",(Student)u);
+			else
+				msg=msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
 			try {
 				client.sendToServer(msg);
 				client.waitForResponse();
 				Object o = msg.getObj();
 				solved = new ArrayList<SolvedExam>();
 				if(o instanceof ArrayList) {
-					ArrayList<SolvedExam> StudentsSolvedExams = (ArrayList<SolvedExam>) o;
-					for (SolvedExam se: StudentsSolvedExams) {
+					ArrayList<SolvedExam> solvedExams = (ArrayList<SolvedExam>) o;
+					for (SolvedExam se: solvedExams) {
 						SolvedExam sExam = new SolvedExam(se);
 						solved.add(sExam);
 					}

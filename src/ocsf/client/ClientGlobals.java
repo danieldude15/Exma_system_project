@@ -27,6 +27,9 @@ public class ClientGlobals {
 	public static final String StudentStartExamID = "StudentStartExam";
 	public static final String StudentStartExamPath = "/fxml/StudentStartExam.fxml";
 	
+	public static final String StudentViewExamID = "StudentViewExam";
+	public static final String StudentViewExamPath = "/fxml/StudentViewExam.fxml";
+	
 
 	
 	public static void handleIOException(IOException e) {

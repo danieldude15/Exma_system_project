@@ -21,18 +21,18 @@
             </Label>
          </items>
       </ToolBar>
-      <Button layoutX="39.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Take exam" />
-      <ListView layoutX="228.0" layoutY="97.0" prefHeight="228.0" prefWidth="464.0" />
+      <Button layoutX="39.0" layoutY="66.0" mnemonicParsing="false" onAction="#TakeExamButtonPressed" prefHeight="25.0" prefWidth="97.0" text="Take exam" />
+      <ListView fx:id="solvedExamsList" layoutX="228.0" layoutY="97.0" prefHeight="228.0" prefWidth="464.0" />
       <Label layoutX="246.0" layoutY="70.0" prefHeight="17.0" prefWidth="51.0" text="Exam:">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Button layoutX="416.0" layoutY="339.0" mnemonicParsing="false" text="View exam" />
-      <Button layoutX="734.0" layoutY="549.0" mnemonicParsing="false" text="LogOut" />
+      <Button layoutX="416.0" layoutY="339.0" mnemonicParsing="false" onAction="#ViewExamButtonPressed" text="View exam" />
+      <Button layoutX="734.0" layoutY="549.0" mnemonicParsing="false" onAction="#LogoutButtonPressed" text="LogOut" />
       <TabPane layoutX="6.0" layoutY="374.0" prefHeight="200.0" prefWidth="685.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="My info" />
+          <Tab fx:id="studentInfo" text="My info" />
         </tabs>
       </TabPane>
       <ScrollBar layoutX="692.0" layoutY="97.0" orientation="VERTICAL" prefHeight="228.0" prefWidth="14.0" />

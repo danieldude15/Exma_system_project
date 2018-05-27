@@ -33,7 +33,7 @@ public class StudentMainFrame implements ControlledScreen {
 		Globals.primaryStage.setWidth(820);
 		
 		/*Get all student solved exams from database and set it to the ListView field on window/*/
-		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getStudentsSolvedExams((Student)ClientGlobals.client.getUser());
+		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		ArrayList<String> solveExamsFields= new ArrayList<String>();
 		solveExamsFields.add("All");
 		for (SolvedExam s:mySolvedExam) {
@@ -66,11 +66,22 @@ public class StudentMainFrame implements ControlledScreen {
 	 */
 	public void ViewExamButtonPressed(ActionEvent event)//Itzik.this methood is not finished yet! Do not touch!
 	{
+		/*
 		String chosenSolvedExam;
 		SolvedExam viewExamFromDatabase;
 		if(solvedExamsList.getSelectionModel().getSelectedItem()!=null)
 			viewExamFromDatabase=SolvedExamController.getSolvedExam((String)solvedExamsList.getSelectionModel().getSelectedItem());
-		
+		/*/
+		SolvedExam chosenViewExam;
+		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
+		for (SolvedExam s:mySolvedExam)
+		{
+			String examId = Integer.toString(s.getID());
+			if(examId==(String)solvedExamsList.getSelectionModel().getSelectedItem())
+			{
+				chosenViewExam=new SolvedExam(s);
+			}
+		}
 	}
 	
 	/**
