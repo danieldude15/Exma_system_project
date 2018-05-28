@@ -41,8 +41,8 @@ public class DBMain {
 	private String teachersQuestions = new String(
 			"select * from questions as q, fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
-	private String teachersSolvedExam;
-	private String studentSolvedExam;
+	private String teachersSolvedExams="select * from solved_exams as se, exams as e where se.examid=e.examid and e.teacherid=?";
+	private String studentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	private String login = "SELECT * FROM aes.users WHERE username=?";
 	/**
 	 * creating a Database Class creates a connection to an SQLServer
@@ -254,6 +254,29 @@ public class DBMain {
 	//Itzik's method..not finished!
 	public ArrayList<SolvedExam> getTeacherSolvedExams(Teacher o) {
 		// TODO Auto-generated method stub
+		try {
+			PreparedStatement prst = conn.prepareStatement(teachersSolvedExams);
+			if (o instanceof Teacher) {
+				Teacher teacher = (Teacher) o;
+				prst.setInt(1, teacher.getID());
+			} else return null;
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<SolvedExam> result = new ArrayList<SolvedExam>();
+			while(rs.next()) {
+				
+				
+				/*int fieldid = rs.getInt(1);
+				String fieldName = rs.getString(2);
+				int courseid = rs.getInt(3);
+				String courseName = rs.getString(4);
+				result.add(new Course(courseid,courseName, new Field(fieldid,fieldName)));/*/
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
 		return null;
 	}
 	//Itzik's method..not finished!

@@ -11,16 +11,14 @@ public class ActiveExam implements Serializable{
 	private Date dateActivated;
 	private Teacher activator;
 	private Exam exam;
-	private boolean active;
 	
-	public ActiveExam(String code,String type,Date dayActivated,Exam e,Teacher activator, boolean currentlyactive)/*Constructor/*/
+	public ActiveExam(String code,String type,Date dayActivated,Exam e,Teacher activator)/*Constructor/*/
 	{
 		this.code=code;
 		this.type=type;
 		this.dateActivated=dayActivated;
 		this.activator=activator;
 		this.exam=e;
-		this.active=currentlyactive;
 		
 	}
 	
@@ -35,7 +33,6 @@ public class ActiveExam implements Serializable{
 		dateActivated=e.getDate();
 		activator=new Teacher(e.getActivator());
 		exam=new Exam(e.getExam());
-		active=e.isActive();
 		
 	}
 	
@@ -43,9 +40,6 @@ public class ActiveExam implements Serializable{
 	 * this function returns if an ActiveExam is currently active or no
 	 * @return true for active exam and false for non-active exams
 	 */
-	private boolean isActive() {
-		return active;
-	}
 
 	private Teacher getActivator() {
 		return activator;
