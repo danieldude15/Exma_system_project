@@ -51,6 +51,8 @@ public class ClientGlobals {
 	public static final String PrincipalMainID = "PrincipalMain";
 	public static final String PrincipalMainPath = "/fxml/PrincipalMain";
 
+	public static final String ConfigfileName = "ConnectionConfig.txt";
+
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
 		try {

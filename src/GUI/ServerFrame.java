@@ -26,6 +26,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 
 	@Override
 	public void runOnScreenChange() {
+		StartListening(null);
 	}
 	
 	@FXML
