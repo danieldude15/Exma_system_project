@@ -17,9 +17,9 @@ public class UserController {
 		iMessage msg = new iMessage("login",u);
 		try {
 			ClientGlobals.client.sendToServer(msg);
-			ClientGlobals.client.waitForResponse();
-			String usertype = ClientGlobals.client.getMsg().getCommand();
-			u = (User)ClientGlobals.client.getMsg().getObj();
+			iMessage message = ClientGlobals.client.getResponseFromServer();
+			String usertype = message.getCommand();
+			u = (User)message.getObj();
 			Alert alert;
 			switch (usertype) {
 			case "Student":

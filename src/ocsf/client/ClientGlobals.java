@@ -59,9 +59,10 @@ public class ClientGlobals {
 				client.openConnection();
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			System.out.println("Tried to Reconect and Failed! with Exception");
 		}
-		
+		System.out.println("Couse: "+ e.getCause());
+		System.out.println("Msg: "+e.getMessage());
 	}
 	
 	

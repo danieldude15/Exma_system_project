@@ -124,6 +124,13 @@ public class Question implements Serializable{
 		}
 		
 	}
+	
+	public boolean isInCourse(Course c) {
+		for(Course course:courses) {
+			if (course.equals(c)) return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

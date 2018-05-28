@@ -30,8 +30,7 @@ public class SolvedExamController {
 				msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getResponseFromServer().getObj();
 				solved = new ArrayList<SolvedExam>();
 				if(o instanceof ArrayList) {
 					ArrayList<SolvedExam> solvedExams = (ArrayList<SolvedExam>) o;

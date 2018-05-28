@@ -19,8 +19,7 @@ public class ExamController {
 			iMessage msg= new iMessage("getTeachersExam",t);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getResponseFromServer();
 				exams = new ArrayList<Exam>();
 				if(o instanceof ArrayList) {
 					ArrayList<Exam> TeacherExams = (ArrayList<Exam>) o;

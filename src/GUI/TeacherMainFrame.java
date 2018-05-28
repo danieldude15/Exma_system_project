@@ -36,7 +36,6 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 
 	@Override
 	public void runOnScreenChange() {
-		ActiveExamController.getTeachersActiveExams(ClientGlobals.client.getUser());
 		Globals.primaryStage.setHeight(750);
 		Globals.primaryStage.setWidth(820);
 	}

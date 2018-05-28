@@ -113,7 +113,7 @@ public class AESClient extends AbstractClient{
 	 * this method should be called right after sending a msg to the server
 	 * that needs to get a response
 	 */
-	public void waitForResponse() {
+	public iMessage getResponseFromServer() {
 		int count=0;
 		while(true) {
 			try {
@@ -132,6 +132,7 @@ public class AESClient extends AbstractClient{
 				if (stopWaiting==1) break;
 			}
 		}
+		return new iMessage(msg);
 	}
 	
 	/**

@@ -17,8 +17,7 @@ public class ReportController {
 			iMessage msg = new iMessage("getExamReport",e);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getResponseFromServer().getObj();
 				if (o instanceof ExamReport)
 					report = new ExamReport((ExamReport)o);
 				client.cleanMsg();

@@ -33,8 +33,7 @@ public class ActiveExamController {
 			msg= new iMessage("getAllActiveExams",null);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = msg.getObj();
+				Object o = client.getResponseFromServer().getObj();
 				allActiveExams = new ArrayList<ActiveExam>();
 				if(o instanceof ArrayList) {
 					ArrayList<ActiveExam> activeExams = (ArrayList<ActiveExam>) o;

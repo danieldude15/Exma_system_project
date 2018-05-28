@@ -93,10 +93,19 @@ public class Course implements Serializable{
 		
 	}
 	
+	/**
+	 * this function will get a String containing the ID of a course and it will be translated to ints
+	 * @param id
+	 * @return an array of 2 int the first is fieldID second is CourseID
+	 */
+	public static int[] parseID(String id) {
+		int[] res = {Integer.parseInt(id.substring(0, 2)),Integer.parseInt(id.substring(2,4))};
+		return res;
+	}
 
 	@Override
 	public String toString() {
-		return new String(String.format("%02d - %s", getId() , getName()));
+		return new String(String.format("%s - %s", courseIdToString() , getName()));
 	}
 	
 	@Override
@@ -108,7 +117,7 @@ public class Course implements Serializable{
 		return false;
 	}
 	public String courseIdToString() {
-		return new String(String.format("%02d", getId()));
+		return new String(String.format("%02d%02d", getField().getID(),getId()));
 	}
 	
 	

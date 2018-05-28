@@ -68,49 +68,62 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(600);
-		/**
-		 * Setting comboBox of fields base on teachers assigned fields
-		 */
-		questions.clear();
+		Globals.primaryStage.setWidth(600);		
 		
-		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
-		ArrayList<String> fieldStrings = new ArrayList<>();
-		fieldStrings.add("All");
-		for (Field f:teachersFields) {
-			fieldStrings.add(f.toString());
+		teacherFieldsLoading();
+		
+		teacherCoursesLoading();		
+		
+		//loading teacher questions
+		DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
+		if (DBquestions!=null) {
+			setQuestionsListInVBox();
 		}
+	}
+
+	/**
+	 * setting Course comboBox values by teachers assigned fields
+	 * this comboBox is used to filter out different Questions from the ListView.
+	 */
+	private void teacherCoursesLoading() {
 		ObservableList<String> list;
-		if (fieldStrings.size()==1) {
-			fieldStrings.remove(0);
-			fieldStrings.add("You Have No Assigned Fields...");
-		}
-		list = FXCollections.observableArrayList(fieldStrings);
-		fieldComboB.setItems(list);
-		
-		
-		/**
-		 * setting Course comboBox values by teachers assigned fields
-		 * this comboBox is used to filter out different Questions from the ListView.
-		 */
-		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields);;
+		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields);
 		ArrayList<String> courseStrings = new ArrayList<>();
-		courseStrings.add("All");
-		for (Course c:teachersCourses) {
-			courseStrings.add(c.toString());
-		}
-		if (courseStrings.size()==1) {
-			courseStrings.remove(0);
+		if (teachersCourses==null) {
 			courseStrings.add("You Have No Assigned Courses...");
+			
+		} else {
+			courseStrings.add("All");
+			for (Course c:teachersCourses) {
+				courseStrings.add(c.toString());
+			}
 		}
 		list = FXCollections.observableArrayList(courseStrings);
 		courseComboB.setItems(list);
 		
-		
-		DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
-		setQuestionsListInVBox();
 	}
-
+	
+	/**
+	 * Setting comboBox of fields base on teachers assigned fields
+	 */
+	private void teacherFieldsLoading() {
+		questions.clear();
+		
+		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
+		ArrayList<String> fieldStrings = new ArrayList<>();
+		if(teachersFields==null) {
+			fieldStrings.add("You Have No Assigned Fields...");
+		} else {
+			fieldStrings.add("All");
+			for (Field f:teachersFields) {
+				fieldStrings.add(f.toString());
+			}
+		}
+		ObservableList<String> list;
+		list = FXCollections.observableArrayList(fieldStrings);
+		fieldComboB.setItems(list);
+	}
+	
 	private Node questionAdder(Question q) {
 		//HBox main question container
 		HBox hbox = new HBox();
@@ -147,6 +160,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		questionInfo.getChildren().add(questionEditDelete);
 		// this VBox holds the course list assigned to this question
 		VBox assignedCourses = new VBox();
+		assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
 		ListView<String> courselist = new ListView<>();
 		courselist.setMaxWidth(120);
 		courselist.setMaxHeight(100);
@@ -197,30 +211,6 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
 	}
 	
-	@FXML
-	public void handleMouseClick(MouseEvent event) {
-		System.out.println("clicked");
-		if (event.getButton()==MouseButton.SECONDARY) {
-			final ContextMenu contextMenu = new ContextMenu();
-			MenuItem edit = new MenuItem("Edit");
-			MenuItem delete = new MenuItem("Delete");
-			contextMenu.getItems().addAll(edit,delete);
-			edit.setOnAction(new EventHandler<ActionEvent>() {
-			    @Override
-			    public void handle(ActionEvent event) {
-			        System.out.println("edit...");
-			    }
-			});
-			delete.setOnAction(new EventHandler<ActionEvent>() {
-			    @Override
-			    public void handle(ActionEvent event) {
-			        System.out.println("delete...");
-			    }
-			});
-			final AnchorPane pane = new AnchorPane();
-			contextMenu.show(pane, event.getScreenX(), event.getScreenY());
-        }
-	}
 	
 	@FXML void BackToMainMenu(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
@@ -267,31 +257,53 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 			ArrayList<String> al = new ArrayList<>();
 			ObservableList<String> list;
 			if(selectedCourse.equals("All")) {
-				for(String c : courseComboB.getItems().toString().replaceAll("[", "").replaceAll("]", "").split(",")) {
-					 int courseid = Integer.parseInt(c.split(" - ")[0]);
-					 String courseName = c.split(" - ")[1];
+				HashMap<String, String> addedQuestions = new HashMap<>();
+				for(Object o : courseComboB.getItems().toArray()) {
+					String c = (String)o;
+					 int courseId = Course.parseID(c.split(" - ")[0])[1];
+					 int courseFieldId = Course.parseID(c.split(" - ")[0])[0];
+					 Course curCourse=null;
+					 for(Course course:teachersCourses) {
+						 if(course.getId()==courseId && course.getField().getID()==courseFieldId) {
+							 curCourse=course;
+							 break;
+						 }
+					 }
 					 for (Question q: DBquestions) {
-						 //if(q.inCourse(c))
+						 if(q.isInCourse(curCourse)) {
+							 if(addedQuestions.get(q.questionIDToString()) == null) {
+								 questionsList.getChildren().add(questionAdder(q));
+								 addedQuestions.put(q.questionIDToString(), "Added");
+							 }
+						 }
 					 }
 				}
 			} else {
-				/**
-				int courseid = Integer.parseInt(selectedCourse);
-				String courseName = courseComboB.getSelectionModel().getSelectedItem().toString().split(" ")[1];
-				questionsList.getChildren().clear();
-				for(Question q:DBquestions) {
-					if(q.getCourses().contains(new Field(courseid,courseName))) {
-						questions.put(q.questionIDToString(),q);
-						questionsList.getChildren().add(questionAdder(q));
-					}
-				}**/
+				int courseId = Course.parseID(selectedCourse)[1];
+				int courseFieldId = Course.parseID(selectedCourse)[0];
+				for(Course course:teachersCourses) {
+					 if(course.getId()==courseId && course.getField().getID()==courseFieldId) {
+						 //curCourse=course;
+						 break;
+					 }
+				 }
+				 for (Question q: DBquestions) {
+					 /*if(q.isInCourse(curCourse)) {
+						 if(addedQuestions.get(q.questionIDToString()) == null) {
+							 questionsList.getChildren().add(questionAdder(q));
+							 addedQuestions.put(q.questionIDToString(), "Added");
+						 }
+					 }*/
+				 }
 			}
 			list = FXCollections.observableArrayList(al);
 			courseComboB.setItems(list);
 		}
 	}
+	
 	private void setQuestionsListInVBox() {
 		questionsList.getChildren().clear();
+		System.out.println(DBquestions);
 		for(Question q:DBquestions) {
 			questions.put(q.questionIDToString(),q);
 			questionsList.getChildren().add(questionAdder(q));

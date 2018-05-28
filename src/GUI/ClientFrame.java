@@ -85,13 +85,6 @@ public class ClientFrame implements Initializable {
         	System.out.println("failed to load "+ ClientGlobals.TeacherEditAddQuestionID);
         	return;
         }
-//Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
-        /*if (!mainContainer.loadScreen(ClientGlobals.PrincipalMainID,ClientGlobals.PrincipalMainPath)){
-			System.out.println("failed to load " + ClientGlobals.PrincipalMainID);
-			return;
-<<<<<<< HEAD
-		}
-/*/
 		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
 			return;
@@ -108,10 +101,7 @@ public class ClientFrame implements Initializable {
 				System.out.println("failed to load "+ ClientGlobals.StudentSolvesExamID);
 				return;
         }
-
-		
-
-//Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
+			
 		mainContainer.setScreen(ClientGlobals.LogInID);
 		
 		AnchorPane root = new AnchorPane();

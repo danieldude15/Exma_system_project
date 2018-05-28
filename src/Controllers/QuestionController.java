@@ -17,8 +17,8 @@ public class QuestionController {
 			iMessage msg= new iMessage("getTeachersQuestions",t);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = client.getMsg().getObj();
+				Object o = client.getResponseFromServer().getObj();
+				//Object o = client.getMsg().getObj();
 				ArrayList<Question> TeacherQuestions = null;
 				if(o instanceof ArrayList) {
 					TeacherQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
@@ -43,8 +43,7 @@ public class QuestionController {
 			iMessage msg= new iMessage("getQuestionCourses",question);
 			try {
 				client.sendToServer(msg);
-				client.waitForResponse();
-				Object o = client.getMsg().getObj();
+				Object o = client.getResponseFromServer().getObj();
 				ArrayList<Course> QuestionCourses = null;
 				if(o instanceof ArrayList) {
 					QuestionCourses = (ArrayList<Course>) ((ArrayList<Course>) o).clone();
