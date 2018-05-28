@@ -13,12 +13,13 @@ public class AESServer extends AbstractServer {
 	
 	private DBMain sqlcon;
 	private HashMap<String,User> connectedUsers;
-	
+	private HashMap<String,ActiveExam> activeExams;
 	
 	public AESServer(int port) {
 		super(port);
 		sqlcon = new DBMain(ServerGlobals.dbHost, ServerGlobals.dbuser, ServerGlobals.dbpass);
 		connectedUsers = new HashMap<String,User>();
+		activeExams=new HashMap<String,ActiveExam>();
 	}
 
 	@Override
@@ -90,10 +91,24 @@ public class AESServer extends AbstractServer {
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
+	public void AddActiveExam(ActiveExam ae)
+	{
+		String examId=Integer.toString(ae.getExam().getID());
+		activeExams.put(examId, ae);
+	}
+	public void DeleteActiveExam(ActiveExam ae)
+	{
+		String examId=Integer.toString(ae.getExam().getID());
+		activeExams.remove(examId);
+	}
 	
 	private void getAllActiveExams(ConnectionToClient client) throws IOException {
 		// TODO Auto-generated method stub
-		ArrayList<ActiveExam> allActiveExams = sqlcon.getAllActiveExams();
+		ArrayList<ActiveExam> allActiveExams=new ArrayList<ActiveExam>();
+		for(String ae: activeExams.keySet())
+		{
+			allActiveExams.add(activeExams.get(ae));
+		}
 		iMessage im = new iMessage("AllActiveExams",allActiveExams);
 		client.sendToClient(im);
 	}

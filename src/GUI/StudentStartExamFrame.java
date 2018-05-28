@@ -24,7 +24,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		
+		examCode.clear();
+		studentId.clear();
 		
 	}
 	/**
@@ -38,7 +39,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 		boolean activeExamExist=false;
 		String sid=Integer.toString(ClientGlobals.client.getUser().getID());
 		//If some of the fields is empty, then the student get an error.
-		if(studentId.getText().equals(null) || examCode.getText().equals(null))
+		if(studentId.getText().isEmpty() || examCode.getText().isEmpty())
 		{
 			alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Start exam Failed!");
@@ -62,20 +63,30 @@ public class StudentStartExamFrame implements ControlledScreen{
 			}
 			if(activeExamExist==false)
 			{
-				examCodeError.setText("**Wrong Exam code! fix it and try again");
+				examCodeError.setText("**Invalid Exam code!");
 				examCodeError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
 			//If student entered wrong id then flag=false and student gets an error message.
 			if( !(studentId.getText().equals(sid)) ) 
 			{
-				idError.setText("**Wrong Id! fix it and try again");
+				idError.setText("**Invalid user Id!");
 				idError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
 			//Student filled Two correct fields 
 			else if(activeExamExist==true)
 			{
-				StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
-				studentsolvesExam.SetActiveExam(activeE);
+				//Exam is computerized, then student can start solve it.
+				if(activeE.getType().equals("computerized"))
+				{
+					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
+					studentsolvesExam.SetActiveExam(activeE);
+					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
+				}
+				//Exam is manual, then word file is download first and then student can solve it.
+				else
+				{
+					//download word file and solve exam from it.
+				}
 			}
 			
 				

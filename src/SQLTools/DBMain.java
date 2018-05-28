@@ -43,7 +43,6 @@ public class DBMain {
 			);
 	private String teachersSolvedExam;
 	private String studentSolvedExam;
-	private String allActiveExams="SELECT * FROM activated_exams";
 	private String login = "SELECT * FROM aes.users WHERE username=?";
 	/**
 	 * creating a Database Class creates a connection to an SQLServer
@@ -263,31 +262,5 @@ public class DBMain {
 		return null;
 	}
 	
-	//Itzik's method..not finished!
-	public ArrayList<ActiveExam> getAllActiveExams()  {
-		// TODO Auto-generated method stub
-		ArrayList <ActiveExam> result=new ArrayList<ActiveExam>();
-		ActiveExam activeExam;
-		String sqlQuery=new String("select * from activated_exams");
-		PreparedStatement statement;
-		try {
-			statement = conn.prepareStatement(sqlQuery);
-			rs = statement.executeQuery();
-			while(rs.next()) {
-				//activeExam=new ActiveExam(rs.getString(5),rs.getString(6),rs.getDate(6));
-				//activeExam=new ActiveExam(Exam e,Teacher activator, boolean currentlyactive);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return null;
-		
-		
-		
-	}
-
-
+	
 }
