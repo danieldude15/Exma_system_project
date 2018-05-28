@@ -27,5 +27,7 @@
             </Label>
          </items>
       </ToolBar>
+      <Label fx:id="examCodeError" layoutX="161.0" layoutY="176.0" prefHeight="17.0" prefWidth="149.0" />
+      <Label fx:id="idError" layoutX="161.0" layoutY="232.0" prefHeight="17.0" prefWidth="149.0" />
    </children>
 </Pane>

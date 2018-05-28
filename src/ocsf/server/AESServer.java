@@ -54,6 +54,16 @@ public class AESServer extends AbstractServer {
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
 				break;
+			case "getStudentsSolvedExams":
+				getStudentsSolvedExams(client,o);
+				break;
+			case "getTeacherSolvedExams":
+				getTeacherSolvedExams(client,o);
+				break;
+			
+			case "getAllActiveExams":
+				getAllActiveExams(client);
+				break;
 				
 			default:
 				
@@ -79,9 +89,16 @@ public class AESServer extends AbstractServer {
 	
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
-	
-	
 
+	
+	private void getAllActiveExams(ConnectionToClient client) throws IOException {
+		// TODO Auto-generated method stub
+		ArrayList<ActiveExam> allActiveExams = sqlcon.getAllActiveExams();
+		iMessage im = new iMessage("AllActiveExams",allActiveExams);
+		client.sendToClient(im);
+	}
+
+	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
 		iMessage im = new iMessage("QuestionCourses",courses);
@@ -120,7 +137,21 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("TeachersQuestions", questions);
 		client.sendToClient(im);
 	}
-	
+
+	private void getTeacherSolvedExams(ConnectionToClient client, Object o) throws IOException {
+		// TODO Auto-generated method stub
+		ArrayList<SolvedExam> teacherSolvedExams = sqlcon.getTeacherSolvedExams((Teacher)o);
+		iMessage im = new iMessage("TeacherSolvedExams", teacherSolvedExams);
+		client.sendToClient(im);
+	}
+
+	private void getStudentsSolvedExams(ConnectionToClient client, Object o) throws IOException {
+		// TODO Auto-generated method stub
+		ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentSolvedExams((Student)o);
+		iMessage im = new iMessage("StudentSolvedExams", studentSolvedExams);
+		client.sendToClient(im);
+	}
+
 	private void loginFunctionality(ConnectionToClient client,Object o) throws IOException {
 		User user = (User) o;
 		iMessage result=null;
@@ -147,4 +178,5 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(result);
 	}
 
+	
 }

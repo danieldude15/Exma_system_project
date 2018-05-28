@@ -35,7 +35,10 @@ public class ClientGlobals {
 	public static final String StudentViewExamID = "StudentExamView";
 	public static final String StudentViewExamPath = "/fxml/StudentExamView.fxml";
 
-	
+	public static final String StudentSolvesExamID = "StudentSolvesExam";
+	public static final String StudentSolvesExamPath = "/fxml/StudentSolvesExam.fxml";
+
+		
 
 	//Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
 

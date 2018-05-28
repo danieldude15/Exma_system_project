@@ -1,6 +1,7 @@
 package SQLTools;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,10 +11,12 @@ import java.util.ArrayList;
 import javafx.scene.layout.ConstraintsBase;
 import logic.ActiveExam;
 import logic.Course;
+import logic.Exam;
 import logic.Field;
 import logic.Globals;
 import logic.Principle;
 import logic.Question;
+import logic.SolvedExam;
 import logic.Student;
 import logic.Teacher;
 import logic.User;
@@ -38,6 +41,9 @@ public class DBMain {
 	private String teachersQuestions = new String(
 			"select * from questions as q, fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
+	private String teachersSolvedExam;
+	private String studentSolvedExam;
+	private String allActiveExams="SELECT * FROM activated_exams";
 	private String login = "SELECT * FROM aes.users WHERE username=?";
 	/**
 	 * creating a Database Class creates a connection to an SQLServer
@@ -245,4 +251,43 @@ public class DBMain {
 		}
 		return null;
 	}
+
+	//Itzik's method..not finished!
+	public ArrayList<SolvedExam> getTeacherSolvedExams(Teacher o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	//Itzik's method..not finished!
+	public ArrayList<SolvedExam> getStudentSolvedExams(Student o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	//Itzik's method..not finished!
+	public ArrayList<ActiveExam> getAllActiveExams()  {
+		// TODO Auto-generated method stub
+		ArrayList <ActiveExam> result=new ArrayList<ActiveExam>();
+		ActiveExam activeExam;
+		String sqlQuery=new String("select * from activated_exams");
+		PreparedStatement statement;
+		try {
+			statement = conn.prepareStatement(sqlQuery);
+			rs = statement.executeQuery();
+			while(rs.next()) {
+				//activeExam=new ActiveExam(rs.getString(5),rs.getString(6),rs.getDate(6));
+				//activeExam=new ActiveExam(Exam e,Teacher activator, boolean currentlyactive);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+		
+		
+		
+	}
+
+
 }

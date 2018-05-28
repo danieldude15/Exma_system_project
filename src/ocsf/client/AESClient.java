@@ -64,6 +64,17 @@ public class AESClient extends AbstractClient{
 		case "FieldsCourses":
 			fieldsCourses(ServerMsg);
 			break;
+		case "AllActiveExams":
+			AllActiveExams(ServerMsg);
+			break;
+		
+		case "TeacherSolvedExams":
+			TeacherSolvedExams(ServerMsg);
+			break;
+		case "StudentSolvedExams":
+			StudentSolvedExams(ServerMsg);
+			break;
+				
 			
 		default:
 			
@@ -73,6 +84,7 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
+
 
 
 
@@ -216,5 +228,24 @@ public class AESClient extends AbstractClient{
 	private void teacherFields(Object o) {
 		msg = new iMessage(o);
 	}
+
+
+	private void AllActiveExams(Object o) {
+		// TODO Auto-generated method stub
+		msg = new iMessage(o);
+	}
+
+
+	private void StudentSolvedExams(Object o) {
+		// TODO Auto-generated method stub
+		msg = new iMessage(o);
+	}
+
+
+	private void TeacherSolvedExams(Object o) {
+		// TODO Auto-generated method stub
+		msg = new iMessage(o);
+	}
+	
 
 }

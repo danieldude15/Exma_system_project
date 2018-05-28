@@ -27,7 +27,7 @@ public class SolvedExamController {
 			if(u instanceof Student)
 				msg= new iMessage("getStudentsSolvedExams",(Student)u);
 			else
-				msg=msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
+				msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
 			try {
 				client.sendToServer(msg);
 				client.waitForResponse();

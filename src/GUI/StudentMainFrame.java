@@ -3,6 +3,7 @@ package GUI;
 
 import javafx.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
@@ -10,9 +11,11 @@ import Controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.Alert.AlertType;
 import logic.Field;
 import logic.Globals;
 import logic.SolvedExam;
@@ -25,21 +28,25 @@ public class StudentMainFrame implements ControlledScreen {
 
 	@FXML ListView<String> solvedExamsList;
 	@FXML Label studentInfo;
+	private HashMap<String,String> courseNameAndExamId=new HashMap<String,String>();
 	
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
 		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);
+		Globals.primaryStage.setWidth(820);	
+		courseNameAndExamId.clear();
 		
 		/*Get all student solved exams from database and set it to the ListView field on window/*/
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		ArrayList<String> solveExamsFields= new ArrayList<String>();
 		solveExamsFields.add("All");
 		for (SolvedExam s:mySolvedExam) {
-			String examId = Integer.toString(s.getID());
-			String examGrade=Integer.toString(s.getScore());
-			solveExamsFields.add(examId+"                             "+examGrade);
+			
+			String courseName = s.getCourse().getName();
+			String solvedExamGrade=Integer.toString(s.getScore());
+			courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
+			solveExamsFields.add(courseName+"                             "+solvedExamGrade);
 		}
 		ObservableList<String> list;
 		if (solveExamsFields.size()==1) {
@@ -66,20 +73,37 @@ public class StudentMainFrame implements ControlledScreen {
 	 */
 	public void ViewExamButtonPressed(ActionEvent event)
 	{
+		Alert alert;
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
-		for (SolvedExam s:mySolvedExam)
+		//if student choose course solved exam to view from list.
+		if(solvedExamsList.getSelectionModel().getSelectedItem()!=null)
 		{
-			String examId = Integer.toString(s.getID());
-			if(examId==(String)solvedExamsList.getSelectionModel().getSelectedItem())
+			String[] CourseNameAndGrade=solvedExamsList.getSelectionModel().getSelectedItem().split("                             ");
+			
+			for (SolvedExam s:mySolvedExam)
 			{
-				studentViewExam.SetSolvedExam(s);
-				break;
+				String ExamId= Integer.toString(s.getID());
+				//if Student press on some course on list we check that student is actually did that exam on that course
+				if(s.getCourse().getName().equals(CourseNameAndGrade[0]) && ExamId.equals(courseNameAndExamId.get(CourseNameAndGrade[0]))) 
+				{
+					studentViewExam.SetSolvedExam(s);
+					break;
+				}
+				
 			}
+			Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
 		}
-		
-		Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
-		
+		//if student pressed to view course solved exam and didn't choose it he gets an error.
+		else
+		{
+			alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("View exam Failed!");
+			alert.setHeaderText(null);
+			alert.setContentText("You have to choose exam first ");
+			alert.showAndWait();
+			
+		}
 	}
 	
 	

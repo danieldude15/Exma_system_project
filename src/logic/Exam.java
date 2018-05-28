@@ -12,10 +12,10 @@ public class Exam implements Serializable{
 	private ArrayList<Question> questionsInExam;
 
 	
-	public Exam(int iD, Course courseid, Field fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
+	public Exam(int iD, Course course, Field fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
 		super();
 		ID = iD;
-		course = courseid;
+		course = course;
 		field = fieldid;
 		Duration = duration;
 		Author = author;
@@ -26,7 +26,7 @@ public class Exam implements Serializable{
 	public Exam(Exam exam) {
 		super();
 		ID = exam.getID();
-		course = new Course(exam.getCourseid());
+		course = new Course(exam.getCourse());
 		field = new Field(exam.getFieldid());
 		Duration = exam.getDuration();
 		Author = new Teacher(exam.getAuthor());
@@ -45,7 +45,7 @@ public class Exam implements Serializable{
 		return ID;
 	}
 
-	public Course getCourseid() {
+	public Course getCourse() {
 		return course;
 	}
 
