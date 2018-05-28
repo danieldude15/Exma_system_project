@@ -129,7 +129,9 @@ public class AESClient extends AbstractClient{
 				break;
 			}
 			synchronized (stopWaiting) {
-				if (stopWaiting==1) break;
+				if (stopWaiting==1) 
+					stopWaiting=0;
+					break;
 			}
 		}
 		return new iMessage(msg);
@@ -145,13 +147,6 @@ public class AESClient extends AbstractClient{
 	protected void connectionException(Exception exception) {
 		IOException e = new IOException(exception);
 		ClientGlobals.handleIOException(e);
-	}
-
-	public void cleanMsg() {
-		msg=null;
-		synchronized (stopWaiting) {
-			stopWaiting=0;	
-		}
 	}
 
 

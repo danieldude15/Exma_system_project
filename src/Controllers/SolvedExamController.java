@@ -39,16 +39,13 @@ public class SolvedExamController {
 						solved.add(sExam);
 					}
 				}
-				client.cleanMsg();
 				return solved;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
-		}
+		} 
+		return null;
 	}
 
 	

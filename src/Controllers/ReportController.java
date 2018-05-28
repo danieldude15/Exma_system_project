@@ -20,15 +20,12 @@ public class ReportController {
 				Object o = client.getResponseFromServer().getObj();
 				if (o instanceof ExamReport)
 					report = new ExamReport((ExamReport)o);
-				client.cleanMsg();
 				return report;
 			} catch (IOException ex) {
 				ClientGlobals.handleIOException(ex);
-				return null;
 			}
-		} else {
-			return null;
 		}
+			return null;
 	}
 	
 }

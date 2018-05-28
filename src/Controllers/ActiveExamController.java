@@ -11,7 +11,7 @@ public class ActiveExamController {
 
 	public static void getTeachersActiveExams(User user) {
 		if (user instanceof Teacher) {
-			iMessage msg = new iMessage("getTeachersActiveExams",user);
+			iMessage msg = new iMessage("getTeachersActiveExams",new User(user));
 			try {
 				ClientGlobals.client.sendToServer(msg);
 			} catch (IOException e) {
@@ -23,15 +23,14 @@ public class ActiveExamController {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	public static ArrayList<ActiveExam> GetAllActiveExams() {
-		// TODO Auto-generated method stub
 		AESClient client = ClientGlobals.client;
 		ArrayList<ActiveExam> allActiveExams;
 		iMessage msg;
 		if(client.isConnected()) {
-			msg= new iMessage("getAllActiveExams",null);
-			msg= new iMessage("getAllActiveExams",null);
 			try {
+				msg= new iMessage("getAllActiveExams",null);
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				allActiveExams = new ArrayList<ActiveExam>();
@@ -41,18 +40,14 @@ public class ActiveExamController {
 						ActiveExam eExam = new ActiveExam(e);
 						allActiveExams.add(eExam);
 					}
+					return allActiveExams;
 				}
-				client.cleanMsg();
-				return allActiveExams;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
 		}
-
+		return null;
 	}
 
 }

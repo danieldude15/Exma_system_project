@@ -28,15 +28,12 @@ public class ExamController {
 						exams.add(exam);
 					}
 				}
-				client.cleanMsg();
 				return exams;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
-		}
+		} 
+		return null;
 	}
 }

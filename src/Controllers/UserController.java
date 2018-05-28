@@ -46,7 +46,6 @@ public class UserController {
 				alert.showAndWait();
 				break;
 			}
-			ClientGlobals.client.cleanMsg();
 		} catch (IOException e) {
 			ClientGlobals.handleIOException(e);
 		}

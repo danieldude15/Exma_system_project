@@ -24,16 +24,14 @@ public class QuestionController {
 					TeacherQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
 				}
 				questions = TeacherQuestions;
-				client.cleanMsg();
 				return questions;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
-		}
+		} 
+		return null;
+
 	}
 
 	public static ArrayList<Course> getQuestionCourses(Question question) {
@@ -49,16 +47,13 @@ public class QuestionController {
 					QuestionCourses = (ArrayList<Course>) ((ArrayList<Course>) o).clone();
 				}
 				courses = QuestionCourses;
-				client.cleanMsg();
 				return courses;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
-		}
+		} 
+		return null;
 	}
 	
 }

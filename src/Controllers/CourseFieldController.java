@@ -26,7 +26,6 @@ public class CourseFieldController {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				if(o==null) {
-					client.cleanMsg();
 					return null;
 				}
 				fields = new ArrayList<Field>();
@@ -35,16 +34,13 @@ public class CourseFieldController {
 					Field field = new Field(f);
 					fields.add(field);
 				}
-				client.cleanMsg();
 				return fields;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
-				return null;
 			}
-		} else {
-			return null;
 		}
+		return null;
 		
 	}
 
@@ -63,10 +59,7 @@ public class CourseFieldController {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				courses = new ArrayList<Course>();
-				if(o==null) {
-					client.cleanMsg();
-					return null;
-				} else if(o instanceof ArrayList) {
+				if(o!=null && o instanceof ArrayList) {
 					ArrayList<Object> TeacherCourses = (ArrayList<Object>) o;
 					Object a = TeacherCourses.get(0);
 					if(a instanceof Course) {
@@ -75,22 +68,15 @@ public class CourseFieldController {
 							Course course = new Course(c);
 							courses.add(course);
 						}
+						return courses;
 					} else {
-						client.cleanMsg();
 						System.out.println("Get Field Courses got " +o.getClass()+" objects instead of Course objects");
-						return null;
 					}
 				}
-				client.cleanMsg();
-				return courses;
 			} catch (IOException e) {
-				client.cleanMsg();
 				ClientGlobals.handleIOException(e);
-				return null;
 			}
-		} else {
-			return null;
-		}
-		
+		} 
+		return null;
 	}
 }
