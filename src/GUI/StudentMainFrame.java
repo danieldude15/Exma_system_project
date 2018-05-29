@@ -77,9 +77,9 @@ public class StudentMainFrame implements ControlledScreen {
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		//if student choose course solved exam to view from list.
-		if(solvedExamsList.getSelectionModel().getSelectedItem()!=null)
+		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null && !(((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("You Have No Assigned Solved Exams...")))
 		{
-			String[] CourseNameAndGrade=solvedExamsList.getSelectionModel().getSelectedItem().split("                             ");
+			String[] CourseNameAndGrade=(String[])solvedExamsList.getSelectionModel().getSelectedItem().split("                             ");
 			
 			for (SolvedExam s:mySolvedExam)
 			{

@@ -33,6 +33,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML
 	public void StartExamButtonPressed(ActionEvent event)
 	{
+		idError.setText("");
+		examCodeError.setText("");
 		Alert alert;
 		ActiveExam active=null;
 		String sid=Integer.toString(ClientGlobals.client.getUser().getID());
@@ -50,20 +52,25 @@ public class StudentStartExamFrame implements ControlledScreen{
 		{
 			
 			active=ActiveExamController.getActiveExam(examCode.getText());
-			//If student entered wrong exam code he gets an error message beneath the exam code Textfield.
-			if(active.equals(null))
+			//If at least one of the fields is wrong.
+			if(active==null || !(studentId.getText().equals(sid)))
 			{
-				examCodeError.setText("**Invalid Exam code!");
-				examCodeError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
-			}
-			//If student entered wrong id he gets an error message beneath the id Textfield.
-			if( !(studentId.getText().equals(sid)) ) 
-			{
-				idError.setText("**Invalid user Id!");
-				idError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
+				//If student entered wrong exam code he gets an error message beneath the exam code Textfield.
+				if(active==null)
+				{
+					examCodeError.setText("**Invalid Exam code!");
+					examCodeError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
+				}
+				
+				//If student entered wrong id he gets an error message beneath the id Textfield.
+				if( !(studentId.getText().equals(sid)) ) 
+				{
+					idError.setText("**Invalid user Id!");
+					idError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
+				}
 			}
 			//Student filled Two correct fields 
-			else if((!(active.equals(null))) && (studentId.getText().equals(sid))) 
+			else  
 			{
 				//Exam is computerized, then student can start solve it.
 				if(active.getType().equals("computerized"))

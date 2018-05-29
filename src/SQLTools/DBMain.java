@@ -51,7 +51,8 @@ public class DBMain {
 	private String getQuestionsInExam="select qie,q from aes.questions_in_exam as qie,aes.questions as q, aes.exams as e"
 			+ " where qie.questionid=q.questionid and qie.examid=e.examid and e.examid=?";
 	
-	
+	private String getQuestionsInCourse="Select * From aes.questions_in_course as q,aes.courses as c"
+			+ " where c.courseid=q.courseid and q.questionid=?";
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
 	private String getUser="select * from users where userid=?";
@@ -311,6 +312,7 @@ public class DBMain {
 				try {
 					PreparedStatement prst1 = conn.prepareStatement(getStudentsSolvedExams);
 					PreparedStatement prst2 = conn.prepareStatement(getQuestionsInExam);
+					PreparedStatement prst3 = conn.prepareStatement(getQuestionsInCourse);
 					
 					
 					if (s instanceof Student) {
@@ -326,21 +328,27 @@ public class DBMain {
 					System.out.println(rs2);
 					Question question;
 					Teacher teacher;
-					Course course;
+					Course SolvedExamIsIncourse;
 					Field field;
 					String[] answers = null;
 					ArrayList<Question> questions = new ArrayList<Question>();
+					ArrayList<Course> questionInCourses=new ArrayList<Course>();
 					ArrayList<SolvedExam> result = new ArrayList<SolvedExam>();
 					while(rs1.next()) {
 						teacher=new Teacher(rs1.getInt(12),rs1.getString(12),rs1.getString(13),rs1.getString(14));
 						field =new Field(rs1.getInt(7),rs1.getString(8));
-						course=new Course(rs1.getInt(9),rs1.getString(10),field);
+						SolvedExamIsIncourse=new Course(rs1.getInt(9),rs1.getString(10),field);
 						/*select qie,q from aes.questions_in_exam as qie,aes.questions as q, aes.exams as e/*/
 						answers[0]=rs2.getString(10);
 						answers[1]=rs2.getString(11);
 						answers[2]=rs2.getString(12);
 						answers[3]=rs2.getString(13);
-						
+						ResultSet rs3 = prst3.executeQuery();
+						while(rs3.next())
+						{
+							
+							//build course and add it to Course Arraylist.
+						}
 						question=new Question(rs2.getInt(1), teacher,rs2.getString(9) ,answers , field, rs2.getInt(14), null);
 						//need to add array of courses to question
 						//need to add solved exam to arraylist solvedexam

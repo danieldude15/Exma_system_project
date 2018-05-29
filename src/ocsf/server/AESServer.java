@@ -13,7 +13,7 @@ public class AESServer extends AbstractServer {
 	
 	private DBMain sqlcon;
 	private HashMap<String,User> connectedUsers;
-	private HashMap<String,ActiveExam> activeExams;
+	private HashMap<String,ActiveExam> activeExams;//HashMap<Key(String ExamCode),Value(ActiveExam)>
 	
 	public AESServer(int port) {
 		super(port);
@@ -134,14 +134,17 @@ public class AESServer extends AbstractServer {
 	 */
 	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
 		String examCode=(String)o;
+		ActiveExam retExam=null;
 		for(String ae: activeExams.keySet())
 		{
 			if(ae.equals(examCode))
 			{
-				iMessage im = new iMessage("ActiveExam",activeExams.get(ae));
-				client.sendToClient(im);
+				retExam=activeExams.get(ae);
+				break;
 			}
 		}
+		iMessage im = new iMessage("ActiveExam",retExam);
+		client.sendToClient(im);
 	}
 	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
