@@ -187,23 +187,13 @@ public class AESServer extends AbstractServer {
 	}
 
 	/**
-	 * Get an active exam code and return an active exam.
+	 * Get an active exam code and sends to client that active exam if exist, otherwise sends null.
 	 * @param client
 	 * @param Object
 	 * @throws IOException
 	 */
 	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
-		String examCode=(String)o;
-		ActiveExam retExam=null;
-		for(String ae: activeExams.keySet())
-		{
-			if(ae.equals(examCode))
-			{
-				retExam=activeExams.get(ae);
-				break;
-			}
-		}
-		iMessage im = new iMessage("ActiveExam",retExam);
+		iMessage im = new iMessage("ActiveExam",activeExams.get((String)o));
 		client.sendToClient(im);
 	}
 	
