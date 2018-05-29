@@ -303,6 +303,7 @@ public class DBMain {
 		return null;
 	}
 	
+	
 	//Itzik's method..not finished!
 	public ArrayList<SolvedExam> getStudentSolvedExams(Student s) {
 		// TODO Auto-generated method stub

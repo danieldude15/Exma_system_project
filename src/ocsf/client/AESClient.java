@@ -67,7 +67,11 @@ public class AESClient extends AbstractClient{
 		case "AllActiveExams":
 			AllActiveExams(ServerMsg);
 			break;
-		
+			
+		case "ActiveExam":
+			GetActiveExam(ServerMsg);
+			break;
+			
 		case "TeacherSolvedExams":
 			TeacherSolvedExams(ServerMsg);
 			break;
@@ -236,6 +240,13 @@ public class AESClient extends AbstractClient{
 
 
 	private void AllActiveExams(Object o) {
+		// TODO Auto-generated method stub
+		msg = new iMessage(o);
+	}
+
+
+
+	private void GetActiveExam(Object o) {
 		// TODO Auto-generated method stub
 		msg = new iMessage(o);
 	}

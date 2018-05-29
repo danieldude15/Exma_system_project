@@ -1,6 +1,5 @@
 package GUI;
 
-import java.util.ArrayList;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
@@ -35,8 +34,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 	public void StartExamButtonPressed(ActionEvent event)
 	{
 		Alert alert;
-		ActiveExam activeE=null;
-		boolean activeExamExist=false;
+		ActiveExam active=null;
 		String sid=Integer.toString(ClientGlobals.client.getUser().getID());
 		//If some of the fields is empty, then the student get an error.
 		if(studentId.getText().isEmpty() || examCode.getText().isEmpty())
@@ -50,36 +48,28 @@ public class StudentStartExamFrame implements ControlledScreen{
 		//Two fields are filled
 		else
 		{
-			ArrayList<ActiveExam> allActiveExams=ActiveExamController.GetAllActiveExams();
-			for (ActiveExam e:allActiveExams) {
-				
-				if(e.getCode().equals(examCode.getText()))
-				{
-					activeExamExist=true;
-					activeE=new ActiveExam(e); 
-					
-				}
-				
-			}
-			if(activeExamExist==false)
+			
+			active=ActiveExamController.getActiveExam(examCode.getText());
+			//If student entered wrong exam code he gets an error message beneath the exam code Textfield.
+			if(active.equals(null))
 			{
 				examCodeError.setText("**Invalid Exam code!");
 				examCodeError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
-			//If student entered wrong id then flag=false and student gets an error message.
+			//If student entered wrong id he gets an error message beneath the id Textfield.
 			if( !(studentId.getText().equals(sid)) ) 
 			{
 				idError.setText("**Invalid user Id!");
 				idError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
 			//Student filled Two correct fields 
-			else if(activeExamExist==true)
+			else if((!(active.equals(null))) && (studentId.getText().equals(sid))) 
 			{
 				//Exam is computerized, then student can start solve it.
-				if(activeE.getType().equals("computerized"))
+				if(active.getType().equals("computerized"))
 				{
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
-					studentsolvesExam.SetActiveExam(activeE);
+					studentsolvesExam.SetActiveExam(active);
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
 				}
 				//Exam is manual, then word file is download first and then student can solve it.

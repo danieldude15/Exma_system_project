@@ -40,9 +40,6 @@ public class AESServer extends AbstractServer {
 			case "login":
 				loginFunctionality(client, o);
 				break;
-			case "getTeachersActiveExams":
-				getTeachersActiveExams(client, o);
-				break;
 			case "getTeachersFields":
 				getTeacherFields(client,o);
 				break;
@@ -55,15 +52,19 @@ public class AESServer extends AbstractServer {
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
 				break;
-			case "getStudentsSolvedExams":
-				getStudentsSolvedExams(client,o);
+			case "getStudentSolvedExams":
+				getSolvedExam(client,o);
 				break;
 			case "getTeacherSolvedExams":
-				getTeacherSolvedExams(client,o);
+				getSolvedExam(client,o);
 				break;
 			
 			case "getAllActiveExams":
 				getAllActiveExams(client);
+				break;
+		
+			case "getActiveExam":
+				getActiveExam(client,o);
 				break;
 				
 			default:
@@ -151,17 +152,29 @@ public class AESServer extends AbstractServer {
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
+	/**
+	 * Get an active exam and add it from active exams Hashmap.
+	 * @param ae
+	 */
 	public void AddActiveExam(ActiveExam ae)
 	{
-		String examId=Integer.toString(ae.getExam().getID());
-		activeExams.put(examId, ae);
+		
+		activeExams.put(ae.getCode(), ae);
 	}
-	public void DeleteActiveExam(ActiveExam ae)
+	/**
+	 * Get an active exam and remove it from active exams Hashmap.
+	 * @param ae
+	 */
+	public void RemoveActiveExam(ActiveExam ae)
 	{
-		String examId=Integer.toString(ae.getExam().getID());
-		activeExams.remove(examId);
+		activeExams.remove(ae.getCode());
 	}
 	
+	/**
+	 * return all available active exams.
+	 * @param client
+	 * @throws IOException
+	 */
 	private void getAllActiveExams(ConnectionToClient client) throws IOException {
 		// TODO Auto-generated method stub
 		ArrayList<ActiveExam> allActiveExams=new ArrayList<ActiveExam>();
@@ -173,6 +186,23 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	/**
+	 * Get an active exam code and return an active exam.
+	 * @param client
+	 * @param Object
+	 * @throws IOException
+	 */
+	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
+		String examCode=(String)o;
+		for(String ae: activeExams.keySet())
+		{
+			if(ae.equals(examCode))
+			{
+				iMessage im = new iMessage("ActiveExam",activeExams.get(ae));
+				client.sendToClient(im);
+			}
+		}
+	}
 	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
@@ -192,11 +222,6 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-	private void getTeachersActiveExams(ConnectionToClient client,Object  o) throws IOException {
-		ArrayList<ActiveExam> activeExams = sqlcon.getTeachersActiveExams((Teacher)o);
-		iMessage im = new iMessage("TeacherActiveExams", activeExams);
-		client.sendToClient(im);
-	}
 
 	private void logoutFunctionality(Object o) {
 		if(connectedUsers.remove(((User)o).getUserName())!=null)
@@ -213,17 +238,25 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-	private void getTeacherSolvedExams(ConnectionToClient client, Object o) throws IOException {
+/**
+ * Send to DBMain a request to pull object solved exams from database.
+ * @param client
+ * @param o
+ * @throws IOException
+ */
+	private void getSolvedExam(ConnectionToClient client, Object o) throws IOException {
 		// TODO Auto-generated method stub
-		ArrayList<SolvedExam> teacherSolvedExams = sqlcon.getTeacherSolvedExams((Teacher)o);
-		iMessage im = new iMessage("TeacherSolvedExams", teacherSolvedExams);
-		client.sendToClient(im);
-	}
-
-	private void getStudentsSolvedExams(ConnectionToClient client, Object o) throws IOException {
-		// TODO Auto-generated method stub
-		ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentSolvedExams((Student)o);
-		iMessage im = new iMessage("StudentSolvedExams", studentSolvedExams);
+		iMessage im;
+		if(o instanceof Student)
+		{
+			ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentSolvedExams((Student)o);
+			im = new iMessage("StudentSolvedExams", studentSolvedExams);
+		}
+		else
+		{
+			ArrayList<SolvedExam> teacherSolvedExams = sqlcon.getTeacherSolvedExams((Teacher)o);
+			im = new iMessage("TeacherSolvedExams", teacherSolvedExams);
+		}
 		client.sendToClient(im);
 	}
 
