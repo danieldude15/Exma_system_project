@@ -15,7 +15,7 @@ import ocsf.client.ClientGlobals;
 public class SolvedExamController {
 
 	/**
-	 * Send to server a request to pull the specific solved exam from database.
+	 * Send to server a request to pull the object solved exams from database.
 	 * @param 
 	 * @return SolvedExam
 	 */

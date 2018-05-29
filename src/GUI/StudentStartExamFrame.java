@@ -50,19 +50,20 @@ public class StudentStartExamFrame implements ControlledScreen{
 		{
 			
 			active=ActiveExamController.getActiveExam(examCode.getText());
+			//If student entered wrong exam code he gets an error message beneath the exam code Textfield.
 			if(active.equals(null))
 			{
 				examCodeError.setText("**Invalid Exam code!");
 				examCodeError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
-			//If student entered wrong id then flag=false and student gets an error message.
+			//If student entered wrong id he gets an error message beneath the id Textfield.
 			if( !(studentId.getText().equals(sid)) ) 
 			{
 				idError.setText("**Invalid user Id!");
 				idError.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			}
 			//Student filled Two correct fields 
-			else if(!(active.equals(null))) 
+			else if((!(active.equals(null))) && (studentId.getText().equals(sid))) 
 			{
 				//Exam is computerized, then student can start solve it.
 				if(active.getType().equals("computerized"))
