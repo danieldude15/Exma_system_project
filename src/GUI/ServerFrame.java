@@ -34,6 +34,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		ServerGlobals.server = new AESServer(Integer.parseInt(portnum.getText()));
 		portnum.setDisable(true);
 		try {
+			disconnectUsers(null);
 			ServerGlobals.server.listen();
 			statusLabel.setText("Listening");
 			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#00FF00"));
@@ -47,6 +48,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 	@FXML
 	public void closeConnectionsBotton(ActionEvent event) {
 		try {
+			disconnectUsers(null);
 			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 			ServerGlobals.server.close();
 			ServerGlobals.server.stopListening();
