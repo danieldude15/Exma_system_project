@@ -23,6 +23,29 @@ public class ActiveExamController {
 		
 	}
 
+	public static ActiveExam getActiveExam(String examCode) {
+		AESClient client = ClientGlobals.client;
+		ActiveExam activeExam;
+		iMessage msg;
+		if(client.isConnected()) {
+			try {
+				msg= new iMessage("getActiveExam",examCode);
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof ActiveExam) {
+					activeExam=(ActiveExam)o;
+					return activeExam;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+		
+	
+
 	@SuppressWarnings("unchecked")
 	public static ArrayList<ActiveExam> GetAllActiveExams() {
 		AESClient client = ClientGlobals.client;

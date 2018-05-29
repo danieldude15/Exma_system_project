@@ -56,7 +56,7 @@ public class AESServer extends AbstractServer {
 				getTeacherQuestions(client,o);
 				break;
 			case "getStudentsSolvedExams":
-				getStudentsSolvedExams(client,o);
+				getStudentsSolvedExam(client,o);
 				break;
 			case "getTeacherSolvedExams":
 				getTeacherSolvedExams(client,o);
@@ -64,6 +64,10 @@ public class AESServer extends AbstractServer {
 			
 			case "getAllActiveExams":
 				getAllActiveExams(client);
+				break;
+		
+			case "getActiveExam":
+				getActiveExam(client,o);
 				break;
 				
 			default:
@@ -93,13 +97,12 @@ public class AESServer extends AbstractServer {
 
 	public void AddActiveExam(ActiveExam ae)
 	{
-		String examId=Integer.toString(ae.getExam().getID());
-		activeExams.put(examId, ae);
+		
+		activeExams.put(ae.getCode(), ae);
 	}
 	public void DeleteActiveExam(ActiveExam ae)
 	{
-		String examId=Integer.toString(ae.getExam().getID());
-		activeExams.remove(examId);
+		activeExams.remove(ae.getCode());
 	}
 	
 	private void getAllActiveExams(ConnectionToClient client) throws IOException {
@@ -113,6 +116,17 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
+		String examCode=(String)o;
+		for(String ae: activeExams.keySet())
+		{
+			if(ae.equals(examCode))
+			{
+				iMessage im = new iMessage("ActiveExam",activeExams.get(ae));
+				client.sendToClient(im);
+			}
+		}
+	}
 	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
@@ -160,7 +174,7 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-	private void getStudentsSolvedExams(ConnectionToClient client, Object o) throws IOException {
+	private void getStudentsSolvedExam(ConnectionToClient client, Object o) throws IOException {
 		// TODO Auto-generated method stub
 		ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentSolvedExams((Student)o);
 		iMessage im = new iMessage("StudentSolvedExams", studentSolvedExams);
