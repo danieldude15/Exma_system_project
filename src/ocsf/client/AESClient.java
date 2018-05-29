@@ -158,6 +158,14 @@ public class AESClient extends AbstractClient{
 		return me;
 	}
 	
+	  /**
+	   * Hook method called after a connection has been established.
+	   * The default implementation does nothing.
+	   * It may be overridden by subclasses to do anything they wish.
+	   */
+	  protected void connectionEstablished() {}
+
+	
 	//  ################################################# Team Start Adding Functions From Here ############################
 	
 	
@@ -208,13 +216,14 @@ public class AESClient extends AbstractClient{
 
 	private void closeAESApplication() {
 		Platform.runLater(() -> { 
-			Globals.primaryStage.close();
-			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Server Disconnected");
 			alert.setHeaderText(null);
 			alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
 			alert.showAndWait();
+			Globals.primaryStage.close();
+			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
+			System.exit(1);
 			});
 		
 	}

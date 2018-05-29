@@ -60,6 +60,17 @@
             </PasswordField>
          </children>
       </HBox>
+      <Label fx:id="error" textFill="#f50000">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+      </Label>
       <HBox alignment="CENTER" layoutX="10.0" layoutY="189.0">
          <children>
             <Button fx:id="loginB" mnemonicParsing="false" onAction="#logInClicked" text="Log In">

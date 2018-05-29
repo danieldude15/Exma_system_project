@@ -176,8 +176,8 @@ public class DBMain {
 				}
 				return fields;
 			}
-		} catch (SQLException e) {
-			ServerGlobals.handleSQLException(e);
+		} catch (Exception e) {
+			ServerGlobals.handleSQLException(new SQLException(e));
 		}
 		return null;
 	}

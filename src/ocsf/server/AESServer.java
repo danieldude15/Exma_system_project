@@ -12,13 +12,13 @@ public class AESServer extends AbstractServer {
 	
 	
 	private DBMain sqlcon;
-	private HashMap<String,User> connectedUsers;
-	private HashMap<String,ActiveExam> activeExams;//HashMap<Key(String ExamCode),Value(ActiveExam)>
-	
+	private HashMap<String,ConnectionToClient> connectedUsers;
+	private HashMap<String,ActiveExam> activeExams;
+
 	public AESServer(int port) {
 		super(port);
 		sqlcon = new DBMain(ServerGlobals.dbHost, ServerGlobals.dbuser, ServerGlobals.dbpass);
-		connectedUsers = new HashMap<String,User>();
+		connectedUsers = new HashMap<String,ConnectionToClient>();
 		activeExams=new HashMap<String,ActiveExam>();
 	}
 
@@ -76,18 +76,78 @@ public class AESServer extends AbstractServer {
 		}
 	}
 	
-
 	/**
-	 * Hook Method executed after server closes
+	 * Hook Method executed right before server closes while still listening
 	 * this is part of AbstractServer functionality
 	 */
 	protected void serverClosed() {
 		try {
+			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 			sqlcon.getConn().close();
 		} catch (SQLException e) {
 			Globals.handleException(e); 
 		}
 	}
+
+	  /**
+	   * Hook method called each time a new client connection is
+	   * accepted. The default implementation does nothing.
+	   * @param client the connection connected to the client.
+	   */
+	  protected void clientConnected(ConnectionToClient client) {}
+
+	  /**
+	   * Hook method called each time a client disconnects.
+	   * The default implementation does nothing. The method
+	   * may be overridden by subclasses but should remains synchronized.
+	   *
+	   * @param client the connection with the client.
+	   */
+	  synchronized protected void clientDisconnected(ConnectionToClient client) {}
+
+	  /**
+	   * Hook method called each time an exception is thrown in a
+	   * ConnectionToClient thread.
+	   * The method may be overridden by subclasses but should remains
+	   * synchronized.
+	   *
+	   * @param client the client that raised the exception.
+	   * @param Throwable the exception thrown.
+	   */
+	  synchronized protected void clientException(ConnectionToClient client, Throwable exception) {}
+
+	  /**
+	   * Hook method called when the server stops accepting
+	   * connections because an exception has been raised.
+	   * The default implementation does nothing.
+	   * This method may be overriden by subclasses.
+	   *
+	   * @param exception the exception raised.
+	   */
+	  protected void listeningException(Throwable exception) {}
+
+	  /**
+	   * Hook method called when the server starts listening for
+	   * connections.  The default implementation does nothing.
+	   * The method may be overridden by subclasses.
+	   */
+	  protected void serverStarted() {}
+
+	  /**
+	   * Hook method called when the server stops accepting
+	   * connections.  The default implementation
+	   * does nothing. This method may be overriden by subclasses.
+	   */
+	  protected void serverStopped() {}
+
+
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
@@ -207,7 +267,7 @@ public class AESServer extends AbstractServer {
 		User user = (User) o;
 		iMessage result=null;
 		String login = "login";
-		if (connectedUsers.get(user.getUserName())!=null) {
+		if (connectedUsers.get(user.getUserName())!=null && connectedUsers.get(user.getUserName()).isAlive()) {
 			//sending back same user to indicate user is already logged in!
 			result = new iMessage("loggedInAlready",o);
 		} else {
@@ -223,7 +283,7 @@ public class AESServer extends AbstractServer {
 				} else if(user instanceof Student) {
 					result = new iMessage(login,new Student((Student) user));
 				}
-				connectedUsers.put(user.getUserName(), user);
+				connectedUsers.put(user.getUserName(), client);
 			}
 		}
 		client.sendToClient(result);

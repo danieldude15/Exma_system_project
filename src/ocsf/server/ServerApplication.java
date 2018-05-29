@@ -33,7 +33,6 @@ public class ServerApplication extends Application {
 	    {
 	        try {
 	        	if (ServerGlobals.server!=null) {
-	        		ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 	        		ServerGlobals.server.close();
 	        	}
 			} catch (IOException e) {
