@@ -20,6 +20,19 @@ public class AESServer extends AbstractServer {
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
 		connectedUsers = new HashMap<String,ConnectionToClient>();
 		activeExams=new HashMap<String,ActiveExam>();
+		
+		/**
+		 * Added a virtual temporary Active Exam to Server!
+		 */
+		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
+		ArrayList<QuestionInExam> questions =  new ArrayList<QuestionInExam>();
+		String[] answers = new String[]{"a","b","c","d"};
+		Field field = new Field(2,"FieldName");
+		ArrayList<Course> cs = new ArrayList<>();
+		cs.add(new Course(3,"CourseName",field));
+		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
+		activeExams.put("acdc", new ActiveExam("acdc", 1, "2018-05-30", 
+				new Exam(1, cs.get(0),120,teacher,questions),teacher));
 	}
 
 	@Override
@@ -58,7 +71,12 @@ public class AESServer extends AbstractServer {
 			case "getTeacherCompletedExams":
 				getTeacherCompletedExams(client,o);
 				break;
+
+			case "getTeachersActiveExams":
+				getTeachersActiveExams(client,o);
+				break;
 			case "getStudentsSolvedExams":
+
 				getSolvedExam(client,o);
 				break;
 			case "getTeacherSolvedExams":
@@ -202,6 +220,17 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
+	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
+		ArrayList<ActiveExam> ac = new ArrayList<>();
+		for(String activeExamCode: activeExams.keySet()) {
+			if(activeExams.get(activeExamCode).getExam().getAuthor().equals((Teacher)o)) {
+				ac.add(activeExams.get(activeExamCode));
+			}
+		}
+		iMessage im = new iMessage("TeachersActiveExams",ac);
+		client.sendToClient(im);
+	}
+	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
 		iMessage im = new iMessage("QuestionCourses",courses);
@@ -221,8 +250,8 @@ public class AESServer extends AbstractServer {
 	}
 
 	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
-		ArrayList<CompletedExam> questions = sqlcon.getTeachersCompletedExams((Teacher) o);
-		iMessage im = new iMessage("TeacherCompletedExams", questions);
+		ArrayList<CompletedExam> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
+		iMessage im = new iMessage("TeacherCompletedExams", completedExams);
 		client.sendToClient(im);
 	}
 	

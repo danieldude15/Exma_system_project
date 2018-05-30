@@ -1,11 +1,5 @@
 package GUI;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +13,12 @@ import logic.Globals;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ClientFrame implements Initializable {
 	
@@ -89,6 +89,14 @@ public class ClientFrame implements Initializable {
         	System.out.println("failed to load "+ ClientGlobals.TeacherEditAddQuestionID);
         	return;
         }
+        if(!mainContainer.loadScreen(ClientGlobals.PrincipalMainID,ClientGlobals.PrincipalMainPath)) {
+			System.out.println("failed to load " + ClientGlobals.PrincipalMainID);
+			return;
+		}
+		if(!mainContainer.loadScreen(ClientGlobals.PrincipalReportsID,ClientGlobals.PrincipalReportsPath)) {
+			System.out.println("failed to load " + ClientGlobals.PrincipalReportsID);
+			return;
+		}
 		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
 			return;
@@ -97,15 +105,19 @@ public class ClientFrame implements Initializable {
 			System.out.println("failed to load "+ ClientGlobals.StudentStartExamID);
 			return;
 		}
-			if (!mainContainer.loadScreen(ClientGlobals.StudentViewExamID, ClientGlobals.StudentViewExamPath)) {
+		if (!mainContainer.loadScreen(ClientGlobals.StudentViewExamID, ClientGlobals.StudentViewExamPath)) {
 				System.out.println("failed to load "+ ClientGlobals.StudentViewExamID);
 				return;
         }
-			if (!mainContainer.loadScreen(ClientGlobals.StudentSolvesExamID, ClientGlobals.StudentSolvesExamPath)) {
+		if (!mainContainer.loadScreen(ClientGlobals.StudentSolvesExamID, ClientGlobals.StudentSolvesExamPath)) {
 				System.out.println("failed to load "+ ClientGlobals.StudentSolvesExamID);
 				return;
         }
-			
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamsID, ClientGlobals.TeacherCheckExamsPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherCheckExamsID);
+			return;
+		}
+		
 		mainContainer.setScreen(ClientGlobals.LogInID);
 		
 		AnchorPane root = new AnchorPane();

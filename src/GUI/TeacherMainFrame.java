@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import Controllers.UserController;
@@ -17,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
+import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Globals;
 import logic.Teacher;
@@ -24,7 +26,8 @@ import ocsf.client.ClientGlobals;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
-	ArrayList<CompletedExam> TeacherCExams;
+	private ArrayList<CompletedExam> TeacherCExams;
+	private ArrayList<ActiveExam> TeacherAExams;
 	
 	@FXML Button manageQuestionsB;
 	@FXML Button manageExamsB;
@@ -33,10 +36,11 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button requestTCB;
 	@FXML Button generateRB;
 	@FXML Button checkExamB;
-	@FXML ListView ActiveExamList;
+	@FXML ListView ActiveExamsList;
 	@FXML ListView CompletedExamList;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -57,6 +61,16 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		CompletedExamList.getItems().clear();
 		ObservableList<String> list = FXCollections.observableArrayList(al);
 		CompletedExamList.setItems(list);
+		
+		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
+		al = new ArrayList<String>();	
+		for (ActiveExam ae : TeacherAExams) {
+			al.add("ExamID: "+ ae.getExam().examIdToString() + " Code:" + ae.getCode() + " Date <DATE>");
+		}
+		
+		ActiveExamsList.getItems().clear();
+		list = FXCollections.observableArrayList(al);
+		ActiveExamsList.setItems(list);
 	}
 	
 	@FXML
@@ -91,7 +105,18 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@FXML
 	public void goToCheckExams(ActionEvent event) {
-		
+		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) return;
+		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
+		System.out.println(selectedExam);
+		String selectedExamid = selectedExam.split(" ")[1];
+		for (CompletedExam ce:TeacherCExams) {
+			if(ce.getExam().examIdToString().equals(selectedExamid)) {
+				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
+				teacherCheckExams.setCompletedExams(ce);
+				Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
+				return;
+			}
+		}
 	}
 	
 	@FXML

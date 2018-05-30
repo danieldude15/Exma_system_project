@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.ConstraintsBase;
 import logic.CompletedExam;
 import logic.Globals;
 import logic.Principle;
@@ -58,6 +59,9 @@ public class AESClient extends AbstractClient{
 			break;
 		case "TeacherFields":
 			teacherFields(ServerMsg);
+			break;
+		case "TeacherActiveExams":
+			teacherActiveExams(ServerMsg);
 			break;
 		case "QuestionCourses":
 			questionCourses(ServerMsg);
@@ -177,6 +181,20 @@ public class AESClient extends AbstractClient{
 	  protected void connectionEstablished() {}
 
 	
+	private void closeAESApplication() {
+		Platform.runLater(() -> { 
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Server Disconnected");
+			alert.setHeaderText(null);
+			alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
+			alert.showAndWait();
+			Globals.primaryStage.close();
+			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
+			System.exit(1);
+			});
+		
+	}
+	  
 	//  ################################################# Team Start Adding Functions From Here ############################
 	
 	
@@ -218,60 +236,46 @@ public class AESClient extends AbstractClient{
 	 * @param serverMsg 
 	 */
 	private void questionCourses(Object serverMsg) {
-		msg = new iMessage(serverMsg);
+		msg = (iMessage) serverMsg;
 	}
 	
 	private void TeacherQuestions(Object serverMsg) {
-		msg = new iMessage(serverMsg);
-	}
-
-	private void closeAESApplication() {
-		Platform.runLater(() -> { 
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Server Disconnected");
-			alert.setHeaderText(null);
-			alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
-			alert.showAndWait();
-			Globals.primaryStage.close();
-			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
-			System.exit(1);
-			});
-		
+		msg = (iMessage) serverMsg;
 	}
 
 	
 	private void fieldsCourses(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
 	
 	private void teacherFields(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
-
 
 	private void AllActiveExams(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
 
+	private void teacherActiveExams(Object o) {
+		msg = (iMessage)o;
+		
+	}
 
 	private void GetActiveExam(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
 
 
 	private void StudentsSolvedExams(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void TeacherCompletedExams(Object o) {
-		ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) ((iMessage) o).getObj();
-		msg = new iMessage(((iMessage) o).getCommand(), completedExams);
-				
+		msg = (iMessage) o;
 	}
 
 	private void TeacherSolvedExams(Object o) {
-		msg = new iMessage(o);
+		msg = (iMessage) o;
 	}
 	
 
