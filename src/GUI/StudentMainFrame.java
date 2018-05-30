@@ -49,7 +49,8 @@ public class StudentMainFrame implements ControlledScreen {
 				String courseName = s.getCourse().getName();
 				String solvedExamGrade=Integer.toString(s.getScore());
 				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
-				solveExamsFields.add(courseName+"                             "+solvedExamGrade);
+				solveExamsFields.add(courseName+"                                                        "
+						+ "                                                      "+solvedExamGrade);
 			}
 			ObservableList<String> list;
 			if (solveExamsFields.size()==1) {

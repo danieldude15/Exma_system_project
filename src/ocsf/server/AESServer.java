@@ -76,7 +76,6 @@ public class AESServer extends AbstractServer {
 				getTeachersActiveExams(client,o);
 				break;
 			case "getStudentsSolvedExams":
-
 				getSolvedExam(client,o);
 				break;
 			case "getTeacherSolvedExams":

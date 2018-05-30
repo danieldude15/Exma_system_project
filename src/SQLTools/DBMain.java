@@ -75,7 +75,7 @@ public class DBMain {
 			"        se.examreportid,se.score,se.minutescompleted ,se.teacherapproved ,se.teacherschangescorenote \n" + 
 			"FROM aes.users as u, aes.courses as c , aes.fields as f, aes.exams as e, aes.solved_exams as se \n" + 
 			"where e.examid=se.examid and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid "
-			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and e.studentid=?;"
+			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and se.studentid=?;"
 			);
 	
 	private String getQuestionsInExam= new String(""
@@ -445,6 +445,7 @@ public class DBMain {
 		}
 		return result;
 	}
+	
 	
 	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
 	{
