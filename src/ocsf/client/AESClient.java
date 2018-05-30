@@ -266,7 +266,7 @@ public class AESClient extends AbstractClient{
 	@SuppressWarnings("unchecked")
 	private void TeacherCompletedExams(Object o) {
 		ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) ((iMessage) o).getObj();
-		msg = new iMessage(null, o);
+		msg = new iMessage(((iMessage) o).getCommand(), completedExams);
 				
 	}
 

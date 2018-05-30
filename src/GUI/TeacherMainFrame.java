@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import logic.CompletedExam;
 import logic.Globals;
 import logic.Teacher;
@@ -50,7 +51,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		ArrayList<String> al = new ArrayList<String>();	
 		for (CompletedExam ce : TeacherCExams) {
-			al.add("QuestionID: "+ ce.getExam().examIdToString() + " Code:" + ce.getCode() + " Date <DATE>");
+			al.add("ExamID: "+ ce.getExam().examIdToString() + " Code:" + ce.getCode() + " Date <DATE>");
 		}
 		
 		CompletedExamList.getItems().clear();
@@ -94,12 +95,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML
-	public void completeExamsListViewClicked(ActionEvent event) {
+	public void completeExamsListViewClicked(MouseEvent event) {
 		
 	}
 	
 	@FXML
-	public void activeExamsListViewClicked(ActionEvent event) {
+	public void activeExamsListViewClicked(MouseEvent event) {
 		
 	}
 	
