@@ -43,7 +43,6 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -59,7 +58,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		}
 		
 		CompletedExamList.getItems().clear();
-		ObservableList<String> list = FXCollections.observableArrayList(al);
+		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 		
 		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
@@ -69,8 +68,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		}
 		
 		ActiveExamsList.getItems().clear();
-		list = FXCollections.observableArrayList(al);
-		ActiveExamsList.setItems(list);
+		ObservableList<ActiveExam> list2 = FXCollections.observableArrayList(TeacherAExams);
+		ActiveExamsList.setItems(list2);
 	}
 	
 	@FXML

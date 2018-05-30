@@ -3,6 +3,8 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -76,4 +78,21 @@ public class QuestionController {
 		return null;
 	}
 	
+	public static int deleteQuestion(Question q) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("deleteQuestion",q);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
 }

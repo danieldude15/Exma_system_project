@@ -2,8 +2,12 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
-@SuppressWarnings("serial")
+
 public class Exam implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int ID;
 	private Course course;
 	private int Duration;

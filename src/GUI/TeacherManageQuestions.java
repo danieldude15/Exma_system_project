@@ -6,19 +6,9 @@ package GUI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import javax.print.attribute.standard.PrinterName;
-import javax.swing.text.DefaultEditorKit.InsertBreakAction;
-
-import com.sun.media.jfxmedia.events.NewFrameEvent;
-
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.QuestionController;
@@ -29,30 +19,24 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
-import logic.Course;
-import logic.Field;
-import logic.Globals;
-import logic.Question;
-import logic.Teacher;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import logic.*;
 import ocsf.client.ClientGlobals;
 
-/**
- * @author cky80
- *
- */
 public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	HashMap<String,Question> questions = new HashMap<>();
@@ -60,8 +44,8 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	ArrayList<Course> teachersCourses;
 	ArrayList<Question> DBquestions;
 	@FXML Button newQuestionB;
-	@FXML ComboBox<String> fieldComboB;
-	@FXML ComboBox<String> courseComboB;
+	@FXML ComboBox<Field> fieldComboB;
+	@FXML ComboBox<Course> courseComboB;
 	@FXML VBox questionsList;
 	@FXML Button home;
 	
@@ -86,19 +70,14 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	 * this comboBox is used to filter out different Questions from the ListView.
 	 */
 	private void teacherCoursesLoading() {
-		ObservableList<String> list;
+		ObservableList<Course> list;
 		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields);
-		ArrayList<String> courseStrings = new ArrayList<>();
 		if (teachersCourses==null) {
-			courseStrings.add("You Have No Assigned Courses...");
-			
+			teachersCourses.add(new Course(0,"No Courses for teacher.",null));
 		} else {
-			courseStrings.add("All");
-			for (Course c:teachersCourses) {
-				courseStrings.add(c.toString());
-			}
+			teachersCourses.add(0,new Course(0,"All",null));
 		}
-		list = FXCollections.observableArrayList(courseStrings);
+		list = FXCollections.observableArrayList(teachersCourses);
 		courseComboB.setItems(list);
 		
 	}
@@ -110,17 +89,12 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		questions.clear();
 		
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
-		ArrayList<String> fieldStrings = new ArrayList<>();
 		if(teachersFields==null) {
-			fieldStrings.add("You Have No Assigned Fields...");
+			teachersFields.add(new Field(-1,"You Have No Assigned Fields..."));
 		} else {
-			fieldStrings.add("All");
-			for (Field f:teachersFields) {
-				fieldStrings.add(f.toString());
-			}
+			teachersFields.add(0,new Field(-1,"All"));
 		}
-		ObservableList<String> list;
-		list = FXCollections.observableArrayList(fieldStrings);
+		ObservableList<Field> list = FXCollections.observableArrayList(teachersFields);
 		fieldComboB.setItems(list);
 	}
 	
@@ -183,6 +157,9 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
         @Override
         public void handle(Event evt) {
            Question question = questions.get(((Control)evt.getSource()).getId());
+           // removing the "All" field to avoid gettin nullPointerException in next window
+           teachersCourses.remove(0);
+           teachersFields.remove(0);
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setQuestion(question);
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.EDIT);
@@ -193,15 +170,42 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	private class MyDeleteHandler implements EventHandler<Event>{
         @Override
         public void handle(Event evt) {
-           System.out.println(((Control)evt.getSource()).getId());
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Deletion Confirmation");
+			alert.setHeaderText(null);
+			alert.setContentText("Are you sure you want to delete this question?\nThis Operation cannot be undone!");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				Question question = questions.get(((Control)evt.getSource()).getId());
+	        	int effectedRows = QuestionController.deleteQuestion(question);
+	        	if(effectedRows>0) {
+	        		alert = new Alert(AlertType.INFORMATION);
+	        		alert.setTitle("Question Deleted Succesfully");
+	    			alert.setHeaderText("");
+	        		alert.setContentText("Question Info:"
+	        				+ "\n" + question +""
+    						+ "\n\n Was deleted Successfully");
+	        		alert.show();
+	        		runOnScreenChange();
+	        		System.out.println("Question Deleted!");
+	        	} else {
+	        		alert = new Alert(AlertType.ERROR);
+	        		alert.setTitle("Deletion Error");
+	    			alert.setHeaderText(null);
+	        		alert.setContentText("Could not delete question\n"
+	        				+ "This question is already in Use in an existing Exam / Solved Exam / Completed Exam.\n"
+	        				+ "you may not delete questions that other people are relaying on. ");
+	        		alert.show();
+	        	}
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+			}
         }
     }
 	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-
 	}
 	
 	@FXML
@@ -218,87 +222,46 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 
 	@FXML void filterByField(ActionEvent event) {
 		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
-			String selectedField = fieldComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
+			questionsList.getChildren().clear();
+			Field selectefield = fieldComboB.getSelectionModel().getSelectedItem();
 			courseComboB.getItems().clear();
-			ArrayList<String> al = new ArrayList<>();
-			ObservableList<String> list;
-			if(selectedField.equals("All")) {
-				for(Course c : teachersCourses) {
-					 al.add(c.toString());
+			ObservableList<Course> list;
+			ArrayList<Course> cousesInField = new ArrayList<>();
+			if(selectefield.equals(new Field(-1,"All"))) {
+				for(Question q:DBquestions) {
+					questions.put(q.questionIDToString(),q);
+					questionsList.getChildren().add(questionAdder(q));
 				}
-				setQuestionsListInVBox();
 			} else {
-				int fieldid = Integer.parseInt(selectedField);
-				al.add("All");
 				for(Course c: teachersCourses) {
-					if(c.getId()==fieldid) {
-						al.add(c.toString());
+					if(c.getField()==null || c.getField().equals(selectefield)) {
+						cousesInField.add(c);
 					}
 				}
-				questionsList.getChildren().clear();
 				for(Question q:DBquestions) {
-					if(q.getField().getID()==fieldid) {
+					if(q.getField().equals(selectefield)) {
 						questions.put(q.questionIDToString(),q);
 						questionsList.getChildren().add(questionAdder(q));
 					}
 				}
 			}
-			list = FXCollections.observableArrayList(al);
+			list = FXCollections.observableArrayList(cousesInField);
 			courseComboB.setItems(list);
 		}
 		System.out.println(courseComboB.getItems().toString());
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	@FXML public void filterByCourse(ActionEvent event) {
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
-			String selectedCourse = courseComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
-			//courseComboB.getItems().clear();
-			ArrayList<String> al = new ArrayList<>();
-			ObservableList<String> list;
-			if(selectedCourse.equals("All")) {
-				HashMap<String, String> addedQuestions = new HashMap<>();
-				for(Object o : courseComboB.getItems().toArray()) {
-					String c = (String)o;
-					 int courseId = Course.parseID(c.split(" - ")[0])[1];
-					 int courseFieldId = Course.parseID(c.split(" - ")[0])[0];
-					 Course curCourse=null;
-					 for(Course course:teachersCourses) {
-						 if(course.getId()==courseId && course.getField().getID()==courseFieldId) {
-							 curCourse=course;
-							 break;
-						 }
-					 }
-					 for (Question q: DBquestions) {
-						 if(q.isInCourse(curCourse)) {
-							 if(addedQuestions.get(q.questionIDToString()) == null) {
-								 questionsList.getChildren().add(questionAdder(q));
-								 addedQuestions.put(q.questionIDToString(), "Added");
-							 }
-						 }
-					 }
-				}
-			} else {
-				int courseId = Course.parseID(selectedCourse)[1];
-				int courseFieldId = Course.parseID(selectedCourse)[0];
-				for(Course course:teachersCourses) {
-					 if(course.getId()==courseId && course.getField().getID()==courseFieldId) {
-						 //curCourse=course;
-						 break;
-					 }
+			questionsList.getChildren().clear();
+			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
+			 for (Question q: DBquestions) {
+				 if(selectedCourse.equals(new Course(0,"All",null)) || q.isInCourse(selectedCourse)) {
+					 questions.put(q.questionIDToString(),q);
+					 questionsList.getChildren().add(questionAdder(q));
 				 }
-				 for (Question q: DBquestions) {
-					 /*if(q.isInCourse(curCourse)) {
-						 if(addedQuestions.get(q.questionIDToString()) == null) {
-							 questionsList.getChildren().add(questionAdder(q));
-							 addedQuestions.put(q.questionIDToString(), "Added");
-						 }
-					 }*/
-				 }
-			}
-			list = FXCollections.observableArrayList(al);
-			courseComboB.setItems(list);
-		}
+			 }
+		 }
 	}
 	
 	private void setQuestionsListInVBox() {

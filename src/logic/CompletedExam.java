@@ -32,7 +32,13 @@ public class CompletedExam extends ActiveExam {
 
 	@Override
 	public String toString() {
-		return "CompletedExam [solvedExams=" + solvedExams + "]";
+		String examType;
+		if (getType()==1) examType = "Computerized";
+		else examType = "Manual";
+		if (solvedExams.size()!=0)
+			return new String(String.format("Activated On: %s \nCode: %s \nID: %s \nType: %s", getDate(),getCode(),solvedExams.get(0).examIdToString() ,examType));
+		else 
+			return new String(String.format("Activated On: %s \nCode: %s \nID: N/A \nType: %s", getDate(),getCode(),examType));
 	}
 
 	public void setSolvedExams(ArrayList<SolvedExam> se) {

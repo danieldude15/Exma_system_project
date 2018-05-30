@@ -60,6 +60,9 @@ public class AESClient extends AbstractClient{
 		case "TeacherFields":
 			teacherFields(ServerMsg);
 			break;
+		case "deletedQuestion":
+			deletedQuestion(ServerMsg);
+			break;
 		case "TeacherActiveExams":
 			teacherActiveExams(ServerMsg);
 			break;
@@ -92,12 +95,6 @@ public class AESClient extends AbstractClient{
 			
 		}
 		synchronized (stopWaiting) {
-			try {
-				Thread.sleep(40);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			stopWaiting=true;	
 		}
 		
@@ -268,6 +265,10 @@ public class AESClient extends AbstractClient{
 
 	private void StudentsSolvedExams(Object o) {
 		msg = (iMessage) o;
+	}
+	
+	private void deletedQuestion(Object o) {
+		msg = (iMessage) o;		
 	}
 
 	private void TeacherCompletedExams(Object o) {

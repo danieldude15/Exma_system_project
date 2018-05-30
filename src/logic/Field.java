@@ -52,6 +52,7 @@ public class Field implements Serializable{
 
 	@Override
 	public String toString() {
+		if(getID()<0) return new String(String.format("%s", getName()));
 		return new String(String.format("%02d - %s", getID() , getName()));
 	}
 	

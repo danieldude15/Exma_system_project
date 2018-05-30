@@ -1,11 +1,13 @@
 package logic;
 
 import java.io.Serializable;
-import java.sql.Date;
 
-@SuppressWarnings("serial")
 public class ActiveExam implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String code;
 	private int type;
 	private String dateActivated;
@@ -41,11 +43,11 @@ public class ActiveExam implements Serializable{
 	 * @return true for active exam and false for non-active exams
 	 */
 
-	private Teacher getActivator() {
+	public Teacher getActivator() {
 		return activator;
 	}
 
-	private String getDate() {
+	public String getDate() {
 		return dateActivated;
 	}
 
@@ -73,6 +75,16 @@ public class ActiveExam implements Serializable{
 		/*Request for time change request setter/*/
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		String examType;
+		if (type==1) examType = "Computerized";
+		else examType = "Manual";
+		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),exam.examIdToString() ,examType));
+	}
+	
+	
 
 	
 }

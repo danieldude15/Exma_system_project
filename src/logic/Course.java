@@ -105,14 +105,21 @@ public class Course implements Serializable{
 
 	@Override
 	public String toString() {
-		return new String(String.format("%s - %s", courseIdToString() , getName()));
+		if(getField()!=null) {
+			return new String(String.format("%s - %s", courseIdToString() , getName()));
+		} else {
+			return new String(String.format("%s", getName()));
+		}
 	}
 	
 	@Override
 	public boolean equals(Object c) {
 		if (c instanceof Course) {
 			Course course = (Course) c;
-			if(course.getId()==getId() && course.getName().equals(getName()) && course.getField().equals(getField())) return true;
+			if(course.getId()==getId() && course.getName().equals(getName())) 
+				if ((course.getField()==getField())) return true;
+				if(course.getField()==null) return false;
+				if (course.getField().equals(getField())) return true;
 		}
 		return false;
 	}
