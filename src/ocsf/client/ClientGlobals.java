@@ -1,14 +1,8 @@
 package ocsf.client;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import GUI.ClientFrame;
 
 import java.io.IOException;
-
-import GUI.ClientFrame;
-import logic.Globals;
-import logic.iMessage;
 
 public class ClientGlobals {
 	public static AESClient client = null;
@@ -52,7 +46,9 @@ public class ClientGlobals {
 
 	
 	public static final String PrincipalMainID = "PrincipalMain";
-	public static final String PrincipalMainPath = "/fxml/PrincipalMain";
+	public static final String PrincipalMainPath = "/fxml/PrincipalMain.fxml";
+	public static final String PrincipalReportsID = "PrincipalReports";
+	public static final String PrincipalReportsPath = "/fxml/PrincipalReports.fxml";
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
 

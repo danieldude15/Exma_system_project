@@ -2,6 +2,7 @@ package GUI;
 
 import Controllers.ControlledScreen;
 import Controllers.UserController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,26 +10,28 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import logic.Globals;
-import logic.iMessage;
 import ocsf.client.ClientGlobals;
 
-import javafx.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Frame manages Main Menu Gui window of Principal
+ */
 public class PrincipalMainFrame implements Initializable, ControlledScreen {
 
-    @FXML Button m_reportsB;
-    @FXML Button m_examsAndQuestionsB;
-    @FXML Button m_usersInfoB;
-    @FXML ListView<String> m_timeChangeRquestsList;
-    @FXML TabPane m_principalTabPane;
-    @FXML Tab m_infoTab;
-    @FXML Tab m_reauestsTab;
+    @FXML private Button m_reportsB;
+    @FXML private Button m_SchoolDataB;
+    @FXML private Button logoutB;
+    @FXML private ListView m_timeChangeRequestsList;
+    @FXML private TabPane m_principalTabPane;
+    @FXML private Tab m_infoTab;
+    @FXML private Tab m_requestsTab;
 
     @Override
     public void runOnScreenChange() {
-
+        Globals.primaryStage.setHeight(535);
+        Globals.primaryStage.setWidth(523);
     }
 
     @Override
@@ -38,16 +41,11 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
 
     @FXML
     public void goToReportsScreen(ActionEvent event){
-
+        Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
     }
 
     @FXML
-    public void goToExamsAndQuestionsScreen(ActionEvent event){
-
-    }
-
-    @FXML
-    public void goToUsersInfoScreen(ActionEvent event){
+    public void goToSchoolDataScreen(ActionEvent event){
 
     }
 
