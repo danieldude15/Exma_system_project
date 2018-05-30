@@ -9,10 +9,10 @@ public class ServerGlobals {
 	
 	public static void handleSQLException(SQLException e) {
 		e.printStackTrace();
-		System.exit(1);
 		System.out.println("SQLState: "+ e.getSQLState());
 		System.out.println("Error Code: "+e.getErrorCode());
 		System.out.println("Msg: "+e.getMessage());
+		System.exit(1);
 	}
 	
 	

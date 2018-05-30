@@ -20,15 +20,18 @@ public class SolvedExamController {
 	 * @param 
 	 * @return SolvedExam
 	 */
-	public static ArrayList<SolvedExam> getSolvedExams(User u) {
+	public static ArrayList<SolvedExam> getSolvedExams(Object u) {
 		AESClient client = ClientGlobals.client;
 		ArrayList<SolvedExam> solved;
 		iMessage msg;
 		if(client.isConnected()) {
 			if(u instanceof Student)
 				msg= new iMessage("getStudentsSolvedExams",(Student)u);
-			else
+			else if (u instanceof Teacher)
 				msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
+			else if (u instanceof String) {
+				msg = new iMessage("getSolvedExamsByID",(String) u );
+			} else return null;
 			try {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();

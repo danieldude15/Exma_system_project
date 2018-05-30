@@ -9,18 +9,25 @@ import ocsf.client.ClientGlobals;
 
 public class ActiveExamController {
 
-	public static void getTeachersActiveExams(User user) {
-		if (user instanceof Teacher) {
-			iMessage msg = new iMessage("getTeachersActiveExams",new User(user));
-			try {
-				ClientGlobals.client.sendToServer(msg);
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
+	/**
+	 * this function will get the Teachers Active Exams from database to display in main window of teacher
+	 * @param Teacher
+	 * @return
+	 */
+	public static ArrayList<ActiveExam> getTeachersActiveExams(Teacher t) {
+		AESClient client = ClientGlobals.client;
+		ActiveExam activeExam;	
+		iMessage msg = new iMessage("getTeachersActiveExams",t);
+		try {
+			client.sendToServer(msg);
+			Object o = client.getResponseFromServer().getObj();
+			if(o instanceof ArrayList) {
+				return (ArrayList<ActiveExam>) o;
 			}
-		} else {
-			//show error alert
+		} catch (IOException e) {
+			ClientGlobals.handleIOException(e);
 		}
-		
+		return null;
 	}
 
 	public static ActiveExam getActiveExam(String examCode) {

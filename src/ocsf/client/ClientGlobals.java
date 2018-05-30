@@ -56,6 +56,9 @@ public class ClientGlobals {
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
 
+	public static final String TeacherCheckExamsID = "TeacherCheckExams";
+	public static final String TeacherCheckExamsPath = "/fxml/TeacherCheckExams.fxml";
+	
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
 		/*Alert alert = new Alert(AlertType.INFORMATION);

@@ -8,10 +8,10 @@ public class Exam implements Serializable{
 	private Course course;
 	private int Duration;
 	private Teacher Author;
-	private ArrayList<Question> questionsInExam;
+	private ArrayList<QuestionInExam> questionsInExam;
 
 	
-	public Exam(int iD, Course course, int duration, Teacher author, ArrayList<Question> questionsInExam) {
+	public Exam(int iD, Course course, int duration, Teacher author, ArrayList<QuestionInExam> questionsInExam) {
 		super();
 		ID = iD;
 		this.course = course;
@@ -27,7 +27,7 @@ public class Exam implements Serializable{
 		course = new Course(exam.getCourse());
 		Duration = exam.getDuration();
 		Author = new Teacher(exam.getAuthor());
-		questionsInExam=(ArrayList<Question>) exam.getQuestionsInExam().clone();		
+		questionsInExam=(ArrayList<QuestionInExam>) exam.getQuestionsInExam().clone();		
 	}
 	
 	public static Vector<Exam> clone(Vector<Exam> exam) {
@@ -58,7 +58,7 @@ public class Exam implements Serializable{
 		return Author;
 	}
 
-	public ArrayList<Question> getQuestionsInExam() {
+	public ArrayList<QuestionInExam> getQuestionsInExam() {
 		return questionsInExam;
 	}
 	

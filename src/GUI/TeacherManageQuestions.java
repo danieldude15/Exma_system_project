@@ -253,7 +253,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@FXML public void filterByCourse(ActionEvent event) {
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
 			String selectedCourse = courseComboB.getSelectionModel().getSelectedItem().toString().split(" ")[0];
-			courseComboB.getItems().clear();
+			//courseComboB.getItems().clear();
 			ArrayList<String> al = new ArrayList<>();
 			ObservableList<String> list;
 			if(selectedCourse.equals("All")) {

@@ -84,9 +84,9 @@ public class SolvedExam extends Exam{
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
 	}
 	@Override
-	public ArrayList<Question> getQuestionsInExam() {
-		ArrayList<Question> questions= new ArrayList<>();
-		for(Question q: studentsAnswers.keySet()) {
+	public ArrayList<QuestionInExam> getQuestionsInExam() {
+		ArrayList<QuestionInExam> questions= new ArrayList<>();
+		for(QuestionInExam q: studentsAnswers.keySet()) {
 			questions.add(q);
 		}
 		return questions;
