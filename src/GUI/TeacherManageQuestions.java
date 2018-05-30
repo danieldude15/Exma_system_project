@@ -68,7 +68,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(600);		
+		Globals.primaryStage.setWidth(650);		
 		
 		teacherFieldsLoading();
 		

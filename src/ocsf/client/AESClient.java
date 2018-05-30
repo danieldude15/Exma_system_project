@@ -18,7 +18,8 @@ public class AESClient extends AbstractClient{
 	
 	User me;
 	private iMessage msg;
-	public Integer stopWaiting=0;
+	private Boolean stopWaiting=false;
+	
 	public AESClient(String host, int port) {
 		super(host, port);
 		me=null;
@@ -87,7 +88,13 @@ public class AESClient extends AbstractClient{
 			
 		}
 		synchronized (stopWaiting) {
-			stopWaiting=1;	
+			try {
+				Thread.sleep(40);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			stopWaiting=true;	
 		}
 		
 	}
@@ -140,12 +147,13 @@ public class AESClient extends AbstractClient{
 				break;
 			}
 			synchronized (stopWaiting) {
-				if (stopWaiting==1) 
-					stopWaiting=0;
+				if (stopWaiting) {
+					stopWaiting=false;
 					break;
+				}
 			}
 		}
-		return new iMessage(msg);
+		return msg;
 	}
 	
 	/**
@@ -258,7 +266,7 @@ public class AESClient extends AbstractClient{
 	@SuppressWarnings("unchecked")
 	private void TeacherCompletedExams(Object o) {
 		ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) ((iMessage) o).getObj();
-		msg = new iMessage(((iMessage) o).getCommand(), completedExams);
+		msg = new iMessage(null, o);
 				
 	}
 

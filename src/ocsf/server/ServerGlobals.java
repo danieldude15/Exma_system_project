@@ -6,9 +6,6 @@ public class ServerGlobals {
 	public static final String ServerGuiID = "ServerGui";
 	public static final String ServerGuiPath = "/fxml/ServerGui.fxml";
 	public static AESServer server = null;
-	public static final String dbHost = "84.108.116.235/aes";
-	public static final String dbuser="aesUser";
-	public static final String dbpass="QxU&v&HMm0t&";
 	
 	public static void handleSQLException(SQLException e) {
 		e.printStackTrace();

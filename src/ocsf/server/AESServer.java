@@ -15,9 +15,9 @@ public class AESServer extends AbstractServer {
 	private HashMap<String,ConnectionToClient> connectedUsers;
 	private HashMap<String,ActiveExam> activeExams;
 
-	public AESServer(int port) {
+	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
-		sqlcon = new DBMain(ServerGlobals.dbHost, ServerGlobals.dbuser, ServerGlobals.dbpass);
+		sqlcon = new DBMain(DBHost, DBUser, DBPass);
 		connectedUsers = new HashMap<String,ConnectionToClient>();
 		activeExams=new HashMap<String,ActiveExam>();
 	}

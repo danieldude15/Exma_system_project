@@ -43,7 +43,7 @@ public class DBMain {
 			+ "FROM aes.fields as f,aes.questions_in_course as qic, aes.courses as c "
 			+ "WHERE c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=?");
 	private String teachersQuestions = new String(
-			"select * from questions as q, fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
+			"select * from aes.questions as q, aes.fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
 	private String getTcompletedExams = new String(""
 			+ "SELECT * FROM aes.completed_exams where teacherid=?");
@@ -282,7 +282,7 @@ public class DBMain {
 				String answers[] = new String[]{answerA,answerB,answerC,answerD};
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
-				String fieldName = rs.getString(28);
+				String fieldName = rs.getString(11);
 				Question question = new Question(questionid, new Teacher(t), questionString, answers, new Field(fieldsid,fieldName), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
@@ -498,6 +498,11 @@ public class DBMain {
 				return null;
 	}
 
+	/**
+	 * get Questions in exam by giving examid
+	 * @param examid
+	 * @return
+	 */
 	public ArrayList<QuestionInExam> getQuestionsInExam(String examid) {
 		int eid = Exam.parseId(examid)[2];
 		int courseid = Exam.parseId(examid)[1];

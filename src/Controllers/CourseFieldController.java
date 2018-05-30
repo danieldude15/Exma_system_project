@@ -61,6 +61,7 @@ public class CourseFieldController {
 				courses = new ArrayList<Course>();
 				if(o!=null && o instanceof ArrayList) {
 					ArrayList<Object> TeacherCourses = (ArrayList<Object>) o;
+					if (TeacherCourses.size()==0) return null;
 					Object a = TeacherCourses.get(0);
 					if(a instanceof Course) {
 						ArrayList<Course> tc = (ArrayList<Course>)o;

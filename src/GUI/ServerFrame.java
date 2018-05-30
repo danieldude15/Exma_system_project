@@ -10,7 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import logic.iMessage;
 import ocsf.server.AESServer;
 import ocsf.server.ConnectionToClient;
@@ -22,16 +24,26 @@ public class ServerFrame implements ControlledScreen,Initializable {
 	@FXML Button StartListenBotton;
 	@FXML Label statusLabel;
 	@FXML TextField portnum;
+	@FXML RadioButton DBHostTB;
+	@FXML RadioButton DBLocal;
+	@FXML TextField DBPass;
+	@FXML TextField DBUser;
+	@FXML TextField DBPort;
 
 
 	@Override
 	public void runOnScreenChange() {
-		StartListening(null);
+		//StartListening(null);
 	}
 	
 	@FXML
 	public void StartListening(ActionEvent event) {
-		ServerGlobals.server = new AESServer(Integer.parseInt(portnum.getText()));
+		if (DBHostTB.isSelected())
+		ServerGlobals.server = new AESServer(
+				DBHostTB.getText(),DBUser.getText(),DBPass.getText(),Integer.parseInt(portnum.getText()));
+		else 
+			ServerGlobals.server = new AESServer(
+					DBLocal.getText(),DBUser.getText(),DBPass.getText(),Integer.parseInt(portnum.getText()));
 		portnum.setDisable(true);
 		try {
 			disconnectUsers(null);
