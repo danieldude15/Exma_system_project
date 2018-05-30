@@ -79,8 +79,8 @@ public class AESClient extends AbstractClient{
 		case "TeacherSolvedExams":
 			TeacherSolvedExams(ServerMsg);
 			break;
-		case "StudentSolvedExams":
-			StudentSolvedExams(ServerMsg);
+		case "StudentsSolvedExams":
+			StudentsSolvedExams(ServerMsg);
 			break;
 				
 			
@@ -259,7 +259,7 @@ public class AESClient extends AbstractClient{
 	}
 
 
-	private void StudentSolvedExams(Object o) {
+	private void StudentsSolvedExams(Object o) {
 		msg = new iMessage(o);
 	}
 

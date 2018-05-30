@@ -25,6 +25,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 		// TODO Auto-generated method stub
 		examCode.clear();
 		studentId.clear();
+		idError.setText("");
+		examCodeError.setText("");
 		
 	}
 	/**

@@ -39,23 +39,26 @@ public class StudentMainFrame implements ControlledScreen {
 		
 		/*Get all student solved exams from database and set it to the ListView field on window/*/
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
+		//System.out.print("blaaaaaaaaaaaaa"+"   +"+mySolvedExam.get(0));
 		ArrayList<String> solveExamsFields= new ArrayList<String>();
-		solveExamsFields.add("All");
-		for (SolvedExam s:mySolvedExam) {
-			
-			String courseName = s.getCourse().getName();
-			String solvedExamGrade=Integer.toString(s.getScore());
-			courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
-			solveExamsFields.add(courseName+"                             "+solvedExamGrade);
+		if(mySolvedExam!=null)
+			{
+			solveExamsFields.add("All");
+			for (SolvedExam s:mySolvedExam) {
+				
+				String courseName = s.getCourse().getName();
+				String solvedExamGrade=Integer.toString(s.getScore());
+				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
+				solveExamsFields.add(courseName+"                             "+solvedExamGrade);
+			}
+			ObservableList<String> list;
+			if (solveExamsFields.size()==1) {
+				solveExamsFields.remove(0);
+				solveExamsFields.add("You Have No Assigned Solved Exams...");
+			}
+			list = FXCollections.observableArrayList(solveExamsFields);
+			solvedExamsList.setItems(list);
 		}
-		ObservableList<String> list;
-		if (solveExamsFields.size()==1) {
-			solveExamsFields.remove(0);
-			solveExamsFields.add("You Have No Assigned Solved Exams...");
-		}
-		list = FXCollections.observableArrayList(solveExamsFields);
-		solvedExamsList.setItems(list);
-		
 		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
 		Student s=(Student)ClientGlobals.client.getUser();
 		studentInfo.setText("Hello "+s.getUserName()+"!\n"+"Name: "+s.getName()+"\n"+"Id: "+s.getID());

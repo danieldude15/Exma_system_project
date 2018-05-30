@@ -58,7 +58,7 @@ public class AESServer extends AbstractServer {
 			case "getTeacherCompletedExams":
 				getTeacherCompletedExams(client,o);
 				break;
-			case "getStudentSolvedExams":
+			case "getStudentsSolvedExams":
 				getSolvedExam(client,o);
 				break;
 			case "getTeacherSolvedExams":
@@ -259,8 +259,8 @@ public class AESServer extends AbstractServer {
 		iMessage im;
 		if(o instanceof Student)
 		{
-			ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentSolvedExams((Student)o);
-			im = new iMessage("StudentSolvedExams", studentSolvedExams);
+			ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentsSolvedExams((Student)o);
+			im = new iMessage("StudentsSolvedExams", studentSolvedExams);
 		}
 		else
 		{

@@ -68,11 +68,15 @@ public class DBMain {
 			"    and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid \n" + 
 			"    and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid " + 
 			"    and se.code=? and se.courseid=? and se.fieldid=? and ce.examid=? and ce.type=? and ce.dateactivated=? and ce.teacherid=?");
-	private String getStudentsSolvedExams="select * from aes.solved_exams as se,aes.fields as f,"
-			+ "aes.courses as c,aes.users as t,aes.exams as e "
-			+ "where se.studentid=? and se.fieldid=f.fieldid and se.courseid=c.courseid "
-			+ "and t.userid=e.teacherid and e.examid=se.examid "
-			+ "and e.fieldid=se.fieldid and e.courseid=se.courseid";
+	
+	private String getStudentsSolvedExams=new String(""
+			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration,\n" + 
+			"		u.userid,u.username,u.password,u.fullname,se.answers,\n" + 
+			"        se.examreportid,se.score,se.minutescompleted ,se.teacherapproved ,se.teacherschangescorenote \n" + 
+			"FROM aes.users as u, aes.courses as c , aes.fields as f, aes.exams as e, aes.solved_exams as se \n" + 
+			"where e.examid=se.examid and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid "
+			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and e.studentid=?;"
+			);
 	
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
@@ -441,63 +445,46 @@ public class DBMain {
 		}
 		return result;
 	}
-
-	//Itzik's method..not finished!
-	public ArrayList<SolvedExam> getStudentSolvedExams(Student s) {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-				try {
-					PreparedStatement prst1 = conn.prepareStatement(getStudentsSolvedExams);
-					PreparedStatement prst2 = conn.prepareStatement(getQuestionsInExam);
-					PreparedStatement prst3 = conn.prepareStatement(getQuestionsInCourse);
-					
-					
-					if (s instanceof Student) {
-						Student student = (Student) s;
-						prst1.setInt(1, student.getID());
-					} else return null;
-					System.out.println("SQL:" + prst1);
-					ResultSet rs1 = prst1.executeQuery();
-					System.out.println(rs1);
-					System.out.println("SQL:" + prst2);
-					prst2.setInt(1,rs1.getInt(1) );
-					ResultSet rs2 = prst2.executeQuery();
-					System.out.println(rs2);
-					Question question;
-					Teacher teacher;
-					Course SolvedExamIsIncourse;
-					Field field;
-					String[] answers = null;
-					ArrayList<Question> questions = new ArrayList<Question>();
-					ArrayList<Course> questionInCourses=new ArrayList<Course>();
-					ArrayList<SolvedExam> result = new ArrayList<SolvedExam>();
-					while(rs1.next()) {
-						teacher=new Teacher(rs1.getInt(12),rs1.getString(12),rs1.getString(13),rs1.getString(14));
-						field =new Field(rs1.getInt(7),rs1.getString(8));
-						SolvedExamIsIncourse=new Course(rs1.getInt(9),rs1.getString(10),field);
-						/*select qie,q from aes.questions_in_exam as qie,aes.questions as q, aes.exams as e/*/
-						answers[0]=rs2.getString(10);
-						answers[1]=rs2.getString(11);
-						answers[2]=rs2.getString(12);
-						answers[3]=rs2.getString(13);
-						ResultSet rs3 = prst3.executeQuery();
-						while(rs3.next())
-						{
-							
-							//build course and add it to Course Arraylist.
-						}
-						question=new Question(rs2.getInt(1), teacher,rs2.getString(9) ,answers , field, rs2.getInt(14), null);
-						//need to add array of courses to question
-						//need to add solved exam to arraylist solvedexam
-						//result.add(new Course(courseid,courseName, new Field(fieldid,fieldName)));/*/
-					}
-					return result;
-				} catch (SQLException e) {
-					ServerGlobals.handleSQLException(e);
-				}
-				return null;
+	
+	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
+	{
+		try {
+			PreparedStatement prst = conn.prepareStatement(getStudentsSolvedExams);
+			prst.setInt(1, s.getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<QuestionInExam> questions = new ArrayList<>();
+			ArrayList<SolvedExam> result = new ArrayList<>();
+			while(rs.next()) {		
+				int examid = rs.getInt(1);
+				Course course = new Course(rs.getInt(4), rs.getString(5), new Field(rs.getInt(2),rs.getString(3)));
+				int duration = rs.getInt(6);
+				int score = rs.getInt(13);
+				int tApprove = rs.getInt(15);
+				boolean teacherApprove;
+				if (tApprove==1)teacherApprove = true;
+				else teacherApprove = false;
+				String studentAnswers = rs.getString(11);
+				String teacherNote = rs.getString(16);
+				int reportit = rs.getInt(12);
+				int timeCompletedMinutes =rs.getInt(14);
+				Teacher teacher = new Teacher(rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10));
+				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),rs.getInt(2)));
+				result.add(new SolvedExam(examid, course, duration, teacher, score, 
+						teacherApprove, parseStudentsAnswers(studentAnswers,questions), reportit , 
+						new Student(s), teacherNote, timeCompletedMinutes));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
 	}
-
+	
+	
+	
+	
 	/**
 	 * get Questions in exam by giving examid
 	 * @param examid
