@@ -6,17 +6,15 @@ import java.util.Vector;
 public class Exam implements Serializable{
 	private int ID;
 	private Course course;
-	private Field field;
 	private int Duration;
 	private Teacher Author;
 	private ArrayList<Question> questionsInExam;
 
 	
-	public Exam(int iD, Course course, Field fieldid, int duration, Teacher author, ArrayList<Question> questionsInExam) {
+	public Exam(int iD, Course course, int duration, Teacher author, ArrayList<Question> questionsInExam) {
 		super();
 		ID = iD;
-		course = course;
-		field = fieldid;
+		this.course = course;
 		Duration = duration;
 		Author = author;
 		this.questionsInExam = questionsInExam;
@@ -27,7 +25,6 @@ public class Exam implements Serializable{
 		super();
 		ID = exam.getID();
 		course = new Course(exam.getCourse());
-		field = new Field(exam.getFieldid());
 		Duration = exam.getDuration();
 		Author = new Teacher(exam.getAuthor());
 		questionsInExam=(ArrayList<Question>) exam.getQuestionsInExam().clone();		
@@ -50,7 +47,7 @@ public class Exam implements Serializable{
 	}
 
 	public Field getFieldid() {
-		return field;
+		return course.getField();
 	}
 
 	public int getDuration() {
@@ -70,7 +67,22 @@ public class Exam implements Serializable{
 	}
 	
 	public String examIdToString() {
-		return new String(String.format("%02d%02d%02d", field.getID(),course.getId(),ID));
+		return new String(String.format("%02d%02d%02d", course.getField().getID(),course.getId(),ID));
+	}
+
+	public static int[] parseId(String examid) {
+		try {
+			int[] result = {Integer.parseInt(examid.substring(0, 2)),Integer.parseInt(examid.substring(2,4)),Integer.parseInt(examid.substring(4,6))};
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			int[] res = {-1,-1,-1};
+			return res;
+		}
+	}
+
+	public static String examIdToString(int examid, int id2, int int1) {
+		return new String(String.format("%02d%02d%02d", int1,id2,examid));
 	}
 
 }

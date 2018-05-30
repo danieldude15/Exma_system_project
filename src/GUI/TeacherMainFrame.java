@@ -1,22 +1,30 @@
 package GUI;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
 import Controllers.UserController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import logic.CompletedExam;
 import logic.Globals;
-import logic.iMessage;
+import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
+	ArrayList<CompletedExam> TeacherCExams;
+	
 	@FXML Button manageQuestionsB;
 	@FXML Button manageExamsB;
 	@FXML Button initiateExamB;
@@ -24,8 +32,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button requestTCB;
 	@FXML Button generateRB;
 	@FXML Button checkExamB;
-	@FXML ListView<String> ActiveExamList;
-	@FXML ListView<String> CompletedExamList;
+	@FXML ListView ActiveExamList;
+	@FXML ListView CompletedExamList;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	@Override
@@ -38,6 +46,16 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(750);
 		Globals.primaryStage.setWidth(820);
+
+		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
+		ArrayList<String> al = new ArrayList<String>();	
+		for (CompletedExam ce : TeacherCExams) {
+			al.add("QuestionID: "+ ce.getExam().examIdToString() + " Code:" + ce.getCode() + " Date <DATE>");
+		}
+		
+		CompletedExamList.getItems().clear();
+		ObservableList<String> list = FXCollections.observableArrayList(al);
+		CompletedExamList.setItems(list);
 	}
 	
 	@FXML

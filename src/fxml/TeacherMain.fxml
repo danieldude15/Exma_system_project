@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherMainFrame">
    <children>
       <HBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
@@ -91,7 +90,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="CompletedExamsList" onMouseClicked="#completeExamsListViewClicked">
+                  <ListView fx:id="CompletedExamList" onMouseClicked="#completeExamsListViewClicked">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>

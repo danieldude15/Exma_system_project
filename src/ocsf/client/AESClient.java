@@ -1,12 +1,12 @@
 package ocsf.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import GUI.TeacherManageQuestions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.ConstraintsBase;
+import logic.CompletedExam;
 import logic.Globals;
 import logic.Principle;
 import logic.Student;
@@ -64,6 +64,9 @@ public class AESClient extends AbstractClient{
 		case "FieldsCourses":
 			fieldsCourses(ServerMsg);
 			break;
+		case "TeacherCompletedExams":
+			TeacherCompletedExams(ServerMsg);
+			break;
 		case "AllActiveExams":
 			AllActiveExams(ServerMsg);
 			break;
@@ -90,9 +93,6 @@ public class AESClient extends AbstractClient{
 	}
 
 
-
-
-
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
 	}
@@ -100,15 +100,22 @@ public class AESClient extends AbstractClient{
 	public iMessage getMsg() {
 		return msg;
 	}
-	
-	
-	
-	public User getMe() {
+
+	/**
+	 * get user connected to server
+	 * this can be any kind of user... Student, Teacher or even Principle
+	 * @return User connected to Server
+	 */
+	public User getUser() {
 		return me;
 	}
-
-
-	public void setMe(User me) {
+	
+	/**
+	 * Set the User that is connected to server
+	 * this should happen when a client logs in as an authenticated user 
+	 * @param me - the user currently connected
+	 */
+	public void setUser(User me) {
 		this.me = me;
 	}
 
@@ -153,10 +160,6 @@ public class AESClient extends AbstractClient{
 		ClientGlobals.handleIOException(e);
 	}
 
-
-	public User getUser() {
-		return me;
-	}
 	
 	  /**
 	   * Hook method called after a connection has been established.
@@ -229,7 +232,6 @@ public class AESClient extends AbstractClient{
 	}
 
 	
-
 	private void fieldsCourses(Object o) {
 		msg = new iMessage(o);
 	}
@@ -240,26 +242,27 @@ public class AESClient extends AbstractClient{
 
 
 	private void AllActiveExams(Object o) {
-		// TODO Auto-generated method stub
 		msg = new iMessage(o);
 	}
 
 
-
 	private void GetActiveExam(Object o) {
-		// TODO Auto-generated method stub
 		msg = new iMessage(o);
 	}
 
 
 	private void StudentSolvedExams(Object o) {
-		// TODO Auto-generated method stub
 		msg = new iMessage(o);
 	}
 
+	@SuppressWarnings("unchecked")
+	private void TeacherCompletedExams(Object o) {
+		ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) ((iMessage) o).getObj();
+		msg = new iMessage(((iMessage) o).getCommand(), completedExams);
+				
+	}
 
 	private void TeacherSolvedExams(Object o) {
-		// TODO Auto-generated method stub
 		msg = new iMessage(o);
 	}
 	

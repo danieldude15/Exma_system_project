@@ -3,6 +3,7 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import logic.CompletedExam;
 import logic.SolvedExam;
 import logic.Student;
 import logic.Teacher;
@@ -40,6 +41,32 @@ public class SolvedExamController {
 					}
 				}
 				return solved;
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return null;
+	}
+
+	public static ArrayList<CompletedExam> getCompletedExams(Teacher user) {
+		AESClient client = ClientGlobals.client;
+		ArrayList<CompletedExam> completed;
+		iMessage msg;
+		if(client.isConnected()) {
+			msg= new iMessage("getTeacherCompletedExams",user);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				completed = new ArrayList<CompletedExam>();
+				if(o instanceof ArrayList) {
+					ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) o;
+					for (CompletedExam ce: completedExams) {
+						CompletedExam sExam = new CompletedExam(ce);
+						completed.add(sExam);
+					}
+				}
+				return completed;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

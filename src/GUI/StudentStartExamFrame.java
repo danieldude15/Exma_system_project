@@ -73,7 +73,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 			else  
 			{
 				//Exam is computerized, then student can start solve it.
-				if(active.getType().equals("computerized"))
+				if(active.getType()==1)
 				{
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);

@@ -55,5 +55,25 @@ public class QuestionController {
 		} 
 		return null;
 	}
+
+	public static ArrayList<QuestionInExam> getQuestionsInExam(String examid) {
+		AESClient client = ClientGlobals.client;
+		ArrayList<QuestionInExam> questions = null;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getQuestionInExam",examid);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof ArrayList) {
+					questions = (ArrayList<QuestionInExam>) ((ArrayList<QuestionInExam>) o).clone();
+				}
+				return questions;
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return null;
+	}
 	
 }

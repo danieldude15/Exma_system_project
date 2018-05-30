@@ -46,11 +46,17 @@ public class AESServer extends AbstractServer {
 			case "getQuestionCourses":
 				getQuestionCourses(client,o);
 				break;
+			case "getQuestionInExam":
+				getQuestionInExam(client,o);
+				break;
 			case "getFieldsCourses":
 				getFieldsCourses(client,o);
 				break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
+				break;
+			case "getTeacherCompletedExams":
+				getTeacherCompletedExams(client,o);
 				break;
 			case "getStudentSolvedExams":
 				getSolvedExam(client,o);
@@ -58,11 +64,9 @@ public class AESServer extends AbstractServer {
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
 				break;
-			
 			case "getAllActiveExams":
 				getAllActiveExams(client);
 				break;
-		
 			case "getActiveExam":
 				getActiveExam(client,o);
 				break;
@@ -76,6 +80,7 @@ public class AESServer extends AbstractServer {
 		}
 	}
 	
+
 	/**
 	 * Hook Method executed right before server closes while still listening
 	 * this is part of AbstractServer functionality
@@ -209,6 +214,18 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<QuestionInExam> questions = sqlcon.getQuestionsInExam((String)o);
+		iMessage im = new iMessage("TeachersQuestions", questions);
+		client.sendToClient(im);
+	}
+
+	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<CompletedExam> questions = sqlcon.getTeachersCompletedExams((Teacher) o);
+		iMessage im = new iMessage("TeacherCompletedExams", questions);
+		client.sendToClient(im);
+	}
+	
 	private void getTeacherFields(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Field> fields = sqlcon.getTeacherFields((Teacher)o);
 		iMessage im = new iMessage("TeacherFields", fields);

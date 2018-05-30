@@ -7,18 +7,18 @@ import java.util.HashMap;
 public class SolvedExam extends Exam{
 	int score;
 	boolean teacherApproved;
-	HashMap<Question, Integer>studentsAnswers;
+	HashMap<QuestionInExam, Integer> studentsAnswers;
 	int examReportID;
 	Student examSolver;
 	String teachersScoreChangeNote;
 	int CompletedTimeInMinutes;
 	
 	
-	public SolvedExam(int iD, Course courseid, Field fieldid, int duration, Teacher author,
-			ArrayList<Question> questionsInExam, int score, boolean teacherApproved,
-			HashMap<Question, Integer> studentsAnswers, int examReportID, Student examSolver,
+	public SolvedExam(int iD, Course course, int duration, Teacher author,
+			int score, boolean teacherApproved,	HashMap<QuestionInExam, Integer> studentsAnswers, 
+			int examReportID, Student examSolver,
 			String teachersScoreChangeNote, int completedTimeInMinutes) {
-		super(iD, courseid, fieldid, duration, author, questionsInExam);
+		super(iD, course, duration, author, null);
 		this.score = score;
 		this.teacherApproved = teacherApproved;
 		this.studentsAnswers = studentsAnswers;
@@ -36,10 +36,11 @@ public class SolvedExam extends Exam{
 		super(exam);
 		this.score = exam.getScore();
 		this.teacherApproved = exam.isTeacherApproved();
-		this.studentsAnswers = (HashMap<Question, Integer>) exam.getStudentsAnswers().clone();
+		this.studentsAnswers = (HashMap<QuestionInExam, Integer>) exam.getStudentsAnswers().clone();
 		this.examReportID = exam.getExamReportID();
 		this.examSolver = new Student(exam.getExamSolver());
-		this.teachersScoreChangeNote = new String(exam.getTeachersScoreChangeNote());
+		if(exam.getTeachersScoreChangeNote()!=null)
+			this.teachersScoreChangeNote = new String(exam.getTeachersScoreChangeNote());
 		CompletedTimeInMinutes = exam.getCompletedTimeInMinutes();
 	}
 
@@ -51,7 +52,7 @@ public class SolvedExam extends Exam{
 		return teacherApproved;
 	}
 
-	public HashMap<Question, Integer> getStudentsAnswers() {
+	public HashMap<QuestionInExam, Integer> getStudentsAnswers() {
 		return studentsAnswers;
 	}
 
@@ -81,6 +82,22 @@ public class SolvedExam extends Exam{
 
 	public void setTeachersScoreChangeNote(String teachersScoreChangeNote) {
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
+	}
+	@Override
+	public ArrayList<Question> getQuestionsInExam() {
+		ArrayList<Question> questions= new ArrayList<>();
+		for(Question q: studentsAnswers.keySet()) {
+			questions.add(q);
+		}
+		return questions;
+	}
+	
+	@Override
+	public String toString() {
+		return "SolvedExam [score=" + score + ", teacherApproved=" + teacherApproved + ", studentsAnswers="
+				+ studentsAnswers + ", examReportID=" + examReportID + ", examSolver=" + examSolver
+				+ ", teachersScoreChangeNote=" + teachersScoreChangeNote + ", CompletedTimeInMinutes="
+				+ CompletedTimeInMinutes + "]";
 	}
 	
 	

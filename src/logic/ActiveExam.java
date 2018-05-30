@@ -7,12 +7,12 @@ import java.sql.Date;
 public class ActiveExam implements Serializable{
 
 	private String code;
-	private String type;
-	private Date dateActivated;
+	private int type;
+	private String dateActivated;
 	private Teacher activator;
 	private Exam exam;
 	
-	public ActiveExam(String code,String type,Date dayActivated,Exam e,Teacher activator)/*Constructor/*/
+	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)/*Constructor/*/
 	{
 		this.code=code;
 		this.type=type;
@@ -45,7 +45,7 @@ public class ActiveExam implements Serializable{
 		return activator;
 	}
 
-	private Date getDate() {
+	private String getDate() {
 		return dateActivated;
 	}
 
@@ -53,7 +53,7 @@ public class ActiveExam implements Serializable{
 		/*Code getter/*/
 		return this.code;
 	}
-	public String getType() {
+	public int getType() {
 		/*Type getter/*/
 		return this.type;
 	}

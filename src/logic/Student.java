@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class Student extends User {
 	
 	public Student(int id,String userName, String Password, String Name) {

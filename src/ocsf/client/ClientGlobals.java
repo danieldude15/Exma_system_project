@@ -58,20 +58,20 @@ public class ClientGlobals {
 
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
-		Alert alert = new Alert(AlertType.INFORMATION);
+		/*Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Diconnected to Server");
 		alert.setHeaderText(null);
 		alert.setContentText("Somthing Went wrong.");
-		alert.show();
+		alert.show();*/
 		try {
 			if (client!=null && !client.isConnected()) {
 				System.out.println("trying to reconnect");
 				client.openConnection();
 			}
 		} catch (IOException e1) {
-			alert.setTitle("Failed to Reconnect");
+			/*alert.setTitle("Failed to Reconnect");
 			alert.setHeaderText(null);
-			alert.setContentText("Reconnect Failed.");
+			alert.setContentText("Reconnect Failed.");*/
 			System.out.println("Tried to Reconect and Failed! with Exception");
 		}
 		System.out.println("Couse: "+ e.getCause());
