@@ -25,7 +25,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 		// TODO Auto-generated method stub
 		examCode.clear();
 		studentId.clear();
-		
+		idError.setText("");
+		examCodeError.setText("");
 	}
 	/**
 	 * When student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
