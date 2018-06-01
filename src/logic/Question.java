@@ -54,7 +54,6 @@ public class Question implements Serializable{
 	}
 
 	public String getQuestionString() {
-		// TODO Auto-generated method stub
 		return questionString;
 	}
 

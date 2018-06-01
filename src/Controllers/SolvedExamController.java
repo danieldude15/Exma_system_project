@@ -3,12 +3,7 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import logic.CompletedExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.User;
-import logic.iMessage;
+import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
