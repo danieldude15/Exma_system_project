@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 public class Teacher extends User{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4127432154155188904L;
+
 	public Teacher(int id,String userName, String Password, String Name) {
 		super(id,userName, Password, Name);
 	}

@@ -198,7 +198,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	        		alert.show();
 	        	}
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+			    System.out.println("user chose CANCEL or closed the dialog");
 			}
         }
     }

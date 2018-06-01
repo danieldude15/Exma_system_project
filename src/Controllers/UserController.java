@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.ConstraintsBase;
 import logic.Globals;
 import logic.User;
 import logic.iMessage;

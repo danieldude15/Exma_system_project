@@ -2,10 +2,15 @@ package logic;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
+
 public class Principle extends User implements Serializable{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8749030854308314525L;
+
 	public Principle(int id,String userName, String Password, String Name) /*Constructor/*/
 	{
 		super(id,userName, Password, Name);

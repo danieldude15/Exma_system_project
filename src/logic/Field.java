@@ -3,9 +3,13 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@SuppressWarnings("serial")
+
 public class Field implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5727608394594462958L;
 	private int fID;
 	private String fName;
 	

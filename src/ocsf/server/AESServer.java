@@ -33,6 +33,19 @@ public class AESServer extends AbstractServer {
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
 		activeExams.put("acdc", new ActiveExam("acdc", 1, "2018-05-30", 
 				new Exam(1, cs.get(0),120,teacher,questions),teacher));
+		
+		/**
+		 * Added a virtual temporary Active Exam to Server!
+		 */
+		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
+		questions =  new ArrayList<QuestionInExam>();
+		answers = new String[]{"a","b","c","d"};
+		field = new Field(2,"FieldName");
+		cs = new ArrayList<>();
+		cs.add(new Course(3,"CourseName",field));
+		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
+		activeExams.put("ddii", new ActiveExam("ddii", 1, "2018-05-30", 
+				new Exam(1, cs.get(0),120,teacher,questions),teacher));
 	}
 
 	@Override

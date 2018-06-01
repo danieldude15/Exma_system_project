@@ -2,8 +2,12 @@ package logic;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
+
 public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8730837249109057228L;
 	private int id;
 	private String userName;
 	private String password;
