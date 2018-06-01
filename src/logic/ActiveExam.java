@@ -7,7 +7,7 @@ public class ActiveExam implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4561592102347244137L;
 	private String code;
 	private int type;
 	private String dateActivated;

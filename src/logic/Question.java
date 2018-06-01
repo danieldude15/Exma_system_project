@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import Controllers.QuestionController;
 
-@SuppressWarnings("serial")
 public class Question implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -406882124262979292L;
 	private int ID;
 	private Teacher Author;
 	private String questionString;
@@ -27,6 +29,7 @@ public class Question implements Serializable{
 		this.courses= courses;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Question(Question q) {
 		super();
 		ID = q.getID();

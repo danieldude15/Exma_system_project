@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class QuestionInExam extends Question {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2747357847217521892L;
 	int PointsValue;
 	String innerNote;
 	String studentNote;

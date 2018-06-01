@@ -5,9 +5,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@SuppressWarnings("serial")
+
 public class ExamReport implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2557792967631535481L;
 	int reportid;
 	int meadian;
 	int avg;

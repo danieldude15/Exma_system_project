@@ -1,10 +1,13 @@
 package logic;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 public class CompletedExam extends ActiveExam {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4657010598883384610L;
 	private ArrayList<SolvedExam> solvedExams = null;
 	
 	public CompletedExam(String code, int type, String dayActivated, Teacher activator,ArrayList<SolvedExam> solvedExams) {

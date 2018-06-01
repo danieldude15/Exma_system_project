@@ -3,9 +3,13 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@SuppressWarnings("serial")
+
 public class iMessage implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1976516783215133976L;
 	private String command;
 	private Object obj;
 	

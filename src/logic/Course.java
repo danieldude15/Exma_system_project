@@ -3,9 +3,12 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@SuppressWarnings("serial")
 public class Course implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7414573568989175063L;
 	private int id;
 	private String name;
 	private Field field;
