@@ -44,7 +44,7 @@ public class AESServer extends AbstractServer {
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		activeExams.put("acdc", new ActiveExam("ddii", 1, "2018-05-30", 
+		activeExams.put("ddii", new ActiveExam("ddii", 1, "2018-05-30", 
 				new Exam(1, cs.get(0),120,teacher,questions),teacher));
 	}
 
