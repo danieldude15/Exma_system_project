@@ -50,7 +50,7 @@ public class StudentMainFrame implements ControlledScreen {
 				String solvedExamGrade=Integer.toString(s.getScore());
 				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
 				solveExamsFields.add(courseName+"                                                        "
-						+ "                                                      "+solvedExamGrade);
+						+ "                                                    "+solvedExamGrade+"\n");
 			}
 			ObservableList<String> list;
 			if (solveExamsFields.size()==1) {
@@ -81,9 +81,11 @@ public class StudentMainFrame implements ControlledScreen {
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		//if student choose course solved exam to view from list.
-		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null && !(((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("You Have No Assigned Solved Exams...")))
+		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null &&
+				!(((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("You Have No Assigned Solved Exams...")) 
+				&& !((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("All"))
 		{
-			String[] CourseNameAndGrade=(String[])solvedExamsList.getSelectionModel().getSelectedItem().split("                             ");
+			String[] CourseNameAndGrade=(String[])solvedExamsList.getSelectionModel().getSelectedItem().split(" ");
 			
 			for (SolvedExam s:mySolvedExam)
 			{

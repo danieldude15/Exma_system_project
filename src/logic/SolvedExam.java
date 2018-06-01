@@ -7,7 +7,8 @@ import java.util.HashMap;
 public class SolvedExam extends Exam{
 	int score;
 	boolean teacherApproved;
-	HashMap<QuestionInExam, Integer> studentsAnswers;
+	HashMap<QuestionInExam, Integer> studentsAnswers;// HashMap<(Key)QuestionInExam,(Value)index of student answer>
+	//HashMap<QuestionInExam, String> answerNoteOnQuestion;//// HashMap<(Key)QuestionInExam,(Value)Note string on solved question>
 	int examReportID;
 	Student examSolver;
 	String teachersScoreChangeNote;
