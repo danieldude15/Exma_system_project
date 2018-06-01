@@ -55,6 +55,13 @@ public class ClientGlobals {
 	public static final String TeacherCheckExamsID = "TeacherCheckExams";
 	public static final String TeacherCheckExamsPath = "/fxml/TeacherCheckExams.fxml";
 	
+	public static final String TeacherTimeChangeRequestID = "TeacherTimeChangeRequest";
+	public static final String TeacherTimeChangeRequestPath = "/fxml/TeacherTimeChangeRequest.fxml";
+	
+	public static final String TeacherBuildNewExamID = "TeacherBuildNewExam";
+	public static final String TeacherBuildNewExamPath = "/fxml/TeacherBuildNewExam.fxml";
+	
+	
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
 		/*Alert alert = new Alert(AlertType.INFORMATION);

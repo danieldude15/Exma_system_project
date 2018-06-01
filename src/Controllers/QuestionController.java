@@ -10,7 +10,7 @@ import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
-public class QuestionController {
+public class QuestionController { 
 	
 	public static ArrayList<Question> getTeachersQuestions(Teacher t) {
 		AESClient client = ClientGlobals.client;
@@ -95,4 +95,29 @@ public class QuestionController {
 		}
 		return 0;
 	}
+
+	public static ArrayList<Question> getCourseQuestions(Course c) {
+		AESClient client = ClientGlobals.client;
+		ArrayList<Question> questions;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getCourseQuestions",c);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				//Object o = client.getMsg().getObj();
+				ArrayList<Question> CourseQuestions = null;
+				if(o instanceof ArrayList) {
+					CourseQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
+				}
+				questions = CourseQuestions;
+				return questions;
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return null;
+
+	}
+
 }

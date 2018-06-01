@@ -31,7 +31,7 @@ public class ClientFrame implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ClientGlobals.ClientConnectionController = this;
+		ClientGlobals.ClientConnectionController = this; 
 	}
 
 	@FXML
@@ -77,6 +77,10 @@ public class ClientFrame implements Initializable {
         	System.out.println("failed to load "+ ClientGlobals.LogInID);
         	return;
         }
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherBuildNewExamID, ClientGlobals.TeacherBuildNewExamPath)) {
+        	System.out.println("failed to load "+ ClientGlobals.TeacherBuildNewExamID);
+        	return;
+        }
 		if (!mainContainer.loadScreen(ClientGlobals.TeacherMainID, ClientGlobals.TeacherMainPath)) {
         	System.out.println("failed to load "+ ClientGlobals.TeacherMainID);
         	return;
@@ -99,6 +103,11 @@ public class ClientFrame implements Initializable {
 		}
 		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
+			return;
+		}
+		
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherTimeChangeRequestID, ClientGlobals.TeacherTimeChangeRequestPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherTimeChangeRequestID);
 			return;
 		}
 		if (!mainContainer.loadScreen(ClientGlobals.StudentStartExamID, ClientGlobals.StudentStartExamPath)) {

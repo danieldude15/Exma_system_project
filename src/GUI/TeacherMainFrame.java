@@ -79,6 +79,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@FXML
 	public void goToManageExams(ActionEvent event) {
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
 		
 	}
 	
@@ -93,8 +94,9 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML
-	public void requestTimeChangeClicked(ActionEvent event) {
-		
+	public void requestTimeChangeClicked(ActionEvent event)
+	{
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
 	}
 	
 	@FXML
