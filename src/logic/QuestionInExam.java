@@ -11,7 +11,8 @@ public class QuestionInExam extends Question {
 	int PointsValue;
 	String innerNote;
 	String studentNote;
-
+	
+	
 	public QuestionInExam(int iD, Teacher Author, String question, String[] answers, Field field,
 			int correctAnswerIndex, ArrayList<Course> courses,int points, String inNote,String StdNote) {
 		super(iD, Author, question, answers, field, correctAnswerIndex, courses);

@@ -36,8 +36,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button requestTCB;
 	@FXML Button generateRB;
 	@FXML Button checkExamB;
-	@FXML ListView ActiveExamsList;
-	@FXML ListView CompletedExamList;
+	@FXML ListView<ActiveExam> ActiveExamsList;
+	@FXML ListView<CompletedExam> CompletedExamList;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	
@@ -46,8 +46,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		
 	}
 
-	@Override
-	public void runOnScreenChange() {
+	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(750);
 		Globals.primaryStage.setWidth(820);
 
@@ -72,8 +71,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.setItems(list2);
 	}
 	
-	@FXML
-	public void gotToManageQuestions(ActionEvent event) {
+	@FXML public void gotToManageQuestions(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
 	
@@ -83,13 +81,11 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		
 	}
 	
-	@FXML
-	public void goToInitiateExam(ActionEvent event) {
+	@FXML public void goToInitiateExam(ActionEvent event) {
 		
 	}
 	
-	@FXML
-	public void lockExamClicked(ActionEvent event) {
+	@FXML public void lockExamClicked(ActionEvent event) {
 		
 	}
 	
@@ -99,23 +95,21 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
 	}
 	
-	@FXML
-	public void goToGenerateReportClicked(ActionEvent event) {
+	@FXML public void goToGenerateReportClicked(ActionEvent event) {
 		
 	}
 	
-	@FXML
-	public void goToCheckExams(ActionEvent event) {
+	@FXML public void goToCheckExams(ActionEvent event) {
 		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) return;
 		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
 		System.out.println(selectedExam);
-		String selectedExamid = selectedExam.split(" ")[1];
+		String selectedExamid = selectedExam.split(" ")[6];
 		for (CompletedExam ce:TeacherCExams) {
 			if(ce.getExam().examIdToString().equals(selectedExamid)) {
 				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
 				teacherCheckExams.setCompletedExams(ce);
 				Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
-				return;
+				break;
 			}
 		}
 	}

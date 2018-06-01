@@ -117,12 +117,10 @@ public class Course implements Serializable{
 	
 	@Override
 	public boolean equals(Object c) {
+		if(c==this) return true;
 		if (c instanceof Course) {
 			Course course = (Course) c;
-			if(course.getId()==getId() && course.getName().equals(getName())) 
-				if ((course.getField()==getField())) return true;
-				if(course.getField()==null) return false;
-				if (course.getField().equals(getField())) return true;
+			return course.getId()==getId() && course.getName().equals(getName()) && course.getField()!=null && course.getField().equals(getField());
 		}
 		return false;
 	}

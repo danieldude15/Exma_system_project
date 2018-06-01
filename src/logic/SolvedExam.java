@@ -11,7 +11,8 @@ public class SolvedExam extends Exam{
 	private static final long serialVersionUID = -6299389250694557248L;
 	int score;
 	boolean teacherApproved;
-	HashMap<QuestionInExam, Integer> studentsAnswers;
+	HashMap<QuestionInExam, Integer> studentsAnswers;// HashMap<(Key)QuestionInExam,(Value)index of student answer>
+	//HashMap<QuestionInExam, String> answerNoteOnQuestion;//// HashMap<(Key)QuestionInExam,(Value)Note string on solved question>
 	int examReportID;
 	Student examSolver;
 	String teachersScoreChangeNote;

@@ -3,8 +3,6 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;

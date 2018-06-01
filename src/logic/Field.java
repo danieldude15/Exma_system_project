@@ -73,5 +73,11 @@ public class Field implements Serializable{
 		return false;
 	}
  
-	
+	@Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + fID;
+        result = 31 * result + fName.hashCode();
+        return result;
+    }
 }

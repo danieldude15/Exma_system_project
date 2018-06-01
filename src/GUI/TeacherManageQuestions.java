@@ -135,15 +135,11 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		// this VBox holds the course list assigned to this question
 		VBox assignedCourses = new VBox();
 		assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
-		ListView<String> courselist = new ListView<>();
+		ListView<Course> courselist = new ListView<>();
 		courselist.setMaxWidth(120);
 		courselist.setMaxHeight(100);
 		courselist.setDisable(true);
-		ArrayList<String> al = new ArrayList<>();
-		for(Course c : q.getCourses()) {
-			al.add(c.toString());
-		}
-		ObservableList<String> list = FXCollections.observableArrayList(al);
+		ObservableList<Course> list = FXCollections.observableArrayList(q.getCourses());
 		courselist.setItems(list);
 		assignedCourses.getChildren().add(courselist);
 		

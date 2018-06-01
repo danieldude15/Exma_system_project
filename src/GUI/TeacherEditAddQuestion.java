@@ -16,10 +16,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.ConstraintsBase;
 import javafx.scene.layout.VBox;
 import logic.Course;
 import logic.Field;
@@ -38,9 +38,14 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	
 	ArrayList<Field> teacherFields = new ArrayList<>();
 	ArrayList<Course> teacherCourses = new ArrayList<>();
-	HashMap<Integer, ArrayList<Course>> coursesInField = new HashMap<>();
+	HashMap<Field, ArrayList<Course>> coursesInField = new HashMap<>();
 	
 	@FXML Label questionID;
+	@FXML Label questionError;
+	@FXML Label answersError;
+	@FXML Label answerError;
+	@FXML Label fieldError;
+	@FXML Label courseError;
 	@FXML TextArea questionString;
 	@FXML ToggleGroup answers;
 	@FXML RadioButton answer1;
@@ -51,20 +56,22 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	@FXML TextField ta2;
 	@FXML TextField ta3;
 	@FXML TextField ta4;
-	@FXML ComboBox<String> fields;
+	@FXML ComboBox<Field> fields;
 	@FXML VBox courseVbox;
-	@FXML Button backB;
+	@FXML Button submitB;
 	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	@Override public void initialize(URL arg0, ResourceBundle arg1) {
 
 	}
 
-	@Override
-	public void runOnScreenChange() {
+	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(656);
 		Globals.primaryStage.setWidth(553);
-		organizedFields();
+		organizedFieldsHashMap();
+		
+		ObservableList<Field> list = FXCollections.observableArrayList(teacherFields);
+		fields.setItems(list);
+		
 		if (type.equals(windowType.ADD) || question==null) {
 			questionID.setText("Add New Question");
 			questionString.setText("");
@@ -72,6 +79,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			ta2.setText("");
 			ta3.setText("");
 			ta4.setText("");
+			submitB.setText("Add Question");
 		} else {
 			questionID.setText("Edit Question: " + question.questionIDToString());
 			questionString.setText(question.getQuestionString());
@@ -94,29 +102,27 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 				answer4.setSelected(true);
 				break;
 			}
+					
+			fields.getSelectionModel().select(question.getField());
+			userSetField(null);
+			fields.setDisable(true);
+			submitB.setText("Update Question");
 		}
 	}
 
-	private void organizedFields() {
+	private void organizedFieldsHashMap() {
 		coursesInField.clear();
 		for(Course c:teacherCourses) {
-			if (coursesInField.get(c.getField().getID()) != null){
-				ArrayList<Course> arrayList = coursesInField.get(c.getField().getID());
+			if (coursesInField.get(c.getField()) != null){
+				ArrayList<Course> arrayList = coursesInField.get(c.getField());
 				arrayList.add(c);
-				coursesInField.put(c.getField().getID(), arrayList);
+				coursesInField.put(c.getField(), arrayList);
 			} else {
 				ArrayList<Course> arrayList = new ArrayList<>();
 				arrayList.add(c);
-				coursesInField.put(c.getField().getID(), arrayList);
+				coursesInField.put(c.getField(), arrayList);
 			}
 		}
-		
-		ArrayList<String> TF = new ArrayList<>();
-		for(Field f:teacherFields) {
-			TF.add(f.toString());
-		}
-		ObservableList<String> list = FXCollections.observableArrayList(TF);
-		fields.setItems(list);
 	}
 
 	public void setQuestion(Question q) {
@@ -124,21 +130,44 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		System.out.println("Change Question to "+ q);
 	}
 	
-	@FXML
-	public void backToMenu(ActionEvent event) {
+	@FXML public void backToMenu(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
 	
-	@FXML
-	public void userSetField(ActionEvent event) {
+	@FXML public void userSetField(ActionEvent event) {
 		courseVbox.getChildren().clear();
-		String Fieldid = fields.getSelectionModel().getSelectedItem().toString().split(" - ")[0];
-		//System.out.println(Fieldid + " -- " + Fieldid);
-		ArrayList<Course> arr = coursesInField.get(Integer.parseInt(Fieldid));
+		Field field = fields.getSelectionModel().getSelectedItem();
+		ArrayList<Course> arr = coursesInField.get(field);
 		if(arr!=null) {
 			for (Course c:arr) {
 				CheckBox cBox = new CheckBox(c.toString());
+				if (type.equals(windowType.EDIT)) {
+					cBox.setDisable(true);
+					if(question.getCourses().contains(c)) 
+						cBox.setSelected(true);
+				}
 				courseVbox.getChildren().add(cBox);
+			}
+		}
+	}
+	
+	@FXML public void submitQuestion(ActionEvent event) {
+		if (questionString.getText().equals("")) 
+			questionError.setVisible(true);;
+		if (ta1.getText().equals("") ||
+			ta2.getText().equals("") ||
+			ta3.getText().equals("") ||
+			ta4.getText().equals("")) 
+			answersError.setVisible(true);
+		if (answers.getSelectedToggle()==null)
+			answerError.setVisible(true);
+		if (fields.getSelectionModel().getSelectedItem()==null)
+			fieldError.setVisible(true);
+		if (!fieldError.isVisible() && !answersError.isVisible() && !answerError.isVisible() &&! questionError.isVisible()) {
+			if (type.equals(windowType.ADD)) {
+			
+			} else {
+			
 			}
 		}
 	}
