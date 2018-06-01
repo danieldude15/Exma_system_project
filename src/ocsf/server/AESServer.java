@@ -37,7 +37,7 @@ public class AESServer extends AbstractServer {
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
-		teacher = new Teacher(204360317, "Niv", "1234", "Niv Mizrahi");
+		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
 		questions =  new ArrayList<QuestionInExam>();
 		answers = new String[]{"a","b","c","d"};
 		field = new Field(2,"FieldName");
