@@ -12,17 +12,17 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
-.button:hover .combo-box:hover{
+.button:hover {
 	-fx-background-color: 
         linear-gradient(#f2f2f2, #d6d6d6),
         linear-gradient(#fcfcfc 0%, #d9d9d9 60%, #d6d6d6 100%),
         linear-gradient(#dddddd 0%, #f6f6f6 80%);
 }
-.button:active .combo-box:active{
-	-fx-background-color: 
-        linear-gradient(#f2f2f2, #d6d6d6),
-        linear-gradient(#fcfcfc 0%, #d9d9d9 10%, #d6d6d6 40%),
-        linear-gradient(#dddddd 0%, #f6f6f6 30%);
+.button:active {
+	-fx-background-color: white;
+        /*linear-gradient(#f2f2f2, #d6d6d6),
+        linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+        linear-gradient(#dddddd 0%, #f6f6f6 50%);*/
 }
 .combo-box {
     -fx-background-color: 
@@ -36,14 +36,24 @@
 }
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
-    -fx-text-fill: white;
+    -fx-background-color: 
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+    	linear-gradient(#020b02, #3a3a3a),
+    	linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+    	linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+    	linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+	-fx-background-insets: 0,1,4,5,6;
+	-fx-background-radius: 9,8,5,4,3;
+	-fx-text-fill:white;
 }
 
-.list-cell:even { /* <=== changed to even */
-    -fx-background-color: white;
+.list-cell:even { 
+    -fx-background-color: 
+    linear-gradient(#f2f2f2, #d6d6d6),
+    linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+    linear-gradient(#dddddd 0%, #f6f6f6 50%);
 }
-.list-cell:odd { /* <=== changed to even */
+.list-cell:odd { 
     -fx-background-color: 
     linear-gradient(#f2f2f2, #d6d6d6),
     linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
@@ -51,8 +61,18 @@
 }
 
 .list-cell:filled:hover {
-    -fx-background-color: #0093ff;
-    -fx-text-fill: white;
+    -fx-background-color: #aaaaaa;
+}
+
+.text-field {
+	-fx-background-color: 
+    linear-gradient(#f2f2f2, #d6d6d6),
+    linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+    linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 .root {
 	-fx-background-color: #deb887;
