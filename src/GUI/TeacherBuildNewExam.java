@@ -185,7 +185,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
         }
     public void CancelButtonPressed(ActionEvent event)
     {
-    		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+    		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
     }
     
 @Override

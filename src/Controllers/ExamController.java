@@ -19,21 +19,17 @@ public class ExamController {
 			iMessage msg= new iMessage("getTeachersExam",t);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer();
-				exams = new ArrayList<Exam>();
-				if(o instanceof ArrayList) {
-					ArrayList<Exam> TeacherExams = (ArrayList<Exam>) o;
-					for (Exam e: TeacherExams) {
-						Exam exam = new Exam(e);
-						exams.add(exam);
-					}
-				}
-				return exams;
+				return (ArrayList<Exam>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		} 
 		return null;
+	}
+
+	public static int deleteExam(Exam exam) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

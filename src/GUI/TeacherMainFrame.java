@@ -75,10 +75,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
 	
-	@FXML
-	public void goToManageExams(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
-		
+	@FXML public void goToManageExams(ActionEvent event) {
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
 	}
 	
 	@FXML public void goToInitiateExam(ActionEvent event) {
@@ -89,9 +87,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		
 	}
 	
-	@FXML
-	public void requestTimeChangeClicked(ActionEvent event)
-	{
+	@FXML public void requestTimeChangeClicked(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
 	}
 	
@@ -114,18 +110,15 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		}
 	}
 	
-	@FXML
-	public void completeExamsListViewClicked(MouseEvent event) {
+	@FXML public void completeExamsListViewClicked(MouseEvent event) {
 		ActiveExamsList.getSelectionModel().clearSelection();
 	}
 	
-	@FXML
-	public void activeExamsListViewClicked(MouseEvent event) {
+	@FXML public void activeExamsListViewClicked(MouseEvent event) {
 		CompletedExamList.getSelectionModel().clearSelection();
 	}
 	
-	@FXML
-	public void logout(ActionEvent event) {
+	@FXML public void logout(ActionEvent event) {
 		UserController.logout();
 	}
 

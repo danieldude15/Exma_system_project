@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherManageQuestions">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherManageExamsFrame">
    <children>
-      <Label text="Manage Questions">
+      <Label text="Manage Exams">
          <font>
             <Font size="18.0" />
          </font>
@@ -22,12 +22,12 @@
       </Label>
       <HBox minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Button fx:id="newQuestionB" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#newQuestionButtonPressed">
+            <Button fx:id="newExamB" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#newExamButtonPressed">
                <graphic>
-                  <VBox minHeight="-Infinity" minWidth="-Infinity">
+                  <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <Label id="blackLabel" minHeight="-Infinity" minWidth="-Infinity" text="Add New" />
-                        <Label id="blackLabel" minHeight="-Infinity" minWidth="-Infinity" style="-fx-text-fill: black;" text="Question" />
+                        <Label id="blackLabel" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" style="-fx-text-fill: black;" text="Exam" />
                      </children>
                   </VBox>
                </graphic>
@@ -60,7 +60,7 @@
       </HBox>
       <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="449.0">
          <children>
-            <Label text="Questions List:">
+            <Label text="Exams List:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -72,7 +72,7 @@
               <content>
                 <AnchorPane maxWidth="1.7976931348623157E308" minWidth="-Infinity">
                      <children>
-                        <VBox fx:id="questionsList" maxWidth="1.7976931348623157E308" minWidth="-Infinity" style="-fx-text-fill: black;" />
+                        <VBox fx:id="examsList" maxWidth="1.7976931348623157E308" minWidth="-Infinity" style="-fx-text-fill: black;" />
                      </children>
                   </AnchorPane>
               </content>

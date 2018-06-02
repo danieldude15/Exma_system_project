@@ -60,6 +60,9 @@ public class ClientGlobals {
 	
 	public static final String TeacherBuildNewExamID = "TeacherBuildNewExam";
 	public static final String TeacherBuildNewExamPath = "/fxml/TeacherBuildNewExam.fxml";
+
+	public static final String TeacherManageExamsID = "TeacherManageExams";
+	public static final String TeacherManageExamsPath = "/fxml/TeacherManageExams.fxml";
 	
 	
 	public static void handleIOException(IOException e) {

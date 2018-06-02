@@ -50,7 +50,7 @@ public class Exam implements Serializable{
 		return course;
 	}
 
-	public Field getFieldid() {
+	public Field getField() {
 		return course.getField();
 	}
 
@@ -87,6 +87,10 @@ public class Exam implements Serializable{
 
 	public static String examIdToString(int examid, int id2, int int1) {
 		return new String(String.format("%02d%02d%02d", int1,id2,examid));
+	}
+
+	public boolean isInCourse(Course course) {
+		return course.equals(getCourse());
 	}
 
 }
