@@ -15,8 +15,10 @@
 .button:hover {
 	-fx-background-color: 
         linear-gradient(#f2f2f2, #d6d6d6),
-        linear-gradient(#fcfcfc 0%, #d9d9d9 60%, #d6d6d6 100%),
-        linear-gradient(#dddddd 0%, #f6f6f6 80%);
+        linear-gradient(#fcfcfc 0%, #d9d9d9 50%, #d6d6d6 100%),
+        linear-gradient(#dddddd 0%, #f6f6f6 100%);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
 }
 .button:active {
 	-fx-background-color: white;
@@ -78,6 +80,19 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
-.root {
-	-fx-background-color: #deb887;
+#pane{
+    -fx-background-image: url("/fxml/light_textured_backround.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 5400 3600;
+    -fx-background-position: top left;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+
+/* ############# END OF GENERAL STYLING ###################### */
+
+/**
+ * this area is for Teachers Main Page styling 
+ */
+#myInfo {
+	-fx-background-color:white;
 }

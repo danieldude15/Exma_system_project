@@ -134,7 +134,7 @@
         <tabs>
           <Tab fx:id="myInfoTab" text="My Info">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="177.0" prefWidth="796.0">
+              <AnchorPane id="myInfo" minHeight="0.0" minWidth="0.0" prefHeight="177.0" prefWidth="796.0">
                      <children>
                         <HBox alignment="BOTTOM_RIGHT" prefHeight="177.0" prefWidth="796.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
