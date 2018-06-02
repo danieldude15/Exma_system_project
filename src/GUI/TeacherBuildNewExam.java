@@ -95,8 +95,8 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		questionString.setWrapText(true);
 		questionInfo.getChildren().add(new Label("QID: "+q.questionIDToString()));
 		questionInfo.getChildren().add(questionString);
-		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(0)),new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3))};
-		answers[q.getCorrectAnswerIndex()].setSelected(true);
+		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
+		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);

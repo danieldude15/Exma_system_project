@@ -61,14 +61,24 @@ public class Question implements Serializable{
 		return ID;
 	}
 
+	/**
+	 * range is between 1-4 and not 0-3 
+	 * @param i index value of answer
+	 * @return the string value of the answer
+	 */
 	public String getAnswer(int i) {
-		return Answers[i];
+		if (i>4 || i<1) {return null;}
+		else return Answers[i-1];
 	}
 	
 	public String[] getAnswers() {
 		return Answers;
 	}
 
+	/**
+	 * will return a value between 1-4 for correct answer
+	 * @return int value of correct index of answer
+	 */
 	public int getCorrectAnswerIndex() {
 		return CorrectAnswerIndex;
 	}
@@ -89,7 +99,7 @@ public class Question implements Serializable{
 			q.getField().getID()!=field.getID() ||
 			!q.getQuestionString().equals(questionString)) 
 			return false;
-		for(int i=0;i<4;i++) {
+		for(int i=1;i<=4;i++) {
 			if(!q.getAnswer(i).equals(getAnswer(i))) return false;
 		}
 		return true;

@@ -173,11 +173,14 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		//This VBox holds the question details
 		VBox questionInfo = new VBox();
 		Label questionString = new Label("Question: "+q.getQuestionString());
+		questionString.setId("blackLabel");
 		questionString.setWrapText(true);
-		questionInfo.getChildren().add(new Label("QID: "+q.questionIDToString()));
+		Label qid = new Label("QID: "+q.questionIDToString());
+		qid.setId("blackLabel");
+		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);
-		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(0)),new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3))};
-		answers[q.getCorrectAnswerIndex()].setSelected(true);
+		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
+		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);
@@ -199,7 +202,9 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		questionInfo.getChildren().add(questionEditDelete);
 		// this VBox holds the course list assigned to this question
 		VBox assignedCourses = new VBox();
-		assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
+		Label courseTitle = new Label("Courses Assigned to Question:");
+		courseTitle.setId("blackLabel");
+		assignedCourses.getChildren().add(courseTitle);
 		ListView<Course> courselist = new ListView<>();
 		courselist.setMaxWidth(120);
 		courselist.setMaxHeight(100);

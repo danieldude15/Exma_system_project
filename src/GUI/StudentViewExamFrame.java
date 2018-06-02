@@ -59,7 +59,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 		for(QuestionInExam qie: studentsAnswers.keySet())
 		{
 			questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+"Points"+")" );
-			answers=new RadioButton[] {new RadioButton(qie.getAnswer(0)),new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3))};
+			answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
 			questionInfoAndAnswers.getChildren().add((Label)questionStringAndPointsValue);
 			for(RadioButton r:answers)
 			{

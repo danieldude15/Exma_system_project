@@ -7,11 +7,15 @@ import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
 import Controllers.QuestionController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -21,6 +25,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import logic.Course;
 import logic.Field;
@@ -40,7 +45,10 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	
 	ArrayList<Field> teacherFields = new ArrayList<>();
 	ArrayList<Course> teacherCourses = new ArrayList<>();
+	ArrayList<Course> questionCourses = new ArrayList<>();
 	HashMap<Field, ArrayList<Course>> coursesInField = new HashMap<>();
+	HashMap<String, Course> availableCourses = new HashMap<>();
+	
 	
 	@FXML Label questionID;
 	@FXML Label questionError;
@@ -70,7 +78,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		Globals.primaryStage.setHeight(656);
 		Globals.primaryStage.setWidth(553);
 		organizedFieldsHashMap();
-		
+		teacherFields.remove(0);
 		ObservableList<Field> list = FXCollections.observableArrayList(teacherFields);
 		fields.setItems(list);
 		
@@ -82,25 +90,27 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			ta3.setText("");
 			ta4.setText("");
 			submitB.setText("Add Question");
+			fields.setDisable(false);
+			courseVbox.getChildren().clear();
 		} else {
 			questionID.setText("Edit Question: " + question.questionIDToString());
 			questionString.setText(question.getQuestionString());
-			ta1.setText(question.getAnswer(0));
-			ta2.setText(question.getAnswer(1));
-			ta3.setText(question.getAnswer(2));
-			ta4.setText(question.getAnswer(3));
+			ta1.setText(question.getAnswer(1));
+			ta2.setText(question.getAnswer(2));
+			ta3.setText(question.getAnswer(3));
+			ta4.setText(question.getAnswer(4));
 			int index = question.getCorrectAnswerIndex();
 			switch(index) {
-			case 0:
+			case 1:
 				answer1.setSelected(true);
 				break;
-			case 1:
+			case 2:
 				answer2.setSelected(true);
 				break;
-			case 2:
+			case 3:
 				answer3.setSelected(true);
 				break;
-			case 3:
+			case 4:
 				answer4.setSelected(true);
 				break;
 			}
@@ -118,11 +128,24 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	
 	@FXML public void userSetField(ActionEvent event) {
 		courseVbox.getChildren().clear();
+		availableCourses.clear();
+		questionCourses.clear();
 		Field field = fields.getSelectionModel().getSelectedItem();
 		ArrayList<Course> arr = coursesInField.get(field);
 		if(arr!=null) {
 			for (Course c:arr) {
 				CheckBox cBox = new CheckBox(c.toString());
+				cBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+				    @Override
+				    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				    	if(newValue) 
+				    		questionCourses.add(availableCourses.get(cBox.getText()));
+				    	else {
+				    		questionCourses.remove(availableCourses.get(cBox.getText()));
+				    	}				    		
+				    }
+				});
+				availableCourses.put(c.toString(), c);
 				if (type.equals(windowType.EDIT)) {
 					cBox.setDisable(true);
 					if(question.getCourses().contains(c)) 
@@ -132,6 +155,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			}
 		}
 	}
+
 	
 	@FXML public void submitQuestion(ActionEvent event) {
 		if (questionString.getText().equals("")) 
@@ -152,22 +176,50 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			else if(answer3.isSelected()) index =3;
 			else if(answer4.isSelected()) index =4;
 			String[] answers = {ta1.getText(),ta2.getText(),ta3.getText(),ta4.getText()};
-			ArrayList<Course> courses = translateCoursesCheckboxes(); 
-			question = new Question(0, (Teacher) ClientGlobals.client.getUser(), 
+			int questionid = 0;
+			if(question!=null) questionid = question.getID();
+			question = new Question(questionid, (Teacher) ClientGlobals.client.getUser(), 
 					questionString.getText(), answers, 
-					fields.getSelectionModel().getSelectedItem(), index, courses);
+					fields.getSelectionModel().getSelectedItem(), index, questionCourses);
+			Alert alert;
 			if (type.equals(windowType.ADD)) {
 				if (QuestionController.addQuestion(question)>0) {
 					System.out.println("ADDED QUESTION!");
-					//successfully added question
+					alert = new Alert(AlertType.INFORMATION);
+	        		alert.setTitle("Question Created Succesfully");
+	    			alert.setHeaderText("");
+	        		alert.setContentText("Question Info:"
+	        				+ "\n" + question +""
+    						+ "\n\n Was Created Successfully");
+	        		alert.show();
+	        		backToMenu(null);
 				} else {
-					//failed to add question
+					alert = new Alert(AlertType.ERROR);
+	        		alert.setTitle("Creation Error");
+	    			alert.setHeaderText(null);
+	        		alert.setContentText("Could not Insert question into Database!\n"
+	        				+ "if this happens again please contact DBAdmin. ");
+	        		alert.show();
 				}
 			} else {
 				if (QuestionController.editQuestion(question)>0) {
-					//successfully updated question
+					alert = new Alert(AlertType.INFORMATION);
+	        		alert.setTitle("Question Updated Succesfully");
+	    			alert.setHeaderText("");
+	        		alert.setContentText("Question Info:"
+	        				+ "\n" + question +""
+    						+ "\n\n Was Updated Successfully");
+	        		alert.show();
+	        		backToMenu(null);
 				} else {
-					//failed to update question
+					alert = new Alert(AlertType.ERROR);
+	        		alert.setTitle("Update Error");
+	    			alert.setHeaderText(null);
+	        		alert.setContentText("Could not Update question in Database!\n"
+	        				+ "This Is probably because this question is already in use!\n"
+	        				+ "If you think this error is wrong\n"
+	        				+ "Please contact DBAdmin. ");
+	        		alert.show();
 				}
 			}
 		}
@@ -206,8 +258,4 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		}
 	}
 
-	private ArrayList<Course> translateCoursesCheckboxes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

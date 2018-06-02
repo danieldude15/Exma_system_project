@@ -19,12 +19,9 @@ public class QuestionController {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				//Object o = client.getMsg().getObj();
-				ArrayList<Question> TeacherQuestions = null;
 				if(o instanceof ArrayList) {
-					TeacherQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
+					return (ArrayList<Question>) o;
 				}
-				questions = TeacherQuestions;
-				return questions;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

@@ -89,18 +89,14 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox>
                <children>
                   <Label text="Field Selection" />
-                  <ComboBox fx:id="fields" onAction="#userSetField" prefWidth="150.0" />
-               </children>
-            </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
+                  <ComboBox fx:id="fields" minWidth="-Infinity" onAction="#userSetField" />
                   <Label text="Course Selection" />
                   <ScrollPane minViewportHeight="80.0" minViewportWidth="250.0" prefHeight="200.0" prefWidth="200.0">
                     <content>
-                      <AnchorPane minHeight="80.0" minWidth="250.0">
+                      <AnchorPane minHeight="80.0" minWidth="-Infinity">
                            <children>
                               <VBox fx:id="courseVbox" />
                            </children>
@@ -108,9 +104,6 @@
                     </content>
                   </ScrollPane>
                </children>
-               <HBox.margin>
-                  <Insets left="70.0" />
-               </HBox.margin>
             </VBox>
          </children>
       </HBox>

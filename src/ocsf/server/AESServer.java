@@ -88,7 +88,11 @@ public class AESServer extends AbstractServer {
 				deleteQuestion(client,o);
 				break;
 			case "addQuestion":
-				addQuestion(client,0);
+				addQuestion(client,o);
+				break;
+			case "editQuestion":
+				editQuestion(client,o);
+				break;
 			case "getTeachersActiveExams":
 				getTeachersActiveExams(client,o);
 				break;
@@ -282,6 +286,13 @@ public class AESServer extends AbstractServer {
 	private void addQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addQuestion((Question) o);
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
+
+
+	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.editQuestion((Question) o);
+		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
 

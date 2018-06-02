@@ -77,12 +77,17 @@ public class DBMain {
 	private String addQuestion = new String(""
 			+ "INSERT INTO `aes`.`questions` "
 			+ "(`questionid`,`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`) "
-			+ "VALUES ('0','?', '?', '?', '?', '?', '?', '?', '?');\n" + 
+			+ "VALUES ('0',?, ?, ?, ?, ?, ?, ?, ?);" + 
+			"");
+	private String editQuestion = new String(""
+			+ "UPDATE `aes`.`questions` "
+			+ "SET `question`=?, `answer1`=?, `answer2`=?, `answer3`=?, `answer4`=?, `answerindex`=? "
+			+ "WHERE `questionid`=? and`fieldid`=?" + 
 			"");
 	private String addQuestionToCourse = new String(""
 			+ "INSERT INTO `aes`.`questions_in_course` "
 			+ "(`questionid`, `fieldid`, `courseid`) "
-			+ "VALUES ('?', '?', '?');\n" 
+			+ "VALUES (?, ?, ?);\n" 
 			);
 	private String getStudentsSolvedExams=new String(""
 			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration,\n" + 
@@ -566,7 +571,7 @@ public class DBMain {
 	public int addQuestion(Question q) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addQuestion,Statement.RETURN_GENERATED_KEYS);
-			//(`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`) "
+			//('0',`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`)
 			prst.setString(1, q.getQuestionString());
 			prst.setString(2, q.getAnswer(1));
 			prst.setString(3, q.getAnswer(2));
@@ -576,27 +581,25 @@ public class DBMain {
 			prst.setInt(7, q.getField().getID());
 			prst.setInt(8, q.getAuthor().getID());
 			System.out.println("SQL:" + prst);
-			prst.toString();
 			int worked = prst.executeUpdate();
 			if (worked==1) {
 				ResultSet rs = prst.getGeneratedKeys();
 				rs.next();
 				int questionid = rs.getInt(1);
-				int fieldid = rs.getInt(2);
 				prst = conn.prepareStatement(addQuestionToCourse);
 				for(Course c: q.getCourses()) {
 					prst.setInt(1, questionid);
-					prst.setInt(2, fieldid);
+					prst.setInt(2, q.getField().getID());
 					prst.setInt(3, c.getId());
 					if(prst.executeUpdate()==0) {
 						System.out.println("FAIL!!!!! rollback issue!!!");
 						return 0;
-					}
+					} else worked++;
 				}
 			}
 			return worked;
-		} catch (SQLException e) {
-			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return 0;
 	}
@@ -633,6 +636,28 @@ public class DBMain {
 			ServerGlobals.handleSQLException(e);
 		}
 		return null;
+	}
+
+	public int editQuestion(Question q) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(editQuestion);
+			/* SET `question`=?, `answer1`=?, `answer2`=?, `answer3`=?, `answer4`=?, `answerindex`=? "
+			 * WHERE `questionid`=? and`fieldid`=?" + 
+			*/
+			prst.setString(1, q.getQuestionString());
+			prst.setString(2, q.getAnswer(1));
+			prst.setString(3, q.getAnswer(2));
+			prst.setString(4, q.getAnswer(3));
+			prst.setString(5, q.getAnswer(4));
+			prst.setInt(6, q.getCorrectAnswerIndex());
+			prst.setInt(7, q.getID());
+			prst.setInt(8, q.getField().getID());
+			System.out.println("SQL:" + prst);
+			return prst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return 0;
 	}
 
 }
