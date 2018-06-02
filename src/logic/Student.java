@@ -16,7 +16,7 @@ public class Student extends User {
 	 * @param student
 	 */
 	public Student(Student s) {
-		super(s.getID(),new String(s.getName()),new String(s.getPassword()),new String(s.getName()));
+		super(s.getID(),new String(s.getUserName()),new String(s.getPassword()),new String(s.getName()));
 	}
 
 }

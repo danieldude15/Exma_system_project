@@ -14,13 +14,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Globals;
+import logic.Student;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
@@ -38,6 +41,10 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button checkExamB;
 	@FXML ListView<ActiveExam> ActiveExamsList;
 	@FXML ListView<CompletedExam> CompletedExamList;
+	@FXML Label welcome;
+	@FXML Label username;
+	@FXML Label userid;
+	@FXML ImageView userImage;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	
@@ -69,6 +76,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.getItems().clear();
 		ObservableList<ActiveExam> list2 = FXCollections.observableArrayList(TeacherAExams);
 		ActiveExamsList.setItems(list2);
+		
+		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
+		Teacher t=(Teacher)ClientGlobals.client.getUser();
+		welcome.setText("Wellcome: "+t.getName());
+		username.setText("UserName: "+t.getUserName());
+		userid.setText("UserID: "+t.getID());
 	}
 	
 	@FXML public void gotToManageQuestions(ActionEvent event) {

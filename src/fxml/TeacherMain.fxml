@@ -7,8 +7,10 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -138,6 +140,30 @@
                      <children>
                         <HBox alignment="BOTTOM_RIGHT" prefHeight="177.0" prefWidth="796.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
+                              <VBox prefHeight="157.0" prefWidth="522.0">
+                                 <children>
+                                    <Label id="blackLabel" fx:id="welcome" text="Welcome ">
+                                       <font>
+                                          <Font name="System Bold" size="30.0" />
+                                       </font>
+                                    </Label>
+                                    <Label id="blackLabel" fx:id="username" text="UserName:">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label id="blackLabel" fx:id="userid" text="UserID:">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
                               <Button fx:id="logoutB" mnemonicParsing="false" onAction="#logout" text="LogOut" />
                            </children>
                            <padding>
