@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -32,7 +33,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="fieldCombo" onAction="#filterByField" prefWidth="150.0">
+                  <ComboBox fx:id="fieldComboB" onAction="#filterByField" onMouseClicked="#filterByCourse" prefWidth="150.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -49,7 +50,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="courseComboB" onAction="#filterByCourse" prefHeight="25.0" prefWidth="112.0" />
+                  <ComboBox fx:id="courseComboB" prefHeight="25.0" prefWidth="112.0" />
                </children>
                <HBox.margin>
                   <Insets />
@@ -69,34 +70,46 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="539.0">
                      <children>
-                        <VBox fx:id="questionsList" prefHeight="131.0" prefWidth="525.0" />
+                        <VBox fx:id="questionsList" onMouseClicked="#ListViewClickedQuestions" prefHeight="131.0" prefWidth="525.0" />
                      </children>
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <TabPane prefHeight="195.0" prefWidth="540.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="obj" prefHeight="195.0" prefWidth="540.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="ViewObj" text="View question">
+                <Tab fx:id="ViewObjTab" text="View question">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="540.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="540.0">
+                           <children>
+                              <TextFlow fx:id="ViewObj" prefHeight="95.0" prefWidth="540.0" />
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                 <Tab fx:id="NoteStudent" text="Note for student">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="NoteForStudent" prefHeight="92.0" prefWidth="540.0" />
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                   <Tab fx:id="NoteTeacher" text="Note for teacher">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="NoteForTeacher" prefHeight="93.0" prefWidth="540.0" />
+                           </children>
+                        </AnchorPane>
                     </content>
                   </Tab>
               </tabs>
             </TabPane>
             <HBox prefHeight="0.0" prefWidth="540.0">
                <children>
-                  <Label text="Total Score" />
-                  <TextFlow fx:id="ScoreFlow" prefHeight="17.0" prefWidth="34.0" textAlignment="RIGHT" />
+                  <Label prefHeight="17.0" prefWidth="66.0" text="Total Score:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Label>
                </children>
                <opaqueInsets>
                   <Insets />
@@ -105,7 +118,7 @@
                   <Insets />
                </VBox.margin>
                <padding>
-                  <Insets left="420.0" />
+                  <Insets left="325.0" />
                </padding>
             </HBox>
          </children>
@@ -113,18 +126,15 @@
             <Insets />
          </VBox.margin>
       </VBox>
-      <HBox prefHeight="17.0" prefWidth="440.0">
+      <HBox alignment="TOP_CENTER" prefHeight="17.0" prefWidth="440.0">
          <children>
             <Button mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel">
                <HBox.margin>
                   <Insets right="200.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Create" />
+            <Button mnemonicParsing="false" onAction="#CreatelButtonPressed" text="Create" />
          </children>
-         <VBox.margin>
-            <Insets left="50.0" right="50.0" />
-         </VBox.margin>
          <padding>
             <Insets left="50.0" right="50.0" />
          </padding>

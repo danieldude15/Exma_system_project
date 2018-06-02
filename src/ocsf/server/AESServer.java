@@ -102,6 +102,9 @@ public class AESServer extends AbstractServer {
 			case "getActiveExam":
 				getActiveExam(client,o);
 				break;
+			case "getCourseQuestions":
+				getCourseQuestions(client,o);
+				break;
 				
 			default:
 				
@@ -290,6 +293,13 @@ public class AESServer extends AbstractServer {
 	public void logOutAllUsers() {
 		connectedUsers.clear();
 	}
+	
+	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Question> questions = sqlcon.getCourseQuestions((Course)o);
+		iMessage im = new iMessage("CourseQuestions", questions);
+		client.sendToClient(im);
+	}
+	
 	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);

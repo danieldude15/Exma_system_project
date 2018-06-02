@@ -89,7 +89,9 @@ public class AESClient extends AbstractClient{
 		case "StudentsSolvedExams":
 			StudentsSolvedExams(ServerMsg);
 			break;
-				
+		case "getCourseQuestions":
+			getCourseQuestions(ServerMsg);
+			break;
 			
 		default:
 			
@@ -279,5 +281,9 @@ public class AESClient extends AbstractClient{
 		msg = (iMessage) o;
 	}
 	
+	private void getCourseQuestions(Object o)
+	{
+		msg = (iMessage) o;
+	}
 
 }
