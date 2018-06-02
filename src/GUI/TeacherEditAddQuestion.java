@@ -145,7 +145,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			answerError.setVisible(true);
 		if (fields.getSelectionModel().getSelectedItem()==null)
 			fieldError.setVisible(true);
-		if (!fieldError.isVisible() && !answersError.isVisible() && !answerError.isVisible() &&! questionError.isVisible()) {
+		if (!fieldError.isVisible() && !answersError.isVisible() && !answerError.isVisible() && !questionError.isVisible()) {
 			int index = 0;
 			if(answer1.isSelected()) index =1;
 			else if(answer2.isSelected()) index =2;

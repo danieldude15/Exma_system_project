@@ -116,7 +116,7 @@
       </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Label fx:id="emptyError" text="*Question Field is Empty" textFill="RED" visible="false">
+            <Label fx:id="questionError" text="*Question Field is Empty" textFill="RED" visible="false">
                <font>
                   <Font size="14.0" />
                </font>
