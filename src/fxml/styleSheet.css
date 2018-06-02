@@ -2,6 +2,9 @@
 /**
  * This area is for general styling across all project
  */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
 .label {
 	-fx-text-fill:white;
 }

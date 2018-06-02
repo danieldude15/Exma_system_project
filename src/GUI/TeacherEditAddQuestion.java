@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
+import Controllers.QuestionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +26,7 @@ import logic.Course;
 import logic.Field;
 import logic.Globals;
 import logic.Question;
+import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
@@ -110,26 +112,6 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		}
 	}
 
-	private void organizedFieldsHashMap() {
-		coursesInField.clear();
-		for(Course c:teacherCourses) {
-			if (coursesInField.get(c.getField()) != null){
-				ArrayList<Course> arrayList = coursesInField.get(c.getField());
-				arrayList.add(c);
-				coursesInField.put(c.getField(), arrayList);
-			} else {
-				ArrayList<Course> arrayList = new ArrayList<>();
-				arrayList.add(c);
-				coursesInField.put(c.getField(), arrayList);
-			}
-		}
-	}
-
-	public void setQuestion(Question q) {
-		question=q;
-		System.out.println("Change Question to "+ q);
-	}
-	
 	@FXML public void backToMenu(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
@@ -164,14 +146,33 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		if (fields.getSelectionModel().getSelectedItem()==null)
 			fieldError.setVisible(true);
 		if (!fieldError.isVisible() && !answersError.isVisible() && !answerError.isVisible() &&! questionError.isVisible()) {
+			int index = 0;
+			if(answer1.isSelected()) index =1;
+			else if(answer2.isSelected()) index =2;
+			else if(answer3.isSelected()) index =3;
+			else if(answer4.isSelected()) index =4;
+			String[] answers = {ta1.getText(),ta2.getText(),ta3.getText(),ta4.getText()};
+			ArrayList<Course> courses = translateCoursesCheckboxes(); 
+			question = new Question(0, (Teacher) ClientGlobals.client.getUser(), 
+					questionString.getText(), answers, 
+					fields.getSelectionModel().getSelectedItem(), index, courses);
 			if (type.equals(windowType.ADD)) {
-			
+				if (QuestionController.addQuestion(question)>0) {
+					System.out.println("ADDED QUESTION!");
+					//successfully added question
+				} else {
+					//failed to add question
+				}
 			} else {
-			
+				if (QuestionController.editQuestion(question)>0) {
+					//successfully updated question
+				} else {
+					//failed to update question
+				}
 			}
 		}
 	}
-	
+
 	public windowType getType() {
 		return type;
 	}
@@ -185,4 +186,28 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		teacherCourses=teachersCourses;
 	}
 	
+	public void setQuestion(Question q) {
+		question=q;
+		System.out.println("Change Question to "+ q);
+	}
+	
+	private void organizedFieldsHashMap() {
+		coursesInField.clear();
+		for(Course c:teacherCourses) {
+			if (coursesInField.get(c.getField()) != null){
+				ArrayList<Course> arrayList = coursesInField.get(c.getField());
+				arrayList.add(c);
+				coursesInField.put(c.getField(), arrayList);
+			} else {
+				ArrayList<Course> arrayList = new ArrayList<>();
+				arrayList.add(c);
+				coursesInField.put(c.getField(), arrayList);
+			}
+		}
+	}
+
+	private ArrayList<Course> translateCoursesCheckboxes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

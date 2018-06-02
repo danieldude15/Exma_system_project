@@ -49,8 +49,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@FXML VBox questionsList;
 	@FXML Button home;
 	
-	@Override
-	public void runOnScreenChange() {
+	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
 		Globals.primaryStage.setWidth(650);		
 		
@@ -62,6 +61,72 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
 		if (DBquestions!=null) {
 			setQuestionsListInVBox();
+		}
+	}
+
+	@Override public void initialize(URL arg0, ResourceBundle arg1) {
+	}
+	
+	@FXML public void newQuestionButtonPressed(ActionEvent event) {
+		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
+		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
+		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
+	}
+	
+	@FXML void BackToMainMenu(ActionEvent event) {
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+	}
+
+	@FXML void filterByField(ActionEvent event) {
+		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
+			questionsList.getChildren().clear();
+			Field selectefield = fieldComboB.getSelectionModel().getSelectedItem();
+			courseComboB.getItems().clear();
+			ObservableList<Course> list;
+			ArrayList<Course> cousesInField = new ArrayList<>();
+			if(selectefield.equals(new Field(-1,"All"))) {
+				for(Question q:DBquestions) {
+					questions.put(q.questionIDToString(),q);
+					questionsList.getChildren().add(questionAdder(q));
+				}
+			} else {
+				for(Course c: teachersCourses) {
+					if(c.getField()==null || c.getField().equals(selectefield)) {
+						cousesInField.add(c);
+					}
+				}
+				for(Question q:DBquestions) {
+					if(q.getField().equals(selectefield)) {
+						questions.put(q.questionIDToString(),q);
+						questionsList.getChildren().add(questionAdder(q));
+					}
+				}
+			}
+			list = FXCollections.observableArrayList(cousesInField);
+			courseComboB.setItems(list);
+		}
+		System.out.println(courseComboB.getItems().toString());
+	}
+	
+	@FXML public void filterByCourse(ActionEvent event) {
+		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
+			questionsList.getChildren().clear();
+			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
+			 for (Question q: DBquestions) {
+				 if(selectedCourse.equals(new Course(0,"All",null)) || q.isInCourse(selectedCourse)) {
+					 questions.put(q.questionIDToString(),q);
+					 questionsList.getChildren().add(questionAdder(q));
+				 }
+			 }
+		 }
+	}
+	
+	private void setQuestionsListInVBox() {
+		questionsList.getChildren().clear();
+		System.out.println(DBquestions);
+		for(Question q:DBquestions) {
+			questions.put(q.questionIDToString(),q);
+			questionsList.getChildren().add(questionAdder(q));
 		}
 	}
 
@@ -150,8 +215,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	}
 
 	private class MyEditHandler implements EventHandler<Event>{
-        @Override
-        public void handle(Event evt) {
+        @Override public void handle(Event evt) {
            Question question = questions.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
            teachersCourses.remove(0);
@@ -199,73 +263,4 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
         }
     }
 	
-	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-	}
-	
-	@FXML
-	public void newQuestionButtonPressed(ActionEvent event) {
-		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
-		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
-		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
-	}
-	
-	
-	@FXML void BackToMainMenu(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
-	}
-
-	@FXML void filterByField(ActionEvent event) {
-		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
-			Field selectefield = fieldComboB.getSelectionModel().getSelectedItem();
-			courseComboB.getItems().clear();
-			ObservableList<Course> list;
-			ArrayList<Course> cousesInField = new ArrayList<>();
-			if(selectefield.equals(new Field(-1,"All"))) {
-				for(Question q:DBquestions) {
-					questions.put(q.questionIDToString(),q);
-					questionsList.getChildren().add(questionAdder(q));
-				}
-			} else {
-				for(Course c: teachersCourses) {
-					if(c.getField()==null || c.getField().equals(selectefield)) {
-						cousesInField.add(c);
-					}
-				}
-				for(Question q:DBquestions) {
-					if(q.getField().equals(selectefield)) {
-						questions.put(q.questionIDToString(),q);
-						questionsList.getChildren().add(questionAdder(q));
-					}
-				}
-			}
-			list = FXCollections.observableArrayList(cousesInField);
-			courseComboB.setItems(list);
-		}
-		System.out.println(courseComboB.getItems().toString());
-	}
-	
-	@FXML public void filterByCourse(ActionEvent event) {
-		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
-			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
-			 for (Question q: DBquestions) {
-				 if(selectedCourse.equals(new Course(0,"All",null)) || q.isInCourse(selectedCourse)) {
-					 questions.put(q.questionIDToString(),q);
-					 questionsList.getChildren().add(questionAdder(q));
-				 }
-			 }
-		 }
-	}
-	
-	private void setQuestionsListInVBox() {
-		questionsList.getChildren().clear();
-		System.out.println(DBquestions);
-		for(Question q:DBquestions) {
-			questions.put(q.questionIDToString(),q);
-			questionsList.getChildren().add(questionAdder(q));
-		}
-	}
 }

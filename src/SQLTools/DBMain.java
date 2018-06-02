@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
+
+import com.mysql.jdbc.Statement;
+
 import Controllers.QuestionController;
 import javafx.scene.input.Mnemonic;
 import javafx.scene.layout.ConstraintsBase;
@@ -70,7 +74,16 @@ public class DBMain {
 			"    and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid \n" + 
 			"    and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid " + 
 			"    and se.code=? and se.courseid=? and se.fieldid=? and ce.examid=? and ce.type=? and ce.dateactivated=? and ce.teacherid=?");
-	
+	private String addQuestion = new String(""
+			+ "INSERT INTO `aes`.`questions` "
+			+ "(`questionid`,`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`) "
+			+ "VALUES ('0','?', '?', '?', '?', '?', '?', '?', '?');\n" + 
+			"");
+	private String addQuestionToCourse = new String(""
+			+ "INSERT INTO `aes`.`questions_in_course` "
+			+ "(`questionid`, `fieldid`, `courseid`) "
+			+ "VALUES ('?', '?', '?');\n" 
+			);
 	private String getStudentsSolvedExams=new String(""
 			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration,\n" + 
 			"		u.userid,u.username,u.password,u.fullname,se.answers,\n" + 
@@ -420,7 +433,11 @@ public class DBMain {
 		return null;
 	}
 	
-	
+	/**
+	 * this function deletes a question from database!
+	 * @param q
+	 * @return
+	 */
 	public int deleteQuestion(Question q) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(deleteQuestion);
@@ -499,9 +516,6 @@ public class DBMain {
 		return null;
 	}
 	
-	
-	
-	
 	/**
 	 * get Questions in exam by giving examid
 	 * @param examid
@@ -547,6 +561,44 @@ public class DBMain {
 			ServerGlobals.handleSQLException(e);
 		}
 		return null;
+	}
+
+	public int addQuestion(Question q) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(addQuestion,Statement.RETURN_GENERATED_KEYS);
+			//(`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`) "
+			prst.setString(1, q.getQuestionString());
+			prst.setString(2, q.getAnswer(1));
+			prst.setString(3, q.getAnswer(2));
+			prst.setString(4, q.getAnswer(3));
+			prst.setString(5, q.getAnswer(4));
+			prst.setInt(6, q.getCorrectAnswerIndex());
+			prst.setInt(7, q.getField().getID());
+			prst.setInt(8, q.getAuthor().getID());
+			System.out.println("SQL:" + prst);
+			prst.toString();
+			int worked = prst.executeUpdate();
+			if (worked==1) {
+				ResultSet rs = prst.getGeneratedKeys();
+				rs.next();
+				int questionid = rs.getInt(1);
+				int fieldid = rs.getInt(2);
+				prst = conn.prepareStatement(addQuestionToCourse);
+				for(Course c: q.getCourses()) {
+					prst.setInt(1, questionid);
+					prst.setInt(2, fieldid);
+					prst.setInt(3, c.getId());
+					if(prst.executeUpdate()==0) {
+						System.out.println("FAIL!!!!! rollback issue!!!");
+						return 0;
+					}
+				}
+			}
+			return worked;
+		} catch (SQLException e) {
+			
+		}
+		return 0;
 	}
 	
 	

@@ -118,4 +118,42 @@ public class QuestionController {
 
 	}
 
+	public static int addQuestion(Question q) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("addQuestion",q);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
+		
+	}
+
+	public static int editQuestion(Question q) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("editQuestion",q);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
+		
+	}
+
 }
