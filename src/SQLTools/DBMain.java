@@ -100,8 +100,8 @@ public class DBMain {
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	
-	private String getQuestionsInCourse="Select * From aes.questions_in_course as q,aes.courses as c"
-			+ " where c.courseid=q.courseid and q.questionid=?";
+	private String getQuestionsInCourse="Select * FROM aes.questions as q, aes.questions_in_course as qc,aes.courses as c,aes.users as u"
+			+ " where c.courseid=qc.courseid and q.questionid=qc.questionid and u.userid=q.teacherid and c.fieldid=q.fieldid and c.courseid=?";
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
 	private String getUser="select * from users where userid=?";
@@ -601,5 +601,39 @@ public class DBMain {
 		return 0;
 	}
 	
-	
+	public ArrayList<Question> getCourseQuestions(Course o) {
+		Course c = (Course) o;
+		try {
+			PreparedStatement prst = conn.prepareStatement(getQuestionsInCourse);
+			prst.setInt(1,c.getId());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Question> result = new ArrayList<>();
+			while(rs.next()) {
+				int questionid = rs.getInt(1);
+				String questionString = rs.getString(2);
+				String answerA = rs.getString(3);
+				String answerB = rs.getString(4);
+				String answerC = rs.getString(5);
+				String answerD = rs.getString(6);
+				String answers[] = new String[]{answerA,answerB,answerC,answerD};
+				int answerIndex = rs.getInt(7);
+				int fieldsid = rs.getInt(8);
+				int Tid = rs.getInt(9);
+				String Tname= rs.getString(12);
+				String Password= rs.getString(13);
+				String fullname= rs.getString(14);
+				String fieldName = rs.getString(11);
+				Question question = new Question(questionid,new Teacher(Tid,Tname,Password,fullname), questionString, answers, new Field(fieldsid,fieldName), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
+				result.add(question);
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
 }
+
