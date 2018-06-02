@@ -116,12 +116,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 	@FXML
 	public void completeExamsListViewClicked(MouseEvent event) {
-		
+		ActiveExamsList.getSelectionModel().clearSelection();
 	}
 	
 	@FXML
 	public void activeExamsListViewClicked(MouseEvent event) {
-		
+		CompletedExamList.getSelectionModel().clearSelection();
 	}
 	
 	@FXML
