@@ -1,5 +1,8 @@
 package GUI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -18,8 +21,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Globals;
@@ -44,7 +49,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Label welcome;
 	@FXML Label username;
 	@FXML Label userid;
-	@FXML ImageView userImage;
+	@FXML Pane userImage;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	
@@ -82,6 +87,10 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		welcome.setText("Wellcome: "+t.getName());
 		username.setText("UserName: "+t.getUserName());
 		userid.setText("UserID: "+t.getID());
+		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+t.getID()+".PNG\");"
+						+ "-fx-background-size: 150px 150px;"
+						+ "-fx-background-repeat: no-repeat;");
+
 	}
 	
 	@FXML public void gotToManageQuestions(ActionEvent event) {

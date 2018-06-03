@@ -94,7 +94,7 @@ public class ScreensController  extends StackPane {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = (Parent) myLoader.load();
             loadScreen.setId("pane");
-            loadScreen.getStylesheets().add(getClass().getResource("/fxml/styleSheet.css").toExternalForm());
+            loadScreen.getStylesheets().add(getClass().getResource("/resources/styleSheet.css").toExternalForm());
             ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
             addScreen(name, loadScreen);
             addController(name, myScreenControler);

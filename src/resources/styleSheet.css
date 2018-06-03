@@ -92,7 +92,7 @@
  * when every screens comes up so we can have an id of all panes to be editable in css file 
  */
 #pane{
-    -fx-background-image: url("/fxml/Abstract-Dark-Background.jpg");
+    -fx-background-image: url("/resources/Abstract-Dark-Background.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: 1024 768;
     -fx-background-position: top left;
