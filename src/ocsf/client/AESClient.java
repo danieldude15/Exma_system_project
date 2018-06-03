@@ -24,7 +24,6 @@ public class AESClient extends AbstractClient{
 	public AESClient(String host, int port) {
 		super(host, port);
 		me=null;
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -54,49 +53,18 @@ public class AESClient extends AbstractClient{
 			break;
 		case "closing Connection":
 			closeAESApplication();
-		case "TeachersQuestions":
-			TeacherQuestions(ServerMsg);
 			break;
-		case "TeacherFields":
-			teacherFields(ServerMsg);
-			break;
-		case "deletedQuestion":
-			deletedQuestion(ServerMsg);
-			break;
-		case "TeacherActiveExams":
-			teacherActiveExams(ServerMsg);
-			break;
-		case "QuestionCourses":
-			questionCourses(ServerMsg);
-			break;
-		case "FieldsCourses":
-			fieldsCourses(ServerMsg);
-			break;
-		case "TeacherCompletedExams":
-			TeacherCompletedExams(ServerMsg);
-			break;
-		case "AllActiveExams":
-			AllActiveExams(ServerMsg);
-			break;
-			
-		case "ActiveExam":
-			GetActiveExam(ServerMsg);
-			break;
-			
-		case "TeacherSolvedExams":
-			TeacherSolvedExams(ServerMsg);
-			break;
-		case "StudentsSolvedExams":
-			StudentsSolvedExams(ServerMsg);
-			break;
-				
-			
 		default:
-			
+			copyServerMsg(ServerMsg);
 		}
 		synchronized (stopWaiting) {
 			stopWaiting=true;	
 		}
+		
+	}
+
+	private void copyServerMsg(Object serverMsg) {
+		msg = (iMessage) serverMsg;
 		
 	}
 
@@ -138,7 +106,6 @@ public class AESClient extends AbstractClient{
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			count++;
@@ -170,12 +137,12 @@ public class AESClient extends AbstractClient{
 	}
 
 	
-	  /**
-	   * Hook method called after a connection has been established.
-	   * The default implementation does nothing.
-	   * It may be overridden by subclasses to do anything they wish.
-	   */
-	  protected void connectionEstablished() {}
+  /**
+   * Hook method called after a connection has been established.
+   * The default implementation does nothing.
+   * It may be overridden by subclasses to do anything they wish.
+   */
+	protected void connectionEstablished() {}
 
 	
 	private void closeAESApplication() {
@@ -225,59 +192,4 @@ public class AESClient extends AbstractClient{
 		me = null;
 	}
 	
-
-	/**
-	 * this function handles the recieved course information on a question
-	 * this will happen after the client requested to get an arraylist of courses that belong to a question
-	 * it copys msg from server to be used by controller
-	 * @param serverMsg 
-	 */
-	private void questionCourses(Object serverMsg) {
-		msg = (iMessage) serverMsg;
-	}
-	
-	private void TeacherQuestions(Object serverMsg) {
-		msg = (iMessage) serverMsg;
-	}
-
-	
-	private void fieldsCourses(Object o) {
-		msg = (iMessage) o;
-	}
-	
-	private void teacherFields(Object o) {
-		msg = (iMessage) o;
-	}
-
-	private void AllActiveExams(Object o) {
-		msg = (iMessage) o;
-	}
-
-	private void teacherActiveExams(Object o) {
-		msg = (iMessage)o;
-		
-	}
-
-	private void GetActiveExam(Object o) {
-		msg = (iMessage) o;
-	}
-
-
-	private void StudentsSolvedExams(Object o) {
-		msg = (iMessage) o;
-	}
-	
-	private void deletedQuestion(Object o) {
-		msg = (iMessage) o;		
-	}
-
-	private void TeacherCompletedExams(Object o) {
-		msg = (iMessage) o;
-	}
-
-	private void TeacherSolvedExams(Object o) {
-		msg = (iMessage) o;
-	}
-	
-
 }

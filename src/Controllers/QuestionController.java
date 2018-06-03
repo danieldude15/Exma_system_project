@@ -19,12 +19,9 @@ public class QuestionController {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				//Object o = client.getMsg().getObj();
-				ArrayList<Question> TeacherQuestions = null;
 				if(o instanceof ArrayList) {
-					TeacherQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
+					return (ArrayList<Question>) o;
 				}
-				questions = TeacherQuestions;
-				return questions;
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -116,6 +113,44 @@ public class QuestionController {
 		} 
 		return null;
 
+	}
+
+	public static int addQuestion(Question q) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("addQuestion",q);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
+		
+	}
+
+	public static int editQuestion(Question q) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("editQuestion",q);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
+		
 	}
 
 }

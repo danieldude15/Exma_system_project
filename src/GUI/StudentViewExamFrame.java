@@ -75,9 +75,11 @@ public class StudentViewExamFrame implements ControlledScreen {
 		studentsAnswers=this.GetSolvedExam().getStudentsAnswers();
 		for(QuestionInExam qie: studentsAnswers.keySet())
 		{
-			questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
-			answers=new RadioButton[] {new RadioButton(qie.getAnswer(0)),new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3))};
+
+			questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+"Points"+")" );
+			answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
 			questionInfo_StudentScoreAndNote.getChildren().add((Label)questionStringAndPointsValue);
+
 			for(RadioButton r:answers)
 			{
 				if(answerIndex==qie.getCorrectAnswerIndex())//Save the real correct answer so we can display it to student if he was wrong.

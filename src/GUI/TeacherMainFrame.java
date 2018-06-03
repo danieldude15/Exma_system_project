@@ -1,5 +1,8 @@
 package GUI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -14,13 +17,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Globals;
+import logic.Student;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
@@ -38,6 +46,10 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button checkExamB;
 	@FXML ListView<ActiveExam> ActiveExamsList;
 	@FXML ListView<CompletedExam> CompletedExamList;
+	@FXML Label welcome;
+	@FXML Label username;
+	@FXML Label userid;
+	@FXML Pane userImage;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	
@@ -69,16 +81,24 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.getItems().clear();
 		ObservableList<ActiveExam> list2 = FXCollections.observableArrayList(TeacherAExams);
 		ActiveExamsList.setItems(list2);
+		
+		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
+		Teacher t=(Teacher)ClientGlobals.client.getUser();
+		welcome.setText("Wellcome: "+t.getName());
+		username.setText("UserName: "+t.getUserName());
+		userid.setText("UserID: "+t.getID());
+		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+t.getID()+".PNG\");"
+						+ "-fx-background-size: 150px 150px;"
+						+ "-fx-background-repeat: no-repeat;");
+
 	}
 	
 	@FXML public void gotToManageQuestions(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
 	
-	@FXML
-	public void goToManageExams(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
-		
+	@FXML public void goToManageExams(ActionEvent event) {
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
 	}
 	
 	@FXML public void goToInitiateExam(ActionEvent event) {
@@ -89,9 +109,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		
 	}
 	
-	@FXML
-	public void requestTimeChangeClicked(ActionEvent event)
-	{
+	@FXML public void requestTimeChangeClicked(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
 	}
 	
@@ -114,18 +132,15 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		}
 	}
 	
-	@FXML
-	public void completeExamsListViewClicked(MouseEvent event) {
-		
+	@FXML public void completeExamsListViewClicked(MouseEvent event) {
+		ActiveExamsList.getSelectionModel().clearSelection();
 	}
 	
-	@FXML
-	public void activeExamsListViewClicked(MouseEvent event) {
-		
+	@FXML public void activeExamsListViewClicked(MouseEvent event) {
+		CompletedExamList.getSelectionModel().clearSelection();
 	}
 	
-	@FXML
-	public void logout(ActionEvent event) {
+	@FXML public void logout(ActionEvent event) {
 		UserController.logout();
 	}
 

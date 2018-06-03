@@ -17,10 +17,7 @@ public class ReportController {
 			iMessage msg = new iMessage("getExamReport",e);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				if (o instanceof ExamReport)
-					report = new ExamReport((ExamReport)o);
-				return report;
+				return (ExamReport) client.getResponseFromServer().getObj();
 			} catch (IOException ex) {
 				ClientGlobals.handleIOException(ex);
 			}

@@ -1,6 +1,7 @@
 package GUI;
 
 
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,10 +29,16 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
@@ -41,54 +48,37 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	ArrayList<Field> teachersFields;
 	ArrayList<Course> teachersCourses;
 	ArrayList<Question> DBquestions;
-	@FXML ComboBox<Field> fieldCombo;
-	@FXML ComboBox<Course> CourseCombo;
+	@FXML ComboBox<Field> fieldComboB;
+	@FXML ComboBox<Course> courseComboB;
 	@FXML VBox questionsList;
 	@FXML Button Cancel;
-	
+	@FXML Button Create;
+	@FXML Tab ViewObjTab;
+	@FXML TabPane obj;
+	@FXML Tab NoteStudent;
+	@FXML Tab NoteTeacher;
+	@FXML TextFlow ViewObj;
+	@FXML TextArea NoteForStudent;
+	@FXML TextArea NoteForTeacher;
 	@Override
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(650);		
+		Globals.primaryStage.setWidth(650);			
 		
 		teacherFieldsLoading();
 		
-		teacherCoursesLoading();		
-		
-		//loading teacher questions
-		DBquestions =  QuestionController.getCourseQuestions(CourseCombo.getSelectionModel().getSelectedItem());
-		if (DBquestions!=null) {
-			setQuestionsListInVBox();
-		}
 	}
 	
-	private void teacherCoursesLoading() {
-		ObservableList<Course> list;
-		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields);
-		if (teachersCourses==null) {
-			teachersCourses.add(new Course(0,"No Courses for teacher.",null));
-		} else {
-			teachersCourses.add(0,new Course(0,"All",null));
-		}
-		list = FXCollections.observableArrayList(teachersCourses);
-		CourseCombo.setItems(list);
-		
-	}
-
-	/**
-	 * Setting comboBox of fields base on teachers assigned fields
-	 */
+	
 	private void teacherFieldsLoading() {
-	questions.clear();
-		
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
-		if(teachersFields==null) {
+		if(teachersFields==null) 
 			teachersFields.add(new Field(-1,"You Have No Assigned Fields..."));
-		} else {
+		 else {
 			teachersFields.add(0,new Field(-1,"All"));
 		}
 		ObservableList<Field> list = FXCollections.observableArrayList(teachersFields);
-		fieldCombo.setItems(list);
+		fieldComboB.setItems(list);
 	}
 	
 
@@ -105,8 +95,8 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		questionString.setWrapText(true);
 		questionInfo.getChildren().add(new Label("QID: "+q.questionIDToString()));
 		questionInfo.getChildren().add(questionString);
-		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(0)),new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3))};
-		answers[q.getCorrectAnswerIndex()].setSelected(true);
+		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
+		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);
@@ -195,60 +185,48 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
         }
     public void CancelButtonPressed(ActionEvent event)
     {
-    		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+    		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
     }
     
 @Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@FXML 
 	void filterByField(ActionEvent event) {
-		if(fieldCombo.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
-			Field selectefield = fieldCombo.getSelectionModel().getSelectedItem();
-			CourseCombo.getItems().clear();
+		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
+			ArrayList <Field> selectefield = new ArrayList<>();
+			Field selectefield1=fieldComboB.getSelectionModel().getSelectedItem();
+			selectefield.add(fieldComboB.getSelectionModel().getSelectedItem());
 			ObservableList<Course> list;
 			ArrayList<Course> cousesInField = new ArrayList<>();
-			if(selectefield.equals(new Field(-1,"All"))) {
-				for(Question q:DBquestions) {
-					questions.put(q.questionIDToString(),q);
-					questionsList.getChildren().add(questionAdder(q));
-				}
-			} else {
-				for(Course c: teachersCourses) {
-					if(c.getField()==null || c.getField().equals(selectefield)) {
+			teachersCourses = CourseFieldController.getFieldsCourses(selectefield);
+			for(Course c: teachersCourses)
+			{
+				if(c.getField().equals(selectefield1)) 
 						cousesInField.add(c);
-					}
-				}
-				for(Question q:DBquestions) {
-					if(q.getField().equals(selectefield)) {
-						questions.put(q.questionIDToString(),q);
-						questionsList.getChildren().add(questionAdder(q));
-					}
-				}
-			}
+			}	
+				
 			list = FXCollections.observableArrayList(cousesInField);
-			CourseCombo.setItems(list);
+			courseComboB.setItems(list);
 		}
-		System.out.println(CourseCombo.getItems().toString());
+		System.out.println(courseComboB.getItems().toString());
 	}
 	
 	@FXML 
-	public void filterByCourse(ActionEvent event) {
-		if(CourseCombo.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
-			Course selectedCourse = CourseCombo.getSelectionModel().getSelectedItem();
-			 for (Question q: DBquestions) {
-				 if(selectedCourse.equals(new Course(0,"All",null)) || q.isInCourse(selectedCourse)) {
-					 questions.put(q.questionIDToString(),q);
-					 questionsList.getChildren().add(questionAdder(q));
-				 }
-			 }
-		 }
-	}
-	
+	public void filterByCourse(ActionEvent event) 
+	{
+		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
+		{
+			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
+			DBquestions =  QuestionController.getCourseQuestions(selectedCourse);
+			if (DBquestions!=null) 
+				setQuestionsListInVBox();
+		}			 
+	 }
+		
 	private void setQuestionsListInVBox() {
 		questionsList.getChildren().clear();
 		System.out.println(DBquestions);
@@ -258,5 +236,18 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		}
 	
 	}
+
+	public void CreatelButtonPressed(ActionEvent event)
+	{
+	}
+	@FXML
+	public void ListViewClickedQuestions(MouseEvent event) {
+		
+	}
+	@FXML
+	public void GetTotalScore(MouseEvent event) {
+		
+	}
+	
 }
 

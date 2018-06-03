@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-
+/**
+ *  This controller is responsible for all information that has to do with solved exams
+ *  it has functionality such as adding/editing solved exams also getting solved exams for informational purpeses.
+ * @author Group-12
+ *
+ */
 @SuppressWarnings("unchecked")
 public class SolvedExamController {
 
@@ -17,7 +22,6 @@ public class SolvedExamController {
 	 */
 	public static ArrayList<SolvedExam> getSolvedExams(Object u) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<SolvedExam> solved;
 		iMessage msg;
 		if(client.isConnected()) {
 			if(u instanceof Student)
@@ -29,16 +33,7 @@ public class SolvedExamController {
 			} else return null;
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				solved = new ArrayList<SolvedExam>();
-				if(o instanceof ArrayList) {
-					ArrayList<SolvedExam> solvedExams = (ArrayList<SolvedExam>) o;
-					for (SolvedExam se: solvedExams) {
-						SolvedExam sExam = new SolvedExam(se);
-						solved.add(sExam);
-					}
-				}
-				return solved;
+				return (ArrayList<SolvedExam>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -49,22 +44,10 @@ public class SolvedExamController {
 
 	public static ArrayList<CompletedExam> getCompletedExams(Teacher user) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<CompletedExam> completed;
-		iMessage msg;
 		if(client.isConnected()) {
-			msg= new iMessage("getTeacherCompletedExams",user);
 			try {
-				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				completed = new ArrayList<CompletedExam>();
-				if(o instanceof ArrayList) {
-					ArrayList<CompletedExam> completedExams = (ArrayList<CompletedExam>) o;
-					for (CompletedExam ce: completedExams) {
-						CompletedExam sExam = new CompletedExam(ce);
-						completed.add(sExam);
-					}
-				}
-				return completed;
+				client.sendToServer(new iMessage("getTeacherCompletedExams",user));
+				return (ArrayList<CompletedExam>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

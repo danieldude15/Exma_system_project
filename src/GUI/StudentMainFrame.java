@@ -15,6 +15,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.Alert.AlertType;
 import logic.Field;
 import logic.Globals;
@@ -27,7 +29,10 @@ import ocsf.client.ClientGlobals;
 public class StudentMainFrame implements ControlledScreen {
 
 	@FXML ListView<String> solvedExamsList;
-	@FXML Label studentInfo;
+	@FXML Label welcome;
+	@FXML Label username;
+	@FXML Label userid;
+	@FXML Pane userImage;
 	private HashMap<String,String> courseNameAndExamId=new HashMap<String,String>();
 	
 	@Override
@@ -61,7 +66,12 @@ public class StudentMainFrame implements ControlledScreen {
 		}
 		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
 		Student s=(Student)ClientGlobals.client.getUser();
-		studentInfo.setText("Hello "+s.getUserName()+"!\n"+"Name: "+s.getName()+"\n"+"Id: "+s.getID());
+		welcome.setText("Wellcome: "+s.getName());
+		username.setText("UserName: "+s.getUserName());
+		userid.setText("UserID: "+s.getID());
+		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+s.getID()+".PNG\");"
+				+ "-fx-background-size: 150px 150px;"
+				+ "-fx-background-repeat: no-repeat;");
 	}
 	
 	/**
@@ -115,7 +125,7 @@ public class StudentMainFrame implements ControlledScreen {
 	/**
 	 * In case that Logout button was pressed by student the main window is open so the user will put his username and password again.
 	 */
-	public void LogoutButtonPressed(ActionEvent event)
+	public void logout(ActionEvent event)
 	{
 		UserController.logout();
 	}

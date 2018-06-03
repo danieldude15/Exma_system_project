@@ -87,8 +87,20 @@ public class AESServer extends AbstractServer {
 			case "deleteQuestion":
 				deleteQuestion(client,o);
 				break;
+			case "addQuestion":
+				addQuestion(client,o);
+				break;
+			case "editQuestion":
+				editQuestion(client,o);
+				break;
 			case "getTeachersActiveExams":
 				getTeachersActiveExams(client,o);
+				break;
+			case "DeleteExam":
+				deleteExam(client,o);
+				break;
+			case "getTeachersExam":
+				getTeachersExams(client,o);
 				break;
 			case "getStudentsSolvedExams":
 				getSolvedExam(client,o);
@@ -102,6 +114,9 @@ public class AESServer extends AbstractServer {
 			case "getActiveExam":
 				getActiveExam(client,o);
 				break;
+			case "getCourseQuestions":
+				getCourseQuestions(client,o);
+				break;
 				
 			default:
 				
@@ -111,6 +126,7 @@ public class AESServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
+
 
 	/**
 	 * Hook Method executed right before server closes while still listening
@@ -250,6 +266,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+
+	private void getTeachersExams(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Exam> exams = sqlcon.getTeachersExams((Teacher) o);
+		iMessage im = new iMessage("TeachersExams",exams);
+		client.sendToClient(im);
+	}
 	private void getFieldsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getFieldsCourses(o);
 		iMessage im = new iMessage("FieldsCourses",courses);
@@ -274,6 +296,24 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 		
 	}
+	private void addQuestion(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.addQuestion((Question) o);
+		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
+
+
+	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.editQuestion((Question) o);
+		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
+
+	private void deleteExam(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.deleteExam((Exam) o);
+		iMessage im = new iMessage("deletedExam", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
 	
 	private void getTeacherFields(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Field> fields = sqlcon.getTeacherFields((Teacher)o);
@@ -291,6 +331,13 @@ public class AESServer extends AbstractServer {
 		connectedUsers.clear();
 	}
 	
+	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Question> questions = sqlcon.getCourseQuestions((Course)o);
+		iMessage im = new iMessage("CourseQuestions", questions);
+		client.sendToClient(im);
+	}
+	
+	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
@@ -304,15 +351,12 @@ public class AESServer extends AbstractServer {
  * @throws IOException
  */
 	private void getSolvedExam(ConnectionToClient client, Object o) throws IOException {
-		// TODO Auto-generated method stub
 		iMessage im;
-		if(o instanceof Student)
-		{
+		if(o instanceof Student) {
 			ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentsSolvedExams((Student)o);
 			im = new iMessage("StudentsSolvedExams", studentSolvedExams);
 		}
-		else
-		{
+		else {
 			ArrayList<SolvedExam> teacherSolvedExams = sqlcon.getTeacherSolvedExams((Teacher)o);
 			im = new iMessage("TeacherSolvedExams", teacherSolvedExams);
 		}

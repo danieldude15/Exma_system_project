@@ -1,16 +1,53 @@
 package logic;
 
+import java.io.Serializable;
 import java.sql.Time;
 
-public class TimeChangeRequest {
+/**
+ * This Class is created to manage Time Change Requests made by Teachers in the system and approved by principles
+ * @author Group-12
+ *
+ */
+public class TimeChangeRequest implements Serializable{
 
+	/**
+	 * Serializable id give for client server communication
+	 */
+	private static final long serialVersionUID = -1250807178967814960L;
+	/**
+	 * Time change request ID
+	 */
 	private int id;
+	/**
+	 * the New Time requested by the teacher to override the exam duration time
+	 */
 	private Time newTime;
+	/**
+	 * a String explaining why a time change is necessary to justify to the principle the request
+	 */
 	private String reasonForTimeChange;
-	private boolean status;//approved or not
+	/**
+	 * this holds the Status of the request if it was approved by the principle or not
+	 */
+	private boolean status;
+	/**
+	 * Active Exam holds the Active Exam that the teachers requested to update it time to the newTime variable
+	 */
 	private ActiveExam activeExam;
+	/**
+	 * the Teacher responsible for the time change request
+	 */
 	private Teacher teacher;
 	
+	/**
+	 * Constructor will build an objet of this type TimeChangeRequest
+	 * @param id - id of the request
+	 * @param newTime - the new time requested to be updated to
+	 * @param reason - the reason for the request
+	 * @param status - the status of the request (aproved/notYetAprroved)
+	 * @param activeExam - the ActiveExan to change the time to
+	 * @param t - the teacher repsonsible for the time change
+	 */
 	public TimeChangeRequest(int id,Time newTime,String reason,boolean status,ActiveExam activeExam,Teacher t)
 	{
 		this.id=id;
@@ -35,26 +72,49 @@ public class TimeChangeRequest {
 		teacher=new Teacher(t.teacher);
 	}
 	
-	public int getId()
-	{
+	/**
+	 * 
+	 * @return the id of the request
+	 */
+	public int getId() {
 		return this.id;
 	}
-	public Time getNewTime()
-	{
+	
+	/**
+	 * 
+	 * @return the new time request value
+	 */
+	public Time getNewTime() {
 		return this.newTime;
 	}
-	public String getReasonForTimeChange()
-	{
+	
+	/**
+	 * 
+	 * @return the reson for the time change requested submitted by the teacher
+	 */
+	public String getReasonForTimeChange() {
 		return this.reasonForTimeChange;
 	}
-	public boolean getStatus()
-	{
+	
+	/**
+	 * 
+	 * @return the status of the request if it was approved or not yet
+	 */
+	public boolean getStatus() {
 		return this.status;
 	}
-	public ActiveExam getActiveExam()
-	{
+	
+	/**
+	 * 
+	 * @returnthe Active Exam of with this timechangerequest belongs to
+	 */
+	public ActiveExam getActiveExam() {
 		return this.activeExam;
 	}
+	/**
+	 * 
+	 * @return the teacher responsible for the time change request
+	 */
 	public Teacher getTeacher()
 	{
 		return this.teacher;

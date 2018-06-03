@@ -1,6 +1,3 @@
-/**
- * 
- */
 package GUI;
 
 import java.net.URL;
@@ -11,6 +8,7 @@ import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
+import Controllers.ExamController;
 import Controllers.QuestionController;
 import GUI.TeacherEditAddQuestion.windowType;
 import javafx.collections.FXCollections;
@@ -20,6 +18,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -37,16 +36,16 @@ import javafx.scene.layout.VBox;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
-public class TeacherManageQuestions implements Initializable, ControlledScreen {
+public class TeacherManageExamsFrame implements Initializable, ControlledScreen {
 	
-	HashMap<String,Question> questions = new HashMap<>();
+	HashMap<String,Exam> exams = new HashMap<>();
 	ArrayList<Field> teachersFields;
 	ArrayList<Course> teachersCourses;
-	ArrayList<Question> DBquestions;
-	@FXML Button newQuestionB;
+	ArrayList<Exam> dBExams;
+	@FXML Button newExamB;
 	@FXML ComboBox<Field> fieldComboB;
 	@FXML ComboBox<Course> courseComboB;
-	@FXML VBox questionsList;
+	@FXML VBox examsList;
 	@FXML Button home;
 	
 	@Override public void runOnScreenChange() {
@@ -58,19 +57,21 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		teacherCoursesLoading();		
 		
 		//loading teacher questions
-		DBquestions =  QuestionController.getTeachersQuestions((Teacher)ClientGlobals.client.getUser());
-		if (DBquestions!=null) {
-			setQuestionsListInVBox();
+		dBExams =  ExamController.getTeachersExams((Teacher)ClientGlobals.client.getUser());
+		if (dBExams!=null) {
+			setExamsListInVBox();
 		}
 	}
 
 	@Override public void initialize(URL arg0, ResourceBundle arg1) {
 	}
 	
-	@FXML public void newQuestionButtonPressed(ActionEvent event) {
+	@FXML public void newExamButtonPressed(ActionEvent event) {
+		/*
 		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
 		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
-		 Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
+		*/
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
 	}
 	
 	@FXML void BackToMainMenu(ActionEvent event) {
@@ -79,15 +80,15 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 
 	@FXML void filterByField(ActionEvent event) {
 		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
+			examsList.getChildren().clear();
 			Field selectefield = fieldComboB.getSelectionModel().getSelectedItem();
 			courseComboB.getItems().clear();
 			ObservableList<Course> list;
 			ArrayList<Course> cousesInField = new ArrayList<>();
 			if(selectefield.equals(new Field(-1,"All"))) {
-				for(Question q:DBquestions) {
-					questions.put(q.questionIDToString(),q);
-					questionsList.getChildren().add(questionAdder(q));
+				for(Exam e:dBExams) {
+					exams.put(e.examIdToString(),e);
+					examsList.getChildren().add(examAdder(e));
 				}
 			} else {
 				for(Course c: teachersCourses) {
@@ -95,10 +96,10 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 						cousesInField.add(c);
 					}
 				}
-				for(Question q:DBquestions) {
-					if(q.getField().equals(selectefield)) {
-						questions.put(q.questionIDToString(),q);
-						questionsList.getChildren().add(questionAdder(q));
+				for(Exam e:dBExams) {
+					if(e.getField().equals(selectefield)) {
+						exams.put(e.examIdToString(),e);
+						examsList.getChildren().add(examAdder(e));
 					}
 				}
 			}
@@ -110,23 +111,23 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	@FXML public void filterByCourse(ActionEvent event) {
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
-			questionsList.getChildren().clear();
+			examsList.getChildren().clear();
 			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
-			 for (Question q: DBquestions) {
-				 if(selectedCourse.equals(new Course(0,"All",null)) || q.isInCourse(selectedCourse)) {
-					 questions.put(q.questionIDToString(),q);
-					 questionsList.getChildren().add(questionAdder(q));
+			 for (Exam e: dBExams) {
+				 if(selectedCourse.equals(new Course(0,"All",null)) || e.isInCourse(selectedCourse)) {
+					 exams.put(e.examIdToString(),e);
+					 examsList.getChildren().add(examAdder(e));
 				 }
 			 }
 		 }
 	}
 	
-	private void setQuestionsListInVBox() {
-		questionsList.getChildren().clear();
-		System.out.println(DBquestions);
-		for(Question q:DBquestions) {
-			questions.put(q.questionIDToString(),q);
-			questionsList.getChildren().add(questionAdder(q));
+	private void setExamsListInVBox() {
+		examsList.getChildren().clear();
+		System.out.println(dBExams);
+		for(Exam e:dBExams) {
+			exams.put(e.examIdToString(),e);
+			examsList.getChildren().add(examAdder(e));
 		}
 	}
 
@@ -151,7 +152,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	 * Setting comboBox of fields base on teachers assigned fields
 	 */
 	private void teacherFieldsLoading() {
-		questions.clear();
+		exams.clear();
 		
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		if(teachersFields==null) {
@@ -163,7 +164,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		fieldComboB.setItems(list);
 	}
 	
-	private Node questionAdder(Question q) {
+	private Node examAdder(Exam e) {
 		//HBox main question container
 		HBox hbox = new HBox();
 		hbox.setStyle("-fx-border-color:black;"
@@ -171,64 +172,36 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 					+ "-fx-padding:10px;");
 		
 		//This VBox holds the question details
-		VBox questionInfo = new VBox();
-		Label questionString = new Label("Question: "+q.getQuestionString());
-		questionString.setId("blackLabel");
-		questionString.setWrapText(true);
-		Label qid = new Label("QID: "+q.questionIDToString());
-		qid.setId("blackLabel");
-		questionInfo.getChildren().add(qid);
-		questionInfo.getChildren().add(questionString);
-		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
-		for(RadioButton r:answers) {
-			r.setDisable(true);
-			r.setWrapText(true);
-			questionInfo.getChildren().add(r);
-		}
-		
-		// this HBox will hold the EditDelete buttons
-		HBox questionEditDelete = new HBox();
-		questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
-		questionEditDelete.setStyle("-fx-margin:20px");
+		HBox examInfo = new HBox();
+		Label examString = new Label("Exam ID: "+e.examIdToString() + "Course:" + e.getCourse().getName() + "Field" + e.getField().getName() + "Question Count: " + e.getQuestionsInExam().size());
+		examString.setStyle("-fx-padding: 10px;");
+		examString.setId("blackLabel");
+		examString.setWrapText(true);
+		examInfo.getChildren().add(examString);
 		Button edit = new Button("Edit");
-		edit.setId(q.questionIDToString());
+		edit.setId(e.examIdToString());
 		edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEditHandler());
 		Button delete = new Button ("Delete");
 		delete.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyDeleteHandler());
-		delete.setId(q.questionIDToString());
-		questionEditDelete.getChildren().add(edit);
-		questionEditDelete.getChildren().add(delete);
-		questionInfo.getChildren().add(questionEditDelete);
-		// this VBox holds the course list assigned to this question
-		VBox assignedCourses = new VBox();
-		Label courseTitle = new Label("Courses Assigned to Question:");
-		courseTitle.setId("blackLabel");
-		assignedCourses.getChildren().add(courseTitle);
-		ListView<Course> courselist = new ListView<>();
-		courselist.setMaxWidth(120);
-		courselist.setMaxHeight(100);
-		courselist.setDisable(true);
-		ObservableList<Course> list = FXCollections.observableArrayList(q.getCourses());
-		courselist.setItems(list);
-		assignedCourses.getChildren().add(courselist);
-		
-		hbox.getChildren().addAll(questionInfo,assignedCourses);
-		
-		
+		delete.setId(e.examIdToString());
+		examInfo.getChildren().add(edit);
+		examInfo.getChildren().add(delete);
+		hbox.getChildren().addAll(examInfo);
 		return hbox;
 	}
 
 	private class MyEditHandler implements EventHandler<Event>{
         @Override public void handle(Event evt) {
-           Question question = questions.get(((Control)evt.getSource()).getId());
+           Exam exam = exams.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
            teachersCourses.remove(0);
            teachersFields.remove(0);
+           /*
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setQuestion(question);
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.EDIT);
-           Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
+           */
+           Globals.mainContainer.setScreen(null);
         }
     }
 	
@@ -241,14 +214,14 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 			alert.setContentText("Are you sure you want to delete this question?\nThis Operation cannot be undone!");
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK){
-				Question question = questions.get(((Control)evt.getSource()).getId());
-	        	int effectedRows = QuestionController.deleteQuestion(question);
+				Exam exam = exams.get(((Control)evt.getSource()).getId());
+	        	int effectedRows = ExamController.deleteExam(exam);
 	        	if(effectedRows>0) {
 	        		alert = new Alert(AlertType.INFORMATION);
-	        		alert.setTitle("Question Deleted Succesfully");
+	        		alert.setTitle("Exam Deleted Succesfully");
 	    			alert.setHeaderText("");
-	        		alert.setContentText("Question Info:"
-	        				+ "\n" + question +""
+	        		alert.setContentText("Exam Info:"
+	        				+ "\n" + exam +""
     						+ "\n\n Was deleted Successfully");
 	        		alert.show();
 	        		runOnScreenChange();
@@ -257,9 +230,9 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	        		alert = new Alert(AlertType.ERROR);
 	        		alert.setTitle("Deletion Error");
 	    			alert.setHeaderText(null);
-	        		alert.setContentText("Could not delete question\n"
-	        				+ "This question is already in Use in an existing Exam / Solved Exam / Completed Exam.\n"
-	        				+ "you may not delete questions that other people are relaying on. ");
+	        		alert.setContentText("Could not delete Exam\n"
+	        				+ "This Exam is already in Use in an existing Solved Exam / Completed Exam.\n"
+	        				+ "you may not delete Exams that other people are relaying on. ");
 	        		alert.show();
 	        	}
 			} else {

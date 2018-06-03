@@ -57,11 +57,15 @@ import logic.Globals;
 /**
  *
  * @author Angie
+ * Modified by Group 12 to fit Project Needs
  */
 public class ScreensController  extends StackPane {
     //Holds the screens to be displayed
 
     private HashMap<String, Node> screens = new HashMap<>();
+    /**
+     * This will hold the hashmap of controlleres by ID to be able to call functions from other controllers and pass informations between screens if needed.
+     */
     private HashMap<String, ControlledScreen> controllers = new HashMap<>();
     
     public ScreensController() {
@@ -89,6 +93,8 @@ public class ScreensController  extends StackPane {
         try {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = (Parent) myLoader.load();
+            loadScreen.setId("pane");
+            loadScreen.getStylesheets().add(getClass().getResource("/resources/styleSheet.css").toExternalForm());
             ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
             addScreen(name, loadScreen);
             addController(name, myScreenControler);
