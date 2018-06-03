@@ -18,6 +18,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -56,9 +57,9 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 		teacherCoursesLoading();		
 		
 		//loading teacher questions
-		//dBExams =  ExamController.getTeachersExams((Teacher)ClientGlobals.client.getUser());
+		dBExams =  ExamController.getTeachersExams((Teacher)ClientGlobals.client.getUser());
 		if (dBExams!=null) {
-			setQuestionsListInVBox();
+			setExamsListInVBox();
 		}
 	}
 
@@ -121,7 +122,7 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 		 }
 	}
 	
-	private void setQuestionsListInVBox() {
+	private void setExamsListInVBox() {
 		examsList.getChildren().clear();
 		System.out.println(dBExams);
 		for(Exam e:dBExams) {
@@ -171,8 +172,9 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 					+ "-fx-padding:10px;");
 		
 		//This VBox holds the question details
-		VBox examInfo = new VBox();
+		HBox examInfo = new HBox();
 		Label examString = new Label("Exam ID: "+e.examIdToString() + "Course:" + e.getCourse().getName() + "Field" + e.getField().getName() + "Question Count: " + e.getQuestionsInExam().size());
+		examString.setStyle("-fx-padding: 10px;");
 		examString.setId("blackLabel");
 		examString.setWrapText(true);
 		examInfo.getChildren().add(examString);

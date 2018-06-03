@@ -99,10 +99,7 @@ public class SolvedExam extends Exam{
 	
 	@Override
 	public String toString() {
-		return "SolvedExam [score=" + score + ", teacherApproved=" + teacherApproved + ", studentsAnswers="
-				+ studentsAnswers + ", examReportID=" + examReportID + ", examSolver=" + examSolver
-				+ ", teachersScoreChangeNote=" + teachersScoreChangeNote + ", CompletedTimeInMinutes="
-				+ CompletedTimeInMinutes + "]";
+		return "Course: " + getCourse().getName() + " Completed_Time: " + CompletedTimeInMinutes + " Score: " + score;
 	}
 	
 	

@@ -61,6 +61,10 @@ public class DBMain {
 			"where e.examid=se.examid and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid "
 			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and e.teacherid=?;"
 			);
+	private String getTeachrsExams = new String(""
+			+ "SELECT e.examid , e.timeduration, c.courseid, c.coursename, f.fieldid, f.fieldname  "
+			+ "FROM aes.exams as e, aes.courses as c, aes.fields as f "
+			+ "WHERE c.courseid=e.courseid and f.fieldid=e.fieldid and c.fieldid=f.fieldid and teacherid=?");
 	private String getSolvedExams = new String(""
 			+ "SELECT e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration," + 
 			"		u.userid,u.username,u.password,u.fullname,se.answers," + 
@@ -558,7 +562,7 @@ public class DBMain {
 						questionid, new Teacher(rs.getInt(22),rs.getString(23),rs.getString(24),rs.getString(25)), questionString, answers, 
 						new Field(fieldsid,fieldName), answerIndex,
 						getQuestionCourses(Question.questionIDToString(questionid, fieldsid)),
-						0,innerNote,viewableNote);
+						pointsValue,innerNote,viewableNote);
 				result.add(question);
 			}
 			return result;
@@ -658,6 +662,28 @@ public class DBMain {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+
+	public ArrayList<Exam> getTeachersExams(Teacher o) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(getTeachrsExams);
+			prst.setInt(1, o.getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			ArrayList<QuestionInExam> questions = new ArrayList<>();
+			ArrayList<Exam> result = new ArrayList<>();
+			while(rs.next()) {		
+				int examid = rs.getInt(1);
+				int duration = rs.getInt(2);
+				Course course = new Course(rs.getInt(3), rs.getString(4), new Field(rs.getInt(5),rs.getString(6)));
+				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
+				result.add(new Exam(examid, course, duration, o, questions));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
 	}
 
 }
