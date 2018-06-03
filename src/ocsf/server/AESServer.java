@@ -96,6 +96,9 @@ public class AESServer extends AbstractServer {
 			case "getTeachersActiveExams":
 				getTeachersActiveExams(client,o);
 				break;
+			case "DeleteExam":
+				deleteExam(client,o);
+				break;
 			case "getTeachersExam":
 				getTeachersExams(client,o);
 				break;
@@ -123,6 +126,7 @@ public class AESServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
+
 
 	/**
 	 * Hook Method executed right before server closes while still listening
@@ -305,6 +309,11 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void deleteExam(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.deleteExam((Exam) o);
+		iMessage im = new iMessage("deletedExam", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
 	
 	private void getTeacherFields(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Field> fields = sqlcon.getTeacherFields((Teacher)o);

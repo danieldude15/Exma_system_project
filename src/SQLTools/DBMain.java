@@ -45,9 +45,11 @@ public class DBMain {
 	private String questionCourses = new String(""
 			+ "SELECT f.fieldid,f.fieldname,qic.courseid,c.coursename "
 			+ "FROM aes.fields as f,aes.questions_in_course as qic, aes.courses as c "
-			+ "WHERE c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=?");
+			+ "WHERE c.fieldid=f.fieldid and c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=?");
 	private String deleteQuestion = new String(""
 			+ "DELETE FROM aes.questions WHERE questionid=? and fieldid=?");
+	private String deleteExam = new String(""
+			+ "DELETE FROM aes.exams WHERE examid=? and fieldid=?"); 
 	private String teachersQuestions = new String(
 			"select * from aes.questions as q, aes.fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
 			);
@@ -684,6 +686,19 @@ public class DBMain {
 			ServerGlobals.handleSQLException(e);
 		}
 		return null;
+	}
+
+	public int deleteExam(Exam e) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(deleteExam);
+			prst.setInt(1, e.getID());
+			prst.setInt(2, e.getField().getID());
+			System.out.println("SQL:" + prst);
+			return prst.executeUpdate();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return 0;
 	}
 
 }

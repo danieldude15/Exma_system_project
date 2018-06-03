@@ -81,7 +81,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		teacherFields.remove(0);
 		ObservableList<Field> list = FXCollections.observableArrayList(teacherFields);
 		fields.setItems(list);
-		
+		fields.getSelectionModel().clearSelection();
 		if (type.equals(windowType.ADD) || question==null) {
 			questionID.setText("Add New Question");
 			questionString.setText("");
