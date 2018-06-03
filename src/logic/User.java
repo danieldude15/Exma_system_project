@@ -39,9 +39,21 @@ public class User implements Serializable{
 	public User(int id,String userName,String Password,String Name)
 	{
 		this.id = id;
-		this.userName=userName;
-		this.password=Password;
-		this.name=Name;
+		
+		if (userName==null) 
+			this.userName="";
+		else 
+			this.userName=userName;
+		
+		if (Password==null)
+			this.password="";
+		else 
+			this.password=Password;
+		
+		if (Name==null)
+			this.name="";
+		else 
+			this.name=Name;
 	}
 	
 	/**

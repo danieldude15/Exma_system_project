@@ -128,8 +128,34 @@ public class ActiveExam implements Serializable{
 		else examType = "Manual";
 		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),exam.examIdToString() ,examType));
 	}
+
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31*result + getExam().hashCode();
+		return result;
+	}
+
+	/**
+	 * This function Overrides the Object equals function and checks if the information in the object is identical 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj)return true;
+		if(obj instanceof ActiveExam) {
+			ActiveExam a = (ActiveExam) obj;
+			if (!a.getCode().equals(code) || a.getType()!=type) return false;
+			if (a.getDate()!=null && !a.getDate().equals(dateActivated)) return false;
+			if (!a.getActivator().equals(activator)) return false;
+			if (a.getExam()!=null && !a.getExam().equals(exam)) return false;
+			return true;
+		}
+		return false;
+	}
 	
 	
 
+	
 	
 }

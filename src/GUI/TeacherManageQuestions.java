@@ -51,7 +51,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	
 	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(650);		
+		Globals.primaryStage.setWidth(570);		
 		
 		teacherFieldsLoading();
 		
@@ -175,6 +175,8 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		Label questionString = new Label("Question: "+q.getQuestionString());
 		questionString.setId("blackLabel");
 		questionString.setWrapText(true);
+		questionInfo.setMinWidth(330);
+		questionInfo.setMaxWidth(330);
 		Label qid = new Label("QID: "+q.questionIDToString());
 		qid.setId("blackLabel");
 		questionInfo.getChildren().add(qid);
@@ -184,6 +186,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);
+			r.setId("blackLabel");
 			questionInfo.getChildren().add(r);
 		}
 		
@@ -200,6 +203,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		questionEditDelete.getChildren().add(edit);
 		questionEditDelete.getChildren().add(delete);
 		questionInfo.getChildren().add(questionEditDelete);
+		
 		// this VBox holds the course list assigned to this question
 		VBox assignedCourses = new VBox();
 		Label courseTitle = new Label("Courses Assigned to Question:");
@@ -209,6 +213,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		courselist.setMaxWidth(120);
 		courselist.setMaxHeight(100);
 		courselist.setDisable(true);
+		courselist.setId("blackLabel");
 		ObservableList<Course> list = FXCollections.observableArrayList(q.getCourses());
 		courselist.setItems(list);
 		assignedCourses.getChildren().add(courselist);

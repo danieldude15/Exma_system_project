@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherManageQuestions">
+<VBox maxWidth="553.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherManageQuestions">
    <children>
       <Label text="Manage Questions">
          <font>
@@ -20,7 +20,7 @@
             <Insets bottom="20.0" />
          </VBox.margin>
       </Label>
-      <HBox minHeight="-Infinity" minWidth="-Infinity">
+      <HBox>
          <children>
             <Button fx:id="newQuestionB" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#newQuestionButtonPressed">
                <graphic>
@@ -38,7 +38,7 @@
             <VBox>
                <children>
                   <Label text="Filter list by field" />
-                  <ComboBox fx:id="fieldComboB" minHeight="-Infinity" minWidth="-Infinity" onAction="#filterByField" promptText="Field" />
+                  <ComboBox fx:id="fieldComboB" onAction="#filterByField" promptText="Field" />
                </children>
                <HBox.margin>
                   <Insets left="30.0" />
@@ -47,7 +47,7 @@
             <VBox>
                <children>
                   <Label text="Filter list by course" />
-                  <ComboBox fx:id="courseComboB" minHeight="-Infinity" minWidth="-Infinity" onAction="#filterByCourse" promptText="Course" />
+                  <ComboBox fx:id="courseComboB" onAction="#filterByCourse" promptText="Course" />
                </children>
                <HBox.margin>
                   <Insets left="30.0" />

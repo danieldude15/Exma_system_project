@@ -85,11 +85,11 @@ public class QuestionInExam extends Question {
 		if (this==obj)return true;
 		if(obj instanceof QuestionInExam) {
 			QuestionInExam q = (QuestionInExam) obj;
-			if (super.equals(q) 
-					&& q.getPointsValue()==PointsValue 
-					&& q.getStudentNote().equals(studentNote) 
-					&& q.getInnerNote().equals(innerNote))
+			if ((super.equals(q) && q.getPointsValue()==PointsValue)) {
+				if ((q.getStudentNote()==studentNote || (q.getStudentNote()!=null && q.getStudentNote().equals(studentNote)))  
+					&& (q.getInnerNote()==innerNote || (q.getInnerNote()!=null && q.getInnerNote().equals(innerNote))))
 				return true;
+			}
 		}
 		return false;
 	}
@@ -98,7 +98,7 @@ public class QuestionInExam extends Question {
 	 * hashCode ovverid to use in HashMaps
 	 */
 	@Override public int hashCode() {
-		int result = super.hashCode();
+		int result = 17;
 		result = 31 * result + PointsValue;
 		return result;
 	}

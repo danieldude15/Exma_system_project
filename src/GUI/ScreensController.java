@@ -56,7 +56,7 @@ import logic.Globals;
 
 /**
  *
- * @author Angie
+ * @author Angie & Group-12
  * Modified by Group 12 to fit Project Needs
  */
 public class ScreensController  extends StackPane {
@@ -108,7 +108,6 @@ public class ScreensController  extends StackPane {
     }
 
     private void addController(String name, ControlledScreen myScreenControler) {
-		// TODO Auto-generated method stub
     	controllers.put(name, myScreenControler);
 	}
 

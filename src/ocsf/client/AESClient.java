@@ -1,19 +1,11 @@
 package ocsf.client;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.ConstraintsBase;
-import logic.CompletedExam;
-import logic.Globals;
-import logic.Principle;
-import logic.Student;
-import logic.Teacher;
-import logic.User;
-import logic.iMessage;
+import logic.*;
 
 public class AESClient extends AbstractClient{
 	
@@ -26,21 +18,22 @@ public class AESClient extends AbstractClient{
 		me=null;
 	}
 
-
 	/**
 	 * Handles a message sent from the server to this client.
 	 *
 	 * @param msg   this will always be an iMessage type of object 
 	 */
 	protected void handleMessageFromServer(Object ServerMsg){
+		System.out.println("Got msg from Server:" + msg);
 		if(!(ServerMsg instanceof iMessage)) {
 			System.out.println("Server msg not of iMessage type");
 			return;
 		}
 		this.msg = (iMessage) ServerMsg;
-		System.out.println("Got msg from Server:" + msg);
 		String cmd = new String(msg.getCommand());
 		Object o = msg.getObj();
+		//cases with return isntead of break are cases that make sure we dont update the stopwaiting 
+		//because the user did not wait for these msgs
 		switch(cmd) {
 		case "login":
 			Login(o);
@@ -53,7 +46,10 @@ public class AESClient extends AbstractClient{
 			break;
 		case "closing Connection":
 			closeAESApplication();
-			break;
+			return;
+		case "ExamLocked":
+			handleExamLocked(o);
+			return;	
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -67,7 +63,6 @@ public class AESClient extends AbstractClient{
 		msg = (iMessage) serverMsg;
 		
 	}
-
 
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
@@ -94,7 +89,6 @@ public class AESClient extends AbstractClient{
 	public void setUser(User me) {
 		this.me = me;
 	}
-
 
 	/**
 	 * this method should be called right after sending a msg to the server
@@ -136,7 +130,6 @@ public class AESClient extends AbstractClient{
 		ClientGlobals.handleIOException(e);
 	}
 
-	
   /**
    * Hook method called after a connection has been established.
    * The default implementation does nothing.
@@ -144,7 +137,6 @@ public class AESClient extends AbstractClient{
    */
 	protected void connectionEstablished() {}
 
-	
 	private void closeAESApplication() {
 		Platform.runLater(() -> { 
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -156,12 +148,9 @@ public class AESClient extends AbstractClient{
 			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
 			System.exit(1);
 			});
-		
 	}
 	  
 	//  ################################################# Team Start Adding Functions From Here ############################
-	
-	
 	
 	private void Login(Object o) {
 		if (o==null) {
@@ -179,13 +168,14 @@ public class AESClient extends AbstractClient{
 		
 	}
 
-
+	private void handleExamLocked(Object o) {
+		// TODO Auto-generated method stub
+	}
 
 	private void showFailedAuth() {
 		msg.setCommand("failedAuth");
 		me = null;
 	}
-
 
 	private void alreadyLoggedIn() {
 		msg.setCommand("AlreadyLoggedIn");

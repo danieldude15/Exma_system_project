@@ -82,6 +82,14 @@ public class Course implements Serializable{
 		int[] res = {Integer.parseInt(id.substring(0, 2)),Integer.parseInt(id.substring(2,4))};
 		return res;
 	}
+	
+	/**
+	 * couresIDtoString
+	 * @return the complete course ID <fieldID><CourseID>
+	 */
+	public String courseIdToString() {
+		return new String(String.format("%02d%02d", getField().getID(),getId()));
+	}
 
 	/**
 	 * overriding the toString method for Courses
@@ -102,9 +110,17 @@ public class Course implements Serializable{
 		}
 		return false;
 	}
-	public String courseIdToString() {
-		return new String(String.format("%02d%02d", getField().getID(),getId()));
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + id;
+		if (name!=null) result = 31 * result + name.hashCode();
+		if (field!=null) result = 31*result + field.hashCode();
+		return result;
 	}
+	
+	
 	
 	
 }

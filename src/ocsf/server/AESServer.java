@@ -12,14 +12,16 @@ public class AESServer extends AbstractServer {
 	
 	
 	private DBMain sqlcon;
-	private HashMap<String,ConnectionToClient> connectedUsers;
+	private HashMap<User,ConnectionToClient> connectedUsers;
 	private HashMap<String,ActiveExam> activeExams;
+	private HashMap<ActiveExam,ArrayList<Student>> studentsInExam;
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
-		connectedUsers = new HashMap<String,ConnectionToClient>();
-		activeExams=new HashMap<String,ActiveExam>();
+		connectedUsers = new HashMap<User,ConnectionToClient>();
+		activeExams = new HashMap<String,ActiveExam>();
+		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
@@ -31,8 +33,10 @@ public class AESServer extends AbstractServer {
 		ArrayList<Course> cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		activeExams.put("acdc", new ActiveExam("acdc", 1, "2018-05-30", 
-				new Exam(1, cs.get(0),120,teacher,questions),teacher));
+		ActiveExam tibisExam = new ActiveExam("acdc", 1, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		activeExams.put("acdc", tibisExam);
+		
+		studentsInExam.put(tibisExam, new ArrayList<Student>());
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
@@ -44,8 +48,10 @@ public class AESServer extends AbstractServer {
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		activeExams.put("ddii", new ActiveExam("ddii", 1, "2018-05-30", 
-				new Exam(1, cs.get(0),120,teacher,questions),teacher));
+		ActiveExam nivsExam = new ActiveExam("ddii", 1, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		activeExams.put("ddii", nivsExam);
+		
+		studentsInExam.put(nivsExam, new ArrayList<Student>());
 	}
 
 	@Override
@@ -105,6 +111,9 @@ public class AESServer extends AbstractServer {
 			case "getStudentsSolvedExams":
 				getSolvedExam(client,o);
 				break;
+			case "LOCKActiveExam":
+				lockActiveExams(client,o);
+				break;
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
 				break;
@@ -122,16 +131,15 @@ public class AESServer extends AbstractServer {
 				
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 
 	/**
-	 * Hook Method executed right before server closes while still listening
-	 * this is part of AbstractServer functionality
-	 */
+	* Hook Method executed right before server closes while still listening
+	* this is part of AbstractServer functionality
+	*/
 	protected void serverClosed() {
 		try {
 			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
@@ -141,65 +149,59 @@ public class AESServer extends AbstractServer {
 		}
 	}
 
-	  /**
-	   * Hook method called each time a new client connection is
-	   * accepted. The default implementation does nothing.
-	   * @param client the connection connected to the client.
-	   */
-	  protected void clientConnected(ConnectionToClient client) {}
+	/**
+	* Hook method called each time a new client connection is
+	* accepted. The default implementation does nothing.
+	* @param client the connection connected to the client.
+	*/
+	protected void clientConnected(ConnectionToClient client) {}
 
-	  /**
-	   * Hook method called each time a client disconnects.
-	   * The default implementation does nothing. The method
-	   * may be overridden by subclasses but should remains synchronized.
-	   *
-	   * @param client the connection with the client.
-	   */
-	  synchronized protected void clientDisconnected(ConnectionToClient client) {}
+	/**
+	* Hook method called each time a client disconnects.
+	* The default implementation does nothing. The method
+	* may be overridden by subclasses but should remains synchronized.
+	*
+	* @param client the connection with the client.
+	*/
+	synchronized protected void clientDisconnected(ConnectionToClient client) {}
 
-	  /**
-	   * Hook method called each time an exception is thrown in a
-	   * ConnectionToClient thread.
-	   * The method may be overridden by subclasses but should remains
-	   * synchronized.
-	   *
-	   * @param client the client that raised the exception.
-	   * @param Throwable the exception thrown.
-	   */
-	  synchronized protected void clientException(ConnectionToClient client, Throwable exception) {}
+	/**
+	* Hook method called each time an exception is thrown in a
+	* ConnectionToClient thread.
+	* The method may be overridden by subclasses but should remains
+	* synchronized.
+	*
+	* @param client the client that raised the exception.
+	* @param Throwable the exception thrown.
+	*/
+	synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
+		exception.printStackTrace();
+	}
 
-	  /**
-	   * Hook method called when the server stops accepting
-	   * connections because an exception has been raised.
-	   * The default implementation does nothing.
-	   * This method may be overriden by subclasses.
-	   *
-	   * @param exception the exception raised.
-	   */
-	  protected void listeningException(Throwable exception) {}
+	/**
+	* Hook method called when the server stops accepting
+	* connections because an exception has been raised.
+	* The default implementation does nothing.
+	* This method may be overriden by subclasses.
+	*
+	* @param exception the exception raised.
+	*/
+	protected void listeningException(Throwable exception) {}
 
-	  /**
-	   * Hook method called when the server starts listening for
-	   * connections.  The default implementation does nothing.
-	   * The method may be overridden by subclasses.
-	   */
-	  protected void serverStarted() {}
+	 /**
+	 * Hook method called when the server starts listening for
+	 * connections.  The default implementation does nothing.
+	 * The method may be overridden by subclasses.
+	 */
+	protected void serverStarted() {}
 
-	  /**
-	   * Hook method called when the server stops accepting
-	   * connections.  The default implementation
-	   * does nothing. This method may be overriden by subclasses.
-	   */
-	  protected void serverStopped() {}
+	/**
+	 * Hook method called when the server stops accepting
+	 * connections.  The default implementation
+	 * does nothing. This method may be overriden by subclasses.
+	 */
+	protected void serverStopped() {}
 
-
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
@@ -210,16 +212,30 @@ public class AESServer extends AbstractServer {
 	 */
 	public void AddActiveExam(ActiveExam ae)
 	{
-		
 		activeExams.put(ae.getCode(), ae);
 	}
+
 	/**
 	 * Get an active exam and remove it from active exams Hashmap.
 	 * @param ae
 	 */
-	public void RemoveActiveExam(ActiveExam ae)
+	public int RemoveActiveExam(ActiveExam ae)
 	{
+		iMessage msg = new iMessage("ExamLocked", ae);
+		int counter=0;
+		for(Student s: studentsInExam.get(ae)) {
+			try {
+				if (connectedUsers.get(s)!=null) {
+					connectedUsers.get(s).sendToClient(msg);
+					counter++;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				return counter;
+			}
+		}
 		activeExams.remove(ae.getCode());
+		return counter;
 	}
 	
 	/**
@@ -260,18 +276,23 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
+	private void lockActiveExams(ConnectionToClient client, Object o) throws IOException {
+		int kickedStudents = RemoveActiveExam((ActiveExam) o);
+		client.sendToClient(new iMessage("lockedExam", new Integer(kickedStudents)));
+	}
+	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
 		iMessage im = new iMessage("QuestionCourses",courses);
 		client.sendToClient(im);
 	}
 
-
 	private void getTeachersExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Exam> exams = sqlcon.getTeachersExams((Teacher) o);
 		iMessage im = new iMessage("TeachersExams",exams);
 		client.sendToClient(im);
 	}
+	
 	private void getFieldsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getFieldsCourses(o);
 		iMessage im = new iMessage("FieldsCourses",courses);
@@ -296,12 +317,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 		
 	}
+	
 	private void addQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addQuestion((Question) o);
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-
 
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
@@ -321,9 +342,8 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-
 	private void logoutFunctionality(Object o) {
-		if(connectedUsers.remove(((User)o).getUserName())!=null)
+		if(connectedUsers.remove(((User)o))!=null)
 			System.out.println("Logged out User: "+ o );
 	}
 	
@@ -337,19 +357,18 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
-	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
 		client.sendToClient(im);
 	}
 
-/**
- * Send to DBMain a request to pull object solved exams from database.
- * @param client
- * @param o
- * @throws IOException
- */
+	/**
+	 * Send to DBMain a request to pull object solved exams from database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getSolvedExam(ConnectionToClient client, Object o) throws IOException {
 		iMessage im;
 		if(o instanceof Student) {
@@ -367,7 +386,7 @@ public class AESServer extends AbstractServer {
 		User user = (User) o;
 		iMessage result=null;
 		String login = "login";
-		if (connectedUsers.get(user.getUserName())!=null && connectedUsers.get(user.getUserName()).isAlive()) {
+		if (connectedUsers.get(user)!=null && connectedUsers.get(user).isAlive()) {
 			//sending back same user to indicate user is already logged in!
 			result = new iMessage("loggedInAlready",o);
 		} else {
@@ -383,7 +402,7 @@ public class AESServer extends AbstractServer {
 				} else if(user instanceof Student) {
 					result = new iMessage(login,new Student((Student) user));
 				}
-				connectedUsers.put(user.getUserName(), client);
+				connectedUsers.put((User)o, client);
 			}
 		}
 		client.sendToClient(result);

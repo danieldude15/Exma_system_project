@@ -7,6 +7,7 @@ import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+@SuppressWarnings("unchecked")
 public class ActiveExamController {
 
 	/**
@@ -16,14 +17,10 @@ public class ActiveExamController {
 	 */
 	public static ArrayList<ActiveExam> getTeachersActiveExams(Teacher t) {
 		AESClient client = ClientGlobals.client;
-		ActiveExam activeExam;	
 		iMessage msg = new iMessage("getTeachersActiveExams",t);
 		try {
 			client.sendToServer(msg);
-			Object o = client.getResponseFromServer().getObj();
-			if(o instanceof ArrayList) {
-				return (ArrayList<ActiveExam>) o;
-			}
+			return (ArrayList<ActiveExam>) client.getResponseFromServer().getObj();
 		} catch (IOException e) {
 			ClientGlobals.handleIOException(e);
 		}
@@ -51,33 +48,34 @@ public class ActiveExamController {
 		return null;
 	}
 		
-	
-
-	@SuppressWarnings("unchecked")
 	public static ArrayList<ActiveExam> GetAllActiveExams() {
 		AESClient client = ClientGlobals.client;
-		ArrayList<ActiveExam> allActiveExams;
-		iMessage msg;
 		if(client.isConnected()) {
 			try {
-				msg= new iMessage("getAllActiveExams",null);
+				iMessage msg= new iMessage("getAllActiveExams",null);
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				allActiveExams = new ArrayList<ActiveExam>();
-				if(o instanceof ArrayList) {
-					ArrayList<ActiveExam> activeExams = (ArrayList<ActiveExam>) o;
-					for (ActiveExam e: allActiveExams) {
-						ActiveExam eExam = new ActiveExam(e);
-						allActiveExams.add(eExam);
-					}
-					return allActiveExams;
-				}
+				return (ArrayList<ActiveExam>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
 		return null;
+	}
+
+	public static Integer lockExam(ActiveExam activeExam) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("LOCKActiveExam",activeExam);
+				client.sendToServer(msg);
+				return (Integer) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 
 }

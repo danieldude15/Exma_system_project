@@ -168,4 +168,38 @@ public class Exam implements Serializable{
 		return course.equals(getCourse());
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this==obj) return true;
+		if (obj instanceof Exam) {
+			Exam e = (Exam)obj;
+			if (e.getID()!=ID || e.getDuration()!=Duration) return false;
+			if (!e.getCourse().equals(course) || !e.getAuthor().equals(Author)) return false;
+			for(int i=0;i<questionsInExam.size();i++) {
+				if (!questionsInExam.get(i).equals(e.getQuestionsInExam().get(i))) return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "ExamID:" + ID + " Duration:" + Duration + " AutherID:" + Author.getID();
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31*result + Duration;
+		result = 31*result + course.hashCode();
+		for(QuestionInExam q: questionsInExam)
+			result = 31 * result + q.questionIDToString().hashCode();
+		return result;
+	}
+	
+	
+	
+	
+
 }

@@ -217,7 +217,6 @@ public class DBMain {
 			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
-				System.out.println(rs);
 				if (rs.next()) {
 					int userid = rs.getInt(1);
 					String username = rs.getString(2);
