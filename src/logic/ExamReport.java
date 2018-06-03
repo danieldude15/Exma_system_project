@@ -5,31 +5,82 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * ExamReport entity used to create reports for the principle and Teacher when needed
+ * this class will generate and hold reprot information 
+ * @author Group-12
+ *
+ */
 public class ExamReport implements Serializable{
 
 	/**
-	 * 
+	 * Serializable id give for client server communication
 	 */
 	private static final long serialVersionUID = 2557792967631535481L;
+	/**
+	 * report unique id
+	 */
 	int reportid;
+	/**
+	 * median value of all solvedExams
+	 */
 	int meadian;
+	/**
+	 * avg of all solvedExams
+	 */
 	int avg;
+	/**
+	 * diviation value of the report
+	 */
 	int diviation;
+	/**
+	 * the amount of students submitted this exam in time
+	 */
 	int submitedcount;
+	/**
+	 * the amount of student that started the exam
+	 */
 	int startedcount;
+	/**
+	 * the amount of student failed to submit the exam in time 
+	 */
 	int failedsubmitstudentcount;
+	/**
+	 * the actual timeduration of the exam, in most cases this should be equals to the time duration of an exam 
+	 * but in case the time was changed in the active exam this should have dirrenet value
+	 */
 	int actualdurationofexam;
+	/**
+	 * the date the exam was initiated
+	 */
 	Date dateinitiated;
-	
+	/**
+	 * arraylist of all solvedexam copies of all student
+	 */
 	ArrayList<SolvedExam> m_examCopies;
+	/**
+	 * the hashMap of all potential cheaters in this exam
+	 */
 	HashMap<Student,Integer> m_cheatingStudents;
 	
-	public ExamReport(int ID, int reportid, int meadian, int avg, int diviation,
+	/**
+	 * Exam Report Constructor
+	 * @param ID - report id
+	 * @param meadian - median value of all solvedExams
+	 * @param avg - avg of all solvedExams
+	 * @param diviation - the amount of students submitted this exam in time
+	 * @param submitedcount - the amount of students submitted this exam in time
+	 * @param startedcount - the amount of student that started the exam
+	 * @param failedsubmitstudentcount - the amount of student failed to submit the exam in time 
+	 * @param actualdurationofexam - the actual timeduration of the exam, in most cases this should be equals to the time duration of an exam  but in case the time was changed in the active exam this should have dirrenet value
+	 * @param dateinitiated - the date the exam was initiated
+	 * @param m_examCopies - arraylist of all solvedexam copies of all student
+	 * @param m_cheatingStudents - the hashMap of all potential cheaters in this exam
+	 */
+	public ExamReport(int ID, int meadian, int avg, int diviation,
 			int submitedcount, int startedcount, int failedsubmitstudentcount, int actualdurationofexam,
-			Date dateinitiated, ArrayList<SolvedExam> m_examCopies, HashMap<Student, Integer> m_cheatingStudents) {
+			Date dateinitiated, ArrayList<SolvedExam> m_examCopies) {
 		this.reportid = ID;
-		this.reportid = reportid;
 		this.meadian = meadian;
 		this.avg = avg;
 		this.diviation = diviation;
@@ -39,113 +90,112 @@ public class ExamReport implements Serializable{
 		this.actualdurationofexam = actualdurationofexam;
 		this.dateinitiated = dateinitiated;
 		this.m_examCopies = m_examCopies;
-		this.m_cheatingStudents = m_cheatingStudents;
-	}
-	
-	public ExamReport(ExamReport report) {
-		this.reportid = report.getReportid();
-		this.meadian = report.getMeadian();
-		this.avg = report.getAvg();
-		this.diviation = report.getDiviation();
-		this.submitedcount = report.getSubmitedcount();
-		this.startedcount = report.getStartedcount();
-		this.failedsubmitstudentcount = report.getFailedsubmitstudentcount();
-		this.actualdurationofexam = report.getActualdurationofexam();
-		this.dateinitiated = report.getDateinitiated();
-		this.m_examCopies = report.getM_examCopies();
-		this.m_cheatingStudents = report.getM_cheatingStudents();
+		this.m_cheatingStudents = findCheaters();
 	}
 
+	/**
+	 * getReportID
+	 * @return the reports id
+	 */
 	public int getReportid() {
 		return reportid;
 	}
 
-	public void setReportid(int reportid) {
-		this.reportid = reportid;
-	}
-
+	/**
+	 * getMedian
+	 * @return the meadian of this report
+	 */
 	public int getMeadian() {
 		return meadian;
 	}
 
-	public void setMeadian(int meadian) {
-		this.meadian = meadian;
-	}
-
+	/**
+	 * getAvg
+	 * @return the avarage ofthis exam
+	 */
 	public int getAvg() {
 		return avg;
 	}
 
-	public void setAvg(int avg) {
-		this.avg = avg;
-	}
-
+	/**
+	 * getDiviation
+	 * @return the diviation of this exam
+	 */
 	public int getDiviation() {
 		return diviation;
 	}
 
-	public void setDiviation(int diviation) {
-		this.diviation = diviation;
-	}
-
+	/**
+	 * getSubmittedCount
+	 * @return return the amount of studnets that submited thsi exam in time
+	 */
 	public int getSubmitedcount() {
 		return submitedcount;
 	}
 
-	public void setSubmitedcount(int submitedcount) {
-		this.submitedcount = submitedcount;
-	}
-
+	/**
+	 * getStaredCount
+	 * @return the amount of students who started the exam
+	 */
 	public int getStartedcount() {
 		return startedcount;
 	}
 
-	public void setStartedcount(int startedcount) {
-		this.startedcount = startedcount;
-	}
-
+	/**
+	 * getFailedsybmitstudentcount
+	 * @return the amount of students who failed to submit in time
+	 */
 	public int getFailedsubmitstudentcount() {
 		return failedsubmitstudentcount;
 	}
-
-	public void setFailedsubmitstudentcount(int failedsubmitstudentcount) {
-		this.failedsubmitstudentcount = failedsubmitstudentcount;
-	}
-
+	
+	/**
+	 * getActualDurationTime
+	 * @return the actual duration time of this exam
+	 */
 	public int getActualdurationofexam() {
 		return actualdurationofexam;
 	}
 
-	public void setActualdurationofexam(int actualdurationofexam) {
-		this.actualdurationofexam = actualdurationofexam;
-	}
-
+	/**
+	 * getDateinitiated
+	 * @return the date of witch this exam initiated
+	 */
 	public Date getDateinitiated() {
 		return dateinitiated;
 	}
 
-	public void setDateinitiated(Date dateinitiated) {
-		this.dateinitiated = dateinitiated;
-	}
-
+	/**
+	 * get all solvedExams
+	 * @return
+	 */
 	public ArrayList<SolvedExam> getM_examCopies() {
 		return m_examCopies;
 	}
 
-	public void setM_examCopies(ArrayList<SolvedExam> m_examCopies) {
-		this.m_examCopies = m_examCopies;
-	}
-
+	/**
+	 * get all potential cheaters in this exam
+	 * @return the hashmap of potential cheates
+	 */
 	public HashMap<Student, Integer> getM_cheatingStudents() {
 		return m_cheatingStudents;
 	}
-
-	public void setM_cheatingStudents(HashMap<Student, Integer> m_cheatingStudents) {
-		this.m_cheatingStudents = m_cheatingStudents;
-	}
 	
+	/**
+	 * getExam
+	 * @return the exam of this report
+	 */
 	public Exam getExam() {
 		if(m_examCopies.size()==0) return null;
 		return m_examCopies.get(0).getExam();
+	}
+	
+	/**
+	 * this function will be responsible for check witch students cheated and return the hashmap of these students
+	 * this is a private method used in the constructor if examReport to genereate these potential cheating students 
+	 * @return hashmap of potential cheating students
+	 */
+	private HashMap<Student, Integer> findCheaters() {
+		return null;
 	}
 }

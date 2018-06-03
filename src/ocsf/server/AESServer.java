@@ -342,15 +342,12 @@ public class AESServer extends AbstractServer {
  * @throws IOException
  */
 	private void getSolvedExam(ConnectionToClient client, Object o) throws IOException {
-		// TODO Auto-generated method stub
 		iMessage im;
-		if(o instanceof Student)
-		{
+		if(o instanceof Student) {
 			ArrayList<SolvedExam> studentSolvedExams = sqlcon.getStudentsSolvedExams((Student)o);
 			im = new iMessage("StudentsSolvedExams", studentSolvedExams);
 		}
-		else
-		{
+		else {
 			ArrayList<SolvedExam> teacherSolvedExams = sqlcon.getTeacherSolvedExams((Teacher)o);
 			im = new iMessage("TeacherSolvedExams", teacherSolvedExams);
 		}
