@@ -35,11 +35,10 @@ public class StudentMainFrame implements ControlledScreen {
 		// TODO Auto-generated method stub
 		Globals.primaryStage.setHeight(630);
 		Globals.primaryStage.setWidth(820);	
-		courseNameAndExamId.clear();
+		//courseNameAndExamId.clear();
 		
 		/*Get all student solved exams from database and set it to the ListView field on window/*/
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
-		//System.out.print("blaaaaaaaaaaaaa"+"   +"+mySolvedExam.get(0));
 		ArrayList<String> solveExamsFields= new ArrayList<String>();
 		if(mySolvedExam!=null)
 			{
