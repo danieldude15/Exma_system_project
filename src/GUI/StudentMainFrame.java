@@ -55,7 +55,9 @@ public class StudentMainFrame implements ControlledScreen {
 				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
 				solveExamsFields.add(courseName+"                                                        "
 						+ "                                                    "+solvedExamGrade+"\n");
+				
 			}
+			
 			ObservableList<String> list;
 			if (solveExamsFields.size()==1) {
 				solveExamsFields.remove(0);
@@ -66,7 +68,7 @@ public class StudentMainFrame implements ControlledScreen {
 		}
 		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
 		Student s=(Student)ClientGlobals.client.getUser();
-		welcome.setText("Wellcome: "+s.getName());
+		welcome.setText("Welcome: "+s.getName());
 		username.setText("UserName: "+s.getUserName());
 		userid.setText("UserID: "+s.getID());
 		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+s.getID()+".PNG\");"
@@ -99,7 +101,7 @@ public class StudentMainFrame implements ControlledScreen {
 			for (SolvedExam s:mySolvedExam)
 			{
 				String ExamId= Integer.toString(s.getID());
-				//if Student press on some course on list we check that student is actually did that exam on that course
+				//if Student press on some course on list we check that student is actually did the exam on that course
 				if(s.getCourse().getName().equals(CourseNameAndGrade[0]) && ExamId.equals(courseNameAndExamId.get(CourseNameAndGrade[0]))) 
 				{
 					studentViewExam.SetSolvedExam(s);
@@ -115,7 +117,7 @@ public class StudentMainFrame implements ControlledScreen {
 			alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("View exam Failed!");
 			alert.setHeaderText(null);
-			alert.setContentText("You have to choose exam first ");
+			alert.setContentText("You have to choose exam first! ");
 			alert.showAndWait();
 			
 		}

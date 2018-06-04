@@ -14,6 +14,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import logic.Globals;
 import logic.QuestionInExam;
@@ -22,13 +23,18 @@ import ocsf.client.ClientGlobals;
 
 public class StudentViewExamFrame implements ControlledScreen {
 
-	private SolvedExam solvedExam;
+	
+	
 	@FXML Label courseName;
 	@FXML Label grade;
 	@FXML Label StudentInfo;
 	@FXML VBox questionInfo_StudentScoreAndNote;
 	
+	private SolvedExam solvedExam;
 	private HashMap<QuestionInExam, Integer> studentsAnswers;
+	private final Image v = new Image("resources/v.png"); 
+	private final Image x = new Image("resources/x.png"); 
+	private final String BlackLabel=new String("blackLabel");
 	
 	
 	@Override
@@ -67,8 +73,9 @@ public class StudentViewExamFrame implements ControlledScreen {
 		ImageView imageView=new ImageView();
 		imageView.setFitHeight(10);
 		imageView.setFitWidth(10);
-		Image v = new Image(getClass().getResourceAsStream("v.png"));
-		Image x = new Image(getClass().getResourceAsStream("x.png"));
+		
+		//theRightAnswerIs.setId(BlackLabel);
+		
 		
 		
 		RadioButton answers[];
@@ -109,7 +116,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 			}
 			
 			questionInfo_StudentScoreAndNote.getChildren().add(GetStudentScorePointsAnd_X_V_Icon(studentGetsPointsFromQuestion,v_x_Icon));
-			if(studentAnswer=false)//If student answer is not correct that he gets a note about the real correct answer.
+			//if(studentAnswer=false)//If student answer is not correct that he gets a note about the real correct answer.
 				questionInfo_StudentScoreAndNote.getChildren().add(theRightAnswerIs);
 			
 			//here we gonna do this line questionNote.setText 
@@ -131,6 +138,22 @@ public class StudentViewExamFrame implements ControlledScreen {
 	 * Set Student's chosen solved exam for window View Exam.
 	 * @param s SolvedExam  
 	 */
+
+	
+	public HBox GetStudentScorePointsAnd_X_V_Icon(Label scorePoints,Pane v_x_Icon)
+	{
+		HBox scorePointsAndv_x_Icon = new HBox();
+		scorePointsAndv_x_Icon.getChildren().addAll(scorePoints,v_x_Icon);
+		return scorePointsAndv_x_Icon;
+	}
+		
+	/**
+	 * Set Student's chosen solved exam for window View Exam.
+	 * @param s SolvedExam  
+	 */
+
+	
+	
 	public void SetSolvedExam(SolvedExam s)
 	{
 		this.solvedExam=s;
