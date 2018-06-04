@@ -103,39 +103,38 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			questionInfo.getChildren().add(r);
 		}
 		// this HBox will hold the EditDelete buttons
-		HBox questionEditDelete = new HBox();
-		questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
-		questionEditDelete.setStyle("-fx-margin:20px");
-		Button edit = new Button("Edit");
-		edit.setId(q.questionIDToString());
-		edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEditHandler());
-		Button delete = new Button ("Delete");
-		delete.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyDeleteHandler());
-		delete.setId(q.questionIDToString());
-		questionEditDelete.getChildren().add(edit);
-		questionEditDelete.getChildren().add(delete);
-		questionInfo.getChildren().add(questionEditDelete);
+		//HBox questionEditDelete = new HBox();
+		//questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
+		//questionEditDelete.setStyle("-fx-margin:20px");
+		//Button edit = new Button("Edit");
+		//edit.setId(q.questionIDToString());
+		//edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEditHandler());
+		//Button delete = new Button ("Delete");
+		//delete.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyDeleteHandler());
+		//delete.setId(q.questionIDToString());
+		//questionEditDelete.getChildren().add(delete);
+		//questionInfo.getChildren().add(questionEditDelete);
 		// this VBox holds the course list assigned to this question
-		VBox assignedCourses = new VBox();
-		assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
-		ListView<String> courselist = new ListView<>();
-		courselist.setMaxWidth(120);
-		courselist.setMaxHeight(100);
-		courselist.setDisable(true);
-		ArrayList<String> al = new ArrayList<>();
-		for(Course c : q.getCourses()) {
-			al.add(c.toString());
-		}
-		ObservableList<String> list = FXCollections.observableArrayList(al);
-		courselist.setItems(list);
-		assignedCourses.getChildren().add(courselist);
-		
-		hbox.getChildren().addAll(questionInfo,assignedCourses);
+		//VBox assignedCourses = new VBox();
+		//assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
+		//ListView<String> courselist = new ListView<>();
+		//courselist.setMaxWidth(120);
+		//courselist.setMaxHeight(100);
+		//courselist.setDisable(true);
+		//ArrayList<String> al = new ArrayList<>();
+		//for(Course c : q.getCourses()) {
+		//	al.add(c.toString());
+		//}
+		//ObservableList<String> list = FXCollections.observableArrayList(al);
+		//courselist.setItems(list);
+		//assignedCourses.getChildren().add(courselist);
+		//
+		//hbox.getChildren().addAll(questionInfo,assignedCourses);
 		
 		
 		return hbox;
 	}
-	private class MyEditHandler implements EventHandler<Event>{
+/*/	private class MyEditHandler implements EventHandler<Event>{
         @Override
         public void handle(Event evt) {
            Question question = questions.get(((Control)evt.getSource()).getId());
@@ -182,7 +181,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
     			    System.out.println("user chose CANCEL or closed the dialog");
     			}
             }
-        }
+        }/*/
     public void CancelButtonPressed(ActionEvent event)
     {
     		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
@@ -195,17 +194,15 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	}
 
 	@FXML 
-	void filterByField(ActionEvent event) {
+	public void filterByField(ActionEvent event) {
 		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
-			ArrayList <Field> selectefield = new ArrayList<>();
-			Field selectefield1=fieldComboB.getSelectionModel().getSelectedItem();
-			selectefield.add(fieldComboB.getSelectionModel().getSelectedItem());
+			Field selectefield=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
 			ArrayList<Course> cousesInField = new ArrayList<>();
-			teachersCourses = CourseFieldController.getFieldsCourses(selectefield);
+			teachersCourses = CourseFieldController.getFieldCourses(selectefield);
 			for(Course c: teachersCourses)
 			{
-				if(c.getField().equals(selectefield1)) 
+				if(c.getField().equals(selectefield)) 
 						cousesInField.add(c);
 			}	
 				
@@ -213,6 +210,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			courseComboB.setItems(list);
 		}
 		System.out.println(courseComboB.getItems().toString());
+		
 	}
 	
 	@FXML 
@@ -236,7 +234,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		}
 	
 	}
-
+	@FXML
 	public void CreatelButtonPressed(ActionEvent event)
 	{
 	}

@@ -105,7 +105,7 @@ public class DBMain {
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	
-	private String getQuestionsInCourse="Select * FROM aes.questions as q, aes.questions_in_course as qc,aes.courses as c,aes.users as u"
+	private String QuestionsInCourse="Select * FROM aes.questions as q, aes.questions_in_course as qc,aes.courses as c,aes.users as u"
 			+ " where c.courseid=qc.courseid and q.questionid=qc.questionid and u.userid=q.teacherid and c.fieldid=q.fieldid and c.courseid=?";
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
@@ -115,6 +115,10 @@ public class DBMain {
 	private String teachersSolvedExams="select * from solved_exams as se, exams as e where se.examid=e.examid and e.teacherid=?";
 	private String getstudentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	/*/
+	
+	private String FieldCourses="Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
+			+ " where  c.fieldid=f.fieldid and f.fieldid=?";
+	
 	
 	private String login = "SELECT * FROM aes.users WHERE username=?";
 	/**
@@ -607,7 +611,7 @@ public class DBMain {
 	public ArrayList<Question> getCourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {
-			PreparedStatement prst = conn.prepareStatement(getQuestionsInCourse);
+			PreparedStatement prst = conn.prepareStatement(QuestionsInCourse);
 			prst.setInt(1,c.getId());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
@@ -658,6 +662,30 @@ public class DBMain {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+//FieldCourses
+	public ArrayList<Course> getFieldCourses(Field o) {
+		Field f = (Field) o;
+		try {
+			PreparedStatement prst = conn.prepareStatement(FieldCourses);
+			prst.setInt(1,f.getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Course> result = new ArrayList<>();
+			while(rs.next()) {
+				int Courseid = rs.getInt(1);
+				String Coursename = rs.getString(2);
+				
+				Course Course = new Course(Courseid,Coursename,f);
+				result.add(Course);
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+		
 	}
 
 }

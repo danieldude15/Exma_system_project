@@ -111,6 +111,10 @@ public class AESServer extends AbstractServer {
 			case "getCourseQuestions":
 				getCourseQuestions(client,o);
 				break;
+			case "getFieldCourses":
+				getFieldCourses(client,o);
+				break;
+				
 				
 			default:
 				
@@ -121,6 +125,7 @@ public class AESServer extends AbstractServer {
 		}
 	}
 
+	
 	/**
 	 * Hook Method executed right before server closes while still listening
 	 * this is part of AbstractServer functionality
@@ -313,6 +318,13 @@ public class AESServer extends AbstractServer {
 		connectedUsers.clear();
 	}
 	
+	private void getFieldCourses(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Course> Courses = sqlcon.getFieldCourses((Field)o);
+		iMessage im = new iMessage("FieldCourses", Courses);
+		client.sendToClient(im);
+		
+	}
+
 	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getCourseQuestions((Course)o);
 		iMessage im = new iMessage("CourseQuestions", questions);
