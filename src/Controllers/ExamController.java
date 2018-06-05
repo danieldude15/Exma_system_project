@@ -14,7 +14,6 @@ public class ExamController {
 
 	public static ArrayList<Exam> getTeachersExams(Teacher t){
 		AESClient client = ClientGlobals.client;
-		ArrayList<Exam> exams;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("getTeachersExam",t);
 			try {
@@ -29,7 +28,17 @@ public class ExamController {
 	}
 
 	public static int deleteExam(Exam exam) {
-		// TODO Auto-generated method stub
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("DeleteExam",exam);
+			try {
+				client.sendToServer(msg);
+				return (Integer) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
 		return 0;
 	}
 }

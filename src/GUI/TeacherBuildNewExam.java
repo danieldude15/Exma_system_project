@@ -43,7 +43,8 @@ import logic.*;
 import ocsf.client.ClientGlobals;
 
 public class TeacherBuildNewExam implements Initializable, ControlledScreen {
-
+	
+	HBox hbox = new HBox();
 	HashMap<String,Question> questions = new HashMap<>();
 	ArrayList<Field> teachersFields;
 	ArrayList<Course> teachersCourses;
@@ -64,7 +65,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(700);
 		Globals.primaryStage.setWidth(650);			
-		
+		questionsList.getChildren().clear();
 		teacherFieldsLoading();
 		
 	}
@@ -81,13 +82,13 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		fieldComboB.setItems(list);
 	}
 	
-
+	/*/
 	private Node questionAdder(Question q) {
 		//HBox main question container
 		HBox hbox = new HBox();
 		hbox.setStyle("-fx-border-color:black;"
-					+ "-fx-border-radius:10px;"
-					+ "-fx-padding:10px;");
+					+ "-fx-border-radius:5px;"
+					+ "-fx-padding:5px;");
 		
 		//This VBox holds the question details
 		VBox questionInfo = new VBox();
@@ -101,42 +102,64 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			r.setDisable(true);
 			r.setWrapText(true);
 			questionInfo.getChildren().add(r);
+		
 		}
+		hbox.getChildren().add(questionInfo);
+		return hbox;
+	}
+	
+  /*/
+	private Node questionAdder(Question q) {
+		//HBox main question container
+		
+		hbox.setStyle("-fx-border-color:black;"
+					+ "-fx-border-radius:10px;"
+					+ "-fx-padding:10px;");
+		
+		//This VBox holds the question details
+		VBox questionInfo = new VBox();
+		Label questionString = new Label("Question: "+q.getQuestionString());
+		questionString.setId("blackLabel");
+		questionString.setWrapText(true);
+		questionInfo.setMinWidth(330);
+		questionInfo.setMaxWidth(330);
+		Label qid = new Label("QID: "+q.questionIDToString());
+		qid.setId("blackLabel");
+		questionInfo.getChildren().add(qid);
+		questionInfo.getChildren().add(questionString);
+		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
+		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
+		for(RadioButton r:answers) {
+			r.setDisable(true);
+			r.setWrapText(true);
+			r.setId("blackLabel");
+			questionInfo.getChildren().add(r);
+		}
+		
 		// this HBox will hold the EditDelete buttons
-		//HBox questionEditDelete = new HBox();
-		//questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
-		//questionEditDelete.setStyle("-fx-margin:20px");
-		//Button edit = new Button("Edit");
-		//edit.setId(q.questionIDToString());
-		//edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEditHandler());
-		//Button delete = new Button ("Delete");
-		//delete.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyDeleteHandler());
-		//delete.setId(q.questionIDToString());
-		//questionEditDelete.getChildren().add(delete);
-		//questionInfo.getChildren().add(questionEditDelete);
-		// this VBox holds the course list assigned to this question
-		//VBox assignedCourses = new VBox();
-		//assignedCourses.getChildren().add(new Label("Courses Assigned to Question:"));
-		//ListView<String> courselist = new ListView<>();
-		//courselist.setMaxWidth(120);
-		//courselist.setMaxHeight(100);
-		//courselist.setDisable(true);
-		//ArrayList<String> al = new ArrayList<>();
-		//for(Course c : q.getCourses()) {
-		//	al.add(c.toString());
-		//}
-		//ObservableList<String> list = FXCollections.observableArrayList(al);
-		//courselist.setItems(list);
-		//assignedCourses.getChildren().add(courselist);
-		//
-		//hbox.getChildren().addAll(questionInfo,assignedCourses);
+		HBox questionEditDelete = new HBox();
+		questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
+		questionEditDelete.setStyle("-fx-margin:20px");
+		Button edit = new Button("Edit");
+		edit.setId(q.questionIDToString());
+		edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEditHandler());
+		Button delete = new Button ("Delete");
+		delete.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyDeleteHandler());
+		delete.setId(q.questionIDToString());
+		questionEditDelete.getChildren().add(edit);
+		questionEditDelete.getChildren().add(delete);
+		questionInfo.getChildren().add(questionEditDelete);
+		
+	
+		
+		hbox.getChildren().addAll(questionInfo);
 		
 		
 		return hbox;
 	}
-/*/	private class MyEditHandler implements EventHandler<Event>{
-        @Override
-        public void handle(Event evt) {
+
+	private class MyEditHandler implements EventHandler<Event>{
+        @Override public void handle(Event evt) {
            Question question = questions.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
            teachersCourses.remove(0);
@@ -146,42 +169,46 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
            ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.EDIT);
            Globals.mainContainer.setScreen(ClientGlobals.TeacherEditAddQuestionID);
         }
-	}
-    private class MyDeleteHandler implements EventHandler<Event>{
-            @Override
-            public void handle(Event evt) {
-        		Alert alert = new Alert(AlertType.CONFIRMATION);
-    			alert.setTitle("Deletion Confirmation");
-    			alert.setHeaderText(null);
-    			alert.setContentText("Are you sure you want to delete this question?\nThis Operation cannot be undone!");
-    			Optional<ButtonType> result = alert.showAndWait();
-    			if (result.get() == ButtonType.OK){
-    				Question question = questions.get(((Control)evt.getSource()).getId());
-    	        	int effectedRows = QuestionController.deleteQuestion(question);
-    	        	if(effectedRows>0) {
-    	        		alert = new Alert(AlertType.INFORMATION);
-    	        		alert.setTitle("Question Deleted Succesfully");
-    	    			alert.setHeaderText("");
-    	        		alert.setContentText("Question Info:"
-    	        				+ "\n" + question +""
-        						+ "\n\n Was deleted Successfully");
-    	        		alert.show();
-    	        		runOnScreenChange();
-    	        		System.out.println("Question Deleted!");
-    	        	} else {
-    	        		alert = new Alert(AlertType.ERROR);
-    	        		alert.setTitle("Deletion Error");
-    	    			alert.setHeaderText(null);
-    	        		alert.setContentText("Could not delete question\n"
-    	        				+ "This question is already in Use in an existing Exam / Solved Exam / Completed Exam.\n"
-    	        				+ "you may not delete questions that other people are relaying on. ");
-    	        		alert.show();
-    	        	}
-    			} else {
-    			    System.out.println("user chose CANCEL or closed the dialog");
-    			}
-            }
-        }/*/
+    }
+	
+	private class MyDeleteHandler implements EventHandler<Event>{
+        @Override
+        public void handle(Event evt) {
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Deletion Confirmation");
+			alert.setHeaderText(null);
+			alert.setContentText("Are you sure you want to delete this question?\nThis Operation cannot be undone!");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				Question question = questions.get(((Control)evt.getSource()).getId());
+	        	int effectedRows = QuestionController.deleteQuestion(question);
+	        	if(effectedRows>0) {
+	        		alert = new Alert(AlertType.INFORMATION);
+	        		alert.setTitle("Question Deleted Succesfully");
+	    			alert.setHeaderText("");
+	        		alert.setContentText("Question Info:"
+	        				+ "\n" + question +""
+    						+ "\n\n Was deleted Successfully");
+	        		alert.show();
+	        		runOnScreenChange();
+	        		System.out.println("Question Deleted!");
+	        	} else {
+	        		alert = new Alert(AlertType.ERROR);
+	        		alert.setTitle("Deletion Error");
+	    			alert.setHeaderText(null);
+	        		alert.setContentText("Could not delete question\n"
+	        				+ "This question is already in Use in an existing Exam / Solved Exam / Completed Exam.\n"
+	        				+ "you may not delete questions that other people are relaying on. ");
+	        		alert.show();
+	        	}
+			} else {
+			    System.out.println("user chose CANCEL or closed the dialog");
+			}
+        }
+    }
+	
+	
+            
     public void CancelButtonPressed(ActionEvent event)
     {
     		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
@@ -195,6 +222,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 
 	@FXML 
 	public void filterByField(ActionEvent event) {
+		questionsList.getChildren().clear();
 		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
 			Field selectefield=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
@@ -216,21 +244,21 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	@FXML 
 	public void filterByCourse(ActionEvent event) 
 	{
+		questionsList.getChildren().clear();
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
 		{
-			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
-			DBquestions =  QuestionController.getCourseQuestions(selectedCourse);
-			if (DBquestions!=null) 
-				setQuestionsListInVBox();
+			 DBquestions =  QuestionController.getCourseQuestions(courseComboB.getSelectionModel().getSelectedItem());
+				if (DBquestions!=null) 
+					setQuestionsListInVBox();
 		}			 
 	 }
+	
 		
 	private void setQuestionsListInVBox() {
 		questionsList.getChildren().clear();
 		System.out.println(DBquestions);
 		for(Question q:DBquestions) {
-			questions.put(q.questionIDToString(),q);
-			questionsList.getChildren().add(questionAdder(q));
+			questionsList.getChildren().add(hbox);
 		}
 	
 	}

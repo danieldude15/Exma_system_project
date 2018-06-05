@@ -48,8 +48,8 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 		
 		ArrayList<String> al = new ArrayList<String>();	
 		for (SolvedExam se : completedExam.getSolvedExams()) {
-			al.add("Student ID: " + se.getExamSolver().getID() + " | "
-					+ "Name: " + se.getExamSolver().getName() + " | "
+			al.add("Student ID: " + se.getStudent().getID() + " | "
+					+ "Name: " + se.getStudent().getName() + " | "
 					+ "Score: " + se.getScore() + " | "
 					+ "Completed: " + se.getCompletedTimeInMinutes());
 		}

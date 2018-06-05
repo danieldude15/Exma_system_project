@@ -3,12 +3,24 @@ package logic;
 import GUI.ScreensController;
 import javafx.stage.Stage;
 
+/**
+ * this class holds global variables that are used globally in the application for easy access and maintanace
+ * @author Group-12
+ *
+ */
 public class Globals {
-	public enum Type {
-		VISIBLE,HIDDEN;
-	}
-
+	
+	/**
+	 * this enum will hold visible or hidden types
+	 */
+	public enum Type {VISIBLE,HIDDEN;}
+	/**
+	 * this is the primaryStage of the users application used to change size of windows and other adjustments
+	 */
 	public static Stage primaryStage = null;
+	/**
+	 * this is the mainContainer that holds all the nodes of contents of all screens and used to pass by different screens information
+	 */
 	public static ScreensController mainContainer;
 	/**
 	 * handle a core exception when the program cannot continue to function after this type of exception

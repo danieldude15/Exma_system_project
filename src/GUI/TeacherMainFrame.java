@@ -13,18 +13,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
-import logic.ActiveExam;
-import logic.CompletedExam;
-import logic.Globals;
-import logic.Student;
-import logic.Teacher;
+import javafx.scene.layout.Pane;
+import logic.*;
 import ocsf.client.ClientGlobals;
 
 
@@ -44,7 +42,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Label welcome;
 	@FXML Label username;
 	@FXML Label userid;
-	@FXML ImageView userImage;
+	@FXML Pane userImage;
 	@FXML Tab myInfoTab;
 	@FXML TabPane infoTabPane;
 	
@@ -57,33 +55,21 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.primaryStage.setHeight(750);
 		Globals.primaryStage.setWidth(820);
 
-		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
-		ArrayList<String> al = new ArrayList<String>();	
-		for (CompletedExam ce : TeacherCExams) {
-			al.add("ExamID: "+ ce.getExam().examIdToString() + " Code:" + ce.getCode() + " Date <DATE>");
-		}
+		updateCompletedExamListView();
 		
-		CompletedExamList.getItems().clear();
-		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
-		CompletedExamList.setItems(list);
+		updateActiveExamListView();
 		
-		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
-		al = new ArrayList<String>();	
-		for (ActiveExam ae : TeacherAExams) {
-			al.add("ExamID: "+ ae.getExam().examIdToString() + " Code:" + ae.getCode() + " Date <DATE>");
-		}
-		
-		ActiveExamsList.getItems().clear();
-		ObservableList<ActiveExam> list2 = FXCollections.observableArrayList(TeacherAExams);
-		ActiveExamsList.setItems(list2);
-		
-		/*Get student personal info from database and set it beneath the TabPane "My info" on window/*/
+		/*Get Teachers personal info from database and set it beneath the TabPane "My info" on window/*/
 		Teacher t=(Teacher)ClientGlobals.client.getUser();
 		welcome.setText("Wellcome: "+t.getName());
 		username.setText("UserName: "+t.getUserName());
 		userid.setText("UserID: "+t.getID());
+		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+t.getID()+".PNG\");"
+						+ "-fx-background-size: 150px 150px;"
+						+ "-fx-background-repeat: no-repeat;");
+
 	}
-	
+
 	@FXML public void gotToManageQuestions(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageQuestionsID);
 	}
@@ -97,7 +83,21 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void lockExamClicked(ActionEvent event) {
-		
+		if (ActiveExamsList.getSelectionModel().getSelectedItem()!=null) {
+			int lockedUsers =  ActiveExamController.lockExam(ActiveExamsList.getSelectionModel().getSelectedItem());
+			Alert alert = new Alert(AlertType.INFORMATION);
+    		alert.setTitle("Locked Active Exam");
+			alert.setHeaderText("");
+    		alert.setContentText("You locked the exam while " + lockedUsers +" students where participating in it.");
+    		alert.show();
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+    		alert.setTitle("No Active Exam Selected");
+			alert.setHeaderText("");
+    		alert.setContentText("You must select an Active Exam from the list to lock an Active Exam");
+    		alert.show();
+		}
+		updateActiveExamListView();
 	}
 	
 	@FXML public void requestTimeChangeClicked(ActionEvent event) {
@@ -135,4 +135,17 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		UserController.logout();
 	}
 
+	private void updateActiveExamListView() {
+		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
+		ActiveExamsList.getItems().clear();
+		ObservableList<ActiveExam> list2 = FXCollections.observableArrayList(TeacherAExams);
+		ActiveExamsList.setItems(list2);
+	}
+	
+	private void updateCompletedExamListView() {
+		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
+		CompletedExamList.getItems().clear();
+		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
+		CompletedExamList.setItems(list);
+	}
 }

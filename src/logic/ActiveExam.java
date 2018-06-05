@@ -2,18 +2,46 @@ package logic;
 
 import java.io.Serializable;
 
+/**
+ * This is the ActiveExam Entitiy that holds information on active exams 
+ * @author Group-12
+ *
+ */
 public class ActiveExam implements Serializable{
 
 	/**
-	 * 
+	 * Serializable id give for client server communication
 	 */
 	private static final long serialVersionUID = 4561592102347244137L;
+	/**
+	 * active exam code is a 4 characted code
+	 */
 	private String code;
+	/**
+	 * type of active Exam , computerized of manual
+	 */
 	private int type;
+	/**
+	 * date that the exam was activated 
+	 */
 	private String dateActivated;
+	/**
+	 * the teacher who activated this exam
+	 */
 	private Teacher activator;
+	/**
+	 * the actual exam
+	 */
 	private Exam exam;
 	
+	/**
+	 * active Exam cosntructor
+	 * @param code - the activeExam code (4 char)
+	 * @param type - the type of exam. {computerized or manual}
+	 * @param dayActivated - the date thei exam was activated
+	 * @param activator - the teacher who activated this exam
+	 * @param e - the exam that is active
+	 */
 	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)/*Constructor/*/
 	{
 		this.code=code;
@@ -39,27 +67,41 @@ public class ActiveExam implements Serializable{
 	}
 	
 	/**
-	 * this function returns if an ActiveExam is currently active or no
+	 * 
 	 * @return true for active exam and false for non-active exams
 	 */
-
 	public Teacher getActivator() {
 		return activator;
 	}
 
+	/**
+	 * getDate
+	 * @return the date when this exam was activated
+	 */
 	public String getDate() {
 		return dateActivated;
 	}
 
+	/**
+	 * getCode
+	 * @return the 4 character code identifier of this active exam
+	 */
 	public String getCode() {
-		/*Code getter/*/
 		return this.code;
 	}
+	
+	/**
+	 * getType
+	 * @return the type of this exam. either computerized or manual
+	 */
 	public int getType() {
-		/*Type getter/*/
 		return this.type;
 	}
 
+	/**
+	 * getExam
+	 * @return this exam that is currently active
+	 */
 	public Exam getExam()
 	{
 		/*Exam getter/*/
@@ -76,15 +118,44 @@ public class ActiveExam implements Serializable{
 		return null;
 	}
 
-	@Override
-	public String toString() {
+	/**
+	 * overriding toString method. 
+	 * will print the active exam information for listViews
+	 */
+	@Override public String toString() {
 		String examType;
 		if (type==1) examType = "Computerized";
 		else examType = "Manual";
 		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),exam.examIdToString() ,examType));
 	}
+
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31*result + getExam().hashCode();
+		return result;
+	}
+
+	/**
+	 * This function Overrides the Object equals function and checks if the information in the object is identical 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj)return true;
+		if(obj instanceof ActiveExam) {
+			ActiveExam a = (ActiveExam) obj;
+			if (!a.getCode().equals(code) || a.getType()!=type) return false;
+			if (a.getDate()!=null && !a.getDate().equals(dateActivated)) return false;
+			if (!a.getActivator().equals(activator)) return false;
+			if (a.getExam()!=null && !a.getExam().equals(exam)) return false;
+			return true;
+		}
+		return false;
+	}
 	
 	
 
+	
 	
 }

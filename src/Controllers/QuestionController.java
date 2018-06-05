@@ -12,16 +12,11 @@ public class QuestionController {
 	
 	public static ArrayList<Question> getTeachersQuestions(Teacher t) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<Question> questions;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("getTeachersQuestions",t);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				//Object o = client.getMsg().getObj();
-				if(o instanceof ArrayList) {
-					return (ArrayList<Question>) o;
-				}
+				return (ArrayList<Question>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -33,18 +28,11 @@ public class QuestionController {
 
 	public static ArrayList<Course> getQuestionCourses(Question question) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<Course> courses;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("getQuestionCourses",question);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				ArrayList<Course> QuestionCourses = null;
-				if(o instanceof ArrayList) {
-					QuestionCourses = (ArrayList<Course>) ((ArrayList<Course>) o).clone();
-				}
-				courses = QuestionCourses;
-				return courses;
+				return (ArrayList<Course>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -55,16 +43,11 @@ public class QuestionController {
 
 	public static ArrayList<QuestionInExam> getQuestionsInExam(String examid) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<QuestionInExam> questions = null;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("getQuestionInExam",examid);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				if(o instanceof ArrayList) {
-					questions = (ArrayList<QuestionInExam>) ((ArrayList<QuestionInExam>) o).clone();
-				}
-				return questions;
+				return (ArrayList<QuestionInExam>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -79,10 +62,7 @@ public class QuestionController {
 			iMessage msg= new iMessage("deleteQuestion",q);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				if(o instanceof Integer) {
-					return (Integer) o;
-				}
+				return (Integer) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -93,19 +73,11 @@ public class QuestionController {
 
 	public static ArrayList<Question> getCourseQuestions(Course c) {
 		AESClient client = ClientGlobals.client;
-		ArrayList<Question> questions;
 		if(client.isConnected()) {
-			iMessage msg= new iMessage("getCourseQuestions",c);
+			iMessage msg= new iMessage("CourseQuestions",c);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				//Object o = client.getMsg().getObj();
-				ArrayList<Question> CourseQuestions = null;
-				if(o instanceof ArrayList) {
-					CourseQuestions = (ArrayList<Question>) ((ArrayList<Question>) o).clone();
-				}
-				questions = CourseQuestions;
-				return questions;
+				return (ArrayList<Question>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -131,7 +103,6 @@ public class QuestionController {
 			}
 		}
 		return 0;
-		
 	}
 
 	public static int editQuestion(Question q) {
