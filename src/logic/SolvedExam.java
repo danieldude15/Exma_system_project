@@ -165,7 +165,7 @@ public class SolvedExam extends Exam{
 	 * overriding the toString proc to be used in listViews in GUI
 	 */
 	@Override public String toString() {
-		return "Course: " + getCourse().getName() + " Completed_Time: " + CompletedTimeInMinutes + " Score: " + score;
+		return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
 	}
 	
 	

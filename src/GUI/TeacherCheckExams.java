@@ -1,11 +1,9 @@
 package GUI;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
-import Controllers.SolvedExamController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import logic.CompletedExam;
 import logic.Globals;
 import logic.SolvedExam;
-import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 public class TeacherCheckExams implements ControlledScreen, Initializable {
@@ -30,7 +27,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	@FXML Label submited;
 	@FXML Label fialToSubmitStudents;
 	@FXML Label checkOutOf;
-	@FXML ListView SolvedExamList;
+	@FXML ListView<SolvedExam> SolvedExamList;
 	@FXML Button checkB;
 	@FXML Button approveB;
 	@FXML Button backB;
@@ -46,23 +43,29 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 		Globals.primaryStage.setHeight(900);
 		Globals.primaryStage.setWidth(670);
 		
-		ArrayList<String> al = new ArrayList<String>();	
-		for (SolvedExam se : completedExam.getSolvedExams()) {
-			al.add("Student ID: " + se.getStudent().getID() + " | "
-					+ "Name: " + se.getStudent().getName() + " | "
-					+ "Score: " + se.getScore() + " | "
-					+ "Completed: " + se.getCompletedTimeInMinutes());
-		}
-		
 		SolvedExamList.getItems().clear();
-		ObservableList<String> list = FXCollections.observableArrayList(al);
+		ObservableList<SolvedExam> list = FXCollections.observableArrayList(completedExam.getSolvedExams());
 		SolvedExamList.setItems(list);
 		
 	}
 	
-	@FXML 
-	public void solvedExamsListViewClicked(MouseEvent event) {
+	@FXML public void solvedExamsListViewClicked(MouseEvent event) {
 		
+	}
+	
+	@FXML public void approvedExamClicked(ActionEvent event) {
+		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
+			((TeacherCheckExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
+			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
+		}
+	}
+
+	
+	@FXML public void checkExamClicked(ActionEvent event) {
+		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
+			((TeacherCheckExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
+			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
+		}
 	}
 	
 	@FXML void backToHome(ActionEvent event) {

@@ -63,28 +63,28 @@ public class ClientGlobals {
 
 	public static final String TeacherManageExamsID = "TeacherManageExams";
 	public static final String TeacherManageExamsPath = "/fxml/TeacherManageExams.fxml";
-	
+
+	public static final String TeacherCheckExamID = "TeacherCheckExam";
+	public static final String TeacherManageExamPath = "/fxml/TeacherCheckExam.fxml";
 	
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
-		/*Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Diconnected to Server");
-		alert.setHeaderText(null);
-		alert.setContentText("Somthing Went wrong.");
-		alert.show();*/
+		System.out.println("Cause: "+ e.getCause());
+		System.out.println("Msg: "+e.getMessage());
 		try {
-			if (client!=null && !client.isConnected()) {
+				client.closeConnection();
+				client.stopWaiting();
 				System.out.println("trying to reconnect");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
 				client.openConnection();
-			}
+				System.out.println("Client is reconnected:" + client.isConnected());
 		} catch (IOException e1) {
-			/*alert.setTitle("Failed to Reconnect");
-			alert.setHeaderText(null);
-			alert.setContentText("Reconnect Failed.");*/
 			System.out.println("Tried to Reconect and Failed! with Exception");
 		}
-		System.out.println("Couse: "+ e.getCause());
-		System.out.println("Msg: "+e.getMessage());
 	}
 	
 	
