@@ -55,7 +55,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	
 	@FXML public void approvedExamClicked(ActionEvent event) {
 		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
-			((TeacherCheckExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
+			((TeacherCheckSolvedExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
 			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
 		}
 	}
@@ -63,7 +63,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	
 	@FXML public void checkExamClicked(ActionEvent event) {
 		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
-			((TeacherCheckExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
+			((TeacherCheckSolvedExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
 			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
 		}
 	}

@@ -23,7 +23,7 @@ import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
 
-public class TeacherCheckExamFrame implements Initializable, ControlledScreen {
+public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScreen {
 
 	SolvedExam solvedExam = null;
 	private final Image v = new Image("resources/v.png"); 
@@ -37,8 +37,8 @@ public class TeacherCheckExamFrame implements Initializable, ControlledScreen {
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(900);
-		Globals.primaryStage.setWidth(670);
+		Globals.primaryStage.setHeight(850);
+		Globals.primaryStage.setWidth(770);
 		
 		if (solvedExam!=null) {
 			for(QuestionInExam q : solvedExam.getQuestionsInExam()) {
@@ -102,14 +102,16 @@ public class TeacherCheckExamFrame implements Initializable, ControlledScreen {
 	}
 
 	@FXML public void backButton(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
+	
+	@FXML public void submitButton(ActionEvent event) {}
 	
 	@FXML public void approvedExamClicked(ActionEvent event) {
 		
 	}
 	
 	public void setSolvedExam(SolvedExam se) {
-		
+		solvedExam= se;
 	}
 }

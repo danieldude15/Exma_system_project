@@ -64,8 +64,8 @@ public class ClientGlobals {
 	public static final String TeacherManageExamsID = "TeacherManageExams";
 	public static final String TeacherManageExamsPath = "/fxml/TeacherManageExams.fxml";
 
-	public static final String TeacherCheckExamID = "TeacherCheckExam";
-	public static final String TeacherManageExamPath = "/fxml/TeacherCheckExam.fxml";
+	public static final String TeacherCheckExamID = "TeacherCheckSolvedExam";
+	public static final String TeacherManageExamPath = "/fxml/TeacherCheckSolvedExam.fxml";
 	
 	public static void handleIOException(IOException e) {
 		e.printStackTrace();
@@ -73,7 +73,7 @@ public class ClientGlobals {
 		System.out.println("Msg: "+e.getMessage());
 		try {
 				client.closeConnection();
-				client.stopWaiting();
+				//client.stopWaiting();
 				System.out.println("trying to reconnect");
 				try {
 					Thread.sleep(1000);
