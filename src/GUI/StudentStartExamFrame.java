@@ -74,18 +74,9 @@ public class StudentStartExamFrame implements ControlledScreen{
 			//Student filled Two correct fields 
 			else  
 			{
-				//Exam is computerized, then student can start solve it.
-				if(active.getType()==1)
-				{
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
-				}
-				//Exam is manual, then word file is download first and then student can solve it.
-				else
-				{
-					//download word file and solve exam from it.
-				}
 			}
 			
 				
