@@ -21,6 +21,7 @@ import ocsf.client.ClientGlobals;
 public class TeacherCheckExams implements ControlledScreen, Initializable {
 
 	CompletedExam completedExam;
+	SolvedExam selectedExam;
 	
 	@FXML Label examid;
 	@FXML Label participated;
@@ -32,14 +33,12 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	@FXML Button approveB;
 	@FXML Button backB;
 	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	@Override public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void runOnScreenChange() {
+	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(900);
 		Globals.primaryStage.setWidth(670);
 		
@@ -50,20 +49,19 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	}
 	
 	@FXML public void solvedExamsListViewClicked(MouseEvent event) {
-		
+		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
+			selectedExam = SolvedExamList.getSelectionModel().getSelectedItem();
+		}
 	}
 	
 	@FXML public void approvedExamClicked(ActionEvent event) {
-		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
-			((TeacherCheckSolvedExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
-			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
-		}
+		
 	}
 
 	
 	@FXML public void checkExamClicked(ActionEvent event) {
 		if (SolvedExamList.getSelectionModel().getSelectedItem()!=null) {
-			((TeacherCheckSolvedExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(SolvedExamList.getSelectionModel().getSelectedItem());
+			((TeacherCheckSolvedExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamID)).setSolvedExam(selectedExam);
 			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamID);
 		}
 	}
