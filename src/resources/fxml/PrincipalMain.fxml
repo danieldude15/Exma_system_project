@@ -37,7 +37,7 @@
         <tabs>
           <Tab id="MyInfoTab_ID" fx:id="m_infoTab" text="My Info">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
+              <AnchorPane id="myInfo" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;">
                   <children>
                         <Button fx:id="logoutB" mnemonicParsing="false" onAction="#logout" text="Logout" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                           <Label id="blackLabel" fx:id="username" layoutY="32.0" text="UserName:">
