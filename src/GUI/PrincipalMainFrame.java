@@ -5,11 +5,10 @@ import Controllers.UserController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import logic.Globals;
+import logic.Principle;
 import ocsf.client.ClientGlobals;
 
 import java.net.URL;
@@ -27,11 +26,25 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
     @FXML private TabPane m_principalTabPane;
     @FXML private Tab m_infoTab;
     @FXML private Tab m_requestsTab;
+    @FXML private Label welcome;
+    @FXML private Label username;
+    @FXML private Label userid;
+    @FXML private Pane userImage;
 
     @Override
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(535);
         Globals.primaryStage.setWidth(523);
+
+
+        Principle p = (Principle) ClientGlobals.client.getUser();
+
+        welcome.setText("Welcome: " + p.getName());
+        username.setText("UserName: " + p.getUserName());
+        userid.setText("UserID: " + p.getID());
+        userImage.setStyle("-fx-background-image: url(\"resources/profile/" + p.getID()+".PNG\");"
+                + "-fx-background-size: 150px 150px;"
+                + "-fx-background-repeat: no-repeat;");
     }
 
     @Override

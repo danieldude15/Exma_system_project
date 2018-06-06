@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalMainFrame">
    <children>
       <AnchorPane prefHeight="250.0" prefWidth="200.0">
@@ -37,15 +37,41 @@
         <tabs>
           <Tab id="MyInfoTab_ID" fx:id="m_infoTab" text="My Info">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="logoutB" layoutX="398.0" layoutY="146.0" mnemonicParsing="false" onAction="#logout" text="Logout" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                     </children></AnchorPane>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
+                  <children>
+                        <Button fx:id="logoutB" mnemonicParsing="false" onAction="#logout" text="Logout" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                          <Label id="blackLabel" fx:id="username" layoutY="32.0" text="UserName:">
+                              <font>
+                                  <Font size="14.0" />
+                              </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                          </Label>
+                          <Label id="blackLabel" fx:id="userid" layoutY="52.0" text="UserID:">
+                              <font>
+                                  <Font size="14.0" />
+                              </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                          </Label>
+                          <Label id="blackLabel" fx:id="welcome" layoutY="-3.0" text="Welcome ">
+                              <font>
+                                  <Font name="System Bold" size="20.0" />
+                              </font>
+                           <padding>
+                              <Insets left="5.0" top="5.0" />
+                           </padding>
+                          </Label>
+                        <Pane fx:id="userImage" layoutX="343.0" prefHeight="154.0" prefWidth="139.0" />
+                  </children>
+              </AnchorPane>
             </content>
           </Tab>
           <Tab fx:id="m_requestsTab" disable="true" text="Request">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;" />
             </content>
           </Tab>
         </tabs>
