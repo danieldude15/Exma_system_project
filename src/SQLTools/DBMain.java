@@ -700,5 +700,14 @@ public class DBMain {
 		return 0;
 	}
 
+	/**
+	 * Upload Student's solved exam to database.
+	 * @param o
+	 */
+	public void UploadSolvedExam(SolvedExam o) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 

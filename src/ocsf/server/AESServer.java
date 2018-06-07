@@ -126,7 +126,13 @@ public class AESServer extends AbstractServer {
 			case "getCourseQuestions":
 				getCourseQuestions(client,o);
 				break;
-				
+			case "StudentCheckInToExam":
+				AddStudentToActiveExam(client,(Object[]) o);
+			case "StudentCheckedOutFromActiveExam":
+				RemoveStudentFromActiveExam(client,(Object[]) o);
+
+			case "UploadSolvedExamToDatabase":
+				UploadSolvedExamToDatabase(client,o);
 			default:
 				
 			}
@@ -134,6 +140,8 @@ public class AESServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
+
+
 
 
 	/**
@@ -264,7 +272,9 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("ActiveExam",activeExams.get((String)o));
 		client.sendToClient(im);
 	}
+
 	
+		
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {
@@ -409,4 +419,51 @@ public class AESServer extends AbstractServer {
 	}
 
 	
+	/**
+	 * Get an object[2] when object[0]=ActiveExam,object[1]=Student and add the student to the list.
+	 * In other words Student is check in to the active exam.
+	 * @param client
+	 * @param o
+	 * @throws IOException 
+	 */
+		private void AddStudentToActiveExam(ConnectionToClient client,Object[] o) throws IOException {
+			// TODO Auto-generated method stub
+			if(studentsInExam.containsKey((ActiveExam)o[0]))
+			{
+				if (studentsInExam.get((ActiveExam)o[0]) == null) 
+				{
+					studentsInExam.put((ActiveExam)o[0], new ArrayList<Student>());
+					studentsInExam.get((ActiveExam)o[0]).add((Student) o[1]);
+				}
+				else
+					studentsInExam.get((ActiveExam)o[0]).add((Student) o[1]);
+			}
+			
+				client.sendToClient(new iMessage("StudentCheckInToExam",null));
+		}
+
+		/**
+		 * When student submitted his exam we remove him from the list of the active exam.
+		 * In other words Student is check out from active exam. 
+		 * @param client
+		 * @param o
+		 * @throws IOException 
+		 */
+		private void RemoveStudentFromActiveExam(ConnectionToClient client, Object[] o) throws IOException {
+			// TODO Auto-generated method stub
+			studentsInExam.get((ActiveExam)o[0]).remove((Student)o[1]);
+			
+			client.sendToClient(new iMessage("StudentCheckedOutFromActiveExam", null));
+		}
+
+		private void UploadSolvedExamToDatabase(ConnectionToClient client, Object o) {
+			// TODO Auto-generated method stub
+			sqlcon.UploadSolvedExam((SolvedExam)o);
+		}
+
+	
 }
+
+
+
+

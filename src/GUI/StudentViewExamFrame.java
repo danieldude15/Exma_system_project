@@ -184,6 +184,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 		int answerIndex=1;
 		boolean visitOnStudentAnswer=false;
 		Label questionStringAndPointsValue = new Label();
+		Label questionNote=new Label();
 		questionStringAndPointsValue.setId(blackLabel);
 		String theRightAnswerIs=new String();
 		
@@ -198,7 +199,11 @@ public class StudentViewExamFrame implements ControlledScreen {
 		imageView.setFitHeight(10);
 		imageView.setFitWidth(10);
 				
-		
+		if(qie.getStudentNote()!=null)//If question contains note for student, we add it at the top of the question.
+		{
+			questionNote.setText("Note: "+qie.getStudentNote());
+			questionInfo_StudentScoreAndNote.getChildren().add(questionNote);
+		}
 		questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
 		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
 		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
