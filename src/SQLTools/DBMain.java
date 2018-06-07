@@ -704,6 +704,11 @@ public class DBMain {
 	 * Upload Student's solved exam to database.
 	 * @param o
 	 */
+	
+	
+	
+	
+	//new by itzik
 	public void UploadSolvedExam(SolvedExam o) {
 		// TODO Auto-generated method stub
 		

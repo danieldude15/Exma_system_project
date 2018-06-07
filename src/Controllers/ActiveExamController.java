@@ -3,6 +3,9 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -78,6 +81,25 @@ public class ActiveExamController {
 		return 0;
 	}
 
+	
+	
+	
+	public static XWPFDocument GetManualExam(String activeExamCode)
+	{
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("GetManualExam",activeExamCode);
+				client.sendToServer(msg);
+				return (XWPFDocument) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Send message to the server to add the student to the list of the Active exam.
 	 * @param s
