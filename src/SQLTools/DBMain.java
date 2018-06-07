@@ -111,14 +111,12 @@ public class DBMain {
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	
-	private String CourseQuestions=new String(""
-			+"Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,"
-			+"u.fullname,u.password,u.userid,u.username,f.fieldname"
-			+"FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u"
-						+" where c.courseid=qc.courseid and c.fieldid=qc.fieldid"  
-			             +"and  qc.questionid=q.questionid and c.fieldid=q.fieldid"
-			            +" and u.userid=q.teacherid and c.courseid=?");
-						
+	private String CourseQuestions=new String("Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,\n" + 
+			"			u.fullname,u.password,u.userid,u.username,f.fieldname\n" + 
+			"			FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u\n" + 
+			"						 where c.courseid=qc.courseid and f.fieldid=c.fieldid and c.fieldid=qc.fieldid \n" + 
+			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid\n" + 
+			"			             and u.userid=q.teacherid and c.courseid=? and f.fieldid=?");
 						
 	
 	
@@ -132,8 +130,9 @@ public class DBMain {
 	private String getstudentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	/*/
 	
-	private String FieldCourses="Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
-			+ " where  c.fieldid=f.fieldid and f.fieldid=?";
+	private String FieldCourses=new String(""
+			+"Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
+			+ " where  c.fieldid=f.fieldid and f.fieldid=?");
 	
 	
 	private String login = "SELECT * FROM aes.users WHERE username=?";
@@ -623,11 +622,12 @@ public class DBMain {
 		return 0;
 	}
 	
-	public ArrayList<Question> getCourseQuestions(Course o) {
+	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {
 			PreparedStatement prst = conn.prepareStatement(CourseQuestions);
 			prst.setInt(1,c.getId());
+			prst.setInt(2,c.getField().getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			System.out.println(rs);
@@ -681,7 +681,7 @@ public class DBMain {
 //FieldCourses
 	public ArrayList<Course> getFieldCourses(Field o) {
 		Field f = (Field) o;
-		try {
+			try {
 			PreparedStatement prst = conn.prepareStatement(FieldCourses);
 			prst.setInt(1,f.getID());
 			System.out.println("SQL:" + prst);
@@ -691,9 +691,7 @@ public class DBMain {
 			while(rs.next()) {
 				int Courseid = rs.getInt(1);
 				String Coursename = rs.getString(2);
-				
-				Course Course = new Course(Courseid,Coursename,f);
-				result.add(Course);
+				result.add(new Course(Courseid,Coursename,f));
 			}
 			return result;
 		} catch (SQLException e) {

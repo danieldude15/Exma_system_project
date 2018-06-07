@@ -41,7 +41,12 @@ public class QuestionInExam extends Question {
 		inNote=innerNote;
 		studentNote=StdNote;
 	}
-
+	public QuestionInExam(Question q,int points, String inNote,String StdNote) {
+		super(q.getID(),q.getAuthor(),q.getQuestionString(),q.getAnswers(),q.getField(),q.getCorrectAnswerIndex(),q.getCourses());
+		PointsValue = points;
+		inNote=innerNote;
+		studentNote=StdNote;
+	}
 	/**
 	 * copy constructor
 	 * @param q is QuestionInExam to be copied 
