@@ -105,6 +105,10 @@ public class ClientFrame implements Initializable {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
 			return;
 		}
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamID, ClientGlobals.TeacherManageExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherCheckExamID);
+			return;
+		}
 		if (!mainContainer.loadScreen(ClientGlobals.TeacherManageExamsID, ClientGlobals.TeacherManageExamsPath)) {
 			System.out.println("failed to load "+ ClientGlobals.TeacherManageExamsID);
 			return;

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class ServerGlobals {
 	public static final String ServerGuiID = "ServerGui";
-	public static final String ServerGuiPath = "/fxml/ServerGui.fxml";
+	public static final String ServerGuiPath = "/resources/fxml/ServerGui.fxml";
 	public static AESServer server = null;
 	
 	public static void handleSQLException(SQLException e) {
