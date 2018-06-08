@@ -39,7 +39,7 @@
          </padding>
       </Label>
       <TextField fx:id="m_searchBox" layoutX="14.0" layoutY="361.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-      <Button fx:id="m_searchBtn" layoutX="217.0" layoutY="361.0" mnemonicParsing="false" onAction="#searchForID" text="View Report" />
+      <Button fx:id="m_searchBtn" layoutX="217.0" layoutY="355.0" mnemonicParsing="false" onAction="#searchForID" text="View Report" />
       <Button fx:id="m_backtoMainBtn" layoutX="272.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToMainMenu" text="Back to Main Menu" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>
