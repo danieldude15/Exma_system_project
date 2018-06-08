@@ -2,8 +2,11 @@ package Controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import logic.Exam;
+import logic.Question;
+import logic.QuestionInExam;
 import logic.Teacher;
 import logic.iMessage;
 import ocsf.client.AESClient;
@@ -39,6 +42,24 @@ public class ExamController {
 				e.printStackTrace();
 			}
 		} 
+		return 0;
+	}
+
+	public static int addExam(Exam exam) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("addExam",exam);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				if(o instanceof Integer) {
+					return (Integer) o;
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
 		return 0;
 	}
 }

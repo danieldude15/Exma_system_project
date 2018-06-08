@@ -112,8 +112,24 @@ public class DBMain {
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	
-	private String getQuestionsInCourse="Select * FROM aes.questions as q, aes.questions_in_course as qc,aes.courses as c,aes.users as u"
-			+ " where c.courseid=qc.courseid and q.questionid=qc.questionid and u.userid=q.teacherid and c.fieldid=q.fieldid and c.courseid=?";
+	private String CourseQuestions=new String("Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,\n" + 
+			"			u.fullname,u.password,u.userid,u.username,f.fieldname\n" + 
+			"			FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u\n" + 
+			"						 where c.courseid=qc.courseid and f.fieldid=c.fieldid and c.fieldid=qc.fieldid \n" + 
+			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid\n" + 
+			"			             and u.userid=q.teacherid and c.courseid=? and f.fieldid=?");
+						
+	private String addexam = new String("INSERT INTO `aes`.`exams` "
+			+ "(`examid`,`timeduration`, `fieldid`, `courseid`,`teacherid`) "
+			+ "VALUES ('0', ?, ?,?,?);\n" 
+			);
+	
+	private String addQuestionInExam = new String(""
+			+ "INSERT INTO `aes`.`questions_in_exam` "
+			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
+			+ "VALUES (?,?,?,?,?,?,?);\n" 
+			);
+	
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
 	private String getUser="select * from users where userid=?";
@@ -122,6 +138,11 @@ public class DBMain {
 	private String teachersSolvedExams="select * from solved_exams as se, exams as e where se.examid=e.examid and e.teacherid=?";
 	private String getstudentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	/*/
+	
+	private String FieldCourses=new String(""
+			+"Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
+			+ " where  c.fieldid=f.fieldid and f.fieldid=?");
+	
 	
 	private String login = "SELECT * FROM aes.users WHERE username=?";
 	/**
@@ -688,30 +709,69 @@ public class DBMain {
 		return 0;
 	}
 	
-	public ArrayList<Question> getCourseQuestions(Course o) {
+	public int addexam(Exam e) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(addexam,Statement.RETURN_GENERATED_KEYS);
+			//(int iD, Course course, int duration, Teacher author, ArrayList<QuestionInExam> questionsInExam)
+			
+			prst.setInt(1, e.getDuration());
+			prst.setInt(2, e.getField().getID());
+			prst.setInt(3, e.getCourse().getId());
+			prst.setInt(3, e.getAuthor().getID());
+			
+			System.out.println("SQL:" + prst);
+			int worked = prst.executeUpdate();
+			if (worked==1) {
+				ResultSet rs = prst.getGeneratedKeys();
+				rs.next();
+				int examid = rs.getInt(1);
+				prst = conn.prepareStatement(addQuestionInExam);
+				for(QuestionInExam q: e.getQuestionsInExam()) {
+					prst.setInt(1, q.getID());
+					prst.setInt(2, examid);
+					prst.setInt(3, q.getPointsValue());
+					prst.setInt(4, e.getCourse().getId());
+					prst.setInt(5, q.getField().getID());
+					prst.setString(6, q.getInnerNote());
+					prst.setString(7, q.getStudentNote());
+					if(prst.executeUpdate()==0) {
+						deleteExam(e);
+						return 0;
+					} else worked++;
+				}
+			}
+			return worked;
+		} catch (Exception es) {
+			es.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {
-			PreparedStatement prst = conn.prepareStatement(getQuestionsInCourse);
+			PreparedStatement prst = conn.prepareStatement(CourseQuestions);
 			prst.setInt(1,c.getId());
+			prst.setInt(2,c.getField().getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			System.out.println(rs);
 			ArrayList<Question> result = new ArrayList<>();
 			while(rs.next()) {
-				int questionid = rs.getInt(1);
-				String questionString = rs.getString(2);
-				String answerA = rs.getString(3);
-				String answerB = rs.getString(4);
-				String answerC = rs.getString(5);
-				String answerD = rs.getString(6);
+				int questionid = rs.getInt(2);
+				String questionString = rs.getString(3);
+				String answerA = rs.getString(4);
+				String answerB = rs.getString(5);
+				String answerC = rs.getString(6);
+				String answerD = rs.getString(7);
 				String answers[] = new String[]{answerA,answerB,answerC,answerD};
-				int answerIndex = rs.getInt(7);
-				int fieldsid = rs.getInt(8);
-				int Tid = rs.getInt(9);
+				int answerIndex = rs.getInt(8);
+				int fieldsid = rs.getInt(1);
+				int Tid = rs.getInt(11);
 				String Tname= rs.getString(12);
-				String Password= rs.getString(13);
-				String fullname= rs.getString(14);
-				String fieldName = rs.getString(11);
+				String Password= rs.getString(10);
+				String fullname= rs.getString(9);
+				String fieldName = rs.getString(13);
 				Question question = new Question(questionid,new Teacher(Tid,Tname,Password,fullname), questionString, answers, new Field(fieldsid,fieldName), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
@@ -742,6 +802,28 @@ public class DBMain {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+//FieldCourses
+	public ArrayList<Course> getFieldCourses(Field o) {
+		Field f = (Field) o;
+			try {
+			PreparedStatement prst = conn.prepareStatement(FieldCourses);
+			prst.setInt(1,f.getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Course> result = new ArrayList<>();
+			while(rs.next()) {
+				int Courseid = rs.getInt(1);
+				String Coursename = rs.getString(2);
+				result.add(new Course(Courseid,Coursename,f));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+		
 	}
 
 	public ArrayList<Exam> getTeachersExams(Teacher o) {
