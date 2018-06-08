@@ -74,7 +74,7 @@ public class QuestionController {
 	public static ArrayList<Question> getCourseQuestions(Course c) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
-			iMessage msg= new iMessage("getCourseQuestions",c);
+			iMessage msg= new iMessage("CourseQuestions",c);
 			try {
 				client.sendToServer(msg);
 				return (ArrayList<Question>) client.getResponseFromServer().getObj();

@@ -158,8 +158,14 @@ public class AESServer extends AbstractServer {
 			case "getActiveExam":
 				getActiveExam(client,o);
 				break;
-			case "getCourseQuestions":
+			case "CourseQuestions":
 				getCourseQuestions(client,o);
+				break;
+			case "getFieldCourses":
+				getFieldCourses(client,o);
+				break;
+			case "addExam":
+				addExam(client,o);
 				break;
 			case "StudentCheckInToExam":
 				AddStudentToActiveExam(client,(Object[]) o);
@@ -291,7 +297,7 @@ public class AESServer extends AbstractServer {
 		}
 		activeExams.remove(ae.getCode());
 		if(ae.getType()==0)
-			wordFiles.remove(ae.getCode());
+			wordFiles.remove(ae);
 		
 		return counter;
 	}
@@ -387,6 +393,12 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
+	private void addExam(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.addQuestion((Question) o);
+		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
+	
 
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
@@ -418,10 +430,18 @@ public class AESServer extends AbstractServer {
 	}
 	
 	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
-		ArrayList<Question> questions = sqlcon.getCourseQuestions((Course)o);
+		ArrayList<Question> questions = sqlcon.CourseQuestions((Course)o);
 		iMessage im = new iMessage("CourseQuestions", questions);
 		client.sendToClient(im);
 	}
+	
+	private void getFieldCourses(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Course> Courses = sqlcon.getFieldCourses((Field)o);
+		iMessage im = new iMessage("FieldCourses",Courses);
+		client.sendToClient(im);
+	}
+	
+	
 	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
@@ -473,7 +493,6 @@ public class AESServer extends AbstractServer {
 		}
 		client.sendToClient(result);
 	}
-	
 	/**
 	 * When teacher activate an exam he add it to the ActiveExams list.
 	 * @param ae
@@ -564,7 +583,6 @@ public class AESServer extends AbstractServer {
 		 * @param doc
 		 */
 		private void AddToWordFileList(ActiveExam active, XWPFDocument doc) {
-			// TODO Auto-generated method stub
 			wordFiles.put(active, doc);
 		}
 		
@@ -577,12 +595,9 @@ public class AESServer extends AbstractServer {
 		private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
 			// TODO Auto-generated method stub
 			//System.out.print(wordFiles.containsKey((String)o));
-			iMessage im = new iMessage("ManuelExam",wordFiles.get((String)o));
+			iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
 			client.sendToClient(im);
 		}
 
 }
-
-
-
 
