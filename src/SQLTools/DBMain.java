@@ -1,7 +1,6 @@
 package SQLTools;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
-
 import com.mysql.jdbc.Statement;
 
-import Controllers.QuestionController;
-import javafx.scene.input.Mnemonic;
-import javafx.scene.layout.ConstraintsBase;
-import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Course;
 import logic.Exam;
@@ -416,7 +409,7 @@ public class DBMain {
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
 			ArrayList<SolvedExam> result = new ArrayList<>();
 			while(rs.next()) {		
-				int eid = rs.getInt(1);
+				//int eid = rs.getInt(1);
 				Course course = new Course(rs.getInt(4), rs.getString(5), new Field(rs.getInt(2),rs.getString(3)));
 				//int duration = rs.getInt(6);
 				int score = rs.getInt(13);
@@ -457,7 +450,6 @@ public class DBMain {
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
-			ArrayList<Exam> result = new ArrayList<>();
 			if (rs.next()) {		
 				int id = rs.getInt(1);
 				int duration = rs.getInt(2);
@@ -641,7 +633,7 @@ public class DBMain {
 				String answers[] = new String[]{answerA,answerB,answerC,answerD};
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
-				int teacherId = rs.getInt(9);
+				//int teacherId = rs.getInt(9);
 				int pointsValue = rs.getInt(12);
 				String innerNote = rs.getString(15);
 				String viewableNote = rs.getString(16);

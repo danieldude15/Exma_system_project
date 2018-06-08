@@ -18,9 +18,30 @@ public class AESServer extends AbstractServer {
 	
 	private DBMain sqlcon;
 	private HashMap<User,ConnectionToClient> connectedUsers;
-	private HashMap<String,ActiveExam> activeExams;//HashMap<Key(ActiveExam code),Value(ActiveExam)>
-	private HashMap<ActiveExam,ArrayList<Student>> studentsInExam;//HashMap<Key(ActiveExam),Value(students who checked in for it)>
-	private HashMap<String,XWPFDocument> wordFiles;//HashMap<Key(ActiveExam code),Value(Word files)>(Only for manual).
+	
+	/**
+	 * easy acces to active exams
+	 * HashMap with Key that is the active exams code and Value of the actual ActiveExam
+	 */
+	private HashMap<String,ActiveExam> activeExams;
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an arraylist of students who checked in to this active exam
+	 */
+	private HashMap<ActiveExam, ArrayList<Student>> studentsInExam;
+	/**
+	 * This hashmap will hold all the student that are supposed to taki this exam. 
+	 * All the students in this course.
+	 * the purpose of this hashmap is on each students sovedExam submittion 
+	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
+	 */
+	private HashMap<ActiveExam, ArrayList<Student>> studentsInExamCourse;
+	
+	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
+	
+	/**
+	 * HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
+	 */
+	private HashMap<ActiveExam,XWPFDocument> wordFiles;
 	
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
@@ -29,7 +50,7 @@ public class AESServer extends AbstractServer {
 		connectedUsers = new HashMap<User,ConnectionToClient>();
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
-		wordFiles=new HashMap<String,XWPFDocument>();
+		wordFiles=new HashMap<ActiveExam,XWPFDocument>();
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
@@ -142,9 +163,6 @@ public class AESServer extends AbstractServer {
 				break;
 			case "StudentCheckInToExam":
 				AddStudentToActiveExam(client,(Object[]) o);
-				break;
-			case "StudentCheckedOutFromActiveExam":
-				RemoveStudentFromActiveExam(client,(Object[]) o);
 				break;
 			case "GetManualExam":
 				GetManuelExam(client,o);
@@ -477,18 +495,6 @@ public class AESServer extends AbstractServer {
 			client.sendToClient(new iMessage("StudentCheckInToExam",null));
 		}
 
-		/**
-		 * When student submitted his exam we remove him from the list of the active exam.
-		 * In other words Student is check out from active exam. 
-		 * @param client
-		 * @param o
-		 * @throws IOException 
-		 */
-		private void RemoveStudentFromActiveExam(ConnectionToClient client, Object[] o) throws IOException {
-			// TODO Auto-generated method stub
-			studentsInExam.get((ActiveExam)o[0]).remove((Student)o[1]);
-			client.sendToClient(new iMessage("StudentCheckedOutFromActiveExam", null));
-		}
 
 	/**
 	 * Create word file when the teacher activate a manual exam.
@@ -559,7 +565,7 @@ public class AESServer extends AbstractServer {
 		 */
 		private void AddToWordFileList(ActiveExam active, XWPFDocument doc) {
 			// TODO Auto-generated method stub
-			wordFiles.put(active.getCode(), doc);
+			wordFiles.put(active, doc);
 		}
 		
 		/**
