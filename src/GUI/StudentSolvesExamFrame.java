@@ -1,13 +1,7 @@
 package GUI;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,15 +12,10 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import com.mysql.jdbc.Field;
-
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
-import Controllers.SolvedExamController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -34,10 +23,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import logic.ActiveExam;
 import logic.Course;
 import logic.Exam;
@@ -47,8 +33,8 @@ import logic.SolvedExam;
 import logic.Student;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
-import ocsf.server.ServerGlobals;
 
+@SuppressWarnings("unchecked")
 public class StudentSolvesExamFrame implements ControlledScreen{
 
 
@@ -361,9 +347,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
 		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
-		SolvedExam uploadToDatabase=new SolvedExam(examid, course, duration, teacher
-				, score, teacherApproved, studentAnswers, examReportId,
-				examSolver, teachersScoreChangeNote, CompletedTimeInMinutes);
+		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers, examReportId,
+				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),e);
 
 		/*going to replace all in this.
 		SolvedExam s=new SolvedExam(e.getID(),new Course(e.getCourse()), e.getDuration(), new Teacher(e.getAuthor())

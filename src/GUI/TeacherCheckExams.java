@@ -39,7 +39,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(900);
+		Globals.primaryStage.setHeight(500);
 		Globals.primaryStage.setWidth(670);
 		
 		SolvedExamList.getItems().clear();

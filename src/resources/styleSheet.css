@@ -99,6 +99,14 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
 
+#blackLabel , #blackLabel:disabled {
+	-fx-text-fill:black;
+	-fx-opacity: 1.0;
+}
+#redLabel , #redLabel:disabled {
+	-fx-text-fill:red;
+	-fx-opacity: 1.0;
+}
 /* ############# END OF GENERAL STYLING ###################### */
 
 /**
@@ -106,8 +114,4 @@
  */
 #myInfo {
 	-fx-background-color:white;
-}
-#blackLabel , #blackLabel:disabled {
-	-fx-text-fill:black;
-	-fx-opacity: 1.0;
 }

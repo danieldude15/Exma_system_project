@@ -11,7 +11,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import SQLTools.DBMain;
-import javafx.scene.control.RadioButton;
 import logic.*;
 
 public class AESServer extends AbstractServer {
@@ -78,6 +77,9 @@ public class AESServer extends AbstractServer {
 			case "logout":
 				logoutFunctionality(o);
 				break;
+			case "disconnect":
+				disconnectClient(client,o);
+				break;
 			case "login":
 				loginFunctionality(client, o);
 				break;
@@ -126,6 +128,9 @@ public class AESServer extends AbstractServer {
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
 				break;
+			case "addSolvedExam":
+				addSolvedExam(client,o);
+				break;
 			case "getAllActiveExams":
 				getAllActiveExams(client);
 				break;
@@ -135,20 +140,15 @@ public class AESServer extends AbstractServer {
 			case "getCourseQuestions":
 				getCourseQuestions(client,o);
 				break;
-				
-				
-				
-				
-				
-				
 			case "StudentCheckInToExam":
 				AddStudentToActiveExam(client,(Object[]) o);
+				break;
 			case "StudentCheckedOutFromActiveExam":
 				RemoveStudentFromActiveExam(client,(Object[]) o);
-			case "UploadSolvedExamToDatabase":
-				UploadSolvedExamToDatabase(client,o);
+				break;
 			case "GetManualExam":
 				GetManuelExam(client,o);
+				break;
 			default:
 				
 			}
@@ -157,7 +157,13 @@ public class AESServer extends AbstractServer {
 		}
 	}
 
-
+	private void disconnectClient(ConnectionToClient client, Object o) throws IOException {
+		client.close();
+		if (o instanceof User) {
+			logoutFunctionality(o);
+		}
+		
+	}
 
 
 	/**
@@ -233,8 +239,6 @@ public class AESServer extends AbstractServer {
 	protected void serverStopped() {
 		System.out.println("Server Stoped.");
 	}
-
-	
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
@@ -256,9 +260,10 @@ public class AESServer extends AbstractServer {
 		iMessage msg = new iMessage("ExamLocked", ae);
 		int counter=0;
 		for(Student s: studentsInExam.get(ae)) {
+			Student student = new Student(0, s.getUserName(), s.getPassword(), null);
 			try {
-				if (connectedUsers.get(s)!=null) {
-					connectedUsers.get(s).sendToClient(msg);
+				if (connectedUsers.get(student)!=null) {
+					connectedUsers.get(student).sendToClient(msg);
 					counter++;
 				}
 			} catch (IOException e) {
@@ -279,7 +284,6 @@ public class AESServer extends AbstractServer {
 	 * @throws IOException
 	 */
 	private void getAllActiveExams(ConnectionToClient client) throws IOException {
-		// TODO Auto-generated method stub
 		ArrayList<ActiveExam> allActiveExams=new ArrayList<ActiveExam>();
 		for(String ae: activeExams.keySet())
 		{
@@ -336,6 +340,11 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void addSolvedExam(ConnectionToClient client, Object o) throws IOException {
+		client.sendToClient(new iMessage("solvedExamInsertion",(Integer)sqlcon.InsertSolvedExam((SolvedExam)o)));
+		
+	}
+	
 	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<QuestionInExam> questions = sqlcon.getQuestionsInExam((String)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
@@ -380,7 +389,9 @@ public class AESServer extends AbstractServer {
 	}
 
 	private void logoutFunctionality(Object o) {
-		if(connectedUsers.remove(((User)o))!=null)
+		User user = (User) o;
+		user = new User(0, user.getUserName(), user.getPassword(), null);
+		if(connectedUsers.remove(user)!=null)
 			System.out.println("Logged out User: "+ o );
 	}
 	
@@ -444,20 +455,6 @@ public class AESServer extends AbstractServer {
 		}
 		client.sendToClient(result);
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * When teacher activate an exam he add it to the ActiveExams list.
@@ -476,7 +473,6 @@ public class AESServer extends AbstractServer {
 	 * @throws IOException 
 	 */
 		private void AddStudentToActiveExam(ConnectionToClient client,Object[] o) throws IOException {
-			// TODO Auto-generated method stub
 			studentsInExam.get((ActiveExam)o[0]).add((Student)o[1]);
 			client.sendToClient(new iMessage("StudentCheckInToExam",null));
 		}
@@ -492,16 +488,6 @@ public class AESServer extends AbstractServer {
 			// TODO Auto-generated method stub
 			studentsInExam.get((ActiveExam)o[0]).remove((Student)o[1]);
 			client.sendToClient(new iMessage("StudentCheckedOutFromActiveExam", null));
-		}
-
-		/**
-		 * Call to sqlcon to make a query and uploda the solved exam to the database.
-		 * @param client
-		 * @param o
-		 */
-		private void UploadSolvedExamToDatabase(ConnectionToClient client, Object o) {
-			// TODO Auto-generated method stub
-			sqlcon.UploadSolvedExam((SolvedExam)o);
 		}
 
 	/**

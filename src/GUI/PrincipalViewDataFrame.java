@@ -5,32 +5,31 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import logic.Globals;
 import ocsf.client.ClientGlobals;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
 
-/**
- * Frame manages Reports Gui window of Principal
- */
-public class PrincipalReportsFrame implements Initializable, ControlledScreen {
-
-    @FXML private TabPane m_reportsTabPane;
+    @FXML private TabPane m_dataTabPane;
     @FXML private Tab m_studentsTab;
     @FXML private ListView m_studentsList;
     @FXML private Tab m_teachersTab;
     @FXML private ListView m_teachersList;
-    @FXML private Tab m_coursesTab;
-    @FXML private ListView m_coursesList;
+    @FXML private Tab m_questionsTab;
+    @FXML private ListView m_questionsList;
     @FXML private Tab m_examsTab;
     @FXML private ListView m_examsList;
+    @FXML private Tab m_fieldsTab;
+    @FXML private ListView m_fieldsList;
+    @FXML private Tab m_coursesTab;
+    @FXML private ListView m_coursesList;
     @FXML private TextField m_searchBox;
     @FXML private Button m_searchBtn;
     @FXML private Button m_backtoMainBtn;
-
-
 
     @Override
     public void runOnScreenChange() {
@@ -53,9 +52,10 @@ public class PrincipalReportsFrame implements Initializable, ControlledScreen {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
     // method handles selection of text box in which you enter id to manually search for data
     @FXML
-    public void onTextBoxMouseClick(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onTextBoxMouseClick(MouseEvent mouseEvent) {
         if(m_searchBox.getText().equals("Enter ID Here"))
             m_searchBox.clear();
     }

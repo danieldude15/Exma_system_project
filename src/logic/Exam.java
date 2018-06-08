@@ -58,6 +58,7 @@ public class Exam implements Serializable{
 	@SuppressWarnings("unchecked")
 	public Exam(Exam exam) {
 		super();
+		if (exam==null) return;
 		ID = exam.getID();
 		course = new Course(exam.getCourse());
 		Duration = exam.getDuration();
@@ -118,7 +119,7 @@ public class Exam implements Serializable{
 	 * @return the new exam copy
 	 */
 	public Exam getExam() {
-		return new Exam(this);
+		return this;
 	}
 	
 	/**
@@ -171,7 +172,7 @@ public class Exam implements Serializable{
 	@Override
 	public boolean equals(Object obj) {
 		if (this==obj) return true;
-		if (obj instanceof Exam) {
+		if (obj != null && obj.getClass() == getClass()) {
 			Exam e = (Exam)obj;
 			if (e.getID()!=ID || e.getDuration()!=Duration) return false;
 			if (!e.getCourse().equals(course) || !e.getAuthor().equals(Author)) return false;
@@ -183,13 +184,11 @@ public class Exam implements Serializable{
 		return false;
 	}
 
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return "ExamID:" + ID + " Duration:" + Duration + " AutherID:" + Author.getID();
 	}
 
-	@Override
-	public int hashCode() {
+	@Override public int hashCode() {
 		int result = 17;
 		result = 31*result + Duration;
 		result = 31*result + course.hashCode();

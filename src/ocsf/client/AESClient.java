@@ -7,12 +7,31 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import logic.*;
 
+/**
+ * This is the subclass of AbstractClient that is changed by the Team to work as expected 
+ * and fit the needs of the project. 
+ * @author Group-12
+ *
+ */
 public class AESClient extends AbstractClient{
-	
+	/**
+	 * when signed in this "me" will hold the User information that is logged in
+	 */
 	User me;
+	/**
+	 * iMessae object used to pass information from server
+	 */
 	private iMessage msg;
+	/**
+	 * shared variable that can be updated in different threads.
+	 */
 	private Boolean stopWaiting=false;
 	
+	/**
+	 * Constructor
+	 * @param host - host to connect to (Server IP/Domain)
+	 * @param port - port to connect to
+	 */
 	public AESClient(String host, int port) {
 		super(host, port);
 		me=null;

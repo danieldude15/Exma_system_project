@@ -55,21 +55,20 @@ public class SolvedExamController {
 		} 
 		return null;
 	}
-	
-	//new by itzik
-	public static void UploadSolvedExamToDatabase(Object solved) {
+
+
+	public static int insertSolvedExam(SolvedExam solvedExam) {
 		AESClient client = ClientGlobals.client;
-		iMessage msg;
-		msg= new iMessage("UploadSolvedExamToDatabase",(SolvedExam)solved);
 		if(client.isConnected()) {
 			try {
-				client.sendToServer(msg);
-				client.getResponseFromServer();
+				client.sendToServer(new iMessage("addSolvedExam",solvedExam));
+				return (Integer) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		} 
+		return 0;
 	}
-	
+
 }

@@ -59,7 +59,7 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
 
     @FXML
     public void goToSchoolDataScreen(ActionEvent event){
-
+        Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewDataID);
     }
 
     @FXML

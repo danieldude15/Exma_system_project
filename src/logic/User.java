@@ -61,6 +61,7 @@ public class User implements Serializable{
 	 * @param u - the User we want to copy
 	 */
 	public User(User u) {
+		if (u==null) return;
 		this.id = u.getID();
 		this.userName=new String(u.getUserName());
 		this.password=new String(u.getPassword());
@@ -112,7 +113,7 @@ public class User implements Serializable{
 	 */
 	@Override public boolean equals(Object obj) {
 		if (this==obj) return true;
-		if(obj instanceof User) {
+		if(obj != null && obj.getClass() == getClass()) {
 			User user = (User) obj;
 			if(user.getID()!=id || 
 					!user.getName().equals(name) || 

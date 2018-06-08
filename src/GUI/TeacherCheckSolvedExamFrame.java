@@ -2,9 +2,11 @@ package GUI;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,9 +14,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
@@ -30,16 +36,29 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 	private final Image x = new Image("resources/x.png"); 
 	
 	@FXML VBox questionsView;
-	@FXML TextFlow examInfo;
+	@FXML TextField newScore;
+	@FXML TextArea changeNote;
+	@FXML Label errorLabel;
+	@FXML Label noteErrorLabel;
+	@FXML Label studentName;
+	@FXML Label score;
+	@FXML Label timeCompleted;
 
 	@Override public void initialize(URL location, ResourceBundle resources) {
 
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(850);
+		Globals.primaryStage.setHeight(770);
 		Globals.primaryStage.setWidth(770);
-		
+		questionsView.getChildren().clear();
+		errorLabel.setVisible(false);
+		newScore.setText("");
+		changeNote.setText("");
+		noteErrorLabel.setVisible(false);
+		studentName.setText(solvedExam.getStudent().getName());
+		score.setText(Integer.toString(solvedExam.getScore()));
+		timeCompleted.setText(solvedExam.getCompletedTimeInMinutes() + " Min");
 		if (solvedExam!=null) {
 			for(QuestionInExam q : solvedExam.getQuestionsInExam()) {
 				questionsView.getChildren().add(questionAdder(q,solvedExam.getStudentsAnswers()));
@@ -48,6 +67,28 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 			backButton(null);
 	}
 
+	@FXML public void testDigitOnly(KeyEvent keyEvent) {
+		if (!Character.isDigit(keyEvent.getCharacter().charAt(0)) && 
+				keyEvent.getCode()!=KeyCode.BACK_SPACE) {
+			errorLabel.setVisible(true);
+			keyEvent.consume();
+		} else 
+			errorLabel.setVisible(false);
+		System.out.println(keyEvent.getCharacter().charAt(0));
+		try {
+			Integer score = Integer.parseInt(newScore.getText() + keyEvent.getCharacter().charAt(0));
+			if (score>100 || score <0) {
+				errorLabel.setVisible(true);
+				keyEvent.consume();
+			} else {
+				errorLabel.setVisible(false);
+			}
+		} catch (NumberFormatException e) {
+			
+		}
+		
+	}
+	
 	private Node questionAdder(QuestionInExam q, HashMap<QuestionInExam, Integer> answersHash) {
 		//HBox main question container
 		HBox hbox = new HBox();
@@ -61,7 +102,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionString.setId("blackLabel");
 		questionString.setWrapText(true);
 		questionInfo.setMinWidth(330);
-		questionInfo.setMaxWidth(330);
+		questionInfo.setMaxWidth(600);
 		Label qid = new Label("QID: "+q.questionIDToString());
 		qid.setId("blackLabel");
 		questionInfo.getChildren().add(qid);
@@ -105,7 +146,22 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
 	
-	@FXML public void submitButton(ActionEvent event) {}
+	@FXML public void submitButton(ActionEvent event) {
+		if (!newScore.getText().equals("") && changeNote.getText().equals("")) {
+			noteErrorLabel.setVisible(true);
+		} else {
+			if (!newScore.getText().equals("")) {
+					solvedExam.setScore(Integer.parseInt(newScore.getText()));
+					solvedExam.setTeachersScoreChangeNote(changeNote.getText());
+			}
+			solvedExam.setTeacherApproved(true);
+			if (SolvedExamController.insertSolvedExam(solvedExam)>0) {
+				//successfull insertion
+			} else {
+				//Failed To insert!
+			}
+		}
+	}
 	
 	@FXML public void approvedExamClicked(ActionEvent event) {
 		
