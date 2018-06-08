@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SolvedExam extends Exam{
+public class SolvedExam extends ActiveExam{
 	/**
 	 * Serializable id give for client server communication
 	 */
@@ -57,17 +57,17 @@ public class SolvedExam extends Exam{
 	 * @param teachersScoreChangeNote - the teacher score change note . in case the score was changed
 	 * @param completedTimeInMinutes - the time it took the student to complete the exam
 	 */
-	public SolvedExam(int iD, Course course, int duration, Teacher author,
-			int score, boolean teacherApproved,	HashMap<QuestionInExam, Integer> studentsAnswers, 
-			int examReportID, Student examSolver,
-			String teachersScoreChangeNote, int completedTimeInMinutes) {
-		super(iD, course, duration, author, null);
+	public SolvedExam(int score, boolean teacherApproved, HashMap<QuestionInExam, Integer> studentsAnswers, 
+			int examReportID, Student examSolver, String teachersScoreChangeNote, HashMap<QuestionInExam, String> teacherNotes,
+			int completedTimeInMinutes, String code, int type, String dayActivated,Teacher activator, Exam exam) {
+		super(code, type, dayActivated, exam, activator);
 		this.score = score;
 		this.teacherApproved = teacherApproved;
 		this.studentsAnswers = studentsAnswers;
 		this.examReportID = examReportID;
 		this.examSolver = examSolver;
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
+		if (this.teachersScoreChangeNote ==null) this.teachersScoreChangeNote ="";
 		CompletedTimeInMinutes = completedTimeInMinutes;
 	}
 	/**

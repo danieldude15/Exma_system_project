@@ -66,9 +66,9 @@ public class ClientApplication extends Application {
 	    {
 	        try {
 				if(ClientGlobals.client!=null) {
-					if (ClientGlobals.client.me!=null)
-						ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.me));
-					ClientGlobals.client.closeConnection();
+					ClientGlobals.kill=true;
+					ClientGlobals.client.sendToServer(new iMessage("disconnect",ClientGlobals.client.me));
+					System.out.println("Notified Server to Disconnect me!");
 				}
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);

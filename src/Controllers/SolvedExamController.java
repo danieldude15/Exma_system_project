@@ -56,5 +56,18 @@ public class SolvedExamController {
 		return null;
 	}
 
-	
+	public static int insertSolvedExam(SolvedExam solvedExam) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				client.sendToServer(new iMessage("addSolvedExam",solvedExam));
+				return (Integer) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
 }

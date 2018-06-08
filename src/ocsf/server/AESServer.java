@@ -5,6 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
 import SQLTools.DBMain;
 import logic.*;
 
@@ -13,8 +18,10 @@ public class AESServer extends AbstractServer {
 	
 	private DBMain sqlcon;
 	private HashMap<User,ConnectionToClient> connectedUsers;
-	private HashMap<String,ActiveExam> activeExams;
-	private HashMap<ActiveExam,ArrayList<Student>> studentsInExam;
+	private HashMap<String,ActiveExam> activeExams;//HashMap<Key(ActiveExam code),Value(ActiveExam)>
+	private HashMap<ActiveExam,ArrayList<Student>> studentsInExam;//HashMap<Key(ActiveExam),Value(students who checked in for it)>
+	private HashMap<String,XWPFDocument> wordFiles;//HashMap<Key(ActiveExam code),Value(Word files)>(Only for manual).
+	
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
@@ -22,6 +29,7 @@ public class AESServer extends AbstractServer {
 		connectedUsers = new HashMap<User,ConnectionToClient>();
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
+		wordFiles=new HashMap<String,XWPFDocument>();
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
@@ -43,12 +51,12 @@ public class AESServer extends AbstractServer {
 		 */
 		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
 		questions =  new ArrayList<QuestionInExam>();
-		answers = new String[]{"a","b","c","d"};
+		answers = new String[]{"Leo Messi","Cristiano Ronaldo","Toni Kross","Robert Levandovski"};
 		field = new Field(2,"FieldName");
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
-		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		ActiveExam nivsExam = new ActiveExam("ddii", 1, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer mítherfucker"));
+		ActiveExam nivsExam = new ActiveExam("ddii", 0, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("ddii", nivsExam);
 		
 		studentsInExam.put(nivsExam, new ArrayList<Student>());
@@ -68,6 +76,9 @@ public class AESServer extends AbstractServer {
 			switch(cmd) {
 			case "logout":
 				logoutFunctionality(o);
+				break;
+			case "disconnect":
+				disconnectClient(client,o);
 				break;
 			case "login":
 				loginFunctionality(client, o);
@@ -117,6 +128,9 @@ public class AESServer extends AbstractServer {
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
 				break;
+			case "addSolvedExam":
+				addSolvedExam(client,o);
+				break;
 			case "getAllActiveExams":
 				getAllActiveExams(client);
 				break;
@@ -132,12 +146,29 @@ public class AESServer extends AbstractServer {
 			case "addExam":
 				addExam(client,o);
 				break;
+			case "StudentCheckInToExam":
+				AddStudentToActiveExam(client,(Object[]) o);
+				break;
+			case "StudentCheckedOutFromActiveExam":
+				RemoveStudentFromActiveExam(client,(Object[]) o);
+				break;
+			case "GetManualExam":
+				GetManuelExam(client,o);
+				break;
 			default:
 				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void disconnectClient(ConnectionToClient client, Object o) throws IOException {
+		client.close();
+		if (o instanceof User) {
+			logoutFunctionality(o);
+		}
+		
 	}
 
 
@@ -214,8 +245,6 @@ public class AESServer extends AbstractServer {
 	protected void serverStopped() {
 		System.out.println("Server Stoped.");
 	}
-
-	
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
@@ -237,9 +266,10 @@ public class AESServer extends AbstractServer {
 		iMessage msg = new iMessage("ExamLocked", ae);
 		int counter=0;
 		for(Student s: studentsInExam.get(ae)) {
+			Student student = new Student(0, s.getUserName(), s.getPassword(), null);
 			try {
-				if (connectedUsers.get(s)!=null) {
-					connectedUsers.get(s).sendToClient(msg);
+				if (connectedUsers.get(student)!=null) {
+					connectedUsers.get(student).sendToClient(msg);
 					counter++;
 				}
 			} catch (IOException e) {
@@ -248,6 +278,9 @@ public class AESServer extends AbstractServer {
 			}
 		}
 		activeExams.remove(ae.getCode());
+		if(ae.getType()==0)
+			wordFiles.remove(ae.getCode());
+		
 		return counter;
 	}
 	
@@ -257,7 +290,6 @@ public class AESServer extends AbstractServer {
 	 * @throws IOException
 	 */
 	private void getAllActiveExams(ConnectionToClient client) throws IOException {
-		// TODO Auto-generated method stub
 		ArrayList<ActiveExam> allActiveExams=new ArrayList<ActiveExam>();
 		for(String ae: activeExams.keySet())
 		{
@@ -277,7 +309,9 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("ActiveExam",activeExams.get((String)o));
 		client.sendToClient(im);
 	}
+
 	
+		
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {
@@ -312,6 +346,11 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void addSolvedExam(ConnectionToClient client, Object o) throws IOException {
+		client.sendToClient(new iMessage("solvedExamInsertion",(Integer)sqlcon.InsertSolvedExam((SolvedExam)o)));
+		
+	}
+	
 	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<QuestionInExam> questions = sqlcon.getQuestionsInExam((String)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
@@ -362,7 +401,9 @@ public class AESServer extends AbstractServer {
 	}
 
 	private void logoutFunctionality(Object o) {
-		if(connectedUsers.remove(((User)o))!=null)
+		User user = (User) o;
+		user = new User(0, user.getUserName(), user.getPassword(), null);
+		if(connectedUsers.remove(user)!=null)
 			System.out.println("Logged out User: "+ o );
 	}
 	
@@ -434,6 +475,124 @@ public class AESServer extends AbstractServer {
 		}
 		client.sendToClient(result);
 	}
-
+	/**
+	 * When teacher activate an exam he add it to the ActiveExams list.
+	 * @param ae
+	 */
+	private void InitializeActiveExamsStudentsList(ActiveExam ae)
+	{
+		studentsInExam.put(ae, new ArrayList<Student>());			
+	}
 	
+	/**
+	 * Get an object[2] when object[0]=ActiveExam,object[1]=Student and add the student to the list.
+	 * In other words Student is check in to the active exam.
+	 * @param client
+	 * @param o
+	 * @throws IOException 
+	 */
+		private void AddStudentToActiveExam(ConnectionToClient client,Object[] o) throws IOException {
+			studentsInExam.get((ActiveExam)o[0]).add((Student)o[1]);
+			client.sendToClient(new iMessage("StudentCheckInToExam",null));
+		}
+
+		/**
+		 * When student submitted his exam we remove him from the list of the active exam.
+		 * In other words Student is check out from active exam. 
+		 * @param client
+		 * @param o
+		 * @throws IOException 
+		 */
+		private void RemoveStudentFromActiveExam(ConnectionToClient client, Object[] o) throws IOException {
+			// TODO Auto-generated method stub
+			studentsInExam.get((ActiveExam)o[0]).remove((Student)o[1]);
+			client.sendToClient(new iMessage("StudentCheckedOutFromActiveExam", null));
+		}
+
+	/**
+	 * Create word file when the teacher activate a manual exam.
+	 * @param active
+	 */
+		private void CreateWordFile(ActiveExam active)
+		{
+			/*Create document/*/
+			XWPFDocument doc=new XWPFDocument();
+			
+			/*Create title paragraph/*/
+			XWPFParagraph titleParagraph=doc.createParagraph();
+			titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+			XWPFRun runTitleParagraph=titleParagraph.createRun();
+			runTitleParagraph.setBold(true);
+			runTitleParagraph.setItalic(true);
+			runTitleParagraph.setColor("00FF00");
+			runTitleParagraph.setText(active.getExam().getCourse().getName());
+			runTitleParagraph.addBreak();
+			runTitleParagraph.addBreak();
+			
+			/*Create exam details paragraph/*/
+			XWPFParagraph examDetailsParagraph=doc.createParagraph();
+			examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
+			XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
+			runOnExamDetailsParagraph.setText("Field: "+active.getExam().getField().getName());
+			runOnExamDetailsParagraph.addBreak();
+			runOnExamDetailsParagraph.setText("Date: "+active.getDate());
+			runOnExamDetailsParagraph.addBreak();
+			
+			/*Create question+answers paragraph/*/
+			XWPFParagraph questionsParagraph=doc.createParagraph();
+			questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
+			XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
+			int questionIndex=1;
+			ArrayList<QuestionInExam> questionsInExam=active.getExam().getQuestionsInExam();
+			for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
+			{
+				if(qie.getStudentNote()!=null)
+				{
+					runOnquestionsParagraph.setText(qie.getStudentNote());
+					runOnquestionsParagraph.addBreak();
+				}
+				runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
+				runOnquestionsParagraph.addBreak();
+				for(int i=0;i<4;i++)
+				{
+					runOnquestionsParagraph.setText(qie.getAnswer(i));
+					runOnquestionsParagraph.addBreak();
+				}
+			}
+			runOnquestionsParagraph.addBreak();
+			runOnquestionsParagraph.addBreak();
+			
+			/*Create good luck paragraph/*/
+			XWPFParagraph GoodLuckParagraph=doc.createParagraph();
+			XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
+			runOnGoodLuckParagraph.setText("Good Luck!");
+			
+			AddToWordFileList(active,doc);//Add the word file to the list of word files.
+			
+		}
+
+		/**
+		 * Add word file exam to the list of word file exams.
+		 * @param active
+		 * @param doc
+		 */
+		private void AddToWordFileList(ActiveExam active, XWPFDocument doc) {
+			// TODO Auto-generated method stub
+			wordFiles.put(active.getCode(), doc);
+		}
+		
+		/**
+		 * Send to client a Manuel Exam word File.
+		 * @param client
+		 * @param o
+		 * @throws IOException
+		 */
+		private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
+			// TODO Auto-generated method stub
+			//System.out.print(wordFiles.containsKey((String)o));
+			iMessage im = new iMessage("ManuelExam",wordFiles.get((String)o));
+			client.sendToClient(im);
+		}
+
 }
+
