@@ -38,7 +38,6 @@ public class StudentStartExamFrame implements ControlledScreen{
 		idError.setText("");
 		examCodeError.setText("");
 		Alert alert;
-		ActiveExam active=null;
 		String sid=Integer.toString(ClientGlobals.client.getUser().getID());
 		//If some of the fields is empty, then the student get an error.
 		if(studentId.getText().isEmpty() || examCode.getText().isEmpty())
@@ -53,7 +52,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 		else
 		{
 			
-			active=ActiveExamController.getActiveExam(examCode.getText());
+			ActiveExam active=ActiveExamController.getActiveExam(examCode.getText());
 			//If at least one of the fields is wrong.
 			if(active==null || !(studentId.getText().equals(sid)))
 			{

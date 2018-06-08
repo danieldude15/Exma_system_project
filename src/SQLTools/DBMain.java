@@ -118,8 +118,16 @@ public class DBMain {
 			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid\n" + 
 			"			             and u.userid=q.teacherid and c.courseid=? and f.fieldid=?");
 						
+	private String addexam = new String("INSERT INTO `aes`.`exams` "
+			+ "(`examid`,`timeduration`, `fieldid`, `courseid`,`teacherid`) "
+			+ "VALUES ('0', ?, ?,?,?);\n" 
+			);
 	
-	
+	private String addQuestionInExam = new String(""
+			+ "INSERT INTO `aes`.`questions_in_exam` "
+			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
+			+ "VALUES (?,?,?,?,?,?,?);\n" 
+			);
 	
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
@@ -618,6 +626,44 @@ public class DBMain {
 			return worked;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int addexam(Exam e) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(addexam,Statement.RETURN_GENERATED_KEYS);
+			//(int iD, Course course, int duration, Teacher author, ArrayList<QuestionInExam> questionsInExam)
+			
+			prst.setInt(1, e.getDuration());
+			prst.setInt(2, e.getField().getID());
+			prst.setInt(3, e.getCourse().getId());
+			prst.setInt(3, e.getAuthor().getID());
+			
+			System.out.println("SQL:" + prst);
+			int worked = prst.executeUpdate();
+			if (worked==1) {
+				ResultSet rs = prst.getGeneratedKeys();
+				rs.next();
+				int examid = rs.getInt(1);
+				prst = conn.prepareStatement(addQuestionInExam);
+				for(QuestionInExam q: e.getQuestionsInExam()) {
+					prst.setInt(1, q.getID());
+					prst.setInt(2, examid);
+					prst.setInt(3, q.getPointsValue());
+					prst.setInt(4, e.getCourse().getId());
+					prst.setInt(5, q.getField().getID());
+					prst.setString(6, q.getInnerNote());
+					prst.setString(7, q.getStudentNote());
+					if(prst.executeUpdate()==0) {
+						deleteExam(e);
+						return 0;
+					} else worked++;
+				}
+			}
+			return worked;
+		} catch (Exception es) {
+			es.printStackTrace();
 		}
 		return 0;
 	}

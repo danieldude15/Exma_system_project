@@ -129,6 +129,9 @@ public class AESServer extends AbstractServer {
 			case "getFieldCourses":
 				getFieldCourses(client,o);
 				break;
+			case "addExam":
+				addExam(client,o);
+				break;
 			default:
 				
 			}
@@ -156,7 +159,9 @@ public class AESServer extends AbstractServer {
 	* accepted. The default implementation does nothing.
 	* @param client the connection connected to the client.
 	*/
-	protected void clientConnected(ConnectionToClient client) {}
+	protected void clientConnected(ConnectionToClient client) {
+		System.out.println("Client: "+client+" Has Connected to Server.");
+	}
 
 	/**
 	* Hook method called each time a client disconnects.
@@ -165,7 +170,9 @@ public class AESServer extends AbstractServer {
 	*
 	* @param client the connection with the client.
 	*/
-	synchronized protected void clientDisconnected(ConnectionToClient client) {}
+	synchronized protected void clientDisconnected(ConnectionToClient client) {
+		System.out.println("Client: " + client + " has diconnected from the server.");
+	}
 
 	/**
 	* Hook method called each time an exception is thrown in a
@@ -177,7 +184,7 @@ public class AESServer extends AbstractServer {
 	* @param Throwable the exception thrown.
 	*/
 	synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
-		exception.printStackTrace();
+		System.err.println("Client: " + client + " has thrown an exception:\n" + exception.getStackTrace());
 	}
 
 	/**
@@ -195,14 +202,18 @@ public class AESServer extends AbstractServer {
 	 * connections.  The default implementation does nothing.
 	 * The method may be overridden by subclasses.
 	 */
-	protected void serverStarted() {}
+	protected void serverStarted() {
+		System.out.println("Server Started.");
+	}
 
 	/**
 	 * Hook method called when the server stops accepting
 	 * connections.  The default implementation
 	 * does nothing. This method may be overriden by subclasses.
 	 */
-	protected void serverStopped() {}
+	protected void serverStopped() {
+		System.out.println("Server Stoped.");
+	}
 
 	
 	
@@ -325,6 +336,12 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
+	private void addExam(ConnectionToClient client, Object o) throws IOException {
+		int effectedRowCount = sqlcon.addQuestion((Question) o);
+		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
+		client.sendToClient(im);
+	}
+	
 
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);

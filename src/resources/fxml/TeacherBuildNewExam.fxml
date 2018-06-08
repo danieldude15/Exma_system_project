@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -66,7 +67,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="676.0">
                      <children>
-                        <VBox fx:id="questionsList" prefHeight="466.0" prefWidth="675.0" />
+                        <VBox fx:id="questionsList" layoutX="7.0" layoutY="5.0" prefHeight="471.0" prefWidth="672.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -78,7 +79,12 @@
       </VBox>
       <HBox prefHeight="0.0" prefWidth="540.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="66.0" text="Total Score:">
+            <TextField fx:id="duration" prefHeight="25.0" prefWidth="128.0" promptText="Estimated exam time">
+               <HBox.margin>
+                  <Insets right="350.0" />
+               </HBox.margin>
+            </TextField>
+            <Label fx:id="TotalScore" prefHeight="17.0" prefWidth="66.0" text="Total Score:">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -90,9 +96,6 @@
          <VBox.margin>
             <Insets />
          </VBox.margin>
-         <padding>
-            <Insets left="325.0" />
-         </padding>
       </HBox>
       <HBox alignment="TOP_CENTER" prefHeight="17.0" prefWidth="440.0">
          <children>

@@ -138,6 +138,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		ObservableList<Course> list;
 		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields); 
 		if (teachersCourses==null) {
+			teachersCourses = new ArrayList<>();
 			teachersCourses.add(new Course(0,"No Courses for teacher.",null));
 		} else {
 			teachersCourses.add(0,new Course(0,"All",null));
@@ -155,6 +156,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		if(teachersFields==null) {
+			teachersFields = new ArrayList<>();
 			teachersFields.add(new Field(-1,"You Have No Assigned Fields..."));
 		} else {
 			teachersFields.add(0,new Field(-1,"All"));

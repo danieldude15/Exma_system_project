@@ -65,6 +65,9 @@ public class QuestionInExam extends Question {
 	public int getPointsValue() {
 		return PointsValue;
 	}
+	public void setPointsValue(String Point) {
+		PointsValue = Integer.parseInt(Point) ;
+	}
 
 	/**
 	 * getInnerNote
@@ -72,6 +75,9 @@ public class QuestionInExam extends Question {
 	 */
 	public String getInnerNote() {
 		return innerNote;
+	}
+	public void setInnerNote(String Note) {
+		innerNote = Note;
 	}
 
 	/**
@@ -81,7 +87,11 @@ public class QuestionInExam extends Question {
 	public String getStudentNote() {
 		return studentNote;
 	}
+	public void setStudentNote(String Note) {
+		studentNote = Note;
+	}
 
+	
 	/**
 	 * overriding the equals method to be able to use hashMap and check for equal objects of this type
 	 * @param obj - the QuestionInExam to check equality to
