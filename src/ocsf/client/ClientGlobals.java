@@ -44,13 +44,18 @@ public class ClientGlobals {
 
 	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
 	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
-	
 
-	
+	/*		Principal Screens Start		*/
+
 	public static final String PrincipalMainID = "PrincipalMain";
 	public static final String PrincipalMainPath = "/resources/fxml/PrincipalMain.fxml";
-	public static final String PrincipalReportsID = "PrincipalReports";
-	public static final String PrincipalReportsPath = "/resources/fxml/PrincipalReports.fxml";
+
+	public static final String PrincipalReportsID = "PrincipalReports";	public static final String PrincipalReportsPath = "/resources/fxml/PrincipalReports.fxml";
+
+	public static final String PrincipalViewDataID = "PrincipalViewData";
+	public static final String PrincipalViewDataPath = "/resources/fxml/PrincipalViewData.fxml";
+
+	/*		Principal Screens End		*/
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
 
