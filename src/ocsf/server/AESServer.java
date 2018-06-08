@@ -149,8 +149,8 @@ public class AESServer extends AbstractServer {
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
 				break;
-			case "addSolvedExam":
-				addSolvedExam(client,o);
+			case "updateSolvedExam":
+				updateSolvedExam(client,o);
 				break;
 			case "getAllActiveExams":
 				getAllActiveExams(client);
@@ -364,9 +364,10 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-	private void addSolvedExam(ConnectionToClient client, Object o) throws IOException {
-		client.sendToClient(new iMessage("solvedExamInsertion",(Integer)sqlcon.InsertSolvedExam((SolvedExam)o)));
-		
+	private void updateSolvedExam(ConnectionToClient client, Object o) throws IOException {
+		Integer updatestatus = sqlcon.UpdateSolvedExam((SolvedExam)o);
+		iMessage im = new iMessage("solvedExamupdated",updatestatus);
+		client.sendToClient(im);
 	}
 	
 	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {

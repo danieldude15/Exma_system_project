@@ -102,8 +102,13 @@ public class DBMain {
 			);
 	private String addSolvedExam = new String(""
 			+ "INSERT INTO `aes`.`solved_exams` "
-			+ "(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" + 
+			+ "(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`,`dateinitiated`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" + 
+			"");
+	private String updateSolvedExam = new String(""
+			+ "UPDATE `aes`.`solved_exams` "
+			+ "SET `score`=?, `teacherapproved`=?, `teacherschangescorenote`=?, `teacherquestionnote`=? "
+			+ "WHERE `studentid`=? and `examid`=? and `courseid`=? and`fieldid`=? and `code`=? " + 
 			"");
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
@@ -880,25 +885,37 @@ public class DBMain {
 			prst.setInt(8, se.getField().getID());
 			prst.setString(9, se.getTeachersScoreChangeNote());
 			prst.setInt(10, se.getCompletedTimeInMinutes());
-			/*prst.setString(11, se.getCode);
+			prst.setString(11, se.getCode());
+			prst.setString(12, "");
+			prst.setString(13, se.getDate());
 			System.out.println("SQL:" + prst);
-			int worked = prst.executeUpdate();
-			if (worked==1) {
-				ResultSet rs = prst.getGeneratedKeys();
-				rs.next();
-				int questionid = rs.getInt(1);
-				prst = conn.prepareStatement(addQuestionToCourse);
-				for(Course c: se.getCourses()) {
-					prst.setInt(1, questionid);
-					prst.setInt(2, se.getField().getID());
-					prst.setInt(3, c.getId());
-					if(prst.executeUpdate()==0) {
-						System.out.println("FAIL!!!!! rollback issue!!!");
-						return 0;
-					} else worked++;
-				}
-			}*/
-			return null;
+			return prst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public Integer UpdateSolvedExam(SolvedExam se) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(updateSolvedExam);
+			//`score`=?, `teacherapproved`=?, `teacherschangescorenote`=?, `teacherquestionnote`=?
+			//`studentid`=? and `examid`=? and `courseid`=? and`fieldid`=? and `code`=? 
+			prst.setInt(1, se.getScore());
+			if (se.isTeacherApproved()) {
+				prst.setInt(2, 1);
+			} else {
+				prst.setInt(2, 0);
+			}
+			prst.setString(3, se.getTeachersScoreChangeNote());
+			prst.setString(4, "");
+			prst.setInt(5, se.getStudent().getID());
+			prst.setInt(6, se.getExam().getID());
+			prst.setInt(7, se.getCourse().getId());
+			prst.setInt(8, se.getField().getID());
+			prst.setString(9, se.getCode());
+			System.out.println("SQL:" + prst);
+			return prst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
