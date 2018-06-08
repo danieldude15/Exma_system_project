@@ -55,7 +55,7 @@ public class SolvedExamController {
 		} 
 		return null;
 	}
-
+	
 	//new by itzik
 	public static void UploadSolvedExamToDatabase(Object solved) {
 		AESClient client = ClientGlobals.client;

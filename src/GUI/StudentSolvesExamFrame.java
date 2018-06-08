@@ -198,16 +198,16 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 
 	/**
-	 * When student pressed on Download button he can download the exam to any path he choose.
+	 * When the student pressed on Download button he can download the exam to any path he choose.
 	 * @param event
 	 * @throws IOException
 	 */
 	public void StudentPressedDownloadButton(ActionEvent event) throws IOException
 	{
-		XWPFDocument doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
+		/*XWPFDocument doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
 		FileOutputStream out= new FileOutputStream("ManualExam.docx");
 		doc.write(out);
-		out.close();
+		out.close();/*/
 		
 		
 		/*
@@ -221,7 +221,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		doc.write(out);
 		out.close();
 		/*/
-		/*Create document
+		
+		//Create document
 		XWPFDocument doc=new XWPFDocument();
 		
 		//Create title paragraph
@@ -281,32 +282,42 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		List<XWPFParagraph> list=doc.getParagraphs();
 		for(XWPFParagraph p:list)
 		{
-			s=s+p.getText();
+			s=s+p.getText()+"/n";
 		}
 		
-	     
-		FileChooser fileChooser = new FileChooser();
-
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().add(extFilter);
-        
-        //Show save file dialog
-        File file = fileChooser.showSaveDialog(null);
-        if(file != null){
-        	try {
-                FileWriter fileWriter = null;
-                
-                fileWriter = new FileWriter(file);
-                fileWriter.write(s);
-                fileWriter.close();
-            } catch (IOException ex) {
-                
-            }
-        }
-        /*/
+	
+		//Save file! currently doesn't work.
+		/*FileChooser fileChooser = new FileChooser();
+		  
+         //Set extension filter
+         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("docx files (*.docx)", "*.docx");
+         fileChooser.getExtensionFilters().add(extFilter);
+         
+         
+         //Show save file dialog
+         File file = fileChooser.showSaveDialog(Globals.primaryStage);
+         
+         if(file != null){
+             SaveFile(s, file);
+         }
+         /*/
 	}
 	
+	/*
+	 private void SaveFile(String content, File file){
+	        try {
+	            FileWriter fileWriter = null;
+	             
+	            fileWriter = new FileWriter(file,true);
+	            fileWriter.write(content);
+	            //fileWriter.flush();
+	            fileWriter.close();
+	        } catch (IOException ex) {
+	           
+	        }
+	         
+	    }
+	/*/
 	
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
@@ -374,7 +385,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	
 	/**
-	 * Called from BuildSolvedExamObject method and run all over student's answers for each question in the exam and return an Object[].
+	 * Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
 	 * Object[0]=HashMap(QuestionInExam,Integer) which contains the question in exam as key and the student's answer index as value. 
 	 * Object[1]=Student's grade for exam.
 	 * @return Object[] studentAnsersAndScoreForExam
