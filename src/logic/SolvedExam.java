@@ -2,6 +2,9 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import javafx.scene.Node;
 
 
 public class SolvedExam extends ActiveExam{
@@ -20,9 +23,11 @@ public class SolvedExam extends ActiveExam{
 	/**
 	 * this holds the students answers to each question in his solved exam
 	 */
-	HashMap<QuestionInExam, Integer> studentsAnswers;// 
-	
-	//HashMap<QuestionInExam, String> answerNoteOnQuestion;//// HashMap<(Key)QuestionInExam,(Value)Note string on solved question>
+	HashMap<QuestionInExam, Integer> studentsAnswers; 
+	/**
+	 * this HashMap holds a Key of QuestionInExam and Value of the Note string on solved question
+	 */
+	HashMap<QuestionInExam, String> answerNoteOnQuestion;
 	
 	/**
 	 * exam report ID. in case needed can be pulled from database using this id
@@ -69,6 +74,7 @@ public class SolvedExam extends ActiveExam{
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
 		if (this.teachersScoreChangeNote ==null) this.teachersScoreChangeNote ="";
 		CompletedTimeInMinutes = completedTimeInMinutes;
+		answerNoteOnQuestion = teacherNotes;
 	}
 	/**
 	 * getScore
@@ -166,6 +172,9 @@ public class SolvedExam extends ActiveExam{
 	 */
 	@Override public String toString() {
 		return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
+	}
+	public HashMap<QuestionInExam,String> getQuestionNotes() {
+		return answerNoteOnQuestion;
 	}
 	
 	
