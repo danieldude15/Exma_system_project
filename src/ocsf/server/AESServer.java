@@ -2,7 +2,6 @@ package ocsf.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +11,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import SQLTools.DBMain;
-import javafx.scene.control.RadioButton;
 import logic.*;
 
 public class AESServer extends AbstractServer {
@@ -142,20 +140,15 @@ public class AESServer extends AbstractServer {
 			case "getCourseQuestions":
 				getCourseQuestions(client,o);
 				break;
-				
-				
-				
-				
-				
-				
 			case "StudentCheckInToExam":
 				AddStudentToActiveExam(client,(Object[]) o);
+				break;
 			case "StudentCheckedOutFromActiveExam":
 				RemoveStudentFromActiveExam(client,(Object[]) o);
-			case "UploadSolvedExamToDatabase":
-				UploadSolvedExamToDatabase(client,o);
+				break;
 			case "GetManualExam":
 				GetManuelExam(client,o);
+				break;
 			default:
 				
 			}
@@ -480,7 +473,6 @@ public class AESServer extends AbstractServer {
 	 * @throws IOException 
 	 */
 		private void AddStudentToActiveExam(ConnectionToClient client,Object[] o) throws IOException {
-			// TODO Auto-generated method stub
 			studentsInExam.get((ActiveExam)o[0]).add((Student)o[1]);
 			client.sendToClient(new iMessage("StudentCheckInToExam",null));
 		}

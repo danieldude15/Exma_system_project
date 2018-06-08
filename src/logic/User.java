@@ -61,6 +61,7 @@ public class User implements Serializable{
 	 * @param u - the User we want to copy
 	 */
 	public User(User u) {
+		if (u==null) return;
 		this.id = u.getID();
 		this.userName=new String(u.getUserName());
 		this.password=new String(u.getPassword());

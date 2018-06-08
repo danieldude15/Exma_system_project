@@ -56,7 +56,6 @@ public class SolvedExamController {
 		return null;
 	}
 
-<<<<<<< HEAD
 	public static int insertSolvedExam(SolvedExam solvedExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -71,22 +70,4 @@ public class SolvedExamController {
 		return 0;
 	}
 
-=======
-	//new by itzik
-	public static void UploadSolvedExamToDatabase(Object solved) {
-		AESClient client = ClientGlobals.client;
-		iMessage msg;
-		msg= new iMessage("UploadSolvedExamToDatabase",(SolvedExam)solved);
-		if(client.isConnected()) {
-			try {
-				client.sendToServer(msg);
-				client.getResponseFromServer();
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-				e.printStackTrace();
-			}
-		} 
-	}
->>>>>>> branch 'master' of https://braude_proj@bitbucket.org/Petachok/automatic_exam_system.git
-	
 }

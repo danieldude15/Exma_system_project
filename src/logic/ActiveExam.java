@@ -37,7 +37,7 @@ public class ActiveExam  extends Exam {
 	 * @param activator - the teacher who activated this exam
 	 * @param e - the exam that is active
 	 */
-	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)/*Constructor/*/
+	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)
 	{
 		super(e);
 		this.code=code;

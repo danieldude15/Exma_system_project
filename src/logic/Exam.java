@@ -58,6 +58,7 @@ public class Exam implements Serializable{
 	@SuppressWarnings("unchecked")
 	public Exam(Exam exam) {
 		super();
+		if (exam==null) return;
 		ID = exam.getID();
 		course = new Course(exam.getCourse());
 		Duration = exam.getDuration();
@@ -118,7 +119,7 @@ public class Exam implements Serializable{
 	 * @return the new exam copy
 	 */
 	public Exam getExam() {
-		return new Exam(this);
+		return this;
 	}
 	
 	/**
