@@ -144,14 +144,14 @@ public class ClientFrame implements Initializable {
 	    {
 	        try {
 				if(ClientGlobals.client!=null) {
+					ClientGlobals.kill=true;
 					if (ClientGlobals.client.getUser()!=null)
-						ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
-					ClientGlobals.client.closeConnection();
+						ClientGlobals.client.sendToServer(new iMessage("disconnect",ClientGlobals.client.getUser()));
+					System.exit(0);
 				}
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 			}
-	    	System.exit(0);
 	    });
         primaryStage.show();
 	}

@@ -103,7 +103,11 @@ public class DBMain {
 			"where e.examid=se.examid and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid "
 			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and se.studentid=?;"
 			);
-	
+	private String addSolvedExam = new String(""
+			+ "INSERT INTO `aes`.`solved_exams` "
+			+ "(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" + 
+			"");
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
 			"FROM aes.questions as q,aes.questions_in_exam as qe, aes.exams as e,aes.users as u, aes.fields as f\n" + 
@@ -698,6 +702,58 @@ public class DBMain {
 			ex.printStackTrace();
 		}
 		return 0;
+	}
+
+	public Integer InsertSolvedExam(SolvedExam se) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(addSolvedExam,Statement.RETURN_GENERATED_KEYS);
+			//(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`)
+			prst.setInt(1, se.getExam().getID());
+			prst.setInt(2, se.getScore());
+			if (se.isTeacherApproved()) {
+				prst.setInt(3, 1);
+			} else {
+				prst.setInt(3, 0);
+			}
+			
+			prst.setString(4, studentAnswersToString(se.getStudentsAnswers()));
+			prst.setInt(5, se.getExamReportID());
+			prst.setInt(6, se.getStudent().getID());
+			prst.setInt(7, se.getCourse().getId());
+			prst.setInt(8, se.getField().getID());
+			prst.setString(9, se.getTeachersScoreChangeNote());
+			prst.setInt(10, se.getCompletedTimeInMinutes());
+			/*prst.setString(11, se.getCode);
+			System.out.println("SQL:" + prst);
+			int worked = prst.executeUpdate();
+			if (worked==1) {
+				ResultSet rs = prst.getGeneratedKeys();
+				rs.next();
+				int questionid = rs.getInt(1);
+				prst = conn.prepareStatement(addQuestionToCourse);
+				for(Course c: se.getCourses()) {
+					prst.setInt(1, questionid);
+					prst.setInt(2, se.getField().getID());
+					prst.setInt(3, c.getId());
+					if(prst.executeUpdate()==0) {
+						System.out.println("FAIL!!!!! rollback issue!!!");
+						return 0;
+					} else worked++;
+				}
+			}*/
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	private String studentAnswersToString(HashMap<QuestionInExam, Integer> studentsAnswers) {
+		String answers = "";
+		for (QuestionInExam qie : studentsAnswers.keySet()) {
+			answers = answers.concat("q"+qie.questionIDToString()+"a"+studentsAnswers.get(qie));
+		}
+		return answers;
 	}
 
 }

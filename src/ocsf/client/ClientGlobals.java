@@ -12,6 +12,8 @@ public class ClientGlobals {
 	 */
 	public static final String ClientConnectionScreenPath = "/resources/fxml/ClientGui.fxml";
 	public static ClientFrame ClientConnectionController;
+
+	public static boolean kill = false;
 	
 	public static final String TeacherMainID = "TeacherMain";
 	public static final String TeacherMainPath = "/resources/fxml/TeacherMain.fxml";
@@ -68,6 +70,7 @@ public class ClientGlobals {
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
 	
 	public static void handleIOException(IOException e) {
+		if(ClientGlobals.kill ) return;
 		e.printStackTrace();
 		System.out.println("Cause: "+ e.getCause());
 		System.out.println("Msg: "+e.getMessage());

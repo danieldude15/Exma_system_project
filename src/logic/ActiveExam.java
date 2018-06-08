@@ -1,13 +1,12 @@
 package logic;
 
-import java.io.Serializable;
 
 /**
  * This is the ActiveExam Entitiy that holds information on active exams 
  * @author Group-12
  *
  */
-public class ActiveExam implements Serializable{
+public class ActiveExam  extends Exam {
 
 	/**
 	 * Serializable id give for client server communication
@@ -29,10 +28,6 @@ public class ActiveExam implements Serializable{
 	 * the teacher who activated this exam
 	 */
 	private Teacher activator;
-	/**
-	 * the actual exam
-	 */
-	private Exam exam;
 	
 	/**
 	 * active Exam cosntructor
@@ -44,12 +39,11 @@ public class ActiveExam implements Serializable{
 	 */
 	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)/*Constructor/*/
 	{
+		super(e);
 		this.code=code;
 		this.type=type;
 		this.dateActivated=dayActivated;
 		this.activator=activator;
-		this.exam=e;
-		
 	}
 	
 	/**
@@ -58,12 +52,11 @@ public class ActiveExam implements Serializable{
 	 */
 	public ActiveExam(ActiveExam e)/*Copy constructor/*/
 	{
+		super(e);
 		code=e.getCode();
 		type=e.getType();
 		dateActivated=e.getDate();
 		activator=new Teacher(e.getActivator());
-		exam=new Exam(e.getExam());
-		
 	}
 	
 	/**
@@ -98,15 +91,6 @@ public class ActiveExam implements Serializable{
 		return this.type;
 	}
 
-	/**
-	 * getExam
-	 * @return this exam that is currently active
-	 */
-	public Exam getExam()
-	{
-		/*Exam getter/*/
-		return this.exam;
-	}
 
 	/**
 	 * this function should get time change requests from database in case there are any
@@ -126,14 +110,16 @@ public class ActiveExam implements Serializable{
 		String examType;
 		if (type==1) examType = "Computerized";
 		else examType = "Manual";
-		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),exam.examIdToString() ,examType));
+		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),examIdToString() ,examType));
 	}
 
 	
 	@Override
 	public int hashCode() {
 		int result = 17;
-		result = 31*result + getExam().hashCode();
+		result = 31*result + super.hashCode();
+		result = 31*result + getCode().hashCode();
+		result = 31*result + getActivator().hashCode();
 		return result;
 	}
 
@@ -148,8 +134,7 @@ public class ActiveExam implements Serializable{
 			if (!a.getCode().equals(code) || a.getType()!=type) return false;
 			if (a.getDate()!=null && !a.getDate().equals(dateActivated)) return false;
 			if (!a.getActivator().equals(activator)) return false;
-			if (a.getExam()!=null && !a.getExam().equals(exam)) return false;
-			return true;
+			return super.equals(a);
 		}
 		return false;
 	}
