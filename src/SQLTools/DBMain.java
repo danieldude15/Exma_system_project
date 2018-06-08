@@ -581,7 +581,7 @@ public class DBMain {
 	
 
 	private HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
-		HashMap<QuestionInExam, String> result = new HashMap<>();
+		return new HashMap<>();/*HashMap<QuestionInExam, String> result = new HashMap<>();
 		HashMap<String, String> notes = new HashMap<>();
 		String[] temp = string.split("<QID>");
 		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
@@ -593,6 +593,7 @@ public class DBMain {
 			result.put(q,notes.get(q.questionIDToString()));
 		}
 		return result;
+		*/
 	}
 	
 	private String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
