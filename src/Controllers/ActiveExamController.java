@@ -3,6 +3,9 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -78,4 +81,69 @@ public class ActiveExamController {
 		return 0;
 	}
 
+	
+	
+	
+	public static XWPFDocument GetManualExam(String activeExamCode)
+	{
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("GetManualExam",activeExamCode);
+				client.sendToServer(msg);
+				return (XWPFDocument) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Send message to the server to add the student to the list of the Active exam.
+	 * @param s
+	 * @param ae
+	 */
+	public static void StudentCheckedInToActiveExam(Student s,ActiveExam ae)
+	{
+		Object[] sendObject=new Object[2];
+		sendObject[0]=(Student)s;
+		sendObject[1]=(ActiveExam)ae;
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("StudentCheckInToExam",sendObject);
+				client.sendToServer(msg);
+				client.getResponseFromServer();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Send message to the server to remove the student from the list of the Active exam.
+	 * @param s
+	 * @param ae
+	 */
+	public static void StudentCheckedOutFromActiveExam(Student s,ActiveExam ae)
+	{
+		Object[] sendObject=new Object[2];
+		sendObject[0]=(Student)s;
+		sendObject[1]=(ActiveExam)ae;
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("StudentCheckedOutFromActiveExam",sendObject);
+				client.sendToServer(msg);
+				client.getResponseFromServer();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
