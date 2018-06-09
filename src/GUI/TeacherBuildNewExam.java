@@ -108,10 +108,11 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	public void filterByField(ActionEvent event) {
 			if(fieldComboB.getSelectionModel().getSelectedItem()!=null) 
 			{
-			Field selectefield=fieldComboB.getSelectionModel().getSelectedItem();
+			
+			 publicField=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
 			courseComboB.getItems().clear();
-			teachersCourses = CourseFieldController.getFieldCourses(selectefield);
+			teachersCourses = CourseFieldController.getFieldCourses(publicField);
 			list = FXCollections.observableArrayList(teachersCourses);
 			courseComboB.setItems(list);
 		}

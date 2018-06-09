@@ -14,39 +14,33 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import logic.Globals;
 
-public class LoginFrame implements ControlledScreen, Initializable {
+public class LoginFrame implements ControlledScreen,Initializable {
 	
 	@FXML TextField userfield;
 	@FXML PasswordField passwordfield;
 	@FXML Button loginB;
 	@FXML Label error;
+
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void runOnScreenChange() {
+	@Override public void initialize(URL location, ResourceBundle resources) {}
+	
+	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(400);
 		Globals.primaryStage.setWidth(400);
 		error.setText("");
 
 	}
 	
-	@FXML
-	public void enterKeyPressed(ActionEvent event) {
+	@FXML public void enterKeyPressed(ActionEvent event) {
 		logInClicked(event);
 	}
-	@FXML
-	public void logInClicked(ActionEvent event) {
+	
+	@FXML public void logInClicked(ActionEvent event) {
 		if (userfield.getText().equals("") || passwordfield.getText().equals("")) {
 			error.setText("* You Must Fill In Both UserName And Password");
 		} else {
-			loginB.setDisable(true);
 			UserController.login(userfield.getText(),passwordfield.getText());
-			loginB.setDisable(false);
 		}
 	}
+
 }

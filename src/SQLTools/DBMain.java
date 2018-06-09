@@ -1,7 +1,6 @@
 package SQLTools;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
-
 import com.mysql.jdbc.Statement;
 
-import Controllers.QuestionController;
-import javafx.scene.input.Mnemonic;
-import javafx.scene.layout.ConstraintsBase;
-import logic.ActiveExam;
 import logic.CompletedExam;
 import logic.Course;
 import logic.Exam;
@@ -38,6 +31,7 @@ public class DBMain {
 	private String user;
 	private String pass;
 	private Connection conn;
+	
 	private String teacherFields = new String(
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
@@ -109,8 +103,13 @@ public class DBMain {
 			);
 	private String addSolvedExam = new String(""
 			+ "INSERT INTO `aes`.`solved_exams` "
-			+ "(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" + 
+			+ "(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`,`dateinitiated`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" + 
+			"");
+	private String updateSolvedExam = new String(""
+			+ "UPDATE `aes`.`solved_exams` "
+			+ "SET `score`=?, `teacherapproved`=?, `teacherschangescorenote`=?, `teacherquestionnote`=? "
+			+ "WHERE `studentid`=? and `examid`=? and `courseid`=? and`fieldid`=? and `code`=? " + 
 			"");
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
@@ -118,20 +117,22 @@ public class DBMain {
 			"WHERE u.userid=q.teacherid and q.questionid=qe.questionid and f.fieldid=q.fieldid "
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
-	
-	private String CourseQuestions=new String("Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,\n" + 
+	private String CourseQuestions=new String(""
+		   +"Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,\n" + 
 			"			u.fullname,u.password,u.userid,u.username,f.fieldname\n" + 
 			"			FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u\n" + 
 			"						 where c.courseid=qc.courseid and f.fieldid=c.fieldid and c.fieldid=qc.fieldid \n" + 
 			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid\n" + 
 			"			             and u.userid=q.teacherid and c.courseid=? and f.fieldid=?");
-						
-	private String addexam = new String("INSERT INTO `aes`.`exams` "
+	private String addexam = new String(""
+			+ "INSERT INTO `aes`.`exams` "
 			+ "(`examid`,`timeduration`, `fieldid`, `courseid`,`teacherid`) "
 			+ "VALUES ('0',?,?,?,?)"); 
 			
 	
-	private String addQuestionInExam = new String("INSERT INTO `aes`.`questions_in_exam` "
+
+	private String addQuestionInExam = new String(""
+			+ "INSERT INTO `aes`.`questions_in_exam` "
 			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
 			+ "VALUES (?,?,?,?,?,?,?)"); 
 			
@@ -145,12 +146,13 @@ public class DBMain {
 	private String getstudentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	/*/
 	
+
+
 	private String FieldCourses=new String(""
 			+"Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
 			+ " where  c.fieldid=f.fieldid and f.fieldid=?");
-	
-	
 	private String login = "SELECT * FROM aes.users WHERE username=?";
+	
 	/**
 	 * creating a Database Class creates a connection to an SQLServer
 	 * @param h the host address - could be a domain name or ip address (ex. "localhost/schema" or "192.168.1.15/schema")
@@ -227,8 +229,13 @@ public class DBMain {
 					String code = rs.getString(5);
 					int type = rs.getInt(6);
 					String dayActivated = rs.getString(7);
+					String timeLocked = rs.getString(8);
+					int participated = rs.getInt(9);
+					int submitted = rs.getInt(11);
+					int notInTime = rs.getInt(10);
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, t.getID(), code, type, dayActivated);
-					completedExams.add(new CompletedExam(code, type, dayActivated, new Teacher(t) , sExams));
+					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
+					completedExams.add(new CompletedExam(code, type, dayActivated, new Teacher(t) , sExams,participated,submitted,notInTime,timeLocked,e));
 				}
 				return completedExams;
 			}
@@ -412,7 +419,7 @@ public class DBMain {
 	}
 
 	/**
-	 * 
+	 * this methos returns a solved exam by parameters
 	 * @param examid
 	 * @param couseid
 	 * @param fieldid
@@ -436,7 +443,7 @@ public class DBMain {
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
 			ArrayList<SolvedExam> result = new ArrayList<>();
 			while(rs.next()) {		
-				int eid = rs.getInt(1);
+				//int eid = rs.getInt(1);
 				Course course = new Course(rs.getInt(4), rs.getString(5), new Field(rs.getInt(2),rs.getString(3)));
 				//int duration = rs.getInt(6);
 				int score = rs.getInt(13);
@@ -477,7 +484,6 @@ public class DBMain {
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
-			ArrayList<Exam> result = new ArrayList<>();
 			if (rs.next()) {		
 				int id = rs.getInt(1);
 				int duration = rs.getInt(2);
@@ -490,10 +496,6 @@ public class DBMain {
 			ServerGlobals.handleSQLException(e);
 		}
 		return null;
-	}
-
-	private HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
-		return new HashMap<>();
 	}
 
 	/**
@@ -561,7 +563,6 @@ public class DBMain {
 		return 0;
 	}
 	
-	
 	/**
 	 * This function will convert answers from database to objects by organizing them
 	 * For this to work the answers must be kept in the database in a cetain way
@@ -589,6 +590,38 @@ public class DBMain {
 		return result;
 	}
 	
+	private String studentAnswersToString(HashMap<QuestionInExam, Integer> studentsAnswers) {
+		String answers = "";
+		for (QuestionInExam qie : studentsAnswers.keySet()) {
+			answers = answers.concat("q"+qie.questionIDToString()+"a"+studentsAnswers.get(qie));
+		}
+		return answers;
+	}
+	
+
+	private HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
+		if (string==null || string.equals("")) return new HashMap<>();
+		HashMap<QuestionInExam, String> result = new HashMap<>();
+		HashMap<String, String> notes = new HashMap<>();
+		String[] temp = string.split("<QID>");
+		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
+		for(String questionNote : splitedNotes) {
+			String[] arr = questionNote.split("<TEACHER-NOTE>");
+			notes.put(arr[0], arr[1]);
+		}
+		for(QuestionInExam q: questionsInExam) {
+			result.put(q,notes.get(q.questionIDToString()));
+		}
+		return result;
+	}
+	
+	private String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
+		String allNotes = "";
+		for(QuestionInExam q: hashMap.keySet()) {
+			allNotes = allNotes.concat("<QID>"+q.questionIDToString()+"<TEACHER-NOTE>"+hashMap.get(q));
+		}
+		return allNotes;
+	}
 	
 	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
 	{
@@ -661,7 +694,7 @@ public class DBMain {
 				String answers[] = new String[]{answerA,answerB,answerC,answerD};
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
-				int teacherId = rs.getInt(9);
+				//int teacherId = rs.getInt(9);
 				int pointsValue = rs.getInt(12);
 				String innerNote = rs.getString(15);
 				String viewableNote = rs.getString(16);
@@ -810,7 +843,10 @@ public class DBMain {
 		}		
 		return 0;
 	}
-//FieldCourses
+
+	/**
+	 * getFieldCourses returns all field courses
+	 */ 
 	public ArrayList<Course> getFieldCourses(Field o) {
 		Field f = (Field) o;
 			try {
@@ -887,38 +923,43 @@ public class DBMain {
 			prst.setInt(8, se.getField().getID());
 			prst.setString(9, se.getTeachersScoreChangeNote());
 			prst.setInt(10, se.getCompletedTimeInMinutes());
-			/*prst.setString(11, se.getCode);
+			prst.setString(11, se.getCode());
+			prst.setString(12, teachersNotesToString(se.getQuestionNoteOnHash()));
+			prst.setString(13, se.getDate());
 			System.out.println("SQL:" + prst);
-			int worked = prst.executeUpdate();
-			if (worked==1) {
-				ResultSet rs = prst.getGeneratedKeys();
-				rs.next();
-				int questionid = rs.getInt(1);
-				prst = conn.prepareStatement(addQuestionToCourse);
-				for(Course c: se.getCourses()) {
-					prst.setInt(1, questionid);
-					prst.setInt(2, se.getField().getID());
-					prst.setInt(3, c.getId());
-					if(prst.executeUpdate()==0) {
-						System.out.println("FAIL!!!!! rollback issue!!!");
-						return 0;
-					} else worked++;
-				}
-			}*/
-			return null;
+			return prst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public Integer UpdateSolvedExam(SolvedExam se) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(updateSolvedExam);
+			//`score`=?, `teacherapproved`=?, `teacherschangescorenote`=?, `teacherquestionnote`=?
+			//`studentid`=? and `examid`=? and `courseid`=? and`fieldid`=? and `code`=? 
+			prst.setInt(1, se.getScore());
+			if (se.isTeacherApproved()) {
+				prst.setInt(2, 1);
+			} else {
+				prst.setInt(2, 0);
+			}
+			prst.setString(3, se.getTeachersScoreChangeNote());
+			prst.setString(4, teachersNotesToString(se.getQuestionNoteOnHash()));
+			prst.setInt(5, se.getStudent().getID());
+			prst.setInt(6, se.getExam().getID());
+			prst.setInt(7, se.getCourse().getId());
+			prst.setInt(8, se.getField().getID());
+			prst.setString(9, se.getCode());
+			System.out.println("SQL:" + prst);
+			return prst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
 
-	private String studentAnswersToString(HashMap<QuestionInExam, Integer> studentsAnswers) {
-		String answers = "";
-		for (QuestionInExam qie : studentsAnswers.keySet()) {
-			answers = answers.concat("q"+qie.questionIDToString()+"a"+studentsAnswers.get(qie));
-		}
-		return answers;
-	}
 
 }
 
