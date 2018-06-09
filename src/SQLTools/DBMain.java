@@ -128,14 +128,13 @@ public class DBMain {
 						
 	private String addexam = new String("INSERT INTO `aes`.`exams` "
 			+ "(`examid`,`timeduration`, `fieldid`, `courseid`,`teacherid`) "
-			+ "VALUES ('0', ?, ?,?,?);\n" 
-			);
+			+ "VALUES ('0',?,?,?,?)"); 
+			
 	
-	private String addQuestionInExam = new String(""
-			+ "INSERT INTO `aes`.`questions_in_exam` "
+	private String addQuestionInExam = new String("INSERT INTO `aes`.`questions_in_exam` "
 			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
-			+ "VALUES (?,?,?,?,?,?,?);\n" 
-			);
+			+ "VALUES (?,?,?,?,?,?,?)"); 
+			
 	
 	/*Do not delete me, maybe you will need me later :)
 	private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
@@ -725,8 +724,7 @@ public class DBMain {
 			prst.setInt(1, e.getDuration());
 			prst.setInt(2, e.getField().getID());
 			prst.setInt(3, e.getCourse().getId());
-			prst.setInt(3, e.getAuthor().getID());
-			
+			prst.setInt(4, (e.getAuthor().getID()));
 			System.out.println("SQL:" + prst);
 			int worked = prst.executeUpdate();
 			if (worked==1) {
@@ -743,17 +741,18 @@ public class DBMain {
 					prst.setString(6, q.getInnerNote());
 					prst.setString(7, q.getStudentNote());
 					if(prst.executeUpdate()==0) {
-						deleteExam(e);
+						deleteQuestion(q);
 						return 0;
 					} else worked++;
 				}
 			}
 			return worked;
-		} catch (Exception es) {
-			es.printStackTrace();
+		} catch (Exception x) {
+			x.printStackTrace();
 		}
 		return 0;
 	}
+	
 	
 	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;

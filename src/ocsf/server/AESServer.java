@@ -376,8 +376,8 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	private void addExam(ConnectionToClient client, Object o) throws IOException {
-		int effectedRowCount = sqlcon.addQuestion((Question) o);
-		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
+		int effectedRowCount = sqlcon.addexam((Exam) o);
+		iMessage im = new iMessage("addExam", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
 	

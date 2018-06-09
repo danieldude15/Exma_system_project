@@ -83,6 +83,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		questionsList.getChildren().clear();
 		questions.clear();
 		questionsinexam.clear();
+		duration.clear();
 		scores.clear();
 		NoteTeacherts.clear();
 		NoteStudents.clear();
@@ -123,7 +124,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	{
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
 		{
-			
+			publicCourse=courseComboB.getSelectionModel().getSelectedItem();
 			 DBquestions =  QuestionController.getCourseQuestions(courseComboB.getSelectionModel().getSelectedItem());
 				if (DBquestions!=null) 
 					setQuestionsListInVBox();
@@ -243,11 +244,11 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	        		questionsinexam.put(question.questionIDToString(),new QuestionInExam (question,point,notetech,notestd));
 	        		sum=sum+point;
 					TotalScore.setText("Total Score:"+sum);
-					if(!questionsinexam.isEmpty())
-					 {
-						 fieldComboB.setDisable(false);
-						 courseComboB.setDisable(false);
+					if(!questionsinexam.isEmpty()) {
+						 fieldComboB.setDisable(true);
+						 courseComboB.setDisable(true);
 					 }
+					
 		           		
 				}	
 	        	else {
@@ -277,25 +278,24 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 					alert.setHeaderText(null);
 					alert.setContentText("Are you sure you want to remove this question?");
 					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK){
+					if (result.get() == ButtonType.OK)
+					{
 						AddRemoves.get(((Control)evt.getSource()).getId()).setSelected(false);
 						scores.get(((Control)evt.getSource()).getId()).setText("");
 						QuestionInExam question = questionsinexam.get(((Control)evt.getSource()).getId());
+						questionsinexam.remove(((Control)evt.getSource()).getId());
 						sum=sum-question.getPointsValue();
 						TotalScore.setText("Total Score:"+sum);
-						questionsinexam.remove(((Control)evt.getSource()).getId());
-						
-						
 						scores.remove(((Control)evt.getSource()).getId());
-						
 						NoteStudents.remove(((Control)evt.getSource()).getId());
 						NoteTeacherts.remove(((Control)evt.getSource()).getId());
-						
-						
-						if(questionsinexam.isEmpty()) {
-							 fieldComboB.setDisable(true);
-							 courseComboB.setDisable(true);
+						if(questionsinexam.isEmpty())
+						 {
+							 fieldComboB.setDisable(false);
+							 courseComboB.setDisable(false);
 						 }
+						
+						
 			           		alert = new Alert(AlertType.INFORMATION);
 			        		alert.setTitle("Question remove Succesfully");
 			    			alert.setHeaderText("");
