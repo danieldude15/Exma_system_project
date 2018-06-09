@@ -118,6 +118,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 					 questionsList.getChildren().add(questionAdder(q));
 				 }
 			 }
+			 fieldComboB.getSelectionModel().select(selectedCourse.getField());
 		 }
 	}
 	
@@ -168,17 +169,19 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	private Node questionAdder(Question q) {
 		//HBox main question container
 		HBox hbox = new HBox();
-		hbox.setStyle("-fx-border-color:black;"
+		hbox.setStyle(""
+					+ "-fx-border-color:black;"
 					+ "-fx-border-radius:10px;"
 					+ "-fx-padding:10px;");
-		
+		hbox.setId("transbg");
 		//This VBox holds the question details
 		VBox questionInfo = new VBox();
+		questionInfo.setId("transbg");
 		Label questionString = new Label("Question: "+q.getQuestionString());
 		questionString.setId("blackLabel");
 		questionString.setWrapText(true);
-		questionInfo.setMinWidth(330);
-		questionInfo.setMaxWidth(330);
+		questionInfo.setMinWidth(300);
+		questionInfo.setMaxWidth(300);
 		Label qid = new Label("QID: "+q.questionIDToString());
 		qid.setId("blackLabel");
 		questionInfo.getChildren().add(qid);
@@ -194,6 +197,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		
 		// this HBox will hold the EditDelete buttons
 		HBox questionEditDelete = new HBox();
+		questionEditDelete.setId("transbg");
 		questionEditDelete.setAlignment(Pos.BOTTOM_LEFT);
 		questionEditDelete.setStyle("-fx-margin:20px");
 		Button edit = new Button("Edit");
@@ -208,6 +212,8 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		
 		// this VBox holds the course list assigned to this question
 		VBox assignedCourses = new VBox();
+		assignedCourses.setId("transbg");
+		assignedCourses.setAlignment(Pos.TOP_RIGHT);
 		Label courseTitle = new Label("Courses Assigned to Question:");
 		courseTitle.setId("blackLabel");
 		assignedCourses.getChildren().add(courseTitle);
@@ -221,7 +227,7 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		assignedCourses.getChildren().add(courselist);
 		
 		hbox.getChildren().addAll(questionInfo,assignedCourses);
-		
+		hbox.setId("transbg");
 		
 		return hbox;
 	}

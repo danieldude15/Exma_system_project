@@ -168,7 +168,7 @@ public class AESServer extends AbstractServer {
 				addExam(client,o);
 				break;
 			case "StudentCheckInToExam":
-				AddStudentToActiveExam(client,(Object[]) o);
+				AddStudentToActiveExam(client, o);
 				break;
 			case "GetManualExam":
 				GetManuelExam(client,o);
@@ -510,8 +510,12 @@ public class AESServer extends AbstractServer {
 	 * @param o
 	 * @throws IOException 
 	 */
-		private void AddStudentToActiveExam(ConnectionToClient client,Object[] o) throws IOException {
-			studentsInExam.get((ActiveExam)o[0]).add((Student)o[1]);
+		private void AddStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
+			Object[] o = (Object[])obj;
+ 			//System.out.println("Size="+studentsInExam.size());
+			//ActiveExam e=(ActiveExam)o[1];
+			//Student s=(Student)o[0];
+			studentsInExam.get((ActiveExam)o[1]).add((Student)o[0]);
 			client.sendToClient(new iMessage("StudentCheckInToExam",null));
 		}
 

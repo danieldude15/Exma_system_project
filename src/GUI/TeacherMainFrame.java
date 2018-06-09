@@ -45,16 +45,13 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Label username;
 	@FXML Label userid;
 	@FXML Pane userImage;
-	@FXML Tab myInfoTab;
-	@FXML TabPane infoTabPane;
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@Override public void initialize(URL location, ResourceBundle resources) {
 		
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(750);
+		Globals.primaryStage.setHeight(680);
 		Globals.primaryStage.setWidth(820);
 
 		updateCompletedExamListView();
@@ -67,7 +64,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		username.setText("UserName: "+t.getUserName());
 		userid.setText("UserID: "+t.getID());
 		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+t.getID()+".PNG\");"
-						+ "-fx-background-size: 150px 150px;"
+						+ "-fx-background-size: 100px 100px;"
 						+ "-fx-background-repeat: no-repeat;");
 
 	}

@@ -116,7 +116,7 @@ public class ActiveExamController {
 			try {
 				iMessage msg= new iMessage("StudentCheckInToExam",sendObject);
 				client.sendToServer(msg);
-				client.getResponseFromServer();
+				//client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -137,7 +137,7 @@ public class ActiveExamController {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
-				iMessage msg= new iMessage("StudentCheckedOutFromActiveExam",sendObject);
+				iMessage msg= new iMessage("StudentCheckedOutFromActiveExam",(Object)sendObject);
 				client.sendToServer(msg);
 				client.getResponseFromServer();
 			} catch (IOException e) {

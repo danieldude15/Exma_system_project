@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
 <VBox maxWidth="553.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherManageQuestions">
    <children>
       <Label text="Manage Questions">
@@ -66,7 +72,7 @@
               <content>
                 <AnchorPane maxWidth="1.7976931348623157E308" minWidth="-Infinity">
                      <children>
-                        <VBox fx:id="questionsList" maxWidth="1.7976931348623157E308" minWidth="-Infinity" style="-fx-text-fill: black;" />
+                        <VBox fx:id="questionsList" maxWidth="1.7976931348623157E308" minWidth="-Infinity" style="-fx-background-color: transparent; -fx-background-radius: 10;" />
                      </children>
                   </AnchorPane>
               </content>

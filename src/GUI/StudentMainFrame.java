@@ -83,8 +83,8 @@ public class StudentMainFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);	
+		Globals.primaryStage.setHeight(530);
+		Globals.primaryStage.setWidth(750);	
 		courseNameAndExamId.clear();
 		solvedExamsList.getItems().clear();
 		
@@ -128,7 +128,7 @@ public class StudentMainFrame implements ControlledScreen{
 		username.setText("UserName: "+s.getUserName());
 		userid.setText("UserID: "+s.getID());
 		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+s.getID()+".PNG\");"
-				+ "-fx-background-size: 150px 150px;"
+				+ "-fx-background-size: 100px 100px;"
 				+ "-fx-background-repeat: no-repeat;");
 	}
 	
