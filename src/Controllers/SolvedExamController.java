@@ -61,7 +61,7 @@ public class SolvedExamController {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
-				client.sendToServer(new iMessage("addSolvedExam",solvedExam));
+				client.sendToServer(new iMessage("updateSolvedExam",solvedExam));
 				return (Integer) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);

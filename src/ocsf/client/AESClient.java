@@ -43,12 +43,12 @@ public class AESClient extends AbstractClient{
 	 * @param msg   this will always be an iMessage type of object 
 	 */
 	protected void handleMessageFromServer(Object ServerMsg){
+		this.msg = (iMessage) ServerMsg;
 		System.out.println("Got msg from Server:" + msg);
 		if(!(ServerMsg instanceof iMessage)) {
 			System.out.println("Server msg not of iMessage type");
 			return;
 		}
-		this.msg = (iMessage) ServerMsg;
 		String cmd = new String(msg.getCommand());
 		Object o = msg.getObj();
 		//cases with return isntead of break are cases that make sure we dont update the stopwaiting 
@@ -80,7 +80,6 @@ public class AESClient extends AbstractClient{
 
 	private void copyServerMsg(Object serverMsg) {
 		msg = (iMessage) serverMsg;
-		
 	}
 
 	protected void connectionClosed() {

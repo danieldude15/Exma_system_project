@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
 import java.util.ResourceBundle;
 
+import javax.lang.model.util.SimpleElementVisitor6;
+
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
@@ -12,10 +14,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
@@ -43,7 +47,8 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 	@FXML Label studentName;
 	@FXML Label score;
 	@FXML Label timeCompleted;
-
+	@FXML ImageView doneImage;	
+	
 	@Override public void initialize(URL location, ResourceBundle resources) {
 
 	}
@@ -58,7 +63,17 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		noteErrorLabel.setVisible(false);
 		studentName.setText(solvedExam.getStudent().getName());
 		score.setText(Integer.toString(solvedExam.getScore()));
+		newScore.setDisable(false);
+		changeNote.setDisable(false);
 		timeCompleted.setText(solvedExam.getCompletedTimeInMinutes() + " Min");
+		doneImage.setVisible(false);
+		if (solvedExam.isTeacherApproved()) {
+			newScore.setText(Integer.toString(solvedExam.getScore()));
+			newScore.setDisable(true);
+			changeNote.setText(solvedExam.getTeachersScoreChangeNote());
+			changeNote.setDisable(true);
+			doneImage.setVisible(true);
+		}
 		if (solvedExam!=null) {
 			for(QuestionInExam q : solvedExam.getQuestionsInExam()) {
 				questionsView.getChildren().add(questionAdder(q,solvedExam.getStudentsAnswers()));
@@ -120,8 +135,15 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		HBox questionNoteByTeacher = new HBox();
 		questionNoteByTeacher.setAlignment(Pos.BOTTOM_LEFT);
 		questionNoteByTeacher.setStyle("-fx-margin:20px");
-		TextField teacherNote = new TextField("Add Note");
-		questionNoteByTeacher.getChildren().add(teacherNote);
+		Object teacherNote;
+		if (solvedExam.isTeacherApproved()) {
+			teacherNote = new Label("Written Note: "+solvedExam.getQuestionNotes().get(q));
+			((Label)teacherNote).setId("blackLabel");
+		} else {
+			teacherNote = new TextField();
+			((TextField)teacherNote).setPromptText("Note for student");
+		}
+		questionNoteByTeacher.getChildren().add((Node) teacherNote);
 		questionInfo.getChildren().add(questionNoteByTeacher);
 		
 		// this VBox holds the correect/Incorrect icon for the question
@@ -157,6 +179,13 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 			solvedExam.setTeacherApproved(true);
 			if (SolvedExamController.insertSolvedExam(solvedExam)>0) {
 				//successfull insertion
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Exam Check Is Updated Successfully");
+				alert.setHeaderText(null);
+				alert.setContentText("The exam was updated into the system.");
+				alert.showAndWait();
+				doneImage.setVisible(true);
+				score.setText(Integer.toString(solvedExam.getScore()));
 			} else {
 				//Failed To insert!
 			}

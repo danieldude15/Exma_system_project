@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -83,6 +85,14 @@
                               <Insets left="60.0" />
                            </HBox.margin>
                         </Label>
+                        <ImageView fx:id="doneImage" fitHeight="65.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../images/completed-stamp.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets top="-30.0" />
+                           </HBox.margin>
+                        </ImageView>
                      </children>
                      <padding>
                         <Insets top="30.0" />
