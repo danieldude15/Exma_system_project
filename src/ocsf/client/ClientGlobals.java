@@ -73,7 +73,7 @@ public class ClientGlobals {
 
 	public static final String TeacherCheckExamID = "TeacherCheckSolvedExam";
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
-	
+
 	public static void handleIOException(IOException e) {
 		if(ClientGlobals.kill ) return;
 		e.printStackTrace();

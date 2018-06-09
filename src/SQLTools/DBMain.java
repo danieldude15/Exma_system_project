@@ -215,8 +215,13 @@ public class DBMain {
 					String code = rs.getString(5);
 					int type = rs.getInt(6);
 					String dayActivated = rs.getString(7);
+					String timeLocked = rs.getString(8);
+					int participated = rs.getInt(9);
+					int submitted = rs.getInt(11);
+					int notInTime = rs.getInt(10);
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, t.getID(), code, type, dayActivated);
-					completedExams.add(new CompletedExam(code, type, dayActivated, new Teacher(t) , sExams));
+					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
+					completedExams.add(new CompletedExam(code, type, dayActivated, new Teacher(t) , sExams,participated,submitted,notInTime,timeLocked,e));
 				}
 				return completedExams;
 			}
@@ -581,7 +586,8 @@ public class DBMain {
 	
 
 	private HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
-		return new HashMap<>();/*HashMap<QuestionInExam, String> result = new HashMap<>();
+		if (string==null || string.equals("")) return new HashMap<>();
+		HashMap<QuestionInExam, String> result = new HashMap<>();
 		HashMap<String, String> notes = new HashMap<>();
 		String[] temp = string.split("<QID>");
 		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
@@ -593,7 +599,6 @@ public class DBMain {
 			result.put(q,notes.get(q.questionIDToString()));
 		}
 		return result;
-		*/
 	}
 	
 	private String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
@@ -905,7 +910,7 @@ public class DBMain {
 			prst.setString(9, se.getTeachersScoreChangeNote());
 			prst.setInt(10, se.getCompletedTimeInMinutes());
 			prst.setString(11, se.getCode());
-			prst.setString(12, teachersNotesToString(se.getQuestionNotes()));
+			prst.setString(12, teachersNotesToString(se.getQuestionNoteOnHash()));
 			prst.setString(13, se.getDate());
 			System.out.println("SQL:" + prst);
 			return prst.executeUpdate();
@@ -927,7 +932,7 @@ public class DBMain {
 				prst.setInt(2, 0);
 			}
 			prst.setString(3, se.getTeachersScoreChangeNote());
-			prst.setString(4, teachersNotesToString(se.getQuestionNotes()));
+			prst.setString(4, teachersNotesToString(se.getQuestionNoteOnHash()));
 			prst.setInt(5, se.getStudent().getID());
 			prst.setInt(6, se.getExam().getID());
 			prst.setInt(7, se.getCourse().getId());
