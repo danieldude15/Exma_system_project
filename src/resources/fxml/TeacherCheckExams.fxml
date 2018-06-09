@@ -30,7 +30,7 @@
                               <Label fx:id="examid" text="Exam ID:" />
                               <Label fx:id="participated" text="Students Participating:" />
                               <Label fx:id="submited" text="Students Submitted:" />
-                              <Label fx:id="fialToSubmitStudents" text="Students Not On-Time:" />
+                              <Label fx:id="failToSubmitStudents" text="Students Not On-Time:" />
                            </children>
                            <HBox.margin>
                               <Insets left="40.0" />

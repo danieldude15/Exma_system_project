@@ -35,7 +35,8 @@ import ocsf.client.ClientGlobals;
 
 public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScreen {
 
-	SolvedExam solvedExam = null;
+	private SolvedExam solvedExam = null;
+	private HashMap<QuestionInExam, TextField> teacherNotesH = new HashMap<>();
 	private final Image v = new Image("resources/v.png"); 
 	private final Image x = new Image("resources/x.png"); 
 	
@@ -137,11 +138,12 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionNoteByTeacher.setStyle("-fx-margin:20px");
 		Object teacherNote;
 		if (solvedExam.isTeacherApproved()) {
-			teacherNote = new Label("Written Note: "+solvedExam.getQuestionNotes().get(q));
+			teacherNote = new Label("Written Note: "+solvedExam.getQuestionNoteOnHash().get(q));
 			((Label)teacherNote).setId("blackLabel");
 		} else {
 			teacherNote = new TextField();
 			((TextField)teacherNote).setPromptText("Note for student");
+			teacherNotesH.put(q, (TextField)teacherNote);
 		}
 		questionNoteByTeacher.getChildren().add((Node) teacherNote);
 		questionInfo.getChildren().add(questionNoteByTeacher);
@@ -175,6 +177,11 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 			if (!newScore.getText().equals("")) {
 					solvedExam.setScore(Integer.parseInt(newScore.getText()));
 					solvedExam.setTeachersScoreChangeNote(changeNote.getText());
+					HashMap<QuestionInExam, String> teacherNotes = new HashMap<>();
+					for(QuestionInExam qie: teacherNotesH.keySet()) {
+						teacherNotes.put(qie, teacherNotesH.get(qie).getText());
+					}
+					solvedExam.setQuestionNoteOnHash(teacherNotes);
 			}
 			solvedExam.setTeacherApproved(true);
 			if (SolvedExamController.insertSolvedExam(solvedExam)>0) {

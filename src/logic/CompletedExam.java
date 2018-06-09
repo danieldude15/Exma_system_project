@@ -18,7 +18,22 @@ public class CompletedExam extends ActiveExam {
 	 * arraylist of all solved exams of this completed exam
 	 */
 	private ArrayList<SolvedExam> solvedExams = null;
-	
+	/**
+	 * 
+	 */
+	private Integer participatingStudent;
+	/**
+	 * 
+	 */
+	private Integer submittedStudents;
+	/**
+	 * 
+	 */
+	private Integer notInTimeStudents;
+	/**
+	 * 
+	 */
+	private String timeLocked;
 	/**
 	 * constructor of Completed Exam
 	 * @param code - the activeExam code (4 char)
@@ -26,10 +41,17 @@ public class CompletedExam extends ActiveExam {
 	 * @param dayActivated - the date thei exam was activated
 	 * @param activator - the teacher who activated this exam
 	 * @param solvedExams - the arraylist of all sovled exams 
+	 * @param notInTime 
+	 * @param submitted 
+	 * @param participated 
 	 */
-	public CompletedExam(String code, int type, String dayActivated, Teacher activator,ArrayList<SolvedExam> solvedExams) {
-		super(code, type, dayActivated, null, activator);
+	public CompletedExam(String code, int type, String dayActivated, Teacher activator,ArrayList<SolvedExam> solvedExams, int participated, int submitted, int notInTime,String timelocked,Exam e) {
+		super(code, type, dayActivated, e, activator);
 		this.solvedExams=solvedExams;
+		participatingStudent=participated;
+		submittedStudents=submitted;
+		notInTimeStudents=notInTime;
+		timeLocked=timelocked;
 	}
 
 	/**
@@ -61,5 +83,19 @@ public class CompletedExam extends ActiveExam {
 			return new String(String.format("Activated On: %s \nCode: %s \nID: %s \nType: %s", getDate(),getCode(),solvedExams.get(0).examIdToString() ,examType));
 		else 
 			return new String(String.format("Activated On: %s \nCode: %s \nID: N/A \nType: %s", getDate(),getCode(),examType));
-	}	
+	}
+
+	public Integer getParticipatingStudent() {
+		return participatingStudent;
+	}
+
+	public Integer getSubmittedStudents() {
+		return submittedStudents;
+	}
+
+	public Integer getNoInTimeStudents() {
+		return notInTimeStudents;
+	}
+	
+	
 }

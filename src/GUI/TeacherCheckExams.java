@@ -26,7 +26,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	@FXML Label examid;
 	@FXML Label participated;
 	@FXML Label submited;
-	@FXML Label fialToSubmitStudents;
+	@FXML Label failToSubmitStudents;
 	@FXML Label checkOutOf;
 	@FXML ListView<SolvedExam> SolvedExamList;
 	@FXML Button checkB;
@@ -41,7 +41,17 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	@Override public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(500);
 		Globals.primaryStage.setWidth(670);
-		
+		examid.setText(completedExam.getExam().examIdToString());
+		participated.setText(Integer.toString(completedExam.getParticipatingStudent()));
+		submited.setText(Integer.toString(completedExam.getSubmittedStudents()));
+		failToSubmitStudents.setText(Integer.toString(completedExam.getNoInTimeStudents()));
+		int counter=0;
+		for(SolvedExam se : completedExam.getSolvedExams()) {
+			if(se.isTeacherApproved())
+				counter++;
+		}
+		int total = completedExam.getSolvedExams().size();
+		checkOutOf.setText(counter+"/"+total);
 		SolvedExamList.getItems().clear();
 		ObservableList<SolvedExam> list = FXCollections.observableArrayList(completedExam.getSolvedExams());
 		SolvedExamList.setItems(list);

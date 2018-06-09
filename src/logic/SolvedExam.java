@@ -27,7 +27,7 @@ public class SolvedExam extends ActiveExam{
 	/**
 	 * this HashMap holds a Key of QuestionInExam and Value of the Note string on solved question
 	 */
-	HashMap<QuestionInExam, String> answerNoteOnQuestion;
+	HashMap<QuestionInExam, String> questionNoteOnHash;
 	
 	/**
 	 * exam report ID. in case needed can be pulled from database using this id
@@ -74,7 +74,7 @@ public class SolvedExam extends ActiveExam{
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
 		if (this.teachersScoreChangeNote ==null) this.teachersScoreChangeNote ="";
 		CompletedTimeInMinutes = completedTimeInMinutes;
-		answerNoteOnQuestion = teacherNotes;
+		questionNoteOnHash = teacherNotes;
 	}
 	/**
 	 * getScore
@@ -173,9 +173,13 @@ public class SolvedExam extends ActiveExam{
 	@Override public String toString() {
 		return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
 	}
-	public HashMap<QuestionInExam,String> getQuestionNotes() {
-		return answerNoteOnQuestion;
+	public HashMap<QuestionInExam, String> getQuestionNoteOnHash() {
+		return questionNoteOnHash;
 	}
+	public void setQuestionNoteOnHash(HashMap<QuestionInExam, String> answerNoteOnQuestion) {
+		this.questionNoteOnHash = answerNoteOnQuestion;
+	}
+	
 	
 	
 
