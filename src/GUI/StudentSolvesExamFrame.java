@@ -1,7 +1,9 @@
 package GUI;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import logic.ActiveExam;
 import logic.Course;
 import logic.Exam;
@@ -47,7 +50,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML Button exitButton;
 	
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
-	private HashMap<String,Integer> indexOfAnswerInQuestion=new  HashMap<String,Integer>();//So we can mark the index of student answer.
 	private ActiveExam activeExam;
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
@@ -60,7 +62,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		Globals.primaryStage.setWidth(820);
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
-		indexOfAnswerInQuestion.clear();
 		
 		activeExam=this.GetActiveExam();
 		courseNameLabel.setId(whiteLabel);
@@ -70,7 +71,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		downloadButton.setVisible(false);//This button will show on screen only if the exam is manual.
 		
 		/*Student check in to the Active exam./*/
-		//ActiveExamController.StudentCheckedInToActiveExam((Student)ClientGlobals.client.getUser(),activeExam);
+		ActiveExamController.StudentCheckedInToActiveExam((Student)ClientGlobals.client.getUser(),activeExam);
 		
 		//Active exam is manual.
 		if(activeExam.getType()==0)
@@ -138,7 +139,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void SetQuestionOnWindowScreen(QuestionInExam qie,int questionIndex)
 	{
-		int aIndex=1;
 		ToggleGroup toogleGroup = new ToggleGroup();//Group all answers in ToggleGroup so the student can choose only one option.
 		Label note=new Label();
 		note.setId(blackLabel);
@@ -160,8 +160,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			r.setWrapText(true);
 			r.setToggleGroup(toogleGroup);
 			questionsAndAnswers.getChildren().add(r);
-			indexOfAnswerInQuestion.put(r.getText(), aIndex);//Add answer and it's index to HashMap(will use us in SubmitButtonPressed method to convert student's answer String to Integer index).
-			aIndex++;
 		}
 		questionWithAnswers.put(qie, toogleGroup);//Add question and it's group of answers to HashMap(will use us in SubmitButtonPressed method to check which answer the user marked for that question).
 	
@@ -196,17 +194,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		out.close();/*/
 		
 		
-		/*
-		FileChooser fs=new FileChooser();
-		fs.setTitle("Save Manual exam");
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-		fs.getExtensionFilters().add(extFilter);
-		fs.showSaveDialog(null);
-		File fi = fs.showOpenDialog(null);
-		FileOutputStream out= new FileOutputStream(fi.getPath());
-		doc.write(out);
-		out.close();
-		/*/
+		
 		
 		//Create document
 		XWPFDocument doc=new XWPFDocument();
@@ -224,7 +212,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		//Create exam details paragraph
 		XWPFParagraph examDetailsParagraph=doc.createParagraph();
-		examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
+		examDetailsParagraph.setAlignment(ParagraphAlignment.RIGHT);
 		XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
 		runOnExamDetailsParagraph.setText("Field: "+activeExam.getExam().getField().getName());
 		runOnExamDetailsParagraph.addBreak();
@@ -233,7 +221,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		//Create question+answers paragraph
 		XWPFParagraph questionsParagraph=doc.createParagraph();
-		questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
+		questionsParagraph.setAlignment(ParagraphAlignment.RIGHT);
 		XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
 		int questionIndex=1;
 		ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
@@ -246,7 +234,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			}
 			runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
 			runOnquestionsParagraph.addBreak();
-			for(int i=0;i<4;i++)
+			for(int i=1;i<5;i++)
 			{
 				runOnquestionsParagraph.setText(qie.getAnswer(i));
 				runOnquestionsParagraph.addBreak();
@@ -262,48 +250,41 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 		
 
-		
-		String s=new String();
-		
-		List<XWPFParagraph> list=doc.getParagraphs();
-		for(XWPFParagraph p:list)
-		{
-			s=s+p.getText()+"/n";
-		}
-		
 	
 		//Save file! currently doesn't work.
-		/*FileChooser fileChooser = new FileChooser();
-		  
-         //Set extension filter
-         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("docx files (*.docx)", "*.docx");
-         fileChooser.getExtensionFilters().add(extFilter);
-         
+		FileChooser fileChooser = new FileChooser();
+		
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("docx files (*.docx)", "*.docx");
+        fileChooser.getExtensionFilters().add(extFilter);
          
          //Show save file dialog
          File file = fileChooser.showSaveDialog(Globals.primaryStage);
+         if(file != null)
+             SaveFile(file, doc);
          
-         if(file != null){
-             SaveFile(s, file);
-         }
-         /*/
+         
+         
 	}
 	
-	/*
-	 private void SaveFile(String content, File file){
-	        try {
-	            FileWriter fileWriter = null;
-	             
-	            fileWriter = new FileWriter(file,true);
-	            fileWriter.write(content);
-	            //fileWriter.flush();
-	            fileWriter.close();
-	        } catch (IOException ex) {
-	           
-	        }
-	         
-	    }
-	/*/
+	
+	 private void SaveFile(File file, XWPFDocument doc) throws IOException{
+
+            OutputStream outputStream = new FileOutputStream(file);
+            doc.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+            
+            Alert alert=new Alert(AlertType.INFORMATION);
+ 			alert.setTitle("Download Succeed");
+ 			alert.setHeaderText(null);
+ 			alert.setContentText("You can open it and start your exam!");
+ 			alert.showAndWait();
+ 			
+ 			submitButton.setDisable(false);
+ 			downloadButton.setDisable(true);
+ }
+	
 	
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
@@ -342,6 +323,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		HashMap<QuestionInExam,Integer> studentAnswers=(HashMap<QuestionInExam, Integer>) studentAnsersAndScoreForExam[0];
 		int score=(int) studentAnsersAndScoreForExam[1];
 		
+		
 		boolean teacherApproved=false;
 		int examReportId=5;//need to take care of it.
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
@@ -354,7 +336,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		SolvedExam s=new SolvedExam(e.getID(),new Course(e.getCourse()), e.getDuration(), new Teacher(e.getAuthor())
 				, score, false, studentAnswers, 5,
 				new Student((Student)ClientGlobals.client.getUser()), null, CompletedTimeInMinutes);
-		/*/
+		going to replace all in this./*/
 		
 		/*//delete it all!
 		System.out.println("score= "+score);
@@ -369,12 +351,14 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 	
 	
+	/*
 	/**
 	 * Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
 	 * Object[0]=HashMap(QuestionInExam,Integer) which contains the question in exam as key and the student's answer index as value. 
 	 * Object[1]=Student's grade for exam.
 	 * @return Object[] studentAnsersAndScoreForExam
 	 */
+	/*/
 	private Object[] SystemCheckExam() {
 		// TODO Auto-generated method stub
 		int score=0;
@@ -398,6 +382,62 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		studentAnsersAndScoreForExam[1]=score;
 		return studentAnsersAndScoreForExam;
 	}
+/*/
+
+
+
+
+	/**
+	* Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
+	* Object[0]=HashMap(QuestionInExam,Integer) which contains the question in exam as key and the student's answer index as value. 
+	* Object[1]=Student's grade for exam.
+	* @return Object[] studentAnsersAndScoreForExam
+	*/
+	private Object[] SystemCheckExam()
+	{
+		int score=0;
+		Object[] studentAnsersAndScoreForExam=new Object[2];
+		RadioButton r=new RadioButton();
+		HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
+		if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
+		{
+			for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
+			{
+				r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
+				if(r.getText()==null)//Student didn't choose any answer.
+					studentAnswers.put(qie,0);
+				else//Student choose answer.
+				{
+					for(int i=1;i<5;i++)//Runs all over question's answers.
+					{
+						if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
+						{
+							studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
+							if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
+								score+=qie.getPointsValue();
+							break;
+						}
+					}
+				}
+			}
+		}
+		else//Active exam is manual so we fabricate student's answers and score.
+		{
+			ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+			for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
+			{
+				studentAnswers.put(qie, 1);
+			}
+			score=100;
+		}
+		studentAnsersAndScoreForExam[0]=studentAnswers;
+		studentAnsersAndScoreForExam[1]=score;
+		return studentAnsersAndScoreForExam;
+	}
+
+
+
+
 
 	/**
 	 * When student press submit he gets a confirmation dialog and can press ok for submit,

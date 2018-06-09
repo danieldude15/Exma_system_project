@@ -258,6 +258,8 @@ public class StudentViewExamFrame implements ControlledScreen {
 		boolean studentAnswer;
 		Label studentGetsPointsFromQuestion=new Label();
 		studentGetsPointsFromQuestion.setId(blackLabel);
+		Label answerNote=new Label();
+		answerNote.setId(blackLabel);
 		Separator separator=new Separator();
 		separator.setMinWidth(690);
 		separator.setMaxHeight(100);
@@ -272,7 +274,15 @@ public class StudentViewExamFrame implements ControlledScreen {
 			studentGetsPointsFromQuestion.setText(" Score: "+Integer.toString(qie.getPointsValue())+"/"+Integer.toString(qie.getPointsValue())+" points  ");
 			studentAnswer=true;
 		}
-		questionInfo_StudentScoreAndNote.getChildren().addAll(studentGetsPointsFromQuestion,separator);
+		
+		if(this.GetSolvedExam().getQuestionNoteOnHash().get(qie)!=null)//There is a note for that answer.
+			answerNote.setText("Note: "+this.GetSolvedExam().getQuestionNoteOnHash().get(qie));
+		
+		if(answerNote.getText()==null)
+			questionInfo_StudentScoreAndNote.getChildren().addAll(studentGetsPointsFromQuestion,separator);
+		else
+			questionInfo_StudentScoreAndNote.getChildren().addAll(studentGetsPointsFromQuestion,answerNote,separator);
+		
 		return studentAnswer;
 	}
 	

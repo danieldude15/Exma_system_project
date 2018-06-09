@@ -4,11 +4,15 @@ package GUI;
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import logic.ActiveExam;
 import logic.Globals;
 import ocsf.client.ClientGlobals;
@@ -20,6 +24,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML Label examCodeError;
 	@FXML Label idError;
 	
+	
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
@@ -29,6 +34,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 		examCodeError.setText("");
 
 	}
+	
+	
 	/**
 	 * When student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
 	 */
@@ -90,7 +97,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}
-	
+
+
 	
 	
 }
