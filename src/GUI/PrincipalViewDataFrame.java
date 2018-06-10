@@ -79,20 +79,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         ArrayList<String> basicQuestionInfo = new ArrayList<>();
         if (m_questionsToBeDisplayed != null) {
             for (Question question : m_questionsToBeDisplayed) {
-                String displayedQID;
-                int qID = question.getID();
-                int fID = question.getField().getID();
-                if (fID < 10) {
-                    displayedQID = "0" + String.valueOf(fID);
-                } else
-                    displayedQID = String.valueOf(fID);
-                if (qID < 10)
-                    displayedQID = displayedQID + "00" + String.valueOf(qID);
-                else if (qID < 100 && qID > 9)
-                    displayedQID = displayedQID + "0" + String.valueOf(qID);
-                else
-                    displayedQID = displayedQID + String.valueOf(qID);
-                String questionInfo = "QuestionID: " + displayedQID + " | " + question.getQuestionString();
+                String questionInfo = "QuestionID: " + question.questionIDToString() + " | " + question.getQuestionString();
                 basicQuestionInfo.add(questionInfo);
             }
             m_questionsList.getItems().clear();
