@@ -13,6 +13,7 @@ import logic.iMessage;
 public class ServerApplication extends Application {
 
 	public static void main (String args[]) {
+		Globals.application = "server";
 		launch(args);
 	}
 	@Override

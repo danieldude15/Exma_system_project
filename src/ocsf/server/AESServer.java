@@ -1,17 +1,22 @@
 package ocsf.server;
 
+import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import SQLTools.DBMain;
+import logic.*;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import SQLTools.DBMain;
-import logic.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AESServer extends AbstractServer {
 	
@@ -43,6 +48,7 @@ public class AESServer extends AbstractServer {
 	 */
 	private HashMap<ActiveExam,XWPFDocument> wordFiles;
 	
+	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
@@ -62,7 +68,8 @@ public class AESServer extends AbstractServer {
 		ArrayList<Course> cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		ActiveExam tibisExam = new ActiveExam("acdc", 1, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		ActiveExam tibisExam = new ActiveExam("acdc", 1, "2018-05-30",
+				new Exam(1, cs.get(0),2,teacher,questions),teacher);
 		activeExams.put("acdc", tibisExam);
 		
 		studentsInExam.put(tibisExam, new ArrayList<Student>());
@@ -76,7 +83,7 @@ public class AESServer extends AbstractServer {
 		field = new Field(2,"FieldName");
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
-		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer mítherfucker"));
+		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer mï¿½therfucker"));
 		ActiveExam nivsExam = new ActiveExam("ddii", 0, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("ddii", nivsExam);
 		
@@ -110,11 +117,20 @@ public class AESServer extends AbstractServer {
 			case "getQuestionCourses":
 				getQuestionCourses(client,o);
 				break;
+			case "newTimeChangeRequest":
+				newTimeChangeRequest(o);
+				break;
+			case "timeChangeRequestResponse":
+				timeChangeRequestResponse(o);
+				break;
 			case "getQuestionInExam":
 				getQuestionInExam(client,o);
 				break;
 			case "getFieldsCourses":
 				getFieldsCourses(client,o);
+				break;
+			case "getAllQuestions":
+				getAllQuestions(client,null);
 				break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
@@ -168,7 +184,7 @@ public class AESServer extends AbstractServer {
 				addExam(client,o);
 				break;
 			case "StudentCheckInToExam":
-				AddStudentToActiveExam(client, o);
+				checkInStudentToActiveExam(client, o);
 				break;
 			case "GetManualExam":
 				GetManuelExam(client,o);
@@ -181,6 +197,21 @@ public class AESServer extends AbstractServer {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void newTimeChangeRequest(Object o) throws IOException {
+		if (o instanceof TimeChangeRequest) {
+			TimeChangeRequest tc = (TimeChangeRequest) o;
+			if (activeExams.get(tc.getActiveExam().getCode())!=null) {
+				timeChangeRequests.put(tc.getActiveExam(), tc);
+				for(User u: connectedUsers.keySet()) {
+					if(u instanceof Principle) {
+						connectedUsers.get(u).sendToClient(new iMessage("newTimeChangeRequest", tc));
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -233,7 +264,7 @@ public class AESServer extends AbstractServer {
 	* synchronized.
 	*
 	* @param client the client that raised the exception.
-	* @param Throwable the exception thrown.
+	* @param exception the exception thrown.
 	*/
 	synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
 		System.err.println("Client: " + client + " has thrown an exception:\n" + exception.getStackTrace());
@@ -282,7 +313,7 @@ public class AESServer extends AbstractServer {
 	 * Get an active exam and remove it from active exams Hashmap.
 	 * @param ae
 	 */
-	public int RemoveActiveExam(ActiveExam ae)
+	public int lockActiveExam(ActiveExam ae)
 	{
 		iMessage msg = new iMessage("ExamLocked", ae);
 		int counter=0;
@@ -323,7 +354,7 @@ public class AESServer extends AbstractServer {
 	/**
 	 * Get an active exam code and sends to client that active exam if exist, otherwise sends null.
 	 * @param client
-	 * @param Object
+	 * @param o
 	 * @throws IOException
 	 */
 	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
@@ -345,7 +376,7 @@ public class AESServer extends AbstractServer {
 	}
 	
 	private void lockActiveExams(ConnectionToClient client, Object o) throws IOException {
-		int kickedStudents = RemoveActiveExam((ActiveExam) o);
+		int kickedStudents = lockActiveExam((ActiveExam) o);
 		client.sendToClient(new iMessage("lockedExam", new Integer(kickedStudents)));
 	}
 	
@@ -429,8 +460,18 @@ public class AESServer extends AbstractServer {
 			System.out.println("Logged out User: "+ o );
 	}
 	
-	public void logOutAllUsers() {
+	public void clearHashes() {
 		connectedUsers.clear();
+		if (studentsInExam!=null) {
+			for(ActiveExam a: studentsInExam.keySet()) {
+				studentsInExam.get(a).clear();
+			}
+		}
+		if (studentsSolvedExams!=null) {
+			for(ActiveExam a: studentsSolvedExams.keySet()) {
+				studentsSolvedExams.get(a).clear();
+			}
+		}
 	}
 	
 	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
@@ -451,10 +492,31 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
+	private void timeChangeRequestResponse(Object o) throws IOException {
+		if (o instanceof TimeChangeRequest) {
+			TimeChangeRequest tc = (TimeChangeRequest) o;
+			if(tc.getStatus()) {
+				iMessage msg = new iMessage("studentUpdateExamTime", tc.getNewTime());
+				for(Student u : studentsInExam.get(tc.getActiveExam())) {
+					Student s = new Student(0, u.getUserName(), u.getPassword(), null);
+					connectedUsers.get(s).sendToClient(msg);
+				}
+			} 
+			timeChangeRequests.remove(tc.getActiveExam());
+		}
+		
+	}
+	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
 		client.sendToClient(im);
+	}
+
+	private void getAllQuestions(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Question> questions = sqlcon.getAllQuestions();
+		iMessage rtrnmsg = new iMessage("AllQuestions", questions);
+		client.sendToClient(rtrnmsg);
 	}
 
 	/**
@@ -517,13 +579,19 @@ public class AESServer extends AbstractServer {
 	 * @param o
 	 * @throws IOException 
 	 */
-		private void AddStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
+		private void checkInStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
 			Object[] o = (Object[])obj;
- 			//System.out.println("Size="+studentsInExam.size());
-			//ActiveExam e=(ActiveExam)o[1];
-			//Student s=(Student)o[0];
-			studentsInExam.get((ActiveExam)o[1]).add((Student)o[0]);
-			client.sendToClient(new iMessage("StudentCheckInToExam",null));
+			ActiveExam ae = (ActiveExam) o[1];
+			Student s = (Student) o[0];
+			if(!isInActiveExam(s, ae)) {
+				if(studentsInExam.get((ActiveExam)o[1])!=null) {
+					studentsInExam.get((ActiveExam)o[1]).add((Student)o[0]);
+					client.sendToClient(new iMessage("StudentCheckedInToExam",true));
+				}
+			} else {
+				client.sendToClient(new iMessage("StudentCantCheckedInToExam",false));
+			}
+			
 		}
 
 
@@ -611,5 +679,13 @@ public class AESServer extends AbstractServer {
 			client.sendToClient(im);
 		}
 
+		private boolean isInActiveExam(Student s,ActiveExam ae) {
+			return studentsInExam.get(ae).contains(s);
+		}
+
+		public void GenerateActiveExamReport(ActiveExam ae) {
+			// TODO Auto-generated method stub
+			
+		}
 }
 
