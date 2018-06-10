@@ -1,11 +1,11 @@
 package Controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class QuestionController { 
@@ -24,6 +24,25 @@ public class QuestionController {
 		} 
 		return null;
 
+	}
+
+	/**
+	 * method retrieves all questions in database
+	 * @return ArrayList<Question> array list of all the questions in database
+	 */
+	public static ArrayList<Question> getAllQuestions(){
+		AESClient client = ClientGlobals.client;
+		if (client.isConnected()){
+			iMessage msg = new iMessage("getAllQuestions",null);
+			try{
+				client.sendToServer(msg);
+				return (ArrayList<Question>) client.getResponseFromServer().getObj();
+			}catch (IOException e){
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	public static ArrayList<Course> getQuestionCourses(Question question) {
