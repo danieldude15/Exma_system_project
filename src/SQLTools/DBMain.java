@@ -61,6 +61,10 @@ public class DBMain {
 			+ "SELECT e.examid , e.timeduration, c.courseid, c.coursename, f.fieldid, f.fieldname  "
 			+ "FROM aes.exams as e, aes.courses as c, aes.fields as f "
 			+ "WHERE c.courseid=e.courseid and f.fieldid=e.fieldid and c.fieldid=f.fieldid and teacherid=?");
+	
+	private String getcourseExams= new String(" SELECT e.examid ,e.timeduration,e.teacherid,u.fullname,u.password,u.username "
+			+" FROM aes.exams as e,aes.users as u "
+		+" WHERE e.courseid=? and e.fieldid=? and e.teacherid=u.userid ");
 	private String getExam = new String(""
 			+ "SELECT e.examid , e.timeduration, c.courseid, c.coursename, f.fieldid, f.fieldname ,e.teacherid "
 			+ "FROM aes.exams as e, aes.courses as c, aes.fields as f "
@@ -114,7 +118,7 @@ public class DBMain {
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
 			"FROM aes.questions as q,aes.questions_in_exam as qe, aes.exams as e,aes.users as u, aes.fields as f\n" + 
-			"WHERE u.userid=q.teacherid and q.questionid=qe.questionid and f.fieldid=q.fieldid "
+			"WHERE e.examid=qe.examid and u.userid=q.teacherid and q.questionid=qe.questionid and f.fieldid=q.fieldid "
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	private String CourseQuestions=new String(""
@@ -960,6 +964,36 @@ public class DBMain {
 		return 0;
 	}
 
-
+	public ArrayList<Exam> getcourseExams(Course o) {
+		try {
+		PreparedStatement prst = conn.prepareStatement(getcourseExams);
+		prst.setInt(1, o.getId());
+		prst.setInt(2, o.getField().getID());
+		System.out.println("SQL:" + prst);
+		ResultSet rs = prst.executeQuery();
+		ArrayList<QuestionInExam> questions = new ArrayList<>();
+		ArrayList<Exam> result = new ArrayList<>();
+		while(rs.next()) {		
+			int examid = rs.getInt(1);
+			int duration = rs.getInt(2);
+			int authorid = rs.getInt(3); 
+			String fullname= rs.getString(4);
+			String Password= rs.getString(5);
+			String Tname = rs.getString(6);
+			
+			Teacher author=new Teacher(authorid,fullname,Password,Tname);
+			questions = getQuestionsInExam(Exam.examIdToString(examid,o.getId(),o.getField().getID()));
+			result.add(new Exam(examid, o, duration,author, questions));
+		}
+		return result;
+		}
+	     catch (SQLException e) {
+		ServerGlobals.handleSQLException(e);
+	}
+	return null;
 }
+	}
+
+
+
 

@@ -173,6 +173,9 @@ public class AESServer extends AbstractServer {
 			case "GetManualExam":
 				GetManuelExam(client,o);
 				break;
+			case "getcourseExams":
+				getcourseExams(client,o);
+				break;
 			default:
 				
 			}
@@ -442,7 +445,11 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
-	
+	private void getcourseExams(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Exam> exams = sqlcon.getcourseExams((Course) o);
+		iMessage im = new iMessage("TeachersExams",exams);
+		client.sendToClient(im);
+	}
 	
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);

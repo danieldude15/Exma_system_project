@@ -78,7 +78,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void goToInitiateExam(ActionEvent event) {
-		
+		Globals.mainContainer.setScreen(ClientGlobals.InitializeExamID);
 	}
 	
 	@FXML public void lockExamClicked(ActionEvent event) {

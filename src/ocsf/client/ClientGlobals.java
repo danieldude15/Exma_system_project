@@ -59,7 +59,7 @@ public class ClientGlobals {
 	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
 
 	public static final String InitializeExamID = "InitializeExam";
-	public static final String InitializeExamPath = "/resources/fxml/Initialize Exam.fxml";
+	public static final String InitializeExamPath = "/resources/fxml/InitializeExam.fxml";
 	
 	public static final String TeacherCheckExamsID = "TeacherCheckExams";
 	public static final String TeacherCheckExamsPath = "/resources/fxml/TeacherCheckExams.fxml";
