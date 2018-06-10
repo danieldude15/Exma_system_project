@@ -72,8 +72,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		courseNameLabel.setText(activeExam.getExam().getCourse().getName());
 		teacherNameLabel.setText(activeExam.getExam().getAuthor().getName());
 		downloadButton.setVisible(false);//This button will show on screen only if the exam is manual.
-		Thread timer = Globals.createTimer(activeExam,timeLeft);
-		timer.start();
+		//Thread timer = Globals.createTimer(activeExam,this);
+		//timer.start();
 		
 		//Active exam is manual.
 		if(activeExam.getType()==0)
@@ -491,5 +491,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void updateTimeLabel(Integer timeInSeconds) {
+		String hour = "" + timeInSeconds/60/60;
+		String minutes = "" + (timeInSeconds/60)%60;
+		String seconds = "" + timeInSeconds%60;
+		String time = hour + ":" + minutes + ":" +seconds;
+		timeLeftLabel.setText(time);
+	}
+	
+	
 	
 }

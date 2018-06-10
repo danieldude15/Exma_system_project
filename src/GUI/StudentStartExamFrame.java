@@ -3,16 +3,17 @@ package GUI;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
+import javafx.util.Duration;
 import logic.ActiveExam;
 import logic.Globals;
 import logic.Student;
@@ -24,7 +25,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML TextField studentId;
 	@FXML Label examCodeError;
 	@FXML Label idError;
-	
+	private Timeline timeline;
+	private Integer timeSeconds;
 	
 	@Override
 	public void runOnScreenChange() {
@@ -40,6 +42,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	/**
 	 * When student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
 	 */
+
+	@SuppressWarnings("unchecked")
 	@FXML
 	public void StartExamButtonPressed(ActionEvent event)
 	{
@@ -79,12 +83,39 @@ public class StudentStartExamFrame implements ControlledScreen{
 				}
 			}
 			//Student filled Two correct fields 
-			else  
-			{
+			else  {
 				Boolean canStart = ActiveExamController.StudentCheckedInToActiveExam((Student) ClientGlobals.client.getUser(), active);
 				if (canStart) {
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);
+					///////////////////
+		
+					if (timeline != null) {
+			            timeline.stop();
+			        }
+			        timeSeconds = active.getDuration()*60;
+			        
+			        // update timerLabel
+			        studentsolvesExam.updateTimeLabel(timeSeconds);
+			        timeline = new Timeline();
+			        timeline.setCycleCount(Timeline.INDEFINITE);
+			        timeline.getKeyFrames().add(
+			                new KeyFrame(Duration.seconds(1),
+			                  new EventHandler() {
+			                    // KeyFrame event handler
+			                    public void handle(Event event) {
+			                        timeSeconds--;
+			                        // update timerLabel
+			                        studentsolvesExam.updateTimeLabel(timeSeconds);
+			                        if (timeSeconds <= 0) {
+			                            timeline.stop();
+			                            System.out.println("TIMER ENDED!");
+			                        }
+			                      }
+			                }));
+			        timeline.playFromStart();
+			        
+			        /////////////////
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
 				} else {
 					alert = new Alert(AlertType.INFORMATION);
@@ -94,17 +125,15 @@ public class StudentStartExamFrame implements ControlledScreen{
 					alert.showAndWait();
 				}
 			}
-			
-				
 		}
 	}
+			
 	
 	/**
 	 *When student pressed on home button he goes back to his main window. 
 	 */
 	@FXML
-	public void HomeButtonPressed(ActionEvent event)
-	{
+	public void HomeButtonPressed(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}
 
