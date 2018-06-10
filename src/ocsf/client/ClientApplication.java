@@ -12,12 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.Globals;
 import logic.iMessage;
 
 
 public class ClientApplication extends Application {
 	
 	public static void main(String args[]) {
+		Globals.application = "client";
 		launch(args);
 	}
 	@Override

@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -35,6 +38,7 @@ import logic.QuestionInExam;
 import logic.SolvedExam;
 import logic.Student;
 import logic.Teacher;
+import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
@@ -48,7 +52,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML Button downloadButton;
 	@FXML Button submitButton;
 	@FXML Button exitButton;
-	
+	String timeLeft = "";
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
 	private ActiveExam activeExam;
 	private final String whiteLabel=new String("whiteLabel");
@@ -57,21 +61,19 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
 		Globals.primaryStage.setHeight(630);
 		Globals.primaryStage.setWidth(820);
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
 		
-		activeExam=this.GetActiveExam();
+		activeExam=GetActiveExam();
 		courseNameLabel.setId(whiteLabel);
 		teacherNameLabel.setId(whiteLabel);
 		courseNameLabel.setText(activeExam.getExam().getCourse().getName());
 		teacherNameLabel.setText(activeExam.getExam().getAuthor().getName());
 		downloadButton.setVisible(false);//This button will show on screen only if the exam is manual.
-		
-		/*Student check in to the Active exam./*/
-		ActiveExamController.StudentCheckedInToActiveExam((Student)ClientGlobals.client.getUser(),activeExam);
+		Thread timer = Globals.createTimer(activeExam,timeLeft);
+		timer.start();
 		
 		//Active exam is manual.
 		if(activeExam.getType()==0)
@@ -104,6 +106,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 	}
 
+	@FXML public void refreshTimer(MouseEvent event) {
+		timeLeftLabel.setText(timeLeft);
+	}
+	
 	public void SetActiveExam(ActiveExam activeE) {
 		// TODO Auto-generated method stub
 		this.activeExam=activeE;
@@ -289,9 +295,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
 	 */
-	public void isLocked()
+	public boolean isLocked()
 	{
-		
+		return false;
 	}
 	
 	/**
@@ -473,6 +479,17 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	public void StudentPressedExitButton(ActionEvent event)
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+	}
+
+	
+	public void lockExam() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateExamTime(TimeChangeRequest o) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

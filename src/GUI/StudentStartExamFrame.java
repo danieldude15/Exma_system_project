@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import logic.ActiveExam;
 import logic.Globals;
+import logic.Student;
 import ocsf.client.ClientGlobals;
 
 public class StudentStartExamFrame implements ControlledScreen{
@@ -80,9 +81,18 @@ public class StudentStartExamFrame implements ControlledScreen{
 			//Student filled Two correct fields 
 			else  
 			{
+				Boolean canStart = ActiveExamController.StudentCheckedInToActiveExam((Student) ClientGlobals.client.getUser(), active);
+				if (canStart) {
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
+				} else {
+					alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("CAn Not Start Exam");
+					alert.setHeaderText(null);
+					alert.setContentText("It seems as you already submitted your exam and cannot start again.");
+					alert.showAndWait();
+				}
 			}
 			
 				

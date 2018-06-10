@@ -3,6 +3,7 @@ package Controllers;
 import logic.ActiveExam;
 import logic.Student;
 import logic.Teacher;
+import logic.TimeChangeRequest;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -82,7 +83,19 @@ public class ActiveExamController {
 		return 0;
 	}
 
-	
+	public static void requestNewTimeChangeForActiveExam(TimeChangeRequest tcr) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("newTimeChangeRequest",tcr);
+				client.sendToServer(msg);
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return;
+	}
 	
 	
 	public static XWPFDocument GetManualExam(String activeExamCode)
@@ -105,23 +118,26 @@ public class ActiveExamController {
 	 * Send message to the server to add the student to the list of the Active exam.
 	 * @param s
 	 * @param ae
+	 * @return 
 	 */
-	public static void StudentCheckedInToActiveExam(Student s,ActiveExam ae)
+	public static Boolean StudentCheckedInToActiveExam(Student s,ActiveExam ae)
 	{
 		Object[] sendObject=new Object[2];
 		sendObject[0]=(Student)s;
 		sendObject[1]=(ActiveExam)ae;
 		AESClient client = ClientGlobals.client;
+		Boolean canStart;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("StudentCheckInToExam",sendObject);
 				client.sendToServer(msg);
-				//client.getResponseFromServer();
+				return (Boolean) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
+		return false;
 	}
 	
 	/**
