@@ -46,7 +46,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 					DBLocal.getText(),DBUser.getText(),DBPass.getText(),Integer.parseInt(portnum.getText()));
 		portnum.setDisable(true);
 		try {
-			disconnectUsers(null);
+			//disconnectUsers(null);
 			ServerGlobals.server.listen();
 			statusLabel.setText("Listening");
 			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#00FF00"));
@@ -84,7 +84,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 	@FXML
 	public void disconnectUsers(ActionEvent event) {
 		if (ServerGlobals.server!=null) {
-			ServerGlobals.server.logOutAllUsers();
+			ServerGlobals.server.clearHashes();
 		}
 	}
 	

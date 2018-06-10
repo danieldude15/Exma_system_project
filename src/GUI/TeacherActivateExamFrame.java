@@ -11,9 +11,8 @@ package GUI;
 	import Controllers.CourseFieldController;
 	import Controllers.ExamController;
 	import Controllers.QuestionController;
-
-
-	import javafx.collections.FXCollections;
+import GUI.TeacherEditAddQuestion.windowType;
+import javafx.collections.FXCollections;
 	import javafx.collections.ObservableList;
 	import javafx.event.ActionEvent;
 	import javafx.event.Event;
@@ -48,7 +47,7 @@ package GUI;
 
 	
 public class TeacherActivateExamFrame implements Initializable, ControlledScreen  {
-
+	
 		Exam examview=null;	
 		
 		@Override
@@ -66,6 +65,9 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 			examview=e;
 			
 		}
+	
+
+		
 
 	}
 

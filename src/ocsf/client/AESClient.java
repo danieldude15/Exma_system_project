@@ -1,5 +1,8 @@
 package ocsf.client;
 
+import java.io.IOException;
+
+import GUI.StudentSolvesExamFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -69,6 +72,12 @@ public class AESClient extends AbstractClient{
 		case "ExamLocked":
 			handleExamLocked(o);
 			return;	
+		case "newTimeChangeRequest":
+			newTimeChangeRequest();
+			break;
+		case "studentUpdateExamTime":
+			studentUpdateExamTime(o);
+			break;
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -77,6 +86,7 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
+
 
 	private void copyServerMsg(Object serverMsg) {
 		msg = (iMessage) serverMsg;
@@ -186,8 +196,24 @@ public class AESClient extends AbstractClient{
 		
 	}
 
-	private void handleExamLocked(Object o) {
+	
+	private void newTimeChangeRequest() {
 		// TODO Auto-generated method stub
+		// nathan needs to handle this and get a popup to the principle 
+		// that a new time change request has been submited!
+		
+	}
+	
+
+	private void studentUpdateExamTime(Object o) {
+		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
+		if (o instanceof TimeChangeRequest)
+			sef.updateExamTime((TimeChangeRequest)o);
+	}
+	
+	private void handleExamLocked(Object o) {
+		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
+		sef.lockExam();
 	}
 
 	private void showFailedAuth() {

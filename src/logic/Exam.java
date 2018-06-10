@@ -185,7 +185,7 @@ public class Exam implements Serializable{
 	}
 
 	@Override public String toString() {
-		return "ExamID:" + ID + " Duration:" + Duration + " AutherID:" + Author.getID();
+		return new String(String.format( "ExamID: %s\nDuration: %d\nAutherName: %s\n ",examIdToString(),getDuration(), getAuthor().getUserName()));
 	}
 
 	@Override public int hashCode() {

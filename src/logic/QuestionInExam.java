@@ -108,6 +108,9 @@ public class QuestionInExam extends Question {
 		}
 		return false;
 	}
+	@Override public String toString() {
+		return new String(String.format( "QuestionID: %s\nQuestion: %d\nAutherName: %s\n ",questionIDToString(),getQuestionString(), getAuthor().getUserName()));
+	}
 
 	/**
 	 * hashCode ovverid to use in HashMaps
