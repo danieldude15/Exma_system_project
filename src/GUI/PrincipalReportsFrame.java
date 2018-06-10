@@ -36,7 +36,6 @@ public class PrincipalReportsFrame implements Initializable, ControlledScreen {
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(445);
         Globals.primaryStage.setWidth(515);
-        m_searchBox.setText("Enter ID Here");
     }
 
     @FXML
@@ -56,7 +55,6 @@ public class PrincipalReportsFrame implements Initializable, ControlledScreen {
     // method handles selection of text box in which you enter id to manually search for data
     @FXML
     public void onTextBoxMouseClick(javafx.scene.input.MouseEvent mouseEvent) {
-        if(m_searchBox.getText().equals("Enter ID Here"))
-            m_searchBox.clear();
+
     }
 }
