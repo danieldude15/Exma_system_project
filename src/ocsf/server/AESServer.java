@@ -1,17 +1,16 @@
 package ocsf.server;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import SQLTools.DBMain;
+import logic.*;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import SQLTools.DBMain;
-import logic.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AESServer extends AbstractServer {
 	
@@ -76,7 +75,7 @@ public class AESServer extends AbstractServer {
 		field = new Field(2,"FieldName");
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
-		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer mítherfucker"));
+		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer mï¿½therfucker"));
 		ActiveExam nivsExam = new ActiveExam("ddii", 0, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("ddii", nivsExam);
 		
@@ -115,6 +114,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "getFieldsCourses":
 				getFieldsCourses(client,o);
+				break;
+			case "getAllQuestions":
+				getAllQuestions(client,null);
 				break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
@@ -230,7 +232,7 @@ public class AESServer extends AbstractServer {
 	* synchronized.
 	*
 	* @param client the client that raised the exception.
-	* @param Throwable the exception thrown.
+	* @param exception the exception thrown.
 	*/
 	synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
 		System.err.println("Client: " + client + " has thrown an exception:\n" + exception.getStackTrace());
@@ -320,7 +322,7 @@ public class AESServer extends AbstractServer {
 	/**
 	 * Get an active exam code and sends to client that active exam if exist, otherwise sends null.
 	 * @param client
-	 * @param Object
+	 * @param o
 	 * @throws IOException
 	 */
 	private void getActiveExam(ConnectionToClient client,Object o) throws IOException {
@@ -448,6 +450,12 @@ public class AESServer extends AbstractServer {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
 		client.sendToClient(im);
+	}
+
+	private void getAllQuestions(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Question> questions = sqlcon.getAllQuestions();
+		iMessage rtrnmsg = new iMessage("AllQuestions", questions);
+		client.sendToClient(rtrnmsg);
 	}
 
 	/**

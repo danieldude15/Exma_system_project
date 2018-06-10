@@ -1,11 +1,11 @@
 package ocsf.client;
 
-import java.io.IOException;
-
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import logic.*;
+
+import java.io.IOException;
 
 /**
  * This is the subclass of AbstractClient that is changed by the Team to work as expected 
@@ -40,7 +40,7 @@ public class AESClient extends AbstractClient{
 	/**
 	 * Handles a message sent from the server to this client.
 	 *
-	 * @param msg   this will always be an iMessage type of object 
+	 * @param ServerMsg this will always be an iMessage type of object
 	 */
 	protected void handleMessageFromServer(Object ServerMsg){
 		this.msg = (iMessage) ServerMsg;
@@ -123,7 +123,7 @@ public class AESClient extends AbstractClient{
 			count++;
 			if(count>=500) {
 				System.out.println("Server Taking Long Time To Respond...");
-				//Globals.handleException(new Exception("Waited for tooo long for server response!"));
+				//Globals.handleException(new Exception("Waited for too long for server response!"));
 				break;
 			}
 			synchronized (stopWaiting) {

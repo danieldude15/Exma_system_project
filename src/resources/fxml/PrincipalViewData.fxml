@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewDataFrame">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewDataFrame">
    <children>
       <TabPane fx:id="m_dataTabPane" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="572.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <tabs>
@@ -18,7 +18,7 @@
                   <ListView fx:id="m_teachersList" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab fx:id="m_questionsTab" text="Questions">
+            <Tab fx:id="m_questionsTab" onSelectionChanged="#onQuestionsTabSelection" text="Questions">
                <content>
                   <ListView fx:id="m_questionsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
