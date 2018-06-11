@@ -61,25 +61,33 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	CheckBox AddRemove;
 	Course publicCourse;
 	Field publicField;
-	
 	TextField score;
 	TextField NoteTeachert;
 	TextField NoteStudent;
-     int sum=0;
+     int sum;
+     
+     
 	@Override
 	public void runOnScreenChange() {
 
 		Globals.primaryStage.setHeight(670);
 		Globals.primaryStage.setWidth(745);
-		sum=0;
+		//clear the windows of TeacherBuildNewExam
 		TotalScore.setText("Total Score:");
+		fieldComboB.setDisable(false);
+		courseComboB.setDisable(false);
+		fieldComboB.getItems().clear();
+		courseComboB.getItems().clear();
 		questionsList.getChildren().clear();
-		questions.clear();
-		questionsinexam.clear();
 		duration.clear();
+		//clear all the hash map 
+		questionsinexam.clear();
+		questions.clear();
 		scores.clear();
 		NoteTeacherts.clear();
 		NoteStudents.clear();
+		AddRemoves.clear();
+		sum=0;
 		teacherFieldsLoading();
 	}
 	
@@ -102,7 +110,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			if(fieldComboB.getSelectionModel().getSelectedItem()!=null) 
 			{
 			
-			 publicField=fieldComboB.getSelectionModel().getSelectedItem();
+			publicField=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
 			courseComboB.getItems().clear();
 			teachersCourses = CourseFieldController.getFieldCourses(publicField);
@@ -119,8 +127,6 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
 		{
 			publicCourse=courseComboB.getSelectionModel().getSelectedItem();
-			questionsinexam.clear();
-			questions.clear();
 			 DBquestions =  QuestionController.getCourseQuestions(courseComboB.getSelectionModel().getSelectedItem());
 				if (DBquestions!=null) 
 					setQuestionsListInVBox();
@@ -211,109 +217,83 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		 @Override
 	        public void handle(Event evt)
 	        {
-			 
-			 
-			 if(AddRemoves.get(((Control)evt.getSource()).getId()).isSelected() ==false)
-			 {int point;
-	        	String notestd=null;
-	        	String notetech=null;
-	        	Question question=questions.get(((Control)evt.getSource()).getId());
-	        	if(scores.get(question.questionIDToString()).getText().equals(""))
-	        	{
-	        		Alert alert = new Alert(AlertType.CONFIRMATION);
-					alert.setTitle("Add Confirmation");
-					alert.setHeaderText(null);
-					alert.setContentText("You mast put score point befor you add the question \\n Please try again");
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK)
-					{
-						AddRemove.setSelected(false);
-					}
-				
-	        	}
-	        	
-	        	else if(!questionsinexam.containsKey(question.questionIDToString()))
-	        	{	
-	        	     point = Integer.parseInt(scores.get(question.questionIDToString()).getText());
-	        	     if(NoteStudents.get(question.questionIDToString()).getText() != null)
-	        	    	 notestd = NoteStudents.get(question.questionIDToString()).getText();
-	        	     if(NoteTeacherts.get(question.questionIDToString()).getText() !=null)
-	        	    	 notetech = NoteTeacherts.get(question.questionIDToString()).getText();
-	        		questionsinexam.put(question.questionIDToString(),new QuestionInExam (question,point,notetech,notestd));
-	        		sum=sum+point;
-					TotalScore.setText("Total Score:"+sum);
-					if(!questionsinexam.isEmpty()) {
-						 fieldComboB.setDisable(true);
-						 courseComboB.setDisable(true);
-					 }
-					
-		           		
-				}	
-	        	else {
-	        		if(Integer.parseInt(scores.get(question.questionIDToString()).getText()) != (questionsinexam.get(question.questionIDToString()).getPointsValue()))
-	        		{
-	        			sum =sum + (Integer.parseInt(scores.get(question.questionIDToString()).getText()))- (questionsinexam.get(question.questionIDToString()).getPointsValue());
-	        			TotalScore.setText("Total Score:"+sum);
-	        			questionsinexam.get(question.questionIDToString()).setPointsValue(scores.get(question.questionIDToString()).getText());
-	        		}
-	        		if(( NoteStudents.get(question.questionIDToString()).getText())  != (questionsinexam.get(question.questionIDToString()).getStudentNote()))
-	        			questionsinexam.get(question.questionIDToString()).setStudentNote( NoteStudents.get(question.questionIDToString()).getText());
-	        		if((NoteTeacherts.get(question.questionIDToString()).getText()!= questionsinexam.get(question.questionIDToString()).getInnerNote()))
-	        			questionsinexam.get(question.questionIDToString()).setInnerNote( NoteTeacherts.get(question.questionIDToString()).getText());
-	        		
-	        		
-	        	}
-	        	
-				    System.out.println("user chose add Question ");
-			
-	        }
-				
-			
+			 Question question= questions.get(((Control)evt.getSource()).getId());
+			 if(!AddRemoves.get(question.questionIDToString()).isSelected())
+				 Add(question);
 			 else 
-			 {
-				 Alert alert = new Alert(AlertType.CONFIRMATION);
-					alert.setTitle("Remove Confirmation");
-					alert.setHeaderText(null);
-					alert.setContentText("Are you sure you want to remove this question?");
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK)
-					{
-						AddRemoves.get(((Control)evt.getSource()).getId()).setSelected(false);
-						scores.get(((Control)evt.getSource()).getId()).setText("");
-						QuestionInExam question = questionsinexam.get(((Control)evt.getSource()).getId());
-						questionsinexam.remove(((Control)evt.getSource()).getId());
-						sum=sum-question.getPointsValue();
-						TotalScore.setText("Total Score:"+sum);
-						scores.remove(((Control)evt.getSource()).getId());
-						NoteStudents.remove(((Control)evt.getSource()).getId());
-						NoteTeacherts.remove(((Control)evt.getSource()).getId());
-						if(questionsinexam.isEmpty())
-						 {
-							 fieldComboB.setDisable(false);
-							 courseComboB.setDisable(false);
-						 }
-						
-						
-			           		alert = new Alert(AlertType.INFORMATION);
-			        		alert.setTitle("Question remove Succesfully");
-			    			alert.setHeaderText("");
-			        		alert.setContentText("Question Info:"
-			        				+ "\n" + question +""
-		    						+ "\n\n Was remove Successfully");
-			        		alert.show();
-			        		System.out.println("Question Remove!");
-			        		
-					}
-					    System.out.println("user chose CANCEL or closed the dialog ");
-				 
-				 
-			 }
-				 
+				 Removes(question); 
 			 }
 		 
 	}
 	
+	public void Removes(Question question)
+	{
+			sum = sum - questionsinexam.get(question.questionIDToString()).getPointsValue();
+			questionsinexam.remove(question.questionIDToString());
+			//AddRemoves.get((question.questionIDToString())).setSelected(false);
+			scores.get((question.questionIDToString())).setText("");
+			NoteStudents.get((question.questionIDToString())).setText(null);
+			NoteTeacherts.get((question.questionIDToString())).setText(null);
+			TotalScore.setText("Total Score:"+sum);
+			if(questionsinexam.isEmpty())
+			 {
+				 fieldComboB.setDisable(false);
+				 courseComboB.setDisable(false);
+			 }
+	}
 	
+ 	public void Add(Question question)
+	{
+		int point;
+    	String notestd=null;
+    	String notetech=null;
+    	if(scores.get(question.questionIDToString()).getText().equals(""))
+    	{
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Add Confirmation");
+			alert.setHeaderText(null);
+			alert.setContentText("You mast put score point befor you add the question \\n Please try again");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK)
+			{
+				AddRemove.setSelected(false);
+			}
+		
+    	}
+    	
+    	else if(!questionsinexam.containsKey(question.questionIDToString()))
+    	{	
+    	     point = Integer.parseInt(scores.get(question.questionIDToString()).getText());
+    	     if(NoteStudents.get(question.questionIDToString()).getText() != null)
+    	    	 notestd = NoteStudents.get(question.questionIDToString()).getText();
+    	     if(NoteTeacherts.get(question.questionIDToString()).getText() !=null)
+    	    	 notetech = NoteTeacherts.get(question.questionIDToString()).getText();
+    		questionsinexam.put(question.questionIDToString(),new QuestionInExam (question,point,notetech,notestd));
+    		sum=sum+point;
+			TotalScore.setText("Total Score:"+sum);
+			if(!questionsinexam.isEmpty()) {
+				 fieldComboB.setDisable(true);
+				 courseComboB.setDisable(true);
+			 }
+			
+           		
+		}	
+    	else {
+    		if(Integer.parseInt(scores.get(question.questionIDToString()).getText()) != (questionsinexam.get(question.questionIDToString()).getPointsValue()))
+    		{
+    			sum =sum + (Integer.parseInt(scores.get(question.questionIDToString()).getText()))- (questionsinexam.get(question.questionIDToString()).getPointsValue());
+    			TotalScore.setText("Total Score:"+sum);
+    			questionsinexam.get(question.questionIDToString()).setPointsValue(scores.get(question.questionIDToString()).getText());
+    		}
+    		if(( NoteStudents.get(question.questionIDToString()).getText())  != (questionsinexam.get(question.questionIDToString()).getStudentNote()))
+    			questionsinexam.get(question.questionIDToString()).setStudentNote( NoteStudents.get(question.questionIDToString()).getText());
+    		if((NoteTeacherts.get(question.questionIDToString()).getText()!= questionsinexam.get(question.questionIDToString()).getInnerNote()))
+    			questionsinexam.get(question.questionIDToString()).setInnerNote( NoteTeacherts.get(question.questionIDToString()).getText());
+    		
+    		
+    	}
+    	
+	}
 	      
     public void CancelButtonPressed(ActionEvent event)
     {

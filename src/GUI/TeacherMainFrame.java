@@ -146,5 +146,6 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		CompletedExamList.getItems().clear();
 		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
+		
 	}
 }
