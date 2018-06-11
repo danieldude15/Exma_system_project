@@ -119,8 +119,10 @@ public class ActiveExam  extends Exam {
 	public int hashCode() {
 		int result = 17;
 		result = 31*result + super.hashCode();
-		result = 31*result + getCode().hashCode();
-		result = 31*result + getActivator().hashCode();
+		if (getCode()!=null)
+			result = 31*result + getCode().hashCode();
+		if (getActivator()!=null)
+			result = 31*result + getActivator().hashCode();
 		return result;
 	}
 
@@ -130,10 +132,11 @@ public class ActiveExam  extends Exam {
 	@Override
 	public boolean equals(Object obj) {
 		if(this==obj)return true;
-		if(obj instanceof ActiveExam) {
+		if(obj != null && obj.getClass() == getClass()) {
 			ActiveExam a = (ActiveExam) obj;
+			if (a.getCode()==null || a.getDate()==null || a.getActivator()==null) return false;
 			if (!a.getCode().equals(code) || a.getType()!=type) return false;
-			if (a.getDate()!=null && !a.getDate().equals(dateActivated)) return false;
+			if (!a.getDate().equals(dateActivated)) return false;
 			if (!a.getActivator().equals(activator)) return false;
 			return super.equals(a);
 		}

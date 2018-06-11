@@ -22,7 +22,10 @@ public class DBMain {
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
 			+ "WHERE tf.fieldid=f.fieldid and tf.teacherid=?");
-
+	private String getStudentsInCourse = new String(""
+			+ "SELECT * " + 
+			"FROM aes.student_in_course as sic, aes.users as u " + 
+			"WHERE sic.studentid=u.userid and u.usertype=0 and sic.fieldid=? and sic.courseid=?");
 	private String getField = new String(""
 			+ "SELECT * from fields where fieldid=?");
 	private String deleteExamReport = new String(""
@@ -283,8 +286,27 @@ public class DBMain {
 
 
 	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
-		return null;
-		// TODO Auto-generated method stub		
+		try {
+			PreparedStatement prst = conn.prepareStatement(getStudentsInCourse);
+			prst.setInt(2,course.getId());
+			prst.setInt(1, course.getField().getID());
+			System.out.println("SQL:"+prst);
+			ArrayList<Student> result = new ArrayList<>();
+			if (prst.execute()) {
+				ResultSet rs = prst.getResultSet();
+				while (rs.next()) {
+					int userid = rs.getInt(1);
+					String username = rs.getString(2);
+					String password = rs.getString(3);
+					String fullname = rs.getString(4);
+					result.add(new Student(userid,username,password,fullname));
+				}
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;	
 	}
 	
 	// ######################### COURSE FIELD HANDELING  ####################################
