@@ -1,6 +1,8 @@
 package GUI;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -57,6 +60,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private Long timeSeconds;
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
 	private ActiveExam activeExam;
+	boolean activeExamIsLocked=false; 
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
 	
@@ -77,33 +81,34 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		//Active exam is manual.
 		if(activeExam.getType()==0)
-		{
-			
 			SetDownloadButtonOnScreen();
-			
-			/*Here:
-			1.Create word file
-			2.Download word file
-			3.Initialize the timer!
-			4.Submit method(check if exam is not locked yet).
-			5.Remove from active exam HashMap on server.
-			6.Build SolvedExam object.
-			7.Upload to database SolvedExam(word file?).
-			 /*/
-		}
+		
 		//Active exam is computerized.
 		else
-		{
-			
 			SetComputerizeExamOnWindowScreen(activeExam);
-			/*Here:
-			1.Create exam on screen with the questions(Including initialize the timer).
-			2.Submit method(check if exam is not locked yet).
-			3.Remove from active exam HashMap on server.
-			4.Build SolvedExam object.
-			5.Upload to database SolvedExam.
-			/*/
-		}
+
+		
+		//while(isLocked()==false);
+		//ExamWasSubmittedWhenLocking();	
+		
+	}
+
+	/**
+	 * Update student's exam in case that the exam was locked before he pressed on submit button.
+	 */
+	private void ExamWasSubmittedWhenLocking() {
+		// TODO Auto-generated method stub
+		
+		
+		
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Exam is locked!");
+		alert.setHeaderText(null);
+		alert.setContentText("Oops.. The exam is locked!");
+		alert.showAndWait();
+		
+		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+		
 	}
 
 	@FXML public void refreshTimer(MouseEvent event) {
@@ -120,7 +125,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	{
 		return this.activeExam;
 	}
-//blab
+
 
 	/**
 	 * Sets the computerized exam on window screen.
@@ -179,7 +184,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void SetDownloadButtonOnScreen() {
 		// TODO Auto-generated method stub
-		submitButton.setDisable(true);
+		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
 
 	}
@@ -200,7 +205,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		
 		
-		
+		/*
 		//Create document
 		XWPFDocument doc=new XWPFDocument();
 		
@@ -252,23 +257,27 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
 		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
 		runOnGoodLuckParagraph.setText("Good Luck!");
-
+/*/
 		
 
-	
+		XWPFDocument doc=ActiveExamController.GetManualExam(activeExam);
 		
-		FileChooser fileChooser = new FileChooser();
-		
+		FileChooser saveWindow = new FileChooser();
+		saveWindow.setTitle("Save exam");
         //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("docx files (*.docx)", "*.docx");
-        fileChooser.getExtensionFilters().add(extFilter);
+        saveWindow.getExtensionFilters().add(extFilter);
          
          //Show save file dialog
-         File file = fileChooser.showSaveDialog(Globals.primaryStage);
+         File file = saveWindow.showSaveDialog(Globals.primaryStage);
          if(file != null)
              SaveFile(file, doc);
          
          
+ 	
+ 		
+
+		
          
 	}
 	
@@ -295,14 +304,25 @@ public class StudentSolvesExamFrame implements ControlledScreen{
  			downloadButton.setDisable(true);
  }
 	
-	
+
+		
+	public void lockExam() {
+		// TODO Auto-generated method stub
+		this.activeExamIsLocked=true;
+	}
+
+	 
+	 
+	 
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
 	 */
 	public boolean isLocked()
 	{
-		return false;
+		return this.activeExamIsLocked;
 	}
+	
+	
 	
 	/**
 	 * Submit process(upload to database the student SolvedExam).
@@ -323,23 +343,17 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private SolvedExam BuildSolvedExamObject()
 	{
-		Exam e=new Exam(activeExam.getExam());
-		int examid=e.getID();
-		Course course=new Course(e.getCourse());
-		int duration=e.getDuration();
-		Teacher teacher=e.getAuthor();
-		
+	
 		Object[] studentAnsersAndScoreForExam=SystemCheckExam();
 		HashMap<QuestionInExam,Integer> studentAnswers=(HashMap<QuestionInExam, Integer>) studentAnsersAndScoreForExam[0];
 		int score=(int) studentAnsersAndScoreForExam[1];
-		
-		
+			
 		boolean teacherApproved=false;
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
 		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
 		SolvedExam sendToGenerateReport=new SolvedExam(score, teacherApproved, studentAnswers,
-				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),e);
+				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),activeExam.getExam());
 
 		return sendToGenerateReport;
 	}
@@ -389,7 +403,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				studentAnswers.put(qie, 1);
 			}
-			score=100;
+			score=-1;
 		}
 		studentAnsersAndScoreForExam[0]=studentAnswers;
 		studentAnsersAndScoreForExam[1]=score;
@@ -414,11 +428,21 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK)//User choose ok for submit.
 		{
-			/*Send message to the server via ActiveExamController to delete Student from ActiveExam list/*/
-			//ActiveExamController.StudentCheckedOutFromActiveExam((Student)ClientGlobals.client.getUser(),activeExam);//Student check out from exam.
+			if(activeExam.getType()==0)//Exam is manual
+			{
+				XWPFDocument doc=ImportWordFile();
+				
+				/*Send message to the server to add solved exam to the list,
+				so we can generate a report from all solved exams when the active exam will be lock.
+				in addition the student is removing from the CheckOut list in server.
+				/*/
+				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);		
+			}
+			else
+			{
+				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+			}
 			
-			//Send message to the server to add solved exam to the list so we can generate a report from all solved exams when the active exam will be lock.
-			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport);
 			alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Submit confirmation");
 			alert.setHeaderText(null);
@@ -430,17 +454,40 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 	}
 	
+	
+/**
+ * When the student pressed on submit button and the exam is manual,he has to upload his exam back to the system.
+ */
+	private XWPFDocument ImportWordFile() {
+		// TODO Auto-generated method stub
+		XWPFDocument doc;
+ 		FileChooser Uploadwindow=new FileChooser();
+ 		Uploadwindow.setTitle("Upload your exam");
+ 		File file=Uploadwindow.showOpenDialog(Globals.primaryStage);
+ 		if(file!=null)
+ 			try {
+ 				doc=new XWPFDocument(new FileInputStream(file)) ;
+ 				return doc;
+ 				
+ 				//XWPFWordExtractor extract=new XWPFWordExtractor(document);
+ 				//System.out.println(extract.getText());
+ 			} catch (FileNotFoundException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			} catch (IOException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 		return null;
+	}
+
+	
 	//don't need it, here for compilation
 	public void StudentPressedExitButton(ActionEvent event)
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}
 
-	
-	public void lockExam() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void updateExamTime(TimeChangeRequest o) {
 		// TODO Auto-generated method stub

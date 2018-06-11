@@ -48,7 +48,9 @@ public class AESServer extends AbstractServer {
 	/**
 	 * HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
 	 */
-	private HashMap<ActiveExam,XWPFDocument> wordFiles;
+	static HashMap<ActiveExam,XWPFDocument> wordFiles;
+	
+	private HashMap<SolvedExam,XWPFDocument> solvedExamWordFiles;
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 
@@ -58,7 +60,10 @@ public class AESServer extends AbstractServer {
 		connectedUsers = new HashMap<User,ConnectionToClient>();
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
+		studentsCheckOutFromActiveExam=new HashMap<ActiveExam,ArrayList<Student>>();
 		wordFiles=new HashMap<ActiveExam,XWPFDocument>();
+		solvedExamWordFiles=new HashMap<SolvedExam,XWPFDocument>();
+	
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
@@ -89,6 +94,61 @@ public class AESServer extends AbstractServer {
 		ActiveExam nivsExam = new ActiveExam("ddii", 0, new Date(new java.util.Date().getTime()),new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("ddii", nivsExam);
 		studentsInExam.put(nivsExam, new ArrayList<Student>());
+		
+		
+		XWPFDocument doc=new XWPFDocument();
+		
+		/*Create title paragraph/*/
+		XWPFParagraph titleParagraph=doc.createParagraph();
+		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+		XWPFRun runTitleParagraph=titleParagraph.createRun();
+		runTitleParagraph.setBold(true);
+		runTitleParagraph.setItalic(true);
+		runTitleParagraph.setColor("00FF00");
+		runTitleParagraph.setText(nivsExam.getExam().getCourse().getName());
+		runTitleParagraph.addBreak();
+		runTitleParagraph.addBreak();
+		
+		/*Create exam details paragraph/*/
+		XWPFParagraph examDetailsParagraph=doc.createParagraph();
+		examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
+		XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
+		runOnExamDetailsParagraph.setText("Field: "+nivsExam.getExam().getField().getName());
+		runOnExamDetailsParagraph.addBreak();
+		runOnExamDetailsParagraph.setText("Date: "+nivsExam.getDate());
+		runOnExamDetailsParagraph.addBreak();
+		
+		/*Create question+answers paragraph/*/
+		XWPFParagraph questionsParagraph=doc.createParagraph();
+		questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
+		XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
+		int questionIndex=1;
+		ArrayList<QuestionInExam> questionsInExam=nivsExam.getExam().getQuestionsInExam();
+		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
+		{
+			if(qie.getStudentNote()!=null)
+			{
+				runOnquestionsParagraph.setText(qie.getStudentNote());
+				runOnquestionsParagraph.addBreak();
+			}
+			runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
+			runOnquestionsParagraph.addBreak();
+			for(int i=0;i<4;i++)
+			{
+				runOnquestionsParagraph.setText(qie.getAnswer(i));
+				runOnquestionsParagraph.addBreak();
+			}
+		}
+		runOnquestionsParagraph.addBreak();
+		runOnquestionsParagraph.addBreak();
+		
+		/*Create good luck paragraph/*/
+		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
+		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
+		runOnGoodLuckParagraph.setText("Good Luck!");
+		
+		AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
+		
 	}
 
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -663,7 +723,7 @@ public class AESServer extends AbstractServer {
 		}
 		
 		/**
-		 * Send to client a Manuel Exam word File.
+		 * Send to client a Manual Exam word File.
 		 * @param client
 		 * @param o
 		 * @throws IOException
@@ -701,15 +761,26 @@ public class AESServer extends AbstractServer {
 		}
 		
 		/**
-		 * Add solved exam to the list so we can generate all solved exams to report later.
+		 * Add solved exam to the list so we can generate all solved exams to report later, 
+		 * and remove the student from the CheckOut list which her purpose is to see if all students have submitted their exam.
 		 * @param obj
-		 * @throws IOException 
+		 * @throws IOException ä
 		 */
 		public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
 		{
 			Object[] o = (Object[])obj;
-			studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
+			ActiveExam e=(ActiveExam) o[0];
+			SolvedExam solved=(SolvedExam) o[1];
+			Student student=(Student) o[2];
+			XWPFDocument doc=(XWPFDocument) o[3];
+			//studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
+			//studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
+			//if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
+				//GenerateActiveExamReport((ActiveExam)o[0]);
+			if(o[3]!=null)//If it was a manual exam we add it to the list of manual solved exam.
+				solvedExamWordFiles.put((SolvedExam)o[1], (XWPFDocument)o[3]);
 			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
+			
 
 		}
 }
