@@ -1,5 +1,6 @@
 package logic;
 
+import java.sql.Date;
 
 /**
  * This is the ActiveExam Entitiy that holds information on active exams 
@@ -23,12 +24,12 @@ public class ActiveExam  extends Exam {
 	/**
 	 * date that the exam was activated 
 	 */
-	private String dateActivated;
+	private Date dateActivated;
 	/**
 	 * the teacher who activated this exam
 	 */
 	private Teacher activator;
-	
+
 	/**
 	 * active Exam cosntructor
 	 * @param code - the activeExam code (4 char)
@@ -37,7 +38,7 @@ public class ActiveExam  extends Exam {
 	 * @param activator - the teacher who activated this exam
 	 * @param e - the exam that is active
 	 */
-	public ActiveExam(String code,int type,String dayActivated,Exam e,Teacher activator)
+	public ActiveExam(String code,int type,Date dayActivated,Exam e,Teacher activator)
 	{
 		super(e);
 		this.code=code;
@@ -71,7 +72,7 @@ public class ActiveExam  extends Exam {
 	 * getDate
 	 * @return the date when this exam was activated
 	 */
-	public String getDate() {
+	public Date getDate() {
 		return dateActivated;
 	}
 

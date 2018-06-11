@@ -84,7 +84,7 @@
                   <Insets right="350.0" />
                </HBox.margin>
             </TextField>
-            <Label fx:id="TotalScore" prefHeight="17.0" prefWidth="66.0" text="Total Score:">
+            <Label fx:id="TotalScore" prefHeight="10.0" prefWidth="118.0" text="Total Score:">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

@@ -30,19 +30,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
@@ -83,6 +76,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		questionsList.getChildren().clear();
 		questions.clear();
 		questionsinexam.clear();
+		duration.clear();
 		scores.clear();
 		NoteTeacherts.clear();
 		NoteStudents.clear();
@@ -107,10 +101,11 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	public void filterByField(ActionEvent event) {
 			if(fieldComboB.getSelectionModel().getSelectedItem()!=null) 
 			{
-			Field selectefield=fieldComboB.getSelectionModel().getSelectedItem();
+			
+			 publicField=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
 			courseComboB.getItems().clear();
-			teachersCourses = CourseFieldController.getFieldCourses(selectefield);
+			teachersCourses = CourseFieldController.getFieldCourses(publicField);
 			list = FXCollections.observableArrayList(teachersCourses);
 			courseComboB.setItems(list);
 		}
@@ -123,7 +118,9 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	{
 		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
 		{
-			
+			publicCourse=courseComboB.getSelectionModel().getSelectedItem();
+			questionsinexam.clear();
+			questions.clear();
 			 DBquestions =  QuestionController.getCourseQuestions(courseComboB.getSelectionModel().getSelectedItem());
 				if (DBquestions!=null) 
 					setQuestionsListInVBox();
@@ -218,8 +215,8 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			 
 			 if(AddRemoves.get(((Control)evt.getSource()).getId()).isSelected() ==false)
 			 {int point;
-	        	String notestd;
-	        	String notetech;
+	        	String notestd=null;
+	        	String notetech=null;
 	        	Question question=questions.get(((Control)evt.getSource()).getId());
 	        	if(scores.get(question.questionIDToString()).getText().equals(""))
 	        	{
@@ -238,16 +235,18 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	        	else if(!questionsinexam.containsKey(question.questionIDToString()))
 	        	{	
 	        	     point = Integer.parseInt(scores.get(question.questionIDToString()).getText());
-	        		 notestd = NoteStudents.get(question.questionIDToString()).getText();
-	        		 notetech = NoteTeacherts.get(question.questionIDToString()).getText();
+	        	     if(NoteStudents.get(question.questionIDToString()).getText() != null)
+	        	    	 notestd = NoteStudents.get(question.questionIDToString()).getText();
+	        	     if(NoteTeacherts.get(question.questionIDToString()).getText() !=null)
+	        	    	 notetech = NoteTeacherts.get(question.questionIDToString()).getText();
 	        		questionsinexam.put(question.questionIDToString(),new QuestionInExam (question,point,notetech,notestd));
 	        		sum=sum+point;
 					TotalScore.setText("Total Score:"+sum);
-					if(!questionsinexam.isEmpty())
-					 {
-						 fieldComboB.setDisable(false);
-						 courseComboB.setDisable(false);
+					if(!questionsinexam.isEmpty()) {
+						 fieldComboB.setDisable(true);
+						 courseComboB.setDisable(true);
 					 }
+					
 		           		
 				}	
 	        	else {
@@ -277,25 +276,24 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 					alert.setHeaderText(null);
 					alert.setContentText("Are you sure you want to remove this question?");
 					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK){
+					if (result.get() == ButtonType.OK)
+					{
 						AddRemoves.get(((Control)evt.getSource()).getId()).setSelected(false);
 						scores.get(((Control)evt.getSource()).getId()).setText("");
 						QuestionInExam question = questionsinexam.get(((Control)evt.getSource()).getId());
+						questionsinexam.remove(((Control)evt.getSource()).getId());
 						sum=sum-question.getPointsValue();
 						TotalScore.setText("Total Score:"+sum);
-						questionsinexam.remove(((Control)evt.getSource()).getId());
-						
-						
 						scores.remove(((Control)evt.getSource()).getId());
-						
 						NoteStudents.remove(((Control)evt.getSource()).getId());
 						NoteTeacherts.remove(((Control)evt.getSource()).getId());
-						
-						
-						if(questionsinexam.isEmpty()) {
-							 fieldComboB.setDisable(true);
-							 courseComboB.setDisable(true);
+						if(questionsinexam.isEmpty())
+						 {
+							 fieldComboB.setDisable(false);
+							 courseComboB.setDisable(false);
 						 }
+						
+						
 			           		alert = new Alert(AlertType.INFORMATION);
 			        		alert.setTitle("Question remove Succesfully");
 			    			alert.setHeaderText("");
@@ -347,7 +345,9 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		else {
 			int x=(Integer.parseInt(duration.getText()));
 			ArrayList<QuestionInExam> questionsIn = new ArrayList<QuestionInExam>();
-			questionsIn.addAll(questionsinexam.values());
+			questionsIn.clear();
+			for(String q: questionsinexam.keySet())
+				questionsIn.add(questionsinexam.get(q));
 			ExamController.addExam(new Exam (0,publicCourse,x, (Teacher) ClientGlobals.client.getUser(),questionsIn));
 			Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
 			

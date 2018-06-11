@@ -105,6 +105,10 @@ public class ClientFrame implements Initializable {
 			System.out.println("failed to load " + ClientGlobals.PrincipalViewDataID);
 			return;
 		}
+		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewQuestionID,ClientGlobals.PrincipalViewQuestionPath)) {
+			System.out.println("failed to load " + ClientGlobals.PrincipalViewQuestionID);
+			return;
+		}
 		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
 			return;
@@ -133,6 +137,18 @@ public class ClientFrame implements Initializable {
 				System.out.println("failed to load "+ ClientGlobals.StudentSolvesExamID);
 				return;
         }
+		if (!mainContainer.loadScreen(ClientGlobals.InitializeExamID, ClientGlobals.InitializeExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.InitializeExamID);
+			return;
+		}
+		if (!mainContainer.loadScreen(ClientGlobals.ActiveExamID, ClientGlobals.ActiveExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.ActiveExamID);
+			return;
+		}
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherViewExamID, ClientGlobals.TeacherViewExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherViewExamID);
+			return;
+		}
 		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamsID, ClientGlobals.TeacherCheckExamsPath)) {
 			System.out.println("failed to load "+ ClientGlobals.TeacherCheckExamsID);
 			return;

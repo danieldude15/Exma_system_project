@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -35,6 +38,7 @@ import logic.QuestionInExam;
 import logic.SolvedExam;
 import logic.Student;
 import logic.Teacher;
+import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
@@ -48,7 +52,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML Button downloadButton;
 	@FXML Button submitButton;
 	@FXML Button exitButton;
-	
+	String timeLeft = "";
+	private Long timeSeconds;
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
 	private ActiveExam activeExam;
 	private final String whiteLabel=new String("whiteLabel");
@@ -57,21 +62,19 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
 		Globals.primaryStage.setHeight(630);
 		Globals.primaryStage.setWidth(820);
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
 		
-		activeExam=this.GetActiveExam();
+		activeExam=GetActiveExam();
 		courseNameLabel.setId(whiteLabel);
 		teacherNameLabel.setId(whiteLabel);
 		courseNameLabel.setText(activeExam.getExam().getCourse().getName());
 		teacherNameLabel.setText(activeExam.getExam().getAuthor().getName());
 		downloadButton.setVisible(false);//This button will show on screen only if the exam is manual.
-		
-		/*Student check in to the Active exam./*/
-		ActiveExamController.StudentCheckedInToActiveExam((Student)ClientGlobals.client.getUser(),activeExam);
+		//Thread timer = Globals.createTimer(activeExam,this);
+		//timer.start();
 		
 		//Active exam is manual.
 		if(activeExam.getType()==0)
@@ -104,6 +107,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 	}
 
+	@FXML public void refreshTimer(MouseEvent event) {
+		timeLeftLabel.setText(timeLeft);
+	}
+	
 	public void SetActiveExam(ActiveExam activeE) {
 		// TODO Auto-generated method stub
 		this.activeExam=activeE;
@@ -294,9 +301,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
 	 */
-	public void isLocked()
+	public boolean isLocked()
 	{
-		
+		return false;
 	}
 	
 	/**
@@ -330,11 +337,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		
 		boolean teacherApproved=false;
-		int examReportId=5;//need to take care of it.
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
 		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
-		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers, examReportId,
+		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers,
 				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),e);
 
 		/*going to replace all in this.
@@ -479,5 +485,34 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}
+
+	
+	public void lockExam() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateExamTime(TimeChangeRequest o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateTimeLabel(Long timeInSeconds) {
+		String hour = "" + timeInSeconds/60/60;
+		String minutes = "" + (timeInSeconds/60)%60;
+		String seconds = "" + timeInSeconds%60;
+		String time = hour + ":" + minutes + ":" +seconds;
+		timeLeftLabel.setText(time);
+	}
+
+	public void setTimeSeconds(Long timeSeconds) {
+		this.timeSeconds = timeSeconds;
+	}
+
+	public Long getTimeSeconds() {
+		return timeSeconds;
+	}
+	
+	
 	
 }

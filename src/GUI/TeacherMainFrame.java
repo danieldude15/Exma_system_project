@@ -29,7 +29,7 @@ import ocsf.client.ClientGlobals;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
-	private ArrayList<CompletedExam> TeacherCExams;
+	private ArrayList<ExamReport> TeacherCExams;
 	private ArrayList<ActiveExam> TeacherAExams;
 	
 	@FXML Button manageQuestionsB;
@@ -40,21 +40,18 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button generateRB;
 	@FXML Button checkExamB;
 	@FXML ListView<ActiveExam> ActiveExamsList;
-	@FXML ListView<CompletedExam> CompletedExamList;
+	@FXML ListView<ExamReport> CompletedExamList;
 	@FXML Label welcome;
 	@FXML Label username;
 	@FXML Label userid;
 	@FXML Pane userImage;
-	@FXML Tab myInfoTab;
-	@FXML TabPane infoTabPane;
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@Override public void initialize(URL location, ResourceBundle resources) {
 		
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(750);
+		Globals.primaryStage.setHeight(680);
 		Globals.primaryStage.setWidth(820);
 
 		updateCompletedExamListView();
@@ -67,7 +64,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		username.setText("UserName: "+t.getUserName());
 		userid.setText("UserID: "+t.getID());
 		userImage.setStyle("-fx-background-image: url(\"resources/profile/"+t.getID()+".PNG\");"
-						+ "-fx-background-size: 150px 150px;"
+						+ "-fx-background-size: 100px 100px;"
 						+ "-fx-background-repeat: no-repeat;");
 
 	}
@@ -81,7 +78,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void goToInitiateExam(ActionEvent event) {
-		
+		Globals.mainContainer.setScreen(ClientGlobals.InitializeExamID);
 	}
 	
 	@FXML public void lockExamClicked(ActionEvent event) {
@@ -115,7 +112,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
 		System.out.println(selectedExam);
 		String selectedExamid = selectedExam.split(" ")[6];
-		for (CompletedExam ce:TeacherCExams) {
+		for (ExamReport ce:TeacherCExams) {
 			if(ce.getExam().examIdToString().equals(selectedExamid)) {
 				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
 				teacherCheckExams.setCompletedExams(ce);
@@ -147,7 +144,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	private void updateCompletedExamListView() {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		CompletedExamList.getItems().clear();
-		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
+		ObservableList<ExamReport> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 	}
 }

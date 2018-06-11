@@ -75,6 +75,13 @@
 .list-cell:filled:hover {
     -fx-background-color: #aaaaaa;
 }
+.list-cell:empty {
+    visibility:hidden;
+    -fx-background-color:transparent!important;
+}
+.list-view {
+	-fx-background-radius: 10px;
+}
 
 .text-field {
 	-fx-background-color: 
@@ -86,7 +93,9 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
-
+.scroll-pane {
+    -fx-background-color: transparent;
+}
 /*
  * this pane id is set manually in controlledScreen.java file 
  * when every screens comes up so we can have an id of all panes to be editable in css file 
@@ -110,8 +119,17 @@
 /* ############# END OF GENERAL STYLING ###################### */
 
 /**
- * this area is for Teachers Main Page styling 
+ * this area is for Teachers Manage Questions Page styling 
  */
-#myInfo {
-	-fx-background-color:white;
+#transbg {
+	-fx-background-color:transparent;
+	-fx-background-radius: 10px;
+}
+
+/**
+ * principle main window styling
+ */
+#blackbg {
+	-fx-background-color:black;
+	-fx-background-radius:10px;
 }

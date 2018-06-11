@@ -42,12 +42,12 @@ public class SolvedExamController {
 		return null;
 	}
 
-	public static ArrayList<CompletedExam> getCompletedExams(Teacher user) {
+	public static ArrayList<ExamReport> getCompletedExams(Teacher user) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				client.sendToServer(new iMessage("getTeacherCompletedExams",user));
-				return (ArrayList<CompletedExam>) client.getResponseFromServer().getObj();
+				return (ArrayList<ExamReport>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

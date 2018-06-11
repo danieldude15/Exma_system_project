@@ -119,7 +119,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionString.setWrapText(true);
 		questionInfo.setMinWidth(330);
 		questionInfo.setMaxWidth(600);
-		Label qid = new Label("QID: "+q.questionIDToString());
+		Label qid = new Label("QID: "+q.questionIDToString() + " ("+q.getPointsValue()+" points)");
 		qid.setId("blackLabel");
 		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);

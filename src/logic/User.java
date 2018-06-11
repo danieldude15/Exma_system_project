@@ -115,7 +115,8 @@ public class User implements Serializable{
 		if (this==obj) return true;
 		if(obj != null && obj.getClass() == getClass()) {
 			User user = (User) obj;
-			if(user.getID()!=id || 
+			if(user.getID()!=id || user.getName()==null ||
+					user.getPassword()==null || user.getUserName()==null ||
 					!user.getName().equals(name) || 
 					!user.getPassword().equals(password) ||
 					!user.getUserName().equals(userName))

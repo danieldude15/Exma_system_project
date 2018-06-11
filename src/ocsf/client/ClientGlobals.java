@@ -15,8 +15,7 @@ public class ClientGlobals {
 
 	public static boolean kill = false;
 	
-	public static final String TeacherMainID = "TeacherMain";
-	public static final String TeacherMainPath = "/resources/fxml/TeacherMain.fxml";
+	
 	
 	public static final String LogInID = "LogIn";
 	public static final String LogInPath = "/resources/fxml/Login.fxml";
@@ -37,14 +36,6 @@ public class ClientGlobals {
 	public static final String StudentSolvesExamID = "StudentSolvesExam";
 	public static final String StudentSolvesExamPath = "/resources/fxml/StudentSolvesExam.fxml";
 
-		
-
-	//Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
-
-
-	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
-	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
-
 	/*		Principal Screens Start		*/
 
 	public static final String PrincipalMainID = "PrincipalMain";
@@ -55,12 +46,32 @@ public class ClientGlobals {
 	public static final String PrincipalViewDataID = "PrincipalViewData";
 	public static final String PrincipalViewDataPath = "/resources/fxml/PrincipalViewData.fxml";
 
+	public static final String PrincipalViewQuestionID = "PrincipalViewQuestion";
+	public static final String PrincipalViewQuestionPath ="/resources/fxml/PrincipalViewQuestion.fxml";
+
 	/*		Principal Screens End		*/
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
+	
+	/*		Teacher Screens Start		*/
+	
+	public static final String TeacherMainID = "TeacherMain";
+	public static final String TeacherMainPath = "/resources/fxml/TeacherMain.fxml";
+	
+	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
+	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
 
+	public static final String InitializeExamID = "InitializeExam";
+	public static final String InitializeExamPath = "/resources/fxml/InitializeExam.fxml";
+	
 	public static final String TeacherCheckExamsID = "TeacherCheckExams";
 	public static final String TeacherCheckExamsPath = "/resources/fxml/TeacherCheckExams.fxml";
+	
+	public static final String TeacherViewExamID = "TeacherViewExam";
+	public static final String TeacherViewExamPath = "/resources/fxml/TeacherViewExam.fxml";
+	
+	public static final String ActiveExamID = "ActiveExam";
+	public static final String ActiveExamPath = "/resources/fxml/ActiveExam.fxml";
 	
 	public static final String TeacherTimeChangeRequestID = "TeacherTimeChangeRequest";
 	public static final String TeacherTimeChangeRequestPath = "/resources/fxml/TeacherTimeChangeRequest.fxml";
@@ -73,6 +84,8 @@ public class ClientGlobals {
 
 	public static final String TeacherCheckExamID = "TeacherCheckSolvedExam";
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
+
+	/*		Teacher Screens End		*/
 
 	public static void handleIOException(IOException e) {
 		if(ClientGlobals.kill ) return;

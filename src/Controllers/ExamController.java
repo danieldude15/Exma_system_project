@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import logic.Course;
 import logic.Exam;
 import logic.Question;
 import logic.QuestionInExam;
@@ -45,21 +46,36 @@ public class ExamController {
 		return 0;
 	}
 
-	public static int addExam(Exam exam) {
+	public static void  addExam(Exam exam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("addExam",exam);
 			try {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
-				if(o instanceof Integer) {
-					return (Integer) o;
-				}
+				
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
-		return 0;
+	
 	}
+
+	public static ArrayList<Exam> getcourseExams(Course C){
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getcourseExams",C);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Exam>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return null;
+	
+	}
+
 }

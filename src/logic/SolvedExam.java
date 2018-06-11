@@ -1,5 +1,6 @@
 package logic;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +29,6 @@ public class SolvedExam extends ActiveExam{
 	 * this HashMap holds a Key of QuestionInExam and Value of the Note string on solved question
 	 */
 	HashMap<QuestionInExam, String> questionNoteOnHash;
-	
-	/**
-	 * exam report ID. in case needed can be pulled from database using this id
-	 */
-	int examReportID;
 	/**
 	 * the Student that solved this exam
 	 */
@@ -63,13 +59,12 @@ public class SolvedExam extends ActiveExam{
 	 * @param completedTimeInMinutes - the time it took the student to complete the exam
 	 */
 	public SolvedExam(int score, boolean teacherApproved, HashMap<QuestionInExam, Integer> studentsAnswers, 
-			int examReportID, Student examSolver, String teachersScoreChangeNote, HashMap<QuestionInExam, String> teacherNotes,
-			int completedTimeInMinutes, String code, int type, String dayActivated,Teacher activator, Exam exam) {
+			 Student examSolver, String teachersScoreChangeNote, HashMap<QuestionInExam, String> teacherNotes,
+			int completedTimeInMinutes, String code, int type, Date dayActivated,Teacher activator, Exam exam) {
 		super(code, type, dayActivated, exam, activator);
 		this.score = score;
 		this.teacherApproved = teacherApproved;
 		this.studentsAnswers = studentsAnswers;
-		this.examReportID = examReportID;
 		this.examSolver = examSolver;
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
 		if (this.teachersScoreChangeNote ==null) this.teachersScoreChangeNote ="";
@@ -100,13 +95,6 @@ public class SolvedExam extends ActiveExam{
 		return studentsAnswers;
 	}
 
-	/**
-	 * getExamReportID
-	 * @return the int id of the report this solved exam belogs to
-	 */
-	public int getExamReportID() {
-		return examReportID;
-	}
 
 	/**
 	 * getStudent will get the exam solver

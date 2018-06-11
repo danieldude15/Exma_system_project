@@ -1,20 +1,26 @@
 package GUI;
 
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
+import javafx.util.Duration;
 import logic.ActiveExam;
 import logic.Globals;
+import logic.Student;
 import ocsf.client.ClientGlobals;
 
 public class StudentStartExamFrame implements ControlledScreen{
@@ -23,7 +29,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML TextField studentId;
 	@FXML Label examCodeError;
 	@FXML Label idError;
-	
+	private Timeline timeline;
+	private Long timeSeconds;
 	
 	@Override
 	public void runOnScreenChange() {
@@ -39,6 +46,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	/**
 	 * When student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
 	 */
+
+	@SuppressWarnings("unchecked")
 	@FXML
 	public void StartExamButtonPressed(ActionEvent event)
 	{
@@ -78,23 +87,70 @@ public class StudentStartExamFrame implements ControlledScreen{
 				}
 			}
 			//Student filled Two correct fields 
-			else  
-			{
+			else  {
+				Boolean canStart = ActiveExamController.StudentCheckedInToActiveExam((Student) ClientGlobals.client.getUser(), active);
+				if (canStart) {
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);
+					java.util.Date now = new java.util.Date();
+					Date timeActivate = active.getDate();
+					Date timeToComplete = new Date(timeActivate.getTime()+(active.getDuration()*60*1000)-now.getTime());
+					Date examDuration = new Date(active.getDuration()*60*1000);
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					//Date date = new Date(new java.util.Date().getTime());
+					System.out.println("time Activate:" + timeActivate + " -> " + dateFormat.format(timeActivate)  + " float: " + timeActivate.getTime());
+					System.out.println("now: " +now + " -> " + dateFormat.format(now)  + " float: " + now.getTime());
+					System.out.println("examDuration:" + examDuration + " -> " + dateFormat.format(examDuration)  + " float: " + examDuration.getTime());
+					System.out.println("timeToComplete:" + timeToComplete + " -> " + dateFormat.format(timeToComplete)  + " float: " + timeToComplete.getTime());
+					studentsolvesExam.setTimeSeconds(timeToComplete.getTime()/1000);
+					timeSeconds = studentsolvesExam.getTimeSeconds();
+					if (timeline != null) {
+			            timeline.stop();
+			        }
+					
+			        // update timerLabel
+			        studentsolvesExam.updateTimeLabel(timeSeconds);
+			        timeline = new Timeline();
+			        timeline.setCycleCount(Timeline.INDEFINITE);
+			        timeline.getKeyFrames().add(
+			                new KeyFrame(Duration.seconds(1),
+			                  new EventHandler() {
+			                    // KeyFrame event handler
+			                    public void handle(Event event) {
+			                        studentsolvesExam.setTimeSeconds(studentsolvesExam.getTimeSeconds()-1);
+			                        // update timerLabel
+			                        studentsolvesExam.updateTimeLabel(studentsolvesExam.getTimeSeconds());
+			                        if (timeSeconds <= 0) {
+			                            timeline.stop();
+			                            Alert alert = new Alert(AlertType.INFORMATION);
+			        					alert.setTitle("Exam Over");
+			        					alert.setHeaderText(null);
+			        					alert.setContentText("The Exam time is up and thus submitted with no answers. next time pay attention to the time.");
+			        					alert.showAndWait();
+			                            studentsolvesExam.lockExam();
+			                        }
+			                      }
+			                }));
+			        timeline.playFromStart();
+			        
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
+				} else {
+					alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("CAn Not Start Exam");
+					alert.setHeaderText(null);
+					alert.setContentText("It seems as you already submitted your exam and cannot start again.");
+					alert.showAndWait();
+				}
 			}
-			
-				
 		}
 	}
+			
 	
 	/**
 	 *When student pressed on home button he goes back to his main window. 
 	 */
 	@FXML
-	public void HomeButtonPressed(ActionEvent event)
-	{
+	public void HomeButtonPressed(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	}
 
