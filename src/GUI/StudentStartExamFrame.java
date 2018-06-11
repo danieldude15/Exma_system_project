@@ -1,6 +1,10 @@
 package GUI;
 
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import javafx.animation.KeyFrame;
@@ -26,7 +30,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML Label examCodeError;
 	@FXML Label idError;
 	private Timeline timeline;
-	private Integer timeSeconds;
+	private Long timeSeconds;
 	
 	@Override
 	public void runOnScreenChange() {
@@ -88,13 +92,22 @@ public class StudentStartExamFrame implements ControlledScreen{
 				if (canStart) {
 					StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 					studentsolvesExam.SetActiveExam(active);
-					///////////////////
-		
+					java.util.Date now = new java.util.Date();
+					Date timeActivate = active.getDate();
+					Date timeToComplete = new Date(timeActivate.getTime()+(active.getDuration()*60*1000)-now.getTime());
+					Date examDuration = new Date(active.getDuration()*60*1000);
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					//Date date = new Date(new java.util.Date().getTime());
+					System.out.println("time Activate:" + timeActivate + " -> " + dateFormat.format(timeActivate)  + " float: " + timeActivate.getTime());
+					System.out.println("now: " +now + " -> " + dateFormat.format(now)  + " float: " + now.getTime());
+					System.out.println("examDuration:" + examDuration + " -> " + dateFormat.format(examDuration)  + " float: " + examDuration.getTime());
+					System.out.println("timeToComplete:" + timeToComplete + " -> " + dateFormat.format(timeToComplete)  + " float: " + timeToComplete.getTime());
+					studentsolvesExam.setTimeSeconds(timeToComplete.getTime()/1000);
+					timeSeconds = studentsolvesExam.getTimeSeconds();
 					if (timeline != null) {
 			            timeline.stop();
 			        }
-			        timeSeconds = active.getDuration()*60;
-			        
+					
 			        // update timerLabel
 			        studentsolvesExam.updateTimeLabel(timeSeconds);
 			        timeline = new Timeline();
@@ -104,18 +117,22 @@ public class StudentStartExamFrame implements ControlledScreen{
 			                  new EventHandler() {
 			                    // KeyFrame event handler
 			                    public void handle(Event event) {
-			                        timeSeconds--;
+			                        studentsolvesExam.setTimeSeconds(studentsolvesExam.getTimeSeconds()-1);
 			                        // update timerLabel
-			                        studentsolvesExam.updateTimeLabel(timeSeconds);
+			                        studentsolvesExam.updateTimeLabel(studentsolvesExam.getTimeSeconds());
 			                        if (timeSeconds <= 0) {
 			                            timeline.stop();
-			                            System.out.println("TIMER ENDED!");
+			                            Alert alert = new Alert(AlertType.INFORMATION);
+			        					alert.setTitle("Exam Over");
+			        					alert.setHeaderText(null);
+			        					alert.setContentText("The Exam time is up and thus submitted with no answers. next time pay attention to the time.");
+			        					alert.showAndWait();
+			                            studentsolvesExam.lockExam();
 			                        }
 			                      }
 			                }));
 			        timeline.playFromStart();
 			        
-			        /////////////////
 					Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
 				} else {
 					alert = new Alert(AlertType.INFORMATION);

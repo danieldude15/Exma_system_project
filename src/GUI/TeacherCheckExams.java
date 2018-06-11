@@ -13,14 +13,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import logic.CompletedExam;
+import logic.ExamReport;
 import logic.Globals;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
 
 public class TeacherCheckExams implements ControlledScreen, Initializable {
 
-	CompletedExam completedExam;
+	ExamReport completedExam;
 	SolvedExam selectedExam;
 	
 	@FXML Label examid;
@@ -44,7 +44,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 		examid.setText(completedExam.getExam().examIdToString());
 		participated.setText(Integer.toString(completedExam.getParticipatingStudent()));
 		submited.setText(Integer.toString(completedExam.getSubmittedStudents()));
-		failToSubmitStudents.setText(Integer.toString(completedExam.getNoInTimeStudents()));
+		failToSubmitStudents.setText(Integer.toString(completedExam.getNotInTimeStudents()));
 		int counter=0;
 		for(SolvedExam se : completedExam.getSolvedExams()) {
 			if(se.isTeacherApproved())
@@ -80,7 +80,7 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	}
 
-	public void setCompletedExams(CompletedExam ce) {
+	public void setCompletedExams(ExamReport ce) {
 		this.completedExam = ce;
 	}
 

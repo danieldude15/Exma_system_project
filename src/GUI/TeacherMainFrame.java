@@ -29,7 +29,7 @@ import ocsf.client.ClientGlobals;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
-	private ArrayList<CompletedExam> TeacherCExams;
+	private ArrayList<ExamReport> TeacherCExams;
 	private ArrayList<ActiveExam> TeacherAExams;
 	
 	@FXML Button manageQuestionsB;
@@ -40,7 +40,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Button generateRB;
 	@FXML Button checkExamB;
 	@FXML ListView<ActiveExam> ActiveExamsList;
-	@FXML ListView<CompletedExam> CompletedExamList;
+	@FXML ListView<ExamReport> CompletedExamList;
 	@FXML Label welcome;
 	@FXML Label username;
 	@FXML Label userid;
@@ -112,7 +112,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
 		System.out.println(selectedExam);
 		String selectedExamid = selectedExam.split(" ")[6];
-		for (CompletedExam ce:TeacherCExams) {
+		for (ExamReport ce:TeacherCExams) {
 			if(ce.getExam().examIdToString().equals(selectedExamid)) {
 				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
 				teacherCheckExams.setCompletedExams(ce);
@@ -144,7 +144,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	private void updateCompletedExamListView() {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		CompletedExamList.getItems().clear();
-		ObservableList<CompletedExam> list = FXCollections.observableArrayList(TeacherCExams);
+		ObservableList<ExamReport> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 	}
 }

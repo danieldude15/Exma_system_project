@@ -2,7 +2,9 @@ package ocsf.server;
 
 import java.awt.geom.Ellipse2D;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -68,8 +70,8 @@ public class AESServer extends AbstractServer {
 		ArrayList<Course> cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		ActiveExam tibisExam = new ActiveExam("acdc", 1, "2018-05-30",
-				new Exam(1, cs.get(0),2,teacher,questions),teacher);
+		ActiveExam tibisExam = new ActiveExam("acdc", 1, new Date(new java.util.Date().getTime()),
+				new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("acdc", tibisExam);
 		
 		studentsInExam.put(tibisExam, new ArrayList<Student>());
@@ -84,9 +86,8 @@ public class AESServer extends AbstractServer {
 		cs = new ArrayList<>();
 		cs.add(new Course(3,"CourseName",field));
 		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer m�therfucker"));
-		ActiveExam nivsExam = new ActiveExam("ddii", 0, "2018-05-30",new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		ActiveExam nivsExam = new ActiveExam("ddii", 0, new Date(new java.util.Date().getTime()),new Exam(1, cs.get(0),120,teacher,questions),teacher);
 		activeExams.put("ddii", nivsExam);
-		
 		studentsInExam.put(nivsExam, new ArrayList<Student>());
 	}
 
@@ -199,6 +200,7 @@ public class AESServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
+
 
 	private void newTimeChangeRequest(Object o) throws IOException {
 		if (o instanceof TimeChangeRequest) {
@@ -411,7 +413,7 @@ public class AESServer extends AbstractServer {
 	}
 
 	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
-		ArrayList<CompletedExam> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
+		ArrayList<ExamReport> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
 		iMessage im = new iMessage("TeacherCompletedExams", completedExams);
 		client.sendToClient(im);
 	}

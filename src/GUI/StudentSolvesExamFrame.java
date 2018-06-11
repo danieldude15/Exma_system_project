@@ -53,6 +53,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML Button submitButton;
 	@FXML Button exitButton;
 	String timeLeft = "";
+	private Long timeSeconds;
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
 	private ActiveExam activeExam;
 	private final String whiteLabel=new String("whiteLabel");
@@ -331,11 +332,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		
 		boolean teacherApproved=false;
-		int examReportId=5;//need to take care of it.
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
 		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
-		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers, examReportId,
+		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers,
 				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),e);
 
 		/*going to replace all in this.
@@ -492,12 +492,20 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 	}
 
-	public void updateTimeLabel(Integer timeInSeconds) {
+	public void updateTimeLabel(Long timeInSeconds) {
 		String hour = "" + timeInSeconds/60/60;
 		String minutes = "" + (timeInSeconds/60)%60;
 		String seconds = "" + timeInSeconds%60;
 		String time = hour + ":" + minutes + ":" +seconds;
 		timeLeftLabel.setText(time);
+	}
+
+	public void setTimeSeconds(Long timeSeconds) {
+		this.timeSeconds = timeSeconds;
+	}
+
+	public Long getTimeSeconds() {
+		return timeSeconds;
 	}
 	
 	
