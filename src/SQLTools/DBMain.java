@@ -375,7 +375,7 @@ public class DBMain {
 	 * @param fieldID - the ID of the required field
 	 * @return the name of the field as String
 	 */
-	public String getField(int fieldID){
+	public String getFieldName(int fieldID){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getField);
 			prst.setInt(1,fieldID);
@@ -510,7 +510,7 @@ public class DBMain {
 		return null;
 	}
 
-	private Exam getExam(String examIdString) {
+	public Exam getExam(String examIdString) {
 		try {
 			int[] examid = Exam.parseId(examIdString);
 			PreparedStatement prst = conn.prepareStatement(getExam);
@@ -870,7 +870,7 @@ public class DBMain {
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
 				String teacherId = rs.getString(9);
-				Question question = new Question(questionid,(Teacher)getUser(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getField(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
+				Question question = new Question(questionid,(Teacher)getUser(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getFieldName(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
 			return result;

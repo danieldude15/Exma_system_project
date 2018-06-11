@@ -195,9 +195,10 @@ public class Exam implements Serializable{
 		result = 31*result + Duration;
 		if (course!=null)
 			result = 31*result + course.hashCode();
-		for(QuestionInExam q: questionsInExam)
-			if (q!=null && q.questionIDToString()!=null)
-				result = 31 * result + q.questionIDToString().hashCode();
+		if(questionsInExam!=null)
+			for(QuestionInExam q: questionsInExam)
+				if (q!=null && q.questionIDToString()!=null)
+					result = 31 * result + q.questionIDToString().hashCode();
 		return result;
 	}
 	

@@ -77,27 +77,15 @@ public class AESServer extends AbstractServer {
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
-		ArrayList<QuestionInExam> questions =  new ArrayList<QuestionInExam>();
-		String[] answers = new String[]{"a","b","c","d"};
-		Field field = new Field(2,"FieldName");
-		ArrayList<Course> cs = new ArrayList<>();
-		cs.add(new Course(3,"CourseName",field));
-		questions.add(new QuestionInExam(1, teacher, "what up",answers , field, 2, cs,100,null,null));
-		ActiveExam tibisExam = new ActiveExam("acdc", 1, new Date(new java.util.Date().getTime()),
-				new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		ActiveExam tibisExam = new ActiveExam("ac12", 1, new Date(new java.util.Date().getTime()),
+				sqlcon.getExam("010101"),teacher);
 		InitializeActiveExams(tibisExam);
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		questions =  new ArrayList<QuestionInExam>();
-		answers = new String[]{"Leo Messi","Cristiano Ronaldo","Toni Kross","Robert Levandovski"};
-		field = new Field(2,"FieldName");
-		cs = new ArrayList<>();
-		cs.add(new Course(3,"CourseName",field));
-		questions.add(new QuestionInExam(1, teacher, "who is the best player in the world?",answers , field, 2, cs,100,null,"what is your answer m�therfucker"));
-		ActiveExam nivsExam = new ActiveExam("ddii", 0, new Date(new java.util.Date().getTime()),new Exam(1, cs.get(0),120,teacher,questions),teacher);
+		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030101"),teacher);
 		InitializeActiveExams(nivsExam);
 		
 		
