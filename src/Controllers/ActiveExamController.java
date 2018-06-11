@@ -98,12 +98,12 @@ public class ActiveExamController {
 	}
 	
 	
-	public static XWPFDocument GetManualExam(String activeExamCode)
+	public static XWPFDocument GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
-				iMessage msg= new iMessage("GetManualExam",activeExamCode);
+				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
 				return (XWPFDocument) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
@@ -162,6 +162,7 @@ public class ActiveExamController {
 			}
 		}
 	}
+
 
 	
 }

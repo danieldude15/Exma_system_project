@@ -3,6 +3,8 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -71,15 +73,24 @@ public class SolvedExamController {
 		return 0;
 	}
 	
-	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam)
+	/**
+	 * Send message to the server when the student finished his exam.
+	 * @param activeExam
+	 * @param solvedExam
+	 * @param s
+	 */
+	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam,Student s,XWPFDocument doc)
 	{
-		Object[] o=new Object[2];
+		Object[] o=new Object[4];
 		o[0]=(ActiveExam)activeExam;
 		o[1]=(SolvedExam)solvedExam;
+		o[2]=(Student)s;
+		o[3]=(XWPFDocument)doc;
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				client.sendToServer(new iMessage("FinishedSolvedExam",o));
+				client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
