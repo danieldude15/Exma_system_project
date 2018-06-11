@@ -302,14 +302,6 @@ public class AESServer extends AbstractServer {
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
-	/**
-	 * Get an active exam and add it from active exams Hashmap.
-	 * @param ae
-	 */
-	public void AddActiveExam(ActiveExam ae)
-	{
-		activeExams.put(ae.getCode(), ae);
-	}
 
 	/**
 	 * Get an active exam and remove it from active exams Hashmap.
@@ -566,12 +558,13 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(result);
 	}
 	/**
-	 * When teacher activate an exam he add it to the ActiveExams list.
+	 * When teacher activate an exam he add it to the ActiveExams lists.
 	 * @param ae
 	 */
-	private void InitializeActiveExamsStudentsList(ActiveExam ae)
+	private void InitializeActiveExams(ActiveExam ae)
 	{
-		studentsInExam.put(ae, new ArrayList<Student>());			
+		studentsInExam.put(ae, new ArrayList<Student>());	
+		activeExams.put(ae.getCode(), ae);
 	}
 	
 	/**
@@ -598,10 +591,10 @@ public class AESServer extends AbstractServer {
 
 
 	/**
-	 * Create word file when the teacher activate a manual exam.
+	 * Create a Document file when the teacher activate a manual exam.
 	 * @param active
 	 */
-		private void CreateWordFile(ActiveExam active)
+		private void CreateDocFile(ActiveExam active)
 		{
 			/*Create document/*/
 			XWPFDocument doc=new XWPFDocument();
@@ -660,7 +653,7 @@ public class AESServer extends AbstractServer {
 		}
 
 		/**
-		 * Add word file exam to the list of word file exams.
+		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
 		 * @param active
 		 * @param doc
 		 */
