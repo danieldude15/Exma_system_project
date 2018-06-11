@@ -114,7 +114,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	{
 		return this.activeExam;
 	}
-
+//blab
 
 	/**
 	 * Sets the computerized exam on window screen.
@@ -267,7 +267,12 @@ public class StudentSolvesExamFrame implements ControlledScreen{
          
 	}
 	
-	
+	/**
+	 * Show for the user a save dialog where he can pick his saving path for the word file.
+	 * @param file
+	 * @param doc
+	 * @throws IOException
+	 */
 	 private void SaveFile(File file, XWPFDocument doc) throws IOException{
 
             OutputStream outputStream = new FileOutputStream(file);
