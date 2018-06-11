@@ -128,16 +128,6 @@ public class ExamReport extends ActiveExam {
 	}
 
 	/**
-	 * overriding getExam because we dont want to hold double information we use the 
-	 * solvedexams firs element to return the exam from him
-	 */
-	@Override public Exam getExam() {
-		if (solvedExams!=null && solvedExams.get(0)!=null)
-			return solvedExams.get(0).getExam();
-		return null;
-	}
-
-	/**
 	 * getSolvedExams
 	 * @return the arraylist of solveExams
 	 */
