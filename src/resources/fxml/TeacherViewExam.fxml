@@ -13,7 +13,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="31.0" prefWidth="540.0">
          <children>
-            <Label fx:id="examinfo" prefHeight="27.0" prefWidth="480.0" text="View Exam">
+            <Label fx:id="examinfo" prefHeight="27.0" prefWidth="661.0" text="View Exam">
                <font>
                   <Font size="18.0" />
                </font>
@@ -30,7 +30,7 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="556.0" prefWidth="683.0">
                <children>
-                  <VBox fx:id="questionInfo_StudentScoreAndNote" prefHeight="74.0" prefWidth="685.0" />
+                  <VBox fx:id="questionInfo_StudentScoreAndNote" prefHeight="558.0" prefWidth="685.0" />
                </children>
             </AnchorPane>
         </content>

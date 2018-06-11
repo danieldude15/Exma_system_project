@@ -96,6 +96,32 @@ public class ActiveExamController {
 		}
 		return;
 	}
+	public static void InitializeActiveExam(ActiveExam AE) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("InitializeActiveExams",AE);
+				client.sendToServer(msg);
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return;
+	}
+	public static void CreateDocFile(ActiveExam AE) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("CreateDocFile",AE);
+				client.sendToServer(msg);
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return;
+	}
 	
 	
 	public static XWPFDocument GetManualExam(String activeExamCode)

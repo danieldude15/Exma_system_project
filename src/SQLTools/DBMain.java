@@ -120,6 +120,9 @@ public class DBMain {
 			+ "(`examid`,`timeduration`, `fieldid`, `courseid`,`teacherid`) "
 			+ "VALUES ('0',?,?,?,?)");
 
+	private String GetAllStudentsInCourse =new String("SELECT s.studentid, u.username,u.password,u.fullname " + 
+			" FROM aes.student_in_course as s,aes.users as u " + 
+			"  WHERE s.courseid=? and s.fieldid=? and s.studentid=u.userid" );
 
 
 	private String addQuestionInExam = new String(""
@@ -1058,8 +1061,28 @@ private String FieldCourses=new String(""
 }
 
 	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
+		try {
+			PreparedStatement prst = conn.prepareStatement(GetAllStudentsInCourse);
+			prst.setInt(1, course.getId());
+			prst.setInt(2, course.getField().getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			ArrayList<Student> result = new ArrayList<>();
+			while(rs.next()) {		
+				int Studentid = rs.getInt(1);
+				String fullname= rs.getString(2);
+				String Password= rs.getString(3);
+				String Tname = rs.getString(4);
+				
+				Student s=new Student(Studentid,fullname,Password,Tname);
+				result.add(s);
+			}
+			return result;
+			}
+		     catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
 		return null;
-		// TODO Auto-generated method stub
 		
 	}
 }

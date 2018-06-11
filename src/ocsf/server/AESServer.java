@@ -59,7 +59,8 @@ public class AESServer extends AbstractServer {
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
 		wordFiles=new HashMap<ActiveExam,XWPFDocument>();
-		
+		studentsSolvedExams = new HashMap<>();
+		studentsCheckOutFromActiveExam = new HashMap<>();
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
@@ -196,6 +197,13 @@ public class AESServer extends AbstractServer {
 			case "FinishedSolvedExam":
 				SetFinishedSolvedExam(client,o);
 				break;
+			case "InitializeActiveExams":
+				InitializeActiveExams(client,o);
+				break;
+			case "CreateDocFile":
+				CreateDocFile(client,o);
+				break;
+				
 			default:
 				
 			}
@@ -364,7 +372,7 @@ public class AESServer extends AbstractServer {
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {
-			if(activeExams.get(activeExamCode).getExam().getAuthor().equals((Teacher)o)) {
+			if(activeExams.get(activeExamCode).getActivator().equals((Teacher)o)) {
 				ac.add(activeExams.get(activeExamCode));
 			}
 		}
@@ -564,8 +572,9 @@ public class AESServer extends AbstractServer {
 	 * When teacher activate an exam he add it to the ActiveExams lists.
 	 * @param ae
 	 */
-	private void InitializeActiveExams(ActiveExam ae)
+	private void InitializeActiveExams(ConnectionToClient client, Object o)
 	{
+		ActiveExam ae=(ActiveExam)o;
 		studentsInExam.put(ae, new ArrayList<Student>());	
 		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
@@ -600,11 +609,11 @@ public class AESServer extends AbstractServer {
 	 * Create a Document file when the teacher activate a manual exam.
 	 * @param active
 	 */
-		private void CreateDocFile(ActiveExam active)
+		private void CreateDocFile(ConnectionToClient client,Object obj)
 		{
 			/*Create document/*/
 			XWPFDocument doc=new XWPFDocument();
-			
+			ActiveExam active= (ActiveExam) obj;
 			/*Create title paragraph/*/
 			XWPFParagraph titleParagraph=doc.createParagraph();
 			titleParagraph.setAlignment(ParagraphAlignment.CENTER);

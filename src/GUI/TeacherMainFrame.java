@@ -54,7 +54,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.primaryStage.setHeight(680);
 		Globals.primaryStage.setWidth(820);
 
-		updateCompletedExamListView();
+	//	updateCompletedExamListView();
 		
 		updateActiveExamListView();
 		
@@ -141,11 +141,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.setItems(list2);
 	}
 	
-	private void updateCompletedExamListView() {
+/*/	private void updateCompletedExamListView() {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		CompletedExamList.getItems().clear();
 		ObservableList<ExamReport> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 		
 	}
+	/*/
 }
