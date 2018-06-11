@@ -324,10 +324,7 @@ public class AESServer extends AbstractServer {
 				return counter;
 			}
 		}
-		activeExams.remove(ae.getCode());
-		if(ae.getType()==0)
-			wordFiles.remove(ae);
-		
+		GenerateActiveExamReport(ae);
 		return counter;
 	}
 	
