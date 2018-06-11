@@ -70,5 +70,21 @@ public class SolvedExamController {
 		} 
 		return 0;
 	}
+	
+	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam)
+	{
+		Object[] o=new Object[2];
+		o[0]=(ActiveExam)activeExam;
+		o[1]=(SolvedExam)solvedExam;
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				client.sendToServer(new iMessage("FinishedSolvedExam",o));
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+	}
 
 }

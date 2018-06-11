@@ -1056,7 +1056,13 @@ private String FieldCourses=new String(""
 	}
 	return null;
 }
+
+	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
+		return null;
+		// TODO Auto-generated method stub
+		
 	}
+}
 
 
 

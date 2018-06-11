@@ -18,6 +18,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -134,7 +135,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 		{			
 			SetQuestionOnWindowScreen(qie,questionIndex);
-			//aIndex=1;
 			questionIndex++;
 		}
 	}
@@ -258,7 +258,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 
 	
-		//Save file! currently doesn't work.
+		
 		FileChooser fileChooser = new FileChooser();
 		
         //Set extension filter
@@ -313,9 +313,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	public void StudentPressedSubmitButton(ActionEvent event)
 	{	
 		/*Build solved Exam object/*/
-		SolvedExam uploadToDatabase=BuildSolvedExamObject();
+		SolvedExam sendToGenerateReport=BuildSolvedExamObject();
 		/*Confirmation Dialog/*/
-		ConfirmationDialogForSubmitButton(uploadToDatabase);		
+		ConfirmationDialogForSubmitButton(sendToGenerateReport);		
 	}
 	
 
@@ -340,61 +340,13 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
 		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
-		SolvedExam uploadToDatabase=new SolvedExam(score, teacherApproved, studentAnswers,
+		SolvedExam sendToGenerateReport=new SolvedExam(score, teacherApproved, studentAnswers,
 				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),e);
 
-		/*going to replace all in this.
-		SolvedExam s=new SolvedExam(e.getID(),new Course(e.getCourse()), e.getDuration(), new Teacher(e.getAuthor())
-				, score, false, studentAnswers, 5,
-				new Student((Student)ClientGlobals.client.getUser()), null, CompletedTimeInMinutes);
-		going to replace all in this./*/
-		
-		/*//delete it all!
-		System.out.println("score= "+score);
-		System.out.println("studentAnswersSIZE="+studentAnswers.size());
-		
-		for (QuestionInExam qie : studentAnswers.keySet()) 
-		{
-			System.out.println("answer="+studentAnswers.get(qie));
-		}
-		//delete it all!/*/
-		return uploadToDatabase;
+		return sendToGenerateReport;
 	}
 	
 	
-	/*
-	/**
-	 * Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
-	 * Object[0]=HashMap(QuestionInExam,Integer) which contains the question in exam as key and the student's answer index as value. 
-	 * Object[1]=Student's grade for exam.
-	 * @return Object[] studentAnsersAndScoreForExam
-	 */
-	/*/
-	private Object[] SystemCheckExam() {
-		// TODO Auto-generated method stub
-		int score=0;
-		Object[] studentAnsersAndScoreForExam=new Object[2];
-		HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
-		RadioButton r=new RadioButton();
-		for (QuestionInExam qie : questionWithAnswers.keySet()) 
-		{
-			if(questionWithAnswers.get(qie).getSelectedToggle()!=null)
-			{
-				r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-				studentAnswers.put(qie,indexOfAnswerInQuestion.get(r.getText()));//Insert the question and student's index of answer to HashMap.
-				if(studentAnswers.get(qie)==qie.getCorrectAnswerIndex())//If student's answer for that question is correct he gets all points from it.
-					score+=qie.getPointsValue();
-			}
-			else//If student's answer for that question is not correct he gets 0 points from it.
-				studentAnswers.put(qie,0);
-		}
-		
-		studentAnsersAndScoreForExam[0]=studentAnswers;
-		studentAnsersAndScoreForExam[1]=score;
-		return studentAnsersAndScoreForExam;
-	}
-/*/
-
 
 
 
@@ -455,7 +407,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 *  or cancel to go back to the exam.
 	 * @param SolvedExam
 	 */
-	private void ConfirmationDialogForSubmitButton(SolvedExam uploadToDatabase)
+	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport)
 	{
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation");
@@ -467,8 +419,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			/*Send message to the server via ActiveExamController to delete Student from ActiveExam list/*/
 			//ActiveExamController.StudentCheckedOutFromActiveExam((Student)ClientGlobals.client.getUser(),activeExam);//Student check out from exam.
 			
-			/*Send message to the server via SolvedExamController to add Student's SolvedExam to database./*/
-			//SolvedExamController.UploadSolvedExamToDatabase(uploadToDatabase);
+			//Send message to the server to add solved exam to the list so we can generate a report from all solved exams when the active exam will be lock.
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport);
 			alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Submit confirmation");
 			alert.setHeaderText(null);

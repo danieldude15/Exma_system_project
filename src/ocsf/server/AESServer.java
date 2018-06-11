@@ -41,7 +41,7 @@ public class AESServer extends AbstractServer {
 	 * the purpose of this hashmap is on each students sovedExam submittion 
 	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
 	 */
-	private HashMap<ActiveExam, ArrayList<Student>> studentsInExamCourse;
+	private HashMap<ActiveExam, ArrayList<Student>> studentsCheckOutFromActiveExam;
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
@@ -192,6 +192,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "getcourseExams":
 				getcourseExams(client,o);
+				break;
+			case "FinishedSolvedExam":
+				SetFinishedSolvedExam(client,o);
 				break;
 			default:
 				
@@ -564,7 +567,10 @@ public class AESServer extends AbstractServer {
 	private void InitializeActiveExams(ActiveExam ae)
 	{
 		studentsInExam.put(ae, new ArrayList<Student>());	
+		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
+		ArrayList<Student> allStudentsInCourse=sqlcon.GetAllStudentsInCourse(ae.getCourse());
+		studentsCheckOutFromActiveExam.put(ae, allStudentsInCourse);
 	}
 	
 	/**
@@ -681,6 +687,19 @@ public class AESServer extends AbstractServer {
 		public void GenerateActiveExamReport(ActiveExam ae) {
 			// TODO Auto-generated method stub
 			
+		}
+		
+		/**
+		 * Add solved exam to the list so we can generate all solved exams to report later.
+		 * @param obj
+		 * @throws IOException 
+		 */
+		public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
+		{
+			Object[] o = (Object[])obj;
+			studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
+			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
+
 		}
 }
 
