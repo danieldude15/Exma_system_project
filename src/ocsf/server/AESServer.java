@@ -41,7 +41,7 @@ public class AESServer extends AbstractServer {
 	 * the purpose of this hashmap is on each students sovedExam submittion 
 	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
 	 */
-	private HashMap<ActiveExam, ArrayList<Student>> studentsInExamCourse;
+	private HashMap<ActiveExam, ArrayList<Student>> studentsCheckOutFromActiveExam;
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
@@ -192,6 +192,9 @@ public class AESServer extends AbstractServer {
 			case "getcourseExams":
 				getcourseExams(client,o);
 				break;
+			case "FinishedSolvedExam":
+				SetFinishedSolvedExam(client,o);
+				break;
 			default:
 				
 			}
@@ -300,14 +303,6 @@ public class AESServer extends AbstractServer {
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
 
-	/**
-	 * Get an active exam and add it from active exams Hashmap.
-	 * @param ae
-	 */
-	public void AddActiveExam(ActiveExam ae)
-	{
-		activeExams.put(ae.getCode(), ae);
-	}
 
 	/**
 	 * Get an active exam and remove it from active exams Hashmap.
@@ -564,12 +559,16 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(result);
 	}
 	/**
-	 * When teacher activate an exam he add it to the ActiveExams list.
+	 * When teacher activate an exam he add it to the ActiveExams lists.
 	 * @param ae
 	 */
-	private void InitializeActiveExamsStudentsList(ActiveExam ae)
+	private void InitializeActiveExams(ActiveExam ae)
 	{
-		studentsInExam.put(ae, new ArrayList<Student>());			
+		studentsInExam.put(ae, new ArrayList<Student>());	
+		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
+		activeExams.put(ae.getCode(), ae);
+		ArrayList<Student> allStudentsInCourse=sqlcon.GetAllStudentsInCourse(ae.getCourse());
+		studentsCheckOutFromActiveExam.put(ae, allStudentsInCourse);
 	}
 	
 	/**
@@ -596,10 +595,10 @@ public class AESServer extends AbstractServer {
 
 
 	/**
-	 * Create word file when the teacher activate a manual exam.
+	 * Create a Document file when the teacher activate a manual exam.
 	 * @param active
 	 */
-		private void CreateWordFile(ActiveExam active)
+		private void CreateDocFile(ActiveExam active)
 		{
 			/*Create document/*/
 			XWPFDocument doc=new XWPFDocument();
@@ -658,7 +657,7 @@ public class AESServer extends AbstractServer {
 		}
 
 		/**
-		 * Add word file exam to the list of word file exams.
+		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
 		 * @param active
 		 * @param doc
 		 */
@@ -695,13 +694,26 @@ public class AESServer extends AbstractServer {
 				//need to clean hasmaps to remove active exam from server
 				activeExams.remove(ae.getCode()); 
 				studentsInExam.remove(ae); 
-				studentsInExamCourse.remove(ae); 
+				studentsCheckOutFromActiveExam.remove(ae); 
 				studentsSolvedExams.remove(ae); 
 				wordFiles.remove(ae);
 				timeChangeRequests.remove(ae);
 			} else {
 				//fail to add exam report into database! big balagan!
 			}
+		}
+		
+		/**
+		 * Add solved exam to the list so we can generate all solved exams to report later.
+		 * @param obj
+		 * @throws IOException 
+		 */
+		public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
+		{
+			Object[] o = (Object[])obj;
+			studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
+			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
+
 		}
 }
 

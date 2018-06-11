@@ -281,6 +281,11 @@ public class DBMain {
 		return null;
 	}
 
+
+	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
+		return null;
+		// TODO Auto-generated method stub		
+	}
 	
 	// ######################### COURSE FIELD HANDELING  ####################################
 	
@@ -884,11 +889,8 @@ public class DBMain {
 			ex.printStackTrace();
 		}
 		return 0;
-		
 	}
 
-
-	
 	// ##############################   QUESTION HANDELING     ####################################
 	
 	/**
