@@ -91,8 +91,7 @@ public class AESServer extends AbstractServer {
 		studentsInExam.put(nivsExam, new ArrayList<Student>());
 	}
 
-	@Override
-	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("Got msg from:" + client + "message: " + msg);
 		if(!(msg instanceof iMessage)) {
 			System.out.println("msg from client is not of type iMessage!");
@@ -200,7 +199,6 @@ public class AESServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
-
 
 	private void newTimeChangeRequest(Object o) throws IOException {
 		if (o instanceof TimeChangeRequest) {
@@ -686,8 +684,24 @@ public class AESServer extends AbstractServer {
 		}
 
 		public void GenerateActiveExamReport(ActiveExam ae) {
-			// TODO Auto-generated method stub
-			
+			ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
+			int participated = studentsInExam.get(ae).size();
+			int submitted = studentsSolvedExams.get(ae).size();
+			int notInTime = participated-submitted;
+			Date lockDate = new Date(new java.util.Date().getTime()); //now
+			ExamReport eReport = new ExamReport(ae.getCode(), ae.getType(), ae.getDate(), ae, ae.getActivator(), solvedExams, participated, submitted, notInTime, lockDate);
+			if (sqlcon.insertCompletedExam(eReport)>0) {
+				//successfully generated and inserted examreport into database 
+				//need to clean hasmaps to remove active exam from server
+				activeExams.remove(ae.getCode()); 
+				studentsInExam.remove(ae); 
+				studentsInExamCourse.remove(ae); 
+				studentsSolvedExams.remove(ae); 
+				wordFiles.remove(ae);
+				timeChangeRequests.remove(ae);
+			} else {
+				//fail to add exam report into database! big balagan!
+			}
 		}
 }
 

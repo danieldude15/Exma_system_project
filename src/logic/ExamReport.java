@@ -17,7 +17,7 @@ public class ExamReport extends ActiveExam {
 	 */
 	private static final long serialVersionUID = 4657010598883384610L;
 	/**
-	 * arraylist of all solved exams of this completed exam
+	 * ArrayList of all solved exams of this completed exam
 	 */
 	private ArrayList<SolvedExam> solvedExams = null;
 	/**
@@ -49,10 +49,6 @@ public class ExamReport extends ActiveExam {
 	 */
 	String deviation;
 	/**
-	 * the date the exam was initiated
-	 */
-	Date dateinitiated;
-	/**
 	 * the hashMap of all potential cheaters in this exam
 	 */
 	HashMap<Student,Integer> m_cheatingStudents;
@@ -78,8 +74,9 @@ public class ExamReport extends ActiveExam {
 	 * @param m_cheatingStudents - the hashmap of cheaters found in this exam.
 	 */
 	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
-			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, Integer submittedStudents,
-			Integer notInTimeStudents, Date timeLocked, int median, int avg, String diviation, Date dateinitiated,
+			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
+			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
+			int median, int avg, String diviation,
 			HashMap<Student, Integer> m_cheatingStudents) {
 		super(code, type, dayActivated, e, activator);
 		this.solvedExams = solvedExams;
@@ -90,7 +87,6 @@ public class ExamReport extends ActiveExam {
 		this.median = median;
 		this.avg = avg;
 		this.deviation = diviation;
-		this.dateinitiated = dateinitiated;
 		this.m_cheatingStudents = m_cheatingStudents;
 	}
 	
@@ -112,8 +108,7 @@ public class ExamReport extends ActiveExam {
 	 */
 	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
 			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
-			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
-			Date dateinitiated) {
+			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked) {
 		super(code, type, dayActivated, e, activator);
 		this.solvedExams = solvedExams;
 		this.participatingStudent = participatingStudent;
@@ -123,7 +118,7 @@ public class ExamReport extends ActiveExam {
 		this.median = calcMedian(solvedExams);
 		this.avg = calcAvg(solvedExams);
 		this.deviation = calcDeviation(solvedExams);
-		this.dateinitiated = dateinitiated;
+
 		this.m_cheatingStudents = findCheaters(solvedExams);
 	}
 
@@ -171,14 +166,7 @@ public class ExamReport extends ActiveExam {
 	public int getAvg() {
 		return avg;
 	}
-	
-	/**
-	 * getDateinitiated
-	 * @return the date of witch this exam initiated
-	 */
-	public Date getDateinitiated() {
-		return dateinitiated;
-	}
+
 	
 	/**
 	 * get all potential cheaters in this exam
