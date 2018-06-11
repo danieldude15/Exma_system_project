@@ -366,25 +366,9 @@ public class DBMain {
 	 * getFieldCourses returns all field courses
 	 */
 	public ArrayList<Course> getFieldCourses(Field o) {
-		Field f = (Field) o;
-			try {
-			PreparedStatement prst = conn.prepareStatement(FieldCourses);
-			prst.setInt(1,f.getID());
-			System.out.println("SQL:" + prst);
-			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
-			ArrayList<Course> result = new ArrayList<>();
-			while(rs.next()) {
-				int Courseid = rs.getInt(1);
-				String Coursename = rs.getString(2);
-				result.add(new Course(Courseid,Coursename,f));
-			}
-			return result;
-		} catch (SQLException e) {
-			ServerGlobals.handleSQLException(e);
-		}
-		return null;
-
+		ArrayList<Field> fields = new ArrayList<>();
+		fields.add(o);
+		return getFieldsCourses(fields);
 	}
 
 	//  #############################   EXAM HANDELING    ##################################
@@ -425,7 +409,7 @@ public class DBMain {
 					int notInTime = rs.getInt(11);
 					int median = rs.getInt(13);
 					int avg = rs.getInt(14);
-					String deviation = rs.getString(15);
+					HashMap<Integer, Integer> deviation =ExamReport.parseStringDeviation(rs.getString(15));
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, t.getID(), code, type, dayActivated);
 					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
 					completedExams.add(new ExamReport(code, type, dayActivated, e, activator, sExams, 
@@ -480,8 +464,8 @@ public class DBMain {
 				Student student = new Student(rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10));
 				Teacher teacher = new Teacher(rs.getInt(16), rs.getString(17), rs.getString(18), rs.getString(19));
 				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),rs.getInt(2)));
-				HashMap<QuestionInExam,String> teacherQuestionsNotes = parseTeacherNotes(rs.getString(20),questions);
-				HashMap<QuestionInExam,Integer> studentsAnswers = parseStudentsAnswers(studentAnswers,questions);
+				HashMap<QuestionInExam,String> teacherQuestionsNotes = SolvedExam.parseTeacherNotes(rs.getString(20),questions);
+				HashMap<QuestionInExam,Integer> studentsAnswers = SolvedExam.parseStudentsAnswers(studentAnswers,questions);
 				Exam e = getExam(Exam.examIdToString(examid,courseid,fieldid));
 				SolvedExam solvedExam = new SolvedExam(
 						score, teacherApprove, studentsAnswers,
@@ -554,8 +538,8 @@ public class DBMain {
 				Exam e = getExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
 				String code = rs.getString(16);
 				String date = rs.getString(17);
-				HashMap<QuestionInExam,String> teacherQuestionsNotes = parseTeacherNotes(rs.getString(18),questions);
-				HashMap<QuestionInExam,Integer> studentsAnswers = parseStudentsAnswers(studentAnswers,questions);
+				HashMap<QuestionInExam,String> teacherQuestionsNotes = SolvedExam.parseTeacherNotes(rs.getString(18),questions);
+				HashMap<QuestionInExam,Integer> studentsAnswers = SolvedExam.parseStudentsAnswers(studentAnswers,questions);
 				SolvedExam solvedExam = new SolvedExam(
 						score, teacherApprove, studentsAnswers,
 						student, teacherNote, teacherQuestionsNotes,
@@ -568,65 +552,7 @@ public class DBMain {
 		}
 		return null;
 	}
-	
-	/**
-	 * This function will convert answers from database to objects by organizing them
-	 * For this to work the answers must be kept in the database in a cetain way
-	 * answers will appear as a long string and look like following:
-	 * q<questionId>a<answerIndex>q<questionId>a<answerIndex>q<questionId>a<answerIndex>/ ... 
-	 * before every answer there is the letter 'a'
-	 * also before every question there is the letter 'q'
-	 * @param string of answers kept in database in described matter
-	 * @param questions the arraylist of questionsInExam with their points assigned to them
-	 * @return an organized HashMap of questions in exam including the question and the students answer
-	 */
-	private HashMap<QuestionInExam, Integer> parseStudentsAnswers(String string, ArrayList<QuestionInExam> questions) {
-		if (string==null || string.equals("")) return null;
-		HashMap<String, Integer> answers = new HashMap<>();
-		HashMap<QuestionInExam, Integer> result = new HashMap<>();
-		String[] temp = string.split("q");
-		String[] splitedAnswers = Arrays.copyOfRange(temp,1,temp.length);
-		for(String questionIDAndAnswer : splitedAnswers) {
-			String[] arr = questionIDAndAnswer.split("a");
-			answers.put(arr[0], Integer.parseInt(arr[1]));
-		}
-		for(QuestionInExam q: questions) {
-			result.put(q,answers.get(q.questionIDToString()));
-		}
-		return result;
-	}
-	
-	private String studentAnswersToString(HashMap<QuestionInExam, Integer> studentsAnswers) {
-		String answers = "";
-		for (QuestionInExam qie : studentsAnswers.keySet()) {
-			answers = answers.concat("q"+qie.questionIDToString()+"a"+studentsAnswers.get(qie));
-		}
-		return answers;
-	}
 
-	private HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
-		if (string==null || string.equals("")) return new HashMap<>();
-		HashMap<QuestionInExam, String> result = new HashMap<>();
-		HashMap<String, String> notes = new HashMap<>();
-		String[] temp = string.split("<QID>");
-		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
-		for(String questionNote : splitedNotes) {
-			String[] arr = questionNote.split("<TEACHER-NOTE>");
-			notes.put(arr[0], arr[1]);
-		}
-		for(QuestionInExam q: questionsInExam) {
-			result.put(q,notes.get(q.questionIDToString()));
-		}
-		return result;
-	}
-
-	private String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
-		String allNotes = "";
-		for(QuestionInExam q: hashMap.keySet()) {
-			allNotes = allNotes.concat("<QID>"+q.questionIDToString()+"<TEACHER-NOTE>"+hashMap.get(q));
-		}
-		return allNotes;
-	}
 
 	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
 	{
@@ -662,8 +588,8 @@ public class DBMain {
 				Exam e = getExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
 				String code = rs.getString(16);
 				Date dateinitiated = rs.getDate(17);
-				HashMap<QuestionInExam,String> teacherQuestionsNotes = parseTeacherNotes(rs.getString(18),questions);
-				HashMap<QuestionInExam,Integer> studentsAnswers = parseStudentsAnswers(studentAnswers,questions);
+				HashMap<QuestionInExam,String> teacherQuestionsNotes = SolvedExam.parseTeacherNotes(rs.getString(18),questions);
+				HashMap<QuestionInExam,Integer> studentsAnswers = SolvedExam.parseStudentsAnswers(studentAnswers,questions);
 				SolvedExam solvedExam = new SolvedExam(
 						score, teacherApprove, studentsAnswers,
 						s, teacherNote, teacherQuestionsNotes,
@@ -761,14 +687,14 @@ public class DBMain {
 				prst.setInt(3, 0);
 			}
 
-			prst.setString(4, studentAnswersToString(se.getStudentsAnswers()));
+			prst.setString(4, SolvedExam.studentAnswersToString(se.getStudentsAnswers()));
 			prst.setInt(5, se.getStudent().getID());
 			prst.setInt(6, se.getCourse().getId());
 			prst.setInt(7, se.getField().getID());
 			prst.setString(8, se.getTeachersScoreChangeNote());
 			prst.setInt(9, se.getCompletedTimeInMinutes());
 			prst.setString(10, se.getCode());
-			prst.setString(11, teachersNotesToString(se.getQuestionNoteOnHash()));
+			prst.setString(11, SolvedExam.teachersNotesToString(se.getQuestionNoteOnHash()));
 			prst.setDate(13, se.getDate());
 			System.out.println("SQL:" + prst);
 			return prst.executeUpdate();
@@ -790,7 +716,7 @@ public class DBMain {
 				prst.setInt(2, 0);
 			}
 			prst.setString(3, se.getTeachersScoreChangeNote());
-			prst.setString(4, teachersNotesToString(se.getQuestionNoteOnHash()));
+			prst.setString(4, SolvedExam.teachersNotesToString(se.getQuestionNoteOnHash()));
 			prst.setInt(5, se.getStudent().getID());
 			prst.setInt(6, se.getExam().getID());
 			prst.setInt(7, se.getCourse().getId());
@@ -857,7 +783,7 @@ public class DBMain {
 			prst.setInt(12, eReport.getSubmittedStudents());
 			prst.setInt(13, eReport.getMedian());
 			prst.setInt(14, eReport.getAvg());
-			prst.setString(15, eReport.getDeviation());
+			prst.setString(15, ExamReport.convertDeviationToString(eReport.getDeviation()));
 			System.out.println("SQL:" + prst);
 			linesEfected = prst.executeUpdate();
 			for(SolvedExam se : eReport.getSolvedExams()) {
