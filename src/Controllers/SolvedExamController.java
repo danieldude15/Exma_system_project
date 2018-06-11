@@ -19,10 +19,14 @@ public class SolvedExamController {
 
 	/**
 	 * Send to server a request to pull the object solved exams from database.
-	 * @param 
+	 * 
+	 * @param u - is the user object of the student to get the 
+	 * students solved exams or teacher to get the teachers solved exams.
+	 * also possible to send an integer with the user id to get his solved exams
+	 * 
 	 * @return SolvedExam
 	 */
-	public static ArrayList<SolvedExam> getSolvedExams(Object u) {
+	public static ArrayList<SolvedExam> getSolvedExamsByUser(Object u) {
 		AESClient client = ClientGlobals.client;
 		iMessage msg;
 		if(client.isConnected()) {
@@ -30,8 +34,8 @@ public class SolvedExamController {
 				msg= new iMessage("getStudentsSolvedExams",(Student)u);
 			else if (u instanceof Teacher)
 				msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
-			else if (u instanceof String) {
-				msg = new iMessage("getSolvedExamsByID",(String) u );
+			else if (u instanceof Integer) {
+				msg = new iMessage("getSolvedExamsByID",(Integer) u );
 			} else return null;
 			try {
 				client.sendToServer(msg);

@@ -2,6 +2,7 @@ package logic;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -169,6 +170,63 @@ public class SolvedExam extends ActiveExam{
 	}
 	
 	
+	/**
+	 * This function will convert answers from database to objects by organizing them
+	 * For this to work the answers must be kept in the database in a cetain way
+	 * answers will appear as a long string and look like following:
+	 * q<questionId>a<answerIndex>q<questionId>a<answerIndex>q<questionId>a<answerIndex>/ ... 
+	 * before every answer there is the letter 'a'
+	 * also before every question there is the letter 'q'
+	 * @param string of answers kept in database in described matter
+	 * @param questions the arraylist of questionsInExam with their points assigned to them
+	 * @return an organized HashMap of questions in exam including the question and the students answer
+	 */
+	public static HashMap<QuestionInExam, Integer> parseStudentsAnswers(String string, ArrayList<QuestionInExam> questions) {
+		if (string==null || string.equals("")) return null;
+		HashMap<String, Integer> answers = new HashMap<>();
+		HashMap<QuestionInExam, Integer> result = new HashMap<>();
+		String[] temp = string.split("q");
+		String[] splitedAnswers = Arrays.copyOfRange(temp,1,temp.length);
+		for(String questionIDAndAnswer : splitedAnswers) {
+			String[] arr = questionIDAndAnswer.split("a");
+			answers.put(arr[0], Integer.parseInt(arr[1]));
+		}
+		for(QuestionInExam q: questions) {
+			result.put(q,answers.get(q.questionIDToString()));
+		}
+		return result;
+	}
 	
+	public static String studentAnswersToString(HashMap<QuestionInExam, Integer> studentsAnswers) {
+		String answers = "";
+		for (QuestionInExam qie : studentsAnswers.keySet()) {
+			answers = answers.concat("q"+qie.questionIDToString()+"a"+studentsAnswers.get(qie));
+		}
+		return answers;
+	}
+
+	public static HashMap<QuestionInExam,String> parseTeacherNotes(String string , ArrayList<QuestionInExam> questionsInExam) {
+		if (string==null || string.equals("")) return new HashMap<>();
+		HashMap<QuestionInExam, String> result = new HashMap<>();
+		HashMap<String, String> notes = new HashMap<>();
+		String[] temp = string.split("<QID>");
+		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
+		for(String questionNote : splitedNotes) {
+			String[] arr = questionNote.split("<TEACHER-NOTE>");
+			notes.put(arr[0], arr[1]);
+		}
+		for(QuestionInExam q: questionsInExam) {
+			result.put(q,notes.get(q.questionIDToString()));
+		}
+		return result;
+	}
+
+	public static String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
+		String allNotes = "";
+		for(QuestionInExam q: hashMap.keySet()) {
+			allNotes = allNotes.concat("<QID>"+q.questionIDToString()+"<TEACHER-NOTE>"+hashMap.get(q));
+		}
+		return allNotes;
+	}
 
 }
