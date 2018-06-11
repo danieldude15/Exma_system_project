@@ -769,7 +769,7 @@ public class AESServer extends AbstractServer {
 		 * Add solved exam to the list so we can generate all solved exams to report later, 
 		 * and remove the student from the CheckOut list which her purpose is to see if all students have submitted their exam.
 		 * @param obj
-		 * @throws IOException ä
+		 * @throws IOException 
 		 */
 		public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
 		{
@@ -778,10 +778,10 @@ public class AESServer extends AbstractServer {
 			SolvedExam solved=(SolvedExam) o[1];
 			Student student=(Student) o[2];
 			XWPFDocument doc=(XWPFDocument) o[3];
-			//studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
-			//studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
-			//if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
-				//GenerateActiveExamReport((ActiveExam)o[0]);
+			studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
+			studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
+			if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
+				GenerateActiveExamReport((ActiveExam)o[0]);
 			if(o[3]!=null)//If it was a manual exam we add it to the list of manual solved exam.
 				solvedExamWordFiles.put((SolvedExam)o[1], (XWPFDocument)o[3]);
 			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
