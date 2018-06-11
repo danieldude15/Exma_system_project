@@ -2,7 +2,11 @@ package logic;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+
+import javafx.beans.property.DoublePropertyBase;
 
 /**
  * This is the Completed Exam entity that hold information on exams that already been completed 
@@ -17,7 +21,7 @@ public class ExamReport extends ActiveExam {
 	 */
 	private static final long serialVersionUID = 4657010598883384610L;
 	/**
-	 * arraylist of all solved exams of this completed exam
+	 * ArrayList of all solved exams of this completed exam
 	 */
 	private ArrayList<SolvedExam> solvedExams = null;
 	/**
@@ -47,11 +51,7 @@ public class ExamReport extends ActiveExam {
 	/**
 	 * deviation value of the report for every 10 points in the solvedExams scores
 	 */
-	String deviation;
-	/**
-	 * the date the exam was initiated
-	 */
-	Date dateinitiated;
+	HashMap<Integer, Integer> deviation;
 	/**
 	 * the hashMap of all potential cheaters in this exam
 	 */
@@ -78,8 +78,9 @@ public class ExamReport extends ActiveExam {
 	 * @param m_cheatingStudents - the hashmap of cheaters found in this exam.
 	 */
 	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
-			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, Integer submittedStudents,
-			Integer notInTimeStudents, Date timeLocked, int median, int avg, String diviation, Date dateinitiated,
+			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
+			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
+			int median, int avg, HashMap<Integer, Integer> diviation,
 			HashMap<Student, Integer> m_cheatingStudents) {
 		super(code, type, dayActivated, e, activator);
 		this.solvedExams = solvedExams;
@@ -90,7 +91,6 @@ public class ExamReport extends ActiveExam {
 		this.median = median;
 		this.avg = avg;
 		this.deviation = diviation;
-		this.dateinitiated = dateinitiated;
 		this.m_cheatingStudents = m_cheatingStudents;
 	}
 	
@@ -112,8 +112,7 @@ public class ExamReport extends ActiveExam {
 	 */
 	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
 			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
-			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
-			Date dateinitiated) {
+			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked) {
 		super(code, type, dayActivated, e, activator);
 		this.solvedExams = solvedExams;
 		this.participatingStudent = participatingStudent;
@@ -123,7 +122,7 @@ public class ExamReport extends ActiveExam {
 		this.median = calcMedian(solvedExams);
 		this.avg = calcAvg(solvedExams);
 		this.deviation = calcDeviation(solvedExams);
-		this.dateinitiated = dateinitiated;
+
 		this.m_cheatingStudents = findCheaters(solvedExams);
 	}
 
@@ -135,18 +134,6 @@ public class ExamReport extends ActiveExam {
 		return solvedExams;
 	}
 
-	/**
-	 * overriding toString method
-	 */
-	@Override public String toString() {
-		String examType;
-		if (getType()==1) examType = "Computerized";
-		else examType = "Manual";
-		if (solvedExams.size()!=0)
-			return new String(String.format("Activated On: %s \nCode: %s \nID: %s \nType: %s", getDate(),getCode(),solvedExams.get(0).examIdToString() ,examType));
-		else 
-			return new String(String.format("Activated On: %s \nCode: %s \nID: N/A \nType: %s", getDate(),getCode(),examType));
-	}
 
 	public Integer getParticipatingStudent() {
 		return participatingStudent;
@@ -171,14 +158,7 @@ public class ExamReport extends ActiveExam {
 	public int getAvg() {
 		return avg;
 	}
-	
-	/**
-	 * getDateinitiated
-	 * @return the date of witch this exam initiated
-	 */
-	public Date getDateinitiated() {
-		return dateinitiated;
-	}
+
 	
 	/**
 	 * get all potential cheaters in this exam
@@ -193,11 +173,13 @@ public class ExamReport extends ActiveExam {
 		return notInTimeStudents;
 	}
 
+	
 	public Date getTimeLocked() {
 		return timeLocked;
 	}
 
-	public String getDeviation() {
+	
+	public HashMap<Integer, Integer> getDeviation() {
 		return deviation;
 	}
 
@@ -213,18 +195,92 @@ public class ExamReport extends ActiveExam {
 	
 
 	public static int calcMedian(ArrayList<SolvedExam> solvedExams2) {
-		// TODO Auto-generated method stub
-		return 0;
+		ArrayList<Integer> scores = new ArrayList<>();
+		for(SolvedExam se: solvedExams2) {
+			scores.add(se.getScore());
+		}
+		Collections.sort(scores);
+		if (scores.size()>0)
+			return scores.get(scores.size()/2);
+		else 
+			return 0;
 	}
 
 	public static int calcAvg(ArrayList<SolvedExam> solvedExams2) {
-		// TODO Auto-generated method stub
-		return 0;
+		int sum =0;
+		for(SolvedExam se: solvedExams2) {
+			sum+=se.getScore();
+		}
+		return sum/solvedExams2.size();
 	}
 
-	public static String calcDeviation(ArrayList<SolvedExam> solvedExams2) {
-		// TODO Auto-generated method stub
-		return null;
+	public static HashMap<Integer, Integer> calcDeviation(ArrayList<SolvedExam> solvedExams2) {
+		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
+		for(SolvedExam se: solvedExams2) {
+			int score = se.getScore();
+			if (score>90)
+				devValues[9]++;
+			else if (score>80)
+				devValues[8]++;
+			else if (score>70)
+				devValues[7]++;
+			else if (score>60)
+				devValues[6]++;
+			else if (score>50)
+				devValues[5]++;
+			else if (score>40)
+				devValues[4]++;
+			else if (score>30)
+				devValues[3]++;
+			else if (score>20)
+				devValues[2]++;
+			else if (score>10)
+				devValues[1]++;
+			else 
+				devValues[0]++;
+		}
+		HashMap<Integer, Integer> deviation = new HashMap<>();
+		for(int i=0; i<10 ;i++) {
+			deviation.put(i, devValues[i]);
+		}
+		return deviation;
 	}
 
+	public static HashMap<Integer, Integer> parseStringDeviation(String string) {
+		String[] devs = string.split("-");
+		HashMap<Integer, Integer> result = new HashMap<>();
+		if (devs.length!=10) 
+			return null;
+		for(int i=0;i<10;i++) {
+			result.put(i, Integer.parseInt(devs[i]));
+		}
+		return result;
+	}
+
+	public static String convertDeviationToString(HashMap<Integer, Integer> deviation2) {
+		String result = "";
+		if(deviation2.size()!=10)
+			return "0-0-0-0-0-0-0-0-0-0";
+		for(int i=0;i<10;i++) {
+			result= result + "" + deviation2.get(i);
+			if (i!=9)
+				result+= "-";
+		}
+		return result;
+	}
+	
+	/**
+	 * overriding toString method
+	 */
+	@Override public String toString() {
+		String examType;
+		if (getType()==1) examType = "Computerized";
+		else examType = "Manual";
+		if (solvedExams.size()!=0)
+			return new String(String.format("Activated On: %s \nCode: %s \nID: %s \nType: %s", getDate(),getCode(),solvedExams.get(0).examIdToString() ,examType));
+		else 
+			return new String(String.format("Activated On: %s \nCode: %s \nID: N/A \nType: %s", getDate(),getCode(),examType));
+	}
+
+	
 }

@@ -3,6 +3,8 @@ package Controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -17,10 +19,14 @@ public class SolvedExamController {
 
 	/**
 	 * Send to server a request to pull the object solved exams from database.
-	 * @param 
+	 * 
+	 * @param u - is the user object of the student to get the 
+	 * students solved exams or teacher to get the teachers solved exams.
+	 * also possible to send an integer with the user id to get his solved exams
+	 * 
 	 * @return SolvedExam
 	 */
-	public static ArrayList<SolvedExam> getSolvedExams(Object u) {
+	public static ArrayList<SolvedExam> getSolvedExamsByUser(Object u) {
 		AESClient client = ClientGlobals.client;
 		iMessage msg;
 		if(client.isConnected()) {
@@ -28,8 +34,8 @@ public class SolvedExamController {
 				msg= new iMessage("getStudentsSolvedExams",(Student)u);
 			else if (u instanceof Teacher)
 				msg= new iMessage("getTeacherSolvedExams",(Teacher)u);
-			else if (u instanceof String) {
-				msg = new iMessage("getSolvedExamsByID",(String) u );
+			else if (u instanceof Integer) {
+				msg = new iMessage("getSolvedExamsByID",(Integer) u );
 			} else return null;
 			try {
 				client.sendToServer(msg);
@@ -71,15 +77,24 @@ public class SolvedExamController {
 		return 0;
 	}
 	
-	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam)
+	/**
+	 * Send message to the server when the student finished his exam.
+	 * @param activeExam
+	 * @param solvedExam
+	 * @param s
+	 */
+	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam,Student s,XWPFDocument doc)
 	{
-		Object[] o=new Object[2];
+		Object[] o=new Object[4];
 		o[0]=(ActiveExam)activeExam;
 		o[1]=(SolvedExam)solvedExam;
+		o[2]=(Student)s;
+		o[3]=(XWPFDocument)doc;
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				client.sendToServer(new iMessage("FinishedSolvedExam",o));
+				client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

@@ -84,7 +84,7 @@ public class StudentMainFrame implements ControlledScreen{
 		solvedExamsList.getItems().clear();
 		
 		//Get all student solved exams from database and set it to the ListView field on window
-		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
+		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		
 		if(mySolvedExam!=null)//If student has already did at least one exam.
 			{
@@ -146,7 +146,7 @@ public class StudentMainFrame implements ControlledScreen{
 	public void ViewExamButtonPressed(ActionEvent event)
 	{
 		Alert alert;
-		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
+		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		//if student choose course solved exam to view from list.
 		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null &&
