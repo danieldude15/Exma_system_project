@@ -8,80 +8,83 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherActivateExamFrame">
    <children>
-      <HBox prefHeight="32.0" prefWidth="540.0">
+      <HBox prefHeight="21.0" prefWidth="540.0">
          <children>
-            <Label text="Active Exam">
+            <Label prefHeight="20.0" prefWidth="102.0" text="Active Exam">
                <font>
                   <Font size="18.0" />
                </font>
                <HBox.margin>
-                  <Insets right="30.0" />
+                  <Insets />
                </HBox.margin>
             </Label>
-            <TextFlow prefHeight="21.0" prefWidth="200.0" />
          </children>
-         <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="40.0" />
-         </padding>
       </HBox>
-      <VBox prefHeight="146.0" prefWidth="540.0">
+      <HBox alignment="CENTER" prefHeight="27.0" prefWidth="521.0">
          <children>
-            <HBox prefHeight="103.0" prefWidth="540.0">
+            <Label fx:id="ExamId" prefHeight="17.0" prefWidth="162.0" text="Exam id:">
+               <HBox.margin>
+                  <Insets right="50.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="Durationid" prefHeight="17.0" prefWidth="162.0" text="Duration:" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="22.0" prefWidth="540.0">
+         <children>
+            <Label fx:id="Field" prefHeight="17.0" prefWidth="162.0" text="Field:">
+               <HBox.margin>
+                  <Insets right="50.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="CourseId" prefHeight="17.0" prefWidth="162.0" text="Course:" />
+         </children>
+      </HBox>
+      <VBox alignment="CENTER" prefHeight="222.0" prefWidth="540.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="66.0" prefWidth="540.0">
                <children>
-                  <Label text="Exam code ">
+                  <Label text="Exam code:">
                      <font>
                         <Font size="14.0" />
                      </font>
                      <HBox.margin>
-                        <Insets right="30.0" />
+                        <Insets right="50.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField />
+                  <TextField fx:id="Examcode" />
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
-               </padding>
                <VBox.margin>
-                  <Insets bottom="20.0" />
+                  <Insets top="20.0" />
                </VBox.margin>
             </HBox>
-            <HBox prefHeight="177.0" prefWidth="540.0">
+            <HBox alignment="CENTER" prefHeight="55.0" prefWidth="540.0">
                <children>
-                  <RadioButton mnemonicParsing="false" text="Computerized Exam">
+                  <RadioButton fx:id="ComputerizedExamId" mnemonicParsing="false" prefHeight="17.0" prefWidth="132.0" text="Computerized Exam">
                      <HBox.margin>
-                        <Insets right="20.0" />
+                        <Insets right="100.0" />
                      </HBox.margin>
                   </RadioButton>
-                  <RadioButton mnemonicParsing="false" text="Monual Exam" />
+                  <RadioButton fx:id="MonualExamId" mnemonicParsing="false" prefHeight="14.0" prefWidth="96.0" text="Monual Exam" />
                </children>
                <VBox.margin>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="10.0" />
+                  <Insets bottom="10.0" top="10.0" />
                </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="100.0" right="100.0" top="10.0" />
-               </padding>
             </HBox>
          </children>
       </VBox>
-      <HBox prefHeight="44.0" prefWidth="540.0">
+      <HBox alignment="CENTER" prefHeight="41.0" prefWidth="540.0">
          <children>
-            <Button mnemonicParsing="false" text="Cancel">
+            <Button fx:id="Cancel" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel">
                <HBox.margin>
-                  <Insets right="100.0" />
+                  <Insets right="200.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Active" />
+            <Button fx:id="Active" mnemonicParsing="false" onAction="#ActiveButtonPressed" text="Active" />
          </children>
-         <padding>
-            <Insets left="150.0" right="150.0" top="20.0" />
-         </padding>
       </HBox>
    </children>
    <padding>
