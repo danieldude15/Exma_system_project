@@ -46,6 +46,9 @@ public class ClientGlobals {
 	public static final String PrincipalViewDataID = "PrincipalViewData";
 	public static final String PrincipalViewDataPath = "/resources/fxml/PrincipalViewData.fxml";
 
+	public static final String PrincipalViewQuestionID = "PrincipalViewQuestion";
+	public static final String PrincipalViewQuestionPath ="/resources/fxml/PrincipalViewQuestion.fxml";
+
 	/*		Principal Screens End		*/
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";

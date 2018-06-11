@@ -4,16 +4,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewDataFrame">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewDataFrame">
    <children>
       <TabPane fx:id="m_dataTabPane" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="572.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <tabs>
-            <Tab fx:id="m_studentsTab" text="Students">
+            <Tab fx:id="m_studentsTab" onSelectionChanged="#onStudentsTabSelection" text="Students">
                <content>
                   <ListView fx:id="m_studentsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab fx:id="m_teachersTab" text="Teachers">
+            <Tab fx:id="m_teachersTab" onSelectionChanged="#onTeachersTabSelection" text="Teachers">
                <content>
                   <ListView fx:id="m_teachersList" prefHeight="200.0" prefWidth="200.0" />
                </content>
@@ -23,17 +23,17 @@
                   <ListView fx:id="m_questionsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab fx:id="m_examsTab" text="Exams">
+            <Tab fx:id="m_examsTab" onSelectionChanged="#onExamsTabSelection" text="Exams">
                <content>
                   <ListView fx:id="m_examsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab fx:id="m_fieldsTab" text="Fields">
+            <Tab fx:id="m_fieldsTab" onSelectionChanged="#onFieldsTabSelection" text="Fields">
                <content>
                   <ListView fx:id="m_fieldsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab fx:id="m_coursesTab" text="Courses">
+            <Tab fx:id="m_coursesTab" onSelectionChanged="#onCoursesTabSelection" text="Courses">
                <content>
                   <ListView fx:id="m_coursesList" prefHeight="200.0" prefWidth="200.0" />
                </content>
@@ -48,8 +48,8 @@
             <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </Label>
-      <TextField fx:id="m_searchBox" layoutX="14.0" layoutY="361.0" onMouseClicked="#onTextBoxMouseClick" text="Enter ID Here" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-      <Button fx:id="m_searchBtn" layoutX="215.0" layoutY="355.0" mnemonicParsing="false" onAction="#searchForID" prefHeight="31.0" prefWidth="101.0" text="View Data" AnchorPane.bottomAnchor="14.0" />
+      <TextField fx:id="m_searchBox" layoutX="14.0" layoutY="361.0" onMouseClicked="#onTextBoxMouseClick" promptText="Enter ID Here" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+      <Button fx:id="m_searchBtn" layoutX="215.0" layoutY="355.0" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="31.0" prefWidth="101.0" text="View Data" AnchorPane.bottomAnchor="14.0" />
       <Button fx:id="m_backtoMainBtn" layoutX="272.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToMainMenu" text="Back to Main Menu" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>
