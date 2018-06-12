@@ -2,7 +2,7 @@ package GUI;
 
 import java.net.URL;
 import java.util.ArrayList;
-
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
@@ -18,12 +18,13 @@ import javafx.fxml.Initializable;
 
 import logic.*;
 import ocsf.client.ClientGlobals;
-
-
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 
 
 
@@ -41,7 +42,7 @@ public class InitializeExam implements Initializable, ControlledScreen {
 	@FXML Button Cancel;
 	@FXML Button viewid;
 	@FXML Button activeid;
-	Object exam;
+	Exam exam;
 	ArrayList<Exam> DBexam;
 	Course publicCourse;
 	Field publicField;
@@ -101,27 +102,22 @@ public class InitializeExam implements Initializable, ControlledScreen {
     
 	@FXML
     public void MyViewHandler (ActionEvent event) {
-        	Object exam= examsList.getSelectionModel().getSelectedItem();
-           ((TeacherViewExam)Globals.mainContainer.getController(ClientGlobals.TeacherViewExamID)).setExam((Exam)exam);
+		   ((TeacherViewExam)Globals.mainContainer.getController(ClientGlobals.TeacherViewExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
            Globals.mainContainer.setScreen(ClientGlobals.TeacherViewExamID);
-        }
+		}        
    
 	@FXML
     public void MyActiveHandler(ActionEvent event) {
-              ((TeacherActivateExamFrame)Globals.mainContainer.getController(ClientGlobals.ActiveExamID)).setExam((Exam)exam);
+				
+              ((TeacherActivateExamFrame)Globals.mainContainer.getController(ClientGlobals.ActiveExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
                Globals.mainContainer.setScreen(ClientGlobals.ActiveExamID);
-        	}
+			 	}
 		
 	@FXML
     public void CancelButtonPressed(ActionEvent event)
 		    {
 		     Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 		    }
-	@FXML
-    public void PressedOnListExam(ActionEvent event)
-		    {
-		exam= examsList.getSelectionModel().getSelectedItem();
-		    }
-	
+
 	}
 

@@ -1,15 +1,29 @@
 package SQLTools;
 
-import com.mysql.jdbc.Statement;
-import logic.*;
-import ocsf.server.ServerGlobals;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
-import org.omg.CORBA.PRIVATE_MEMBER;
+import com.mysql.jdbc.Statement;
+
+import logic.Course;
+import logic.Exam;
+import logic.ExamReport;
+import logic.Field;
+import logic.Globals;
+import logic.Principle;
+import logic.Question;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
+import ocsf.server.ServerGlobals;
 
 
 public class DBMain {
@@ -22,7 +36,10 @@ public class DBMain {
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
 			+ "WHERE tf.fieldid=f.fieldid and tf.teacherid=?");
-
+	private String getStudentsInCourse = new String(""
+			+ "SELECT * " + 
+			"FROM aes.student_in_course as sic, aes.users as u " + 
+			"WHERE sic.studentid=u.userid and u.usertype=0 and sic.fieldid=? and sic.courseid=?");
 	private String getField = new String(""
 			+ "SELECT * from fields where fieldid=?");
 	private String deleteExamReport = new String(""
@@ -137,14 +154,8 @@ public class DBMain {
 			+ "INSERT INTO `aes`.`questions_in_exam` "
 			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
 			+ "VALUES (?,?,?,?,?,?,?)");
-	private String getQuestionsInCourse = new String(""
-			+ "Select * FROM aes.questions as q, aes.questions_in_course as qc,aes.courses as c,aes.users as u"
-			+ " where c.courseid=qc.courseid and q.questionid=qc.questionid and u.userid=q.teacherid and c.fieldid=q.fieldid and c.courseid=?");
 	private String getAllQuestions = new String(""
 			+ "Select * FROM aes.questions ");
-	private String FieldCourses=new String(""
-			+"Select c.courseid,c.coursename"+" FROM aes.courses as c,aes.fields as f "
-			+ " where  c.fieldid=f.fieldid and f.fieldid=?");	
 	private String login = new String(""
 			+ "SELECT * FROM aes.users WHERE username=?");
 	private String getUserThroughID = new String(""
@@ -283,8 +294,27 @@ public class DBMain {
 
 
 	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
-		return null;
-		// TODO Auto-generated method stub		
+		try {
+			PreparedStatement prst = conn.prepareStatement(getStudentsInCourse);
+			prst.setInt(2,course.getId());
+			prst.setInt(1, course.getField().getID());
+			System.out.println("SQL:"+prst);
+			ArrayList<Student> result = new ArrayList<>();
+			if (prst.execute()) {
+				ResultSet rs = prst.getResultSet();
+				while (rs.next()) {
+					int userid = rs.getInt(1);
+					String username = rs.getString(2);
+					String password = rs.getString(3);
+					String fullname = rs.getString(4);
+					result.add(new Student(userid,username,password,fullname));
+				}
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;	
 	}
 	
 	// ######################### COURSE FIELD HANDELING  ####################################
@@ -345,7 +375,7 @@ public class DBMain {
 	 * @param fieldID - the ID of the required field
 	 * @return the name of the field as String
 	 */
-	public String getField(int fieldID){
+	public String getFieldName(int fieldID){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getField);
 			prst.setInt(1,fieldID);
@@ -480,7 +510,7 @@ public class DBMain {
 		return null;
 	}
 
-	private Exam getExam(String examIdString) {
+	public Exam getExam(String examIdString) {
 		try {
 			int[] examid = Exam.parseId(examIdString);
 			PreparedStatement prst = conn.prepareStatement(getExam);
@@ -537,7 +567,6 @@ public class DBMain {
 				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),rs.getInt(2)));
 				Exam e = getExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
 				String code = rs.getString(16);
-				String date = rs.getString(17);
 				HashMap<QuestionInExam,String> teacherQuestionsNotes = SolvedExam.parseTeacherNotes(rs.getString(18),questions);
 				HashMap<QuestionInExam,Integer> studentsAnswers = SolvedExam.parseStudentsAnswers(studentAnswers,questions);
 				SolvedExam solvedExam = new SolvedExam(
@@ -841,7 +870,7 @@ public class DBMain {
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
 				String teacherId = rs.getString(9);
-				Question question = new Question(questionid,(Teacher)getUser(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getField(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
+				Question question = new Question(questionid,(Teacher)getUser(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getFieldName(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
 			return result;
@@ -1069,6 +1098,7 @@ public class DBMain {
 		}		
 		return 0;
 	}
+
 
 }
 
