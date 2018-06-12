@@ -223,6 +223,7 @@ public class SolvedExam extends ActiveExam{
 
 	public static String teachersNotesToString(HashMap<QuestionInExam, String> hashMap) {
 		String allNotes = "";
+		if (hashMap==null) return allNotes;
 		for(QuestionInExam q: hashMap.keySet()) {
 			allNotes = allNotes.concat("<QID>"+q.questionIDToString()+"<TEACHER-NOTE>"+hashMap.get(q));
 		}
