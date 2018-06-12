@@ -1,14 +1,14 @@
 package Controllers;
 
 import logic.ActiveExam;
+import logic.AesWordDoc;
 import logic.Student;
 import logic.Teacher;
 import logic.TimeChangeRequest;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
+import logic.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -98,14 +98,14 @@ public class ActiveExamController {
 	}
 	
 	
-	public static XWPFDocument GetManualExam(ActiveExam activeExam)
+	public static AesWordDoc GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				return (XWPFDocument) client.getResponseFromServer().getObj();
+				return (AesWordDoc) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
