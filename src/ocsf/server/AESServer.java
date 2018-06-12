@@ -1,7 +1,11 @@
 package ocsf.server;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -768,7 +772,6 @@ public class AESServer extends AbstractServer {
 		 */
 		private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
 			wordFiles.put(active, doc);
-			System.out.println("b");
 		}
 		
 		/**
@@ -781,10 +784,17 @@ public class AESServer extends AbstractServer {
 			// TODO Auto-generated method stub
 			//System.out.print(wordFiles.containsKey((String)o));
 			iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
-			System.out.println("sdfds");
+			//System.out.println("sdfds");
 			client.sendToClient(im);
 			
+			
+			
+			/*FileOutputStream out = new FileOutputStream(new File("manual"));
+			wordFiles.get((ActiveExam)o).write(out);
+			out.close();/*/
+			
 		
+			
 		}
 
 		private boolean isInActiveExam(Student s,ActiveExam ae) {

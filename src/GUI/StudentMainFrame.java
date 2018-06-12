@@ -86,7 +86,7 @@ public class StudentMainFrame implements ControlledScreen{
 		//Get all student solved exams from database and set it to the ListView field on window
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		
-		if(mySolvedExam!=null)//If student has already did at least one exam.
+		if(!(mySolvedExam.isEmpty()))//If student has already did at least one exam.
 			{
 			//solvedExamsList.getItems().add("All");
 			for (SolvedExam s:mySolvedExam)//Add all student's solved exams to the ListView. 
