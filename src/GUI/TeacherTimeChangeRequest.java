@@ -1,15 +1,20 @@
 package GUI;
 
 import java.net.URL;
+import java.sql.Time;
 import java.util.ResourceBundle;
 
+import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import logic.ActiveExam;
 import logic.Globals;
+import logic.Teacher;
+import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
 public class TeacherTimeChangeRequest implements Initializable, ControlledScreen{
@@ -18,6 +23,8 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 	@FXML TextField RequestExplenation;
 	@FXML Label Errortime;
 	@FXML Label Errorrequest;
+	ActiveExam activeexamselect;
+	
 	@Override
 	public void runOnScreenChange() 
 	{
@@ -41,20 +48,28 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 		if(SelectNewTime.getText().isEmpty()) {
 			Errortime.setVisible(true);
 		}
-	    if(RequestExplenation.getText().isEmpty())
+		else if(RequestExplenation.getText().isEmpty())
 		{
 			 Errorrequest.setVisible(true);
 		}
 	    else
-		{
-			//create time change request
-		}
+	    {
+	    	TimeChangeRequest tc=new TimeChangeRequest((Long.valueOf(SelectNewTime.getText())),RequestExplenation.getText(),false,activeexamselect,(Teacher) ClientGlobals.client.getUser());
+	    	System.out.println(tc);
+	    	ActiveExamController.requestNewTimeChangeForActiveExam(tc);
+	    	Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+	    }
 	}
 
 	@FXML
 	public void CancelButtonPressed(ActionEvent event)
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+	}
+
+	public void SetActiveExam(ActiveExam selectedItem) {
+		activeexamselect=selectedItem;
+		
 	}
 
 

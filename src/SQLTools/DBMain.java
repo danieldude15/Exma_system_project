@@ -707,7 +707,10 @@ public class DBMain {
 	public Integer InsertSolvedExam(SolvedExam se) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addSolvedExam,Statement.RETURN_GENERATED_KEYS);
-			//(`examid`, `score`, `teacherapproved`, `answers`, `examreportid`, `studentid`, `courseid`, `fieldid`, `teacherschangescorenote`, `minutescompleted`, `code`, `teacherquestionnote`)
+			//`examid`, `score`, `teacherapproved`, 
+			//`answers`, `studentid`, `courseid`, 
+			//`fieldid`, `teacherschangescorenote`, `minutescompleted`, 
+			//`code`, `teacherquestionnote`,`dateinitiated`
 			prst.setInt(1, se.getExam().getID());
 			prst.setInt(2, se.getScore());
 			if (se.isTeacherApproved()) {
@@ -724,7 +727,7 @@ public class DBMain {
 			prst.setInt(9, se.getCompletedTimeInMinutes());
 			prst.setString(10, se.getCode());
 			prst.setString(11, SolvedExam.teachersNotesToString(se.getQuestionNoteOnHash()));
-			prst.setDate(13, se.getDate());
+			prst.setDate(12, se.getDate());
 			System.out.println("SQL:" + prst);
 			return prst.executeUpdate();
 		} catch (Exception e) {

@@ -54,7 +54,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.primaryStage.setHeight(680);
 		Globals.primaryStage.setWidth(820);
 
-	//	updateCompletedExamListView();
+		updateCompletedExamListView();
 		
 		updateActiveExamListView();
 		
@@ -97,10 +97,15 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
     		alert.show();
 		}
 		updateActiveExamListView();
+		updateCompletedExamListView();
+		
 	}
 	
 	@FXML public void requestTimeChangeClicked(ActionEvent event) {
+		if(ActiveExamsList.getSelectionModel().getSelectedItem()!=null)
+		{ ((TeacherTimeChangeRequest)Globals.mainContainer.getController(ClientGlobals.TeacherTimeChangeRequestID)).SetActiveExam((ActiveExam) ActiveExamsList.getSelectionModel().getSelectedItem());
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
+		}
 	}
 	
 	@FXML public void goToGenerateReportClicked(ActionEvent event) {
@@ -141,12 +146,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.setItems(list2);
 	}
 	
-/*/	private void updateCompletedExamListView() {
+	private void updateCompletedExamListView() {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		CompletedExamList.getItems().clear();
 		ObservableList<ExamReport> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 		
 	}
-	/*/
+	
 }
