@@ -2,16 +2,21 @@ package ocsf.server;
 
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import SQLTools.DBMain;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
 import logic.ActiveExam;
 import logic.AesWordDoc;
 import logic.Course;
@@ -28,7 +33,7 @@ import logic.Teacher;
 import logic.TimeChangeRequest;
 import logic.User;
 import logic.iMessage;
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class AESServer extends AbstractServer {
 	
 	
@@ -62,6 +67,10 @@ public class AESServer extends AbstractServer {
 	private static HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
+	
+	private HashMap<ActiveExam, Long> examTimes;
+	
+	private HashMap<ActiveExam, Timeline> examTimelines;
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
@@ -72,24 +81,24 @@ public class AESServer extends AbstractServer {
 		studentsCheckOutFromActiveExam=new HashMap<ActiveExam,ArrayList<Student>>();
 		wordFiles=new HashMap<ActiveExam,AesWordDoc>();
 		studentsSolvedExams = new HashMap<>();
-
 		timeChangeRequests= new HashMap<>();
 		solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();
-		
+		examTimes = new HashMap<>();
+		examTimelines = new HashMap<>();
 
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
 		ActiveExam tibisExam = new ActiveExam("ac12", 1, new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("010101"),teacher);
+				sqlcon.getExam("040101"),teacher);
 		InitializeActiveExams(tibisExam);
 		
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030101"),teacher);
+		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
 		
 		/*Create document/*/
@@ -373,26 +382,47 @@ public class AESServer extends AbstractServer {
 	 * Get an active exam and remove it from active exams Hashmap.
 	 * @param ae
 	 */
-	public int lockActiveExam(ActiveExam ae)
+
+	public void lockActiveExam(ActiveExam ae)
 	{
 		iMessage msg = new iMessage("ExamLocked", ae);
-		int counter=0;
 		for(Student s: studentsInExam.get(ae)) {
 			Student student = new Student(0, s.getUserName(), s.getPassword(), null);
 			try {
 				if (connectedUsers.get(student)!=null) {
 					connectedUsers.get(student).sendToClient(msg);
-					counter++;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				return counter;
 			}
 		}
-		GenerateActiveExamReport(ae);
-		return counter;
+		//telling the server to wait 7 seconds for all students to send their solved exam to the server
+		setActiveExamTimeline(ae,null);
 	}
 	
+	private void setActiveExamTimeline(ActiveExam ae, TimeChangeRequest tcr) {
+		Long examTime = (long) ae.getDuration();
+		if(tcr!=null) {
+			examTimelines.get(ae).stop();
+			examTimelines.remove(ae);
+			examTime = tcr.getNewTime()-(((new Date(new java.util.Date().getTime()).getTime()-ae.getDate().getTime()))/60000);
+		}
+		Timeline timeline = new Timeline();
+		examTimelines.put(ae, timeline);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(examTime),
+                  new EventHandler() {
+                    // KeyFrame event handler
+                    public void handle(Event event) {
+                            timeline.stop();
+                            lockActiveExam(ae);
+                    }
+                  }));
+        timeline.playFromStart();
+		
+	}
+
 	/**
 	 * return all available active exams.
 	 * @param client
@@ -433,8 +463,8 @@ public class AESServer extends AbstractServer {
 	}
 	
 	private void lockActiveExams(ConnectionToClient client, Object o) throws IOException {
-		int kickedStudents = lockActiveExam((ActiveExam) o);
-		client.sendToClient(new iMessage("lockedExam", new Integer(kickedStudents)));
+		lockActiveExam((ActiveExam) o);
+		client.sendToClient(new iMessage("lockedExam", null));
 	}
 	
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
@@ -630,8 +660,19 @@ public class AESServer extends AbstractServer {
 		studentsInExam.put(ae, new ArrayList<Student>());	
 		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
-		ArrayList<Student> allStudentsInCourse=sqlcon.GetAllStudentsInCourse(ae.getCourse());
-		studentsCheckOutFromActiveExam.put(ae, allStudentsInCourse);
+		studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
+		Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(ae.getDuration()*60),
+                  new EventHandler() {
+                    // KeyFrame event handler
+                    public void handle(Event event) {
+                            timeline.stop();
+                            lockActiveExam(ae);
+                    }
+                  }));
+        timeline.playFromStart();
 	}
 	
 	/**

@@ -273,13 +273,7 @@ public class ExamReport extends ActiveExam {
 	 * overriding toString method
 	 */
 	@Override public String toString() {
-		String examType;
-		if (getType()==1) examType = "Computerized";
-		else examType = "Manual";
-		if (solvedExams.size()!=0)
-			return new String(String.format("Activated On: %s \nCode: %s \nID: %s \nType: %s", getDate(),getCode(),solvedExams.get(0).examIdToString() ,examType));
-		else 
-			return new String(String.format("Activated On: %s \nCode: %s \nID: N/A \nType: %s", getDate(),getCode(),examType));
+		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %d", getCourse().getName(),getDate(),getAvg()));
 	}
 
 	
