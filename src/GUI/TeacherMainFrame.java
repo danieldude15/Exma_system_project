@@ -100,7 +100,10 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void requestTimeChangeClicked(ActionEvent event) {
+		if(ActiveExamsList.getSelectionModel().getSelectedItem()!=null)
+		{ ((TeacherTimeChangeRequest)Globals.mainContainer.getController(ClientGlobals.TeacherTimeChangeRequestID)).SetActiveExam((ActiveExam) ActiveExamsList.getSelectionModel().getSelectedItem());
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
+		}
 	}
 	
 	@FXML public void goToGenerateReportClicked(ActionEvent event) {
