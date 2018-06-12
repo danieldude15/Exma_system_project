@@ -14,14 +14,11 @@ public class TimeChangeRequest implements Serializable{
 	 * Serializable id give for client server communication
 	 */
 	private static final long serialVersionUID = -1250807178967814960L;
-	/**
-	 * Time change request ID
-	 */
-	private int id;
+
 	/**
 	 * the New Time requested by the teacher to override the exam duration time
 	 */
-	private Time newTime;
+	private Long newTime;
 	/**
 	 * a String explaining why a time change is necessary to justify to the principle the request
 	 */
@@ -48,9 +45,8 @@ public class TimeChangeRequest implements Serializable{
 	 * @param activeExam - the ActiveExan to change the time to
 	 * @param t - the teacher repsonsible for the time change
 	 */
-	public TimeChangeRequest(int id,Time newTime,String reason,boolean status,ActiveExam activeExam,Teacher t)
+	public TimeChangeRequest(Long newTime,String reason,boolean status,ActiveExam activeExam,Teacher t)
 	{
-		this.id=id;
 		this.newTime=newTime;
 		this.reasonForTimeChange=reason;
 		this.status=status;
@@ -64,7 +60,7 @@ public class TimeChangeRequest implements Serializable{
 	 */
 	public TimeChangeRequest(TimeChangeRequest t)/*Copy constructor/*/
 	{
-		id=t.id;
+		
 		newTime=t.newTime;
 		reasonForTimeChange=new String(t.reasonForTimeChange);
 		status=t.status;
@@ -72,19 +68,13 @@ public class TimeChangeRequest implements Serializable{
 		teacher=new Teacher(t.teacher);
 	}
 	
-	/**
-	 * 
-	 * @return the id of the request
-	 */
-	public int getId() {
-		return this.id;
-	}
+
 	
 	/**
 	 * 
 	 * @return the new time request value
 	 */
-	public Time getNewTime() {
+	public Long getNewTime() {
 		return this.newTime;
 	}
 	
@@ -118,5 +108,8 @@ public class TimeChangeRequest implements Serializable{
 	public Teacher getTeacher()
 	{
 		return this.teacher;
+	}
+	@Override public String toString() {
+		return new String(String.format( "ExamID: %s\nDuration: %d\nAutherName: %s\n ",getActiveExam().examIdToString(),getActiveExam().getDuration(),getActiveExam().getActivator().getName()));
 	}
 }

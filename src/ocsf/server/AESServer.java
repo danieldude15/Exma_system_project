@@ -72,7 +72,7 @@ public class AESServer extends AbstractServer {
 		wordFiles=new HashMap<ActiveExam,XWPFDocument>();
 		studentsSolvedExams = new HashMap<>();
 		solvedExamWordFiles=new HashMap<SolvedExam,XWPFDocument>();
-		
+		timeChangeRequests= new HashMap<>();
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
