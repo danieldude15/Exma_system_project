@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
@@ -34,15 +33,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import logic.ActiveExam;
-import logic.Course;
-import logic.Exam;
-import logic.Globals;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.TimeChangeRequest;
+import logic.*;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
@@ -63,6 +54,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	boolean activeExamIsLocked=false; 
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
+	
 	
 	
 	@Override
@@ -198,7 +190,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	public void StudentPressedDownloadButton(ActionEvent event) throws IOException
 	{
-		/*XWPFDocument doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
+		/*AesWordDoc doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
 		FileOutputStream out= new FileOutputStream("ManualExam.docx");
 		doc.write(out);
 		out.close();/*/
@@ -207,7 +199,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		/*
 		//Create document
-		XWPFDocument doc=new XWPFDocument();
+		AesWordDoc doc=new AesWordDoc();
 		
 		//Create title paragraph
 		XWPFParagraph titleParagraph=doc.createParagraph();
@@ -260,7 +252,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 /*/
 		
 
-		XWPFDocument doc=ActiveExamController.GetManualExam(activeExam);
+		
+		
+		AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
 		
 		FileChooser saveWindow = new FileChooser();
 		saveWindow.setTitle("Save exam");
@@ -274,9 +268,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
              SaveFile(file, doc);
          
          
- 	
  		
-
 		
          
 	}
@@ -287,7 +279,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @param doc
 	 * @throws IOException
 	 */
-	 private void SaveFile(File file, XWPFDocument doc) throws IOException{
+	 private void SaveFile(File file, AesWordDoc doc) throws IOException{
 
             OutputStream outputStream = new FileOutputStream(file);
             doc.write(outputStream);
@@ -378,11 +370,12 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		{
 			for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
 			{
-				r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-				if(r.getText()==null)//Student didn't choose any answer.
+				if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
 					studentAnswers.put(qie,0);
+					
 				else//Student choose answer.
 				{
+					r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
 					for(int i=1;i<5;i++)//Runs all over question's answers.
 					{
 						if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
@@ -430,7 +423,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		{
 			if(activeExam.getType()==0)//Exam is manual
 			{
-				XWPFDocument doc=ImportWordFile();
+				AesWordDoc doc=ImportWordFile();
 				
 				/*Send message to the server to add solved exam to the list,
 				so we can generate a report from all solved exams when the active exam will be lock.
@@ -458,15 +451,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 /**
  * When the student pressed on submit button and the exam is manual,he has to upload his exam back to the system.
  */
-	private XWPFDocument ImportWordFile() {
+	private AesWordDoc ImportWordFile() {
 		// TODO Auto-generated method stub
-		XWPFDocument doc;
+		AesWordDoc doc;
  		FileChooser Uploadwindow=new FileChooser();
  		Uploadwindow.setTitle("Upload your exam");
  		File file=Uploadwindow.showOpenDialog(Globals.primaryStage);
  		if(file!=null)
  			try {
- 				doc=new XWPFDocument(new FileInputStream(file)) ;
+ 				doc=new AesWordDoc(new FileInputStream(file)) ;
  				return doc;
  				
  				//XWPFWordExtractor extract=new XWPFWordExtractor(document);

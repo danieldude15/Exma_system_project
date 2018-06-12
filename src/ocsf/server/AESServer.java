@@ -1,18 +1,19 @@
 package ocsf.server;
 
+
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import SQLTools.DBMain;
 import logic.ActiveExam;
+import logic.AesWordDoc;
 import logic.Course;
 import logic.Exam;
 import logic.ExamReport;
@@ -56,9 +57,9 @@ public class AESServer extends AbstractServer {
 	/**
 	 * HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
 	 */
-	static HashMap<ActiveExam,XWPFDocument> wordFiles;
+	private static HashMap<ActiveExam,AesWordDoc> wordFiles;
 	
-	private HashMap<SolvedExam,XWPFDocument> solvedExamWordFiles;
+	private static HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 
@@ -69,10 +70,13 @@ public class AESServer extends AbstractServer {
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
 		studentsCheckOutFromActiveExam=new HashMap<ActiveExam,ArrayList<Student>>();
-		wordFiles=new HashMap<ActiveExam,XWPFDocument>();
+		wordFiles=new HashMap<ActiveExam,AesWordDoc>();
 		studentsSolvedExams = new HashMap<>();
-		solvedExamWordFiles=new HashMap<SolvedExam,XWPFDocument>();
+
 		timeChangeRequests= new HashMap<>();
+		solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();
+		
+
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
@@ -88,8 +92,8 @@ public class AESServer extends AbstractServer {
 		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030101"),teacher);
 		InitializeActiveExams(nivsExam);
 		
-		
-		XWPFDocument doc=new XWPFDocument();
+		/*Create document/*/
+		AesWordDoc doc=new AesWordDoc();
 		
 		/*Create title paragraph/*/
 		XWPFParagraph titleParagraph=doc.createParagraph();
@@ -141,6 +145,7 @@ public class AESServer extends AbstractServer {
 		runOnGoodLuckParagraph.setText("Good Luck!");
 		
 		AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
+		System.out.print("bal");
 		
 	}
 
@@ -659,7 +664,8 @@ public class AESServer extends AbstractServer {
 		private void CreateDocFile(ConnectionToClient client,Object obj)
 		{
 			/*Create document/*/
-			XWPFDocument doc=new XWPFDocument();
+
+			AesWordDoc doc=new AesWordDoc();
 			ActiveExam active= (ActiveExam) obj;
 			/*Create title paragraph/*/
 			XWPFParagraph titleParagraph=doc.createParagraph();
@@ -719,8 +725,9 @@ public class AESServer extends AbstractServer {
 		 * @param active
 		 * @param doc
 		 */
-		private void AddToWordFileList(ActiveExam active, XWPFDocument doc) {
+		private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
 			wordFiles.put(active, doc);
+			System.out.println("b");
 		}
 		
 		/**
@@ -733,7 +740,10 @@ public class AESServer extends AbstractServer {
 			// TODO Auto-generated method stub
 			//System.out.print(wordFiles.containsKey((String)o));
 			iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
+			System.out.println("sdfds");
 			client.sendToClient(im);
+			
+		
 		}
 
 		private boolean isInActiveExam(Student s,ActiveExam ae) {
@@ -773,13 +783,13 @@ public class AESServer extends AbstractServer {
 			ActiveExam e=(ActiveExam) o[0];
 			SolvedExam solved=(SolvedExam) o[1];
 			Student student=(Student) o[2];
-			XWPFDocument doc=(XWPFDocument) o[3];
+			AesWordDoc doc=(AesWordDoc) o[3];
 			//studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
 			//studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
 			//if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
 				//GenerateActiveExamReport((ActiveExam)o[0]);
 			if(o[3]!=null)//If it was a manual exam we add it to the list of manual solved exam.
-				solvedExamWordFiles.put((SolvedExam)o[1], (XWPFDocument)o[3]);
+				solvedExamWordFiles.put((SolvedExam)o[1], (AesWordDoc)o[3]);
 			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
 			
 
