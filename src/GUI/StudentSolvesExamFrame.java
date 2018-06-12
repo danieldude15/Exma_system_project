@@ -21,7 +21,11 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -33,6 +37,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
@@ -77,31 +82,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		//Active exam is computerized.
 		else
-			SetComputerizeExamOnWindowScreen(activeExam);
-
-		
-		//while(isLocked()==false);
-		//ExamWasSubmittedWhenLocking();	
+			SetComputerizeExamOnWindowScreen(activeExam);		
 		
 	}
 
-	/**
-	 * Update student's exam in case that the exam was locked before he pressed on submit button.
-	 */
-	private void ExamWasSubmittedWhenLocking() {
-		// TODO Auto-generated method stub
-		
-		
-		
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Exam is locked!");
-		alert.setHeaderText(null);
-		alert.setContentText("Oops.. The exam is locked!");
-		alert.showAndWait();
-		
-		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
-		
-	}
 
 	@FXML public void refreshTimer(MouseEvent event) {
 		timeLeftLabel.setText(timeLeft);
@@ -197,7 +181,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		
 		
-		/*
+		
 		//Create document
 		AesWordDoc doc=new AesWordDoc();
 		
@@ -249,12 +233,12 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
 		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
 		runOnGoodLuckParagraph.setText("Good Luck!");
-/*/
+
 		
 
 		
 		
-		AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
+		//AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
 		
 		FileChooser saveWindow = new FileChooser();
 		saveWindow.setTitle("Save exam");
@@ -299,7 +283,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 		
 	public void lockExam() {
-		// TODO Auto-generated method stub
 		this.activeExamIsLocked=true;
 	}
 
@@ -322,12 +305,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	public void StudentPressedSubmitButton(ActionEvent event)
 	{	
+		submitStudentsExam(true);
+	}
+	
+	public void submitStudentsExam(boolean inTime){
 		/*Build solved Exam object/*/
 		SolvedExam sendToGenerateReport=BuildSolvedExamObject();
 		/*Confirmation Dialog/*/
 		ConfirmationDialogForSubmitButton(sendToGenerateReport);		
 	}
-	
 
 	/** 
 	 * Build SolvedExam object.
@@ -394,7 +380,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
 			for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 			{
-				studentAnswers.put(qie, 1);
+				studentAnswers.put(qie, 0);
 			}
 			score=-1;
 		}
@@ -414,7 +400,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport)
 	{
-		Alert alert = new Alert(AlertType.CONFIRMATION);
+		/*Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation");
 		alert.setHeaderText("SubmitExam");
 		alert.setContentText("Are you sure you want to submit?");
@@ -424,12 +410,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			if(activeExam.getType()==0)//Exam is manual
 			{
 				AesWordDoc doc=ImportWordFile();
-				
+
+ 				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
+ 				System.out.println(extract.getText());
 				/*Send message to the server to add solved exam to the list,
 				so we can generate a report from all solved exams when the active exam will be lock.
 				in addition the student is removing from the CheckOut list in server.
 				/*/
-				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);		
+				//SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);	
+			/*	SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
 			}
 			else
 			{
@@ -444,7 +433,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 
 		}
-		
+		/*/
+		System.out.println("daniel is driving me crazy");
 	}
 	
 	
@@ -497,6 +487,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 	public void setTimeSeconds(Long timeSeconds) {
 		this.timeSeconds = timeSeconds;
+		if (timeSeconds <= 0) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Exam Over");
+			alert.setHeaderText(null);
+			alert.setContentText("The Exam time is up and thus submitted with no answers. next time pay attention to the time.");
+			alert.show();
+            lockExam();
+            Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+        }
 	}
 
 	public Long getTimeSeconds() {

@@ -1,8 +1,11 @@
 package ocsf.server;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -86,7 +89,7 @@ public class AESServer extends AbstractServer {
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030101"),teacher);
+		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
 		
 		/*Create document/*/
@@ -724,7 +727,6 @@ public class AESServer extends AbstractServer {
 		 */
 		private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
 			wordFiles.put(active, doc);
-			System.out.println("b");
 		}
 		
 		/**
@@ -737,10 +739,17 @@ public class AESServer extends AbstractServer {
 			// TODO Auto-generated method stub
 			//System.out.print(wordFiles.containsKey((String)o));
 			iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
-			System.out.println("sdfds");
+			//System.out.println("sdfds");
 			client.sendToClient(im);
 			
+			
+			
+			/*FileOutputStream out = new FileOutputStream(new File("manual"));
+			wordFiles.get((ActiveExam)o).write(out);
+			out.close();/*/
+			
 		
+			
 		}
 
 		private boolean isInActiveExam(Student s,ActiveExam ae) {
