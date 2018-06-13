@@ -2,11 +2,8 @@ package logic;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-
-import javafx.beans.property.DoublePropertyBase;
 
 /**
  * This is the Completed Exam entity that hold information on exams that already been completed 

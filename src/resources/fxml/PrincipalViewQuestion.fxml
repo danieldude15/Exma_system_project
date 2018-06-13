@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewQuestionFrame">
    <children>
       <Button fx:id="m_backButton" layoutX="646.0" layoutY="555.0" mnemonicParsing="false" onAction="#backToViewData" text="Back to View Data" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
@@ -14,11 +15,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionID">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -28,11 +35,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionContent">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -42,11 +55,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionFirstAnswer">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -56,11 +75,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionSecondAnswer">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -70,11 +95,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionThirdAnswer">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -84,11 +115,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionFourthAnswer">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -98,11 +135,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionCorrectAnswer">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -112,11 +155,17 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <Label fx:id="m_questionAuthor">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>

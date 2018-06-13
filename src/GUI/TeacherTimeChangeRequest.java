@@ -1,9 +1,5 @@
 package GUI;
 
-import java.net.URL;
-import java.sql.Time;
-import java.util.ResourceBundle;
-
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
@@ -16,6 +12,9 @@ import logic.Globals;
 import logic.Teacher;
 import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class TeacherTimeChangeRequest implements Initializable, ControlledScreen{
 
