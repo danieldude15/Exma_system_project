@@ -20,6 +20,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.util.Duration;
 import logic.ActiveExam;
 import logic.AesWordDoc;
@@ -63,12 +65,13 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
-	/**
-	 * HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
-	 */
+	/*Word Files
+	 // HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
+	 
 	private static HashMap<ActiveExam,AesWordDoc> wordFiles;
 	
 	private static HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
+	/*/
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 	
@@ -83,10 +86,10 @@ public class AESServer extends AbstractServer {
 		activeExams = new HashMap<String,ActiveExam>();
 		studentsInExam = new HashMap<ActiveExam,ArrayList<Student>>();
 		studentsCheckOutFromActiveExam=new HashMap<ActiveExam,ArrayList<Student>>();
-		wordFiles=new HashMap<ActiveExam,AesWordDoc>();
+		//wordFiles=new HashMap<ActiveExam,AesWordDoc>();Word Files
 		studentsSolvedExams = new HashMap<>();
 		timeChangeRequests= new HashMap<>();
-		solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();
+		//solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();//Word Files
 		examTimes = new HashMap<>();
 		examTimelines = new HashMap<>();
 
@@ -105,61 +108,7 @@ public class AESServer extends AbstractServer {
 		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
 		
-		/*Create document/*/
-		AesWordDoc doc=new AesWordDoc();
-		
-		/*Create title paragraph/*/
-		XWPFParagraph titleParagraph=doc.createParagraph();
-		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-		XWPFRun runTitleParagraph=titleParagraph.createRun();
-		runTitleParagraph.setBold(true);
-		runTitleParagraph.setItalic(true);
-		runTitleParagraph.setColor("00FF00");
-		runTitleParagraph.setText(nivsExam.getExam().getCourse().getName());
-		runTitleParagraph.addBreak();
-		runTitleParagraph.addBreak();
-		
-		/*Create exam details paragraph/*/
-		XWPFParagraph examDetailsParagraph=doc.createParagraph();
-		examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
-		XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
-		runOnExamDetailsParagraph.setText("Field: "+nivsExam.getExam().getField().getName());
-		runOnExamDetailsParagraph.addBreak();
-		runOnExamDetailsParagraph.setText("Date: "+nivsExam.getDate());
-		runOnExamDetailsParagraph.addBreak();
-		
-		/*Create question+answers paragraph/*/
-		XWPFParagraph questionsParagraph=doc.createParagraph();
-		questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
-		XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
-		int questionIndex=1;
-		ArrayList<QuestionInExam> questionsInExam=nivsExam.getExam().getQuestionsInExam();
-		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-		{
-			if(qie.getStudentNote()!=null)
-			{
-				runOnquestionsParagraph.setText(qie.getStudentNote());
-				runOnquestionsParagraph.addBreak();
-			}
-			runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
-			runOnquestionsParagraph.addBreak();
-			for(int i=0;i<4;i++)
-			{
-				runOnquestionsParagraph.setText(qie.getAnswer(i));
-				runOnquestionsParagraph.addBreak();
-			}
-		}
-		runOnquestionsParagraph.addBreak();
-		runOnquestionsParagraph.addBreak();
-		
-		/*Create good luck paragraph/*/
-		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
-		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
-		runOnGoodLuckParagraph.setText("Good Luck!");
-		
-		AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
-		System.out.print("bal");
-		
+			
 	}
 
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -257,9 +206,9 @@ public class AESServer extends AbstractServer {
 			case "StudentCheckInToExam":
 				checkInStudentToActiveExam(client, o);
 				break;
-			case "GetManualExam":
+			/*case "GetManualExam"://Word Files
 				GetManuelExam(client,o);
-				break;
+				break;/*/
 			case "getcourseExams":
 				getcourseExams(client,o);
 				break;
@@ -269,9 +218,12 @@ public class AESServer extends AbstractServer {
 			case "InitializeActiveExams":
 				InitializeActiveExams(o);
 				break;
-			case "CreateDocFile":
+			/*case "CreateDocFile":
 				CreateDocFile(client,o);
-				break;
+				break;/*/
+			/*case "SystemCheckExam":
+				SystemCheckSolvedExam(client,o);
+				break;/*/
 				
 			default:
 				
@@ -701,18 +653,18 @@ public class AESServer extends AbstractServer {
 			
 		}
 
-
+/*
 	/**
 	 * Create a Document file when the teacher activate a manual exam.
 	 * @param active
 	 */
+		/*/
 		private void CreateDocFile(ConnectionToClient client,Object obj)
 		{
-			/*Create document/*/
-
+			//Create document
 			AesWordDoc doc=new AesWordDoc();
 			ActiveExam active= (ActiveExam) obj;
-			/*Create title paragraph/*/
+			//Create title paragraph
 			XWPFParagraph titleParagraph=doc.createParagraph();
 			titleParagraph.setAlignment(ParagraphAlignment.CENTER);
 			XWPFRun runTitleParagraph=titleParagraph.createRun();
@@ -723,7 +675,7 @@ public class AESServer extends AbstractServer {
 			runTitleParagraph.addBreak();
 			runTitleParagraph.addBreak();
 			
-			/*Create exam details paragraph/*/
+			//Create exam details paragraph
 			XWPFParagraph examDetailsParagraph=doc.createParagraph();
 			examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
 			XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
@@ -732,7 +684,7 @@ public class AESServer extends AbstractServer {
 			runOnExamDetailsParagraph.setText("Date: "+active.getDate());
 			runOnExamDetailsParagraph.addBreak();
 			
-			/*Create question+answers paragraph/*/
+			//Create question+answers paragraph
 			XWPFParagraph questionsParagraph=doc.createParagraph();
 			questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
 			XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
@@ -756,7 +708,7 @@ public class AESServer extends AbstractServer {
 			runOnquestionsParagraph.addBreak();
 			runOnquestionsParagraph.addBreak();
 			
-			/*Create good luck paragraph/*/
+			//Create good luck paragraph
 			XWPFParagraph GoodLuckParagraph=doc.createParagraph();
 			XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
 			runOnGoodLuckParagraph.setText("Good Luck!");
@@ -765,21 +717,25 @@ public class AESServer extends AbstractServer {
 			
 		}
 
+
 		/**
 		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
 		 * @param active
 		 * @param doc
 		 */
-		private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
+		/*WordFiles
+		 private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
 			wordFiles.put(active, doc);
-		}
+		}/*/
 		
+		/*Word Files
 		/**
 		 * Send to client a Manual Exam word File.
 		 * @param client
 		 * @param o
 		 * @throws IOException
 		 */
+		/*/
 		private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
 			// TODO Auto-generated method stub
 			//System.out.print(wordFiles.containsKey((String)o));
@@ -789,13 +745,14 @@ public class AESServer extends AbstractServer {
 			
 			
 			
-			/*FileOutputStream out = new FileOutputStream(new File("manual"));
-			wordFiles.get((ActiveExam)o).write(out);
-			out.close();/*/
+			//FileOutputStream out = new FileOutputStream(new File("manual"));
+			//wordFiles.get((ActiveExam)o).write(out);
+			//out.close();
 			
 		
 			
-		}
+		}/*/
+		
 
 		private boolean isInActiveExam(Student s,ActiveExam ae) {
 			return studentsInExam.get(ae).contains(s);
@@ -815,7 +772,7 @@ public class AESServer extends AbstractServer {
 				studentsInExam.remove(ae); 
 				studentsCheckOutFromActiveExam.remove(ae); 
 				studentsSolvedExams.remove(ae); 
-				wordFiles.remove(ae);
+				//wordFiles.remove(ae);//Word Files
 				timeChangeRequests.remove(ae);
 			} else {
 				//fail to add exam report into database! big balagan!
@@ -838,12 +795,91 @@ public class AESServer extends AbstractServer {
 			studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
 			if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
 				GenerateActiveExamReport((ActiveExam)o[0]);
-			AesWordDoc doc=(AesWordDoc) o[3];
+			/*AesWordDoc doc=(AesWordDoc) o[3];//Word Files
 			if(o[3]!=null)//If it was a manual exam we add it to the list of manual solved exam.
-				solvedExamWordFiles.put((SolvedExam)o[1], (AesWordDoc)o[3]);
+				solvedExamWordFiles.put((SolvedExam)o[1], (AesWordDoc)o[3]);/*/
 			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
 			
 
 		}
+
+		/*
+		public void SystemCheckSolvedExam(ConnectionToClient client, Object obj) throws IOException {
+			// TODO Auto-generated method stub
+			Object[] o = (Object[])obj;
+			ActiveExam activeExam=(ActiveExam) o[0];
+			boolean inTime=(boolean) o[1];
+			HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=(HashMap<QuestionInExam, ToggleGroup>) o[2];
+			int score=0;
+			Object[] studentAnsersAndScoreForExam=new Object[2];
+			RadioButton r=new RadioButton();
+			HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
+			if(inTime)//Student submit the exam before that the time is over.
+			{
+				
+				if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
+				{
+					for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
+					{
+						if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
+							studentAnswers.put(qie,0);
+							
+						else//Student choose answer.
+						{
+							r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
+							for(int i=1;i<5;i++)//Runs all over question's answers.
+							{
+								if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
+								{
+									studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
+									if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
+										score+=qie.getPointsValue();
+									break;
+								}
+							}
+						}
+					}
+				}
+				else//Active exam is manual so we fabricate student's answers and score.
+				{
+					ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+					for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
+					{
+						studentAnswers.put(qie, 0);
+					}
+					score=-1;
+				}
+			}
+			else//Student did not have time to submit his exam
+			{
+				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
+				{
+					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
+						studentAnswers.put(qie,0);
+						
+					else//Student choose answer.
+					{
+						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
+						for(int i=1;i<5;i++)//Runs all over question's answers.
+						{
+							if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
+							{
+								studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
+								break;
+							}
+						}
+					}
+					score=0;//His grade is zero if he didn't submit his exam on time.
+				}
+			}
+			studentAnsersAndScoreForExam[0]=studentAnswers;
+			studentAnsersAndScoreForExam[1]=score;
+			iMessage im = new iMessage("SystemCheckSucceed",studentAnsersAndScoreForExam);
+			client.sendToClient(im);
+			
+			//return studentAnsersAndScoreForExam;
+
+		}
+/*/
 }
 

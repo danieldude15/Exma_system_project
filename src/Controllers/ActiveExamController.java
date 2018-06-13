@@ -109,6 +109,7 @@ public class ActiveExamController {
 		}
 		return;
 	}
+	/*Word Files
 	public static void CreateDocFile(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -139,6 +140,7 @@ public class ActiveExamController {
 		}
 		return null;
 	}
+	/*/
 	
 	/**
 	 * Send message to the server to add the student to the list of the Active exam.

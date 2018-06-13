@@ -1,31 +1,16 @@
 package GUI;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -36,8 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.util.Duration;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
@@ -142,11 +125,18 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 		questionString.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
 		questionsAndAnswers.getChildren().add(questionString);
-		answers=new RadioButton[] {new RadioButton((char)(97)+". "+qie.getAnswer(1)),new RadioButton((char)(98)+". "+qie.getAnswer(2)),new RadioButton((char)(99)+". "+qie.getAnswer(3)),new RadioButton((char)(100)+". "+qie.getAnswer(4))};
-		for(RadioButton r:answers)//Sets all answers of the question on window screen.
+		
+		answers=new RadioButton[] {
+				new RadioButton((char)(97)+". "+qie.getAnswer(1)),
+				new RadioButton((char)(98)+". "+qie.getAnswer(2)),
+				new RadioButton((char)(99)+". "+qie.getAnswer(3)),
+				new RadioButton((char)(100)+". "+qie.getAnswer(4))};
+		for(int i=0;i<4;i++)//Sets all answers of the question on window screen.
 		{
+			RadioButton r = answers[i];
 			r.setWrapText(true);
 			r.setToggleGroup(toogleGroup);
+			r.setId(Integer.toString(i+1));
 			questionsAndAnswers.getChildren().add(r);
 		}
 		questionWithAnswers.put(qie, toogleGroup);//Add question and it's group of answers to HashMap(will use us in SubmitButtonPressed method to check which answer the user marked for that question).
@@ -162,9 +152,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void SetDownloadButtonOnScreen() {
 		// TODO Auto-generated method stub
-		//submitButton.setDisable(true);
+		submitButton.setDisable(true);
 		downloadButton.setVisible(true);
-
 	}
 
 
@@ -181,107 +170,17 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		doc.write(out);
 		out.close();/*/
 		
+		/*Open save dialog for the student where he can choose where to save the exam on his computer./*/
+		AesWordDoc wordClass=new AesWordDoc();
+		wordClass.OpenSaveFileDialog(this.GetActiveExam());
 		
-		
-		
-		//Create document
-		AesWordDoc doc=new AesWordDoc();
-		
-		//Create title paragraph
-		XWPFParagraph titleParagraph=doc.createParagraph();
-		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-		XWPFRun runTitleParagraph=titleParagraph.createRun();
-		runTitleParagraph.setBold(true);
-		runTitleParagraph.setItalic(true);
-		runTitleParagraph.setColor("00FF00");
-		runTitleParagraph.setText(activeExam.getExam().getCourse().getName());
-		runTitleParagraph.addBreak();
-		runTitleParagraph.addBreak();
-		
-		//Create exam details paragraph
-		XWPFParagraph examDetailsParagraph=doc.createParagraph();
-		examDetailsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-		XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
-		runOnExamDetailsParagraph.setText("Field: "+activeExam.getExam().getField().getName());
-		runOnExamDetailsParagraph.addBreak();
-		runOnExamDetailsParagraph.setText("Date: "+activeExam.getDate());
-		runOnExamDetailsParagraph.addBreak();
-		
-		//Create question+answers paragraph
-		XWPFParagraph questionsParagraph=doc.createParagraph();
-		questionsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-		XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
-		int questionIndex=1;
-		ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
-		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-		{
-			if(qie.getStudentNote()!=null)
-			{
-				runOnquestionsParagraph.setText(qie.getStudentNote());
-				runOnquestionsParagraph.addBreak();
-			}
-			runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
-			runOnquestionsParagraph.addBreak();
-			for(int i=1;i<5;i++)
-			{
-				runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
-				runOnquestionsParagraph.addBreak();
-			}
-		}
-		runOnquestionsParagraph.addBreak();
-		runOnquestionsParagraph.addBreak();
-		
-		//Create good luck paragraph
-		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
-		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
-		runOnGoodLuckParagraph.setText("Good Luck!");
+		submitButton.setDisable(false);
+		downloadButton.setDisable(true);
 
-		
-
-		
-		
 		//AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
-		
-		FileChooser saveWindow = new FileChooser();
-		saveWindow.setTitle("Save exam");
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("docx files (*.docx)", "*.docx");
-        saveWindow.getExtensionFilters().add(extFilter);
-         
-         //Show save file dialog
-         File file = saveWindow.showSaveDialog(Globals.primaryStage);
-         if(file != null)
-             SaveFile(file, doc);
-         
-         
- 		
-		
-         
 	}
 	
-	/**
-	 * Show for the user a save dialog where he can pick his saving path for the word file.
-	 * @param file
-	 * @param doc
-	 * @throws IOException
-	 */
-	 private void SaveFile(File file, AesWordDoc doc) throws IOException{
-
-            OutputStream outputStream = new FileOutputStream(file);
-            doc.write(outputStream);
-            outputStream.flush();
-            outputStream.close();
-            
-            Alert alert=new Alert(AlertType.INFORMATION);
- 			alert.setTitle("Download Succeed");
- 			alert.setHeaderText(null);
- 			alert.setContentText("You can open it and start your exam!");
- 			alert.showAndWait();
- 			
- 			submitButton.setDisable(false);
- 			downloadButton.setDisable(true);
- }
-	
+		
 
 		
 	public void lockExam() {
@@ -326,6 +225,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	{
 	
 		Object[] studentAnsersAndScoreForExam=SystemCheckExam(inTime);
+		//Object[] studentAnsersAndScoreForExam=SolvedExamController.SystemCheckExam(activeExam, inTime, questionWithAnswers);
 		HashMap<QuestionInExam,Integer> studentAnswers=(HashMap<QuestionInExam, Integer>) studentAnsersAndScoreForExam[0];
 		int score=(int) studentAnsersAndScoreForExam[1];
 			
@@ -350,6 +250,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @param inTime 
 	* @return Object[] studentAnsersAndScoreForExam
 	*/
+	
 	private Object[] SystemCheckExam(boolean inTime)
 	{
 		int score=0;
@@ -369,16 +270,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 					else//Student choose answer.
 					{
 						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-						for(int i=1;i<5;i++)//Runs all over question's answers.
-						{
-							if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-							{
-								studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-								if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
-									score+=qie.getPointsValue();
-								break;
-							}
-						}
+						int markedIndex = Integer.parseInt(r.getId());
+						if(qie.getCorrectAnswerIndex()==markedIndex)//Student's answer is correct(he gets all points from the question).
+							score+=qie.getPointsValue();
+						studentAnswers.put(qie,markedIndex);
 					}
 				}
 			}
@@ -402,14 +297,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 				else//Student choose answer.
 				{
 					r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-					for(int i=1;i<5;i++)//Runs all over question's answers.
-					{
-						if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-						{
-							studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-							break;
-						}
-					}
+					int markedIndex = Integer.parseInt(r.getId());
+					studentAnswers.put(qie,markedIndex);
+
 				}
 				score=0;//His grade is zero if he didn't submit his exam on time.
 			}
@@ -431,6 +321,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime)
 	{
+		AesWordDoc wordClass=new AesWordDoc();
 		if(inTime)//Student Submit his exam on time.
 		{
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -442,65 +333,36 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				if(activeExam.getType()==0)//Exam is manual
 				{
-					AesWordDoc doc=ImportWordFile();
-	
-	 				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
-	 				System.out.println(extract.getText());
+					XWPFDocument doc=wordClass.OpenUploadWordFileDialog();
+					
+					//Print the word file.
+	 				//XWPFWordExtractor extract=new XWPFWordExtractor(doc);
+	 				//System.out.println(extract.getText());
+					
 					/*Send message to the server to add solved exam to the list,
 					so we can generate a report from all solved exams when the active exam will be lock.
 					in addition the student is removing from the CheckOut list in server.
 					/*/
-					//SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);	
-					SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
-				}
-				else
-				{
-					SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+					
+							
 				}
 				
-				alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Submit confirmation");
-				alert.setHeaderText(null);
-				alert.setContentText("The exam was submitted successfully!");
-				alert.showAndWait();
+				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
+				
+				String popUpTitle="Submit confirmation";
+				String popUpContentText="The exam was submitted successfully!";
+				PopUp(popUpTitle,popUpContentText);
 				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 	
 			}
 		}
 		else//Student didn't submit his exam on time.
 		{
-			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());		
 		}
-		System.out.println("daniel is driving me crazy");
+	
 	}
 	
-	
-/**
- * When the student pressed on submit button and the exam is manual,he has to upload his exam back to the system.
- */
-	private AesWordDoc ImportWordFile() {
-		// TODO Auto-generated method stub
-		AesWordDoc doc;
- 		FileChooser Uploadwindow=new FileChooser();
- 		Uploadwindow.setTitle("Upload your exam");
- 		File file=Uploadwindow.showOpenDialog(Globals.primaryStage);
- 		if(file!=null)
- 			try {
- 				doc=new AesWordDoc(new FileInputStream(file)) ;
- 				return doc;
- 				
- 				//XWPFWordExtractor extract=new XWPFWordExtractor(document);
- 				//System.out.println(extract.getText());
- 			} catch (FileNotFoundException e) {
- 				// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			} catch (IOException e) {
- 				// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			}
- 		return null;
-	}
-
 	
 	//don't need it, here for compilation
 	public void StudentPressedExitButton(ActionEvent event)
@@ -525,12 +387,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	public void setTimeSeconds(Long timeSeconds) {
 		this.timeSeconds = timeSeconds;
 		if (timeSeconds <= 0) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Exam Over");
-			alert.setHeaderText(null);
-			alert.setContentText("The Exam time is up and thus submitted with no answers. next time pay attention to the time.");
-			alert.show();
-            lockExam();
+            String popUpTitle="Exam Over";
+			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
+            PopUp(popUpTitle,popUpContentText);
+			lockExam();
             Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
         }
 	}
@@ -539,6 +399,14 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		return timeSeconds;
 	}
 	
+	public void PopUp(String title,String contentText)
+	{
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(contentText);
+		alert.show();
+	}
 	
 	
 }
