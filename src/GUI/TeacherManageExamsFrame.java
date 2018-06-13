@@ -35,6 +35,9 @@ import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 public class TeacherManageExamsFrame implements Initializable, ControlledScreen {
+	enum windowType {
+		EDIT,Build
+	}
 	
 	HashMap<String,Exam> exams = new HashMap<>();
 	ArrayList<Field> teachersFields;
@@ -65,11 +68,8 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 	}
 	
 	@FXML public void newExamButtonPressed(ActionEvent event) {
-		/*
-		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
-		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.ADD);
-		*/
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
+		 ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setType((TeacherBuildNewExam.windowType.Build));
+		  Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
 	}
 	
 	@FXML void BackToMainMenu(ActionEvent event) {
@@ -190,16 +190,17 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 
 	private class MyEditHandler implements EventHandler<Event>{
         @Override public void handle(Event evt) {
-           //Exam exam = exams.get(((Control)evt.getSource()).getId());
+        	if(exams.get(((Control)evt.getSource()).getId())!=null)
+        	{
+           Exam exam = exams.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
            teachersCourses.remove(0);
            teachersFields.remove(0);
-           /*
-           ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setQuestion(question);
-           ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);
-           ((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setType(windowType.EDIT);
-           */
-           Globals.mainContainer.setScreen(null);
+           
+           ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setType((TeacherBuildNewExam.windowType.EDIT));
+           ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setExam(exam);
+           Globals.mainContainer.setScreen(ClientGlobals.TeacherBuildNewExamID);
+        	}
         }
     }
 	

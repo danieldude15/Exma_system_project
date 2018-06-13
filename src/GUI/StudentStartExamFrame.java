@@ -120,14 +120,9 @@ public class StudentStartExamFrame implements ControlledScreen{
 			                        studentsolvesExam.setTimeSeconds(studentsolvesExam.getTimeSeconds()-1);
 			                        // update timerLabel
 			                        studentsolvesExam.updateTimeLabel(studentsolvesExam.getTimeSeconds());
-			                        if (timeSeconds <= 0) {
+			                        if (studentsolvesExam.getTimeSeconds() <= 0 || studentsolvesExam.isLocked()) {
 			                            timeline.stop();
-			                            Alert alert = new Alert(AlertType.INFORMATION);
-			        					alert.setTitle("Exam Over");
-			        					alert.setHeaderText(null);
-			        					alert.setContentText("The Exam time is up and thus submitted with no answers. next time pay attention to the time.");
-			        					alert.showAndWait();
-			                            studentsolvesExam.lockExam();
+			                            studentsolvesExam.submitStudentsExam(false);
 			                        }
 			                      }
 			                }));

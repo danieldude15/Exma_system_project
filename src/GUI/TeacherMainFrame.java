@@ -8,23 +8,22 @@ import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import Controllers.UserController;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import logic.*;
+import logic.ActiveExam;
+import logic.ExamReport;
+import logic.Globals;
+import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 
@@ -54,7 +53,7 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		Globals.primaryStage.setHeight(680);
 		Globals.primaryStage.setWidth(820);
 
-	//	updateCompletedExamListView();
+		updateCompletedExamListView();
 		
 		updateActiveExamListView();
 		
@@ -97,10 +96,15 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
     		alert.show();
 		}
 		updateActiveExamListView();
+		updateCompletedExamListView();
+		
 	}
 	
 	@FXML public void requestTimeChangeClicked(ActionEvent event) {
+		if(ActiveExamsList.getSelectionModel().getSelectedItem()!=null)
+		{ ((TeacherTimeChangeRequest)Globals.mainContainer.getController(ClientGlobals.TeacherTimeChangeRequestID)).SetActiveExam((ActiveExam) ActiveExamsList.getSelectionModel().getSelectedItem());
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
+		}
 	}
 	
 	@FXML public void goToGenerateReportClicked(ActionEvent event) {
@@ -141,12 +145,12 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 		ActiveExamsList.setItems(list2);
 	}
 	
-/*/	private void updateCompletedExamListView() {
+	private void updateCompletedExamListView() {
 		TeacherCExams=SolvedExamController.getCompletedExams((Teacher) ClientGlobals.client.getUser());
 		CompletedExamList.getItems().clear();
 		ObservableList<ExamReport> list = FXCollections.observableArrayList(TeacherCExams);
 		CompletedExamList.setItems(list);
 		
 	}
-	/*/
+	
 }

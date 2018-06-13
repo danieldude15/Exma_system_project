@@ -1,6 +1,7 @@
 package logic;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * This is the ActiveExam Entitiy that holds information on active exams 
@@ -111,7 +112,8 @@ public class ActiveExam  extends Exam {
 		String examType;
 		if (type==1) examType = "Computerized";
 		else examType = "Manual";
-		return new String(String.format("Activated On: %s\n Code: %s\n ID: %s\n Type: %s", getDate(),getCode(),examIdToString() ,examType));
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy  (HH:mm)");
+		return new String(String.format("Course: %s\nActivated On: %s\nLocks On: %s\nType: %s", getCourse().getName(),DATE_FORMAT.format(getDate()),DATE_FORMAT.format(new Date(getDate().getTime()+getDuration()*60000)) ,examType));
 	}
 
 	

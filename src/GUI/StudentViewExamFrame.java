@@ -8,10 +8,12 @@ import javax.swing.ImageIcon;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -29,6 +31,8 @@ public class StudentViewExamFrame implements ControlledScreen {
 	@FXML Label courseName;
 	@FXML Label grade;
 	@FXML Label StudentInfo;
+	@FXML Label changeScoreByTeacherNote;
+	@FXML Button watchExplanationButton;
 	@FXML VBox questionInfo_StudentScoreAndNote;
 	
 	private SolvedExam solvedExam;
@@ -42,12 +46,20 @@ public class StudentViewExamFrame implements ControlledScreen {
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
 		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);
+		Globals.primaryStage.setWidth(820); 
 		questionInfo_StudentScoreAndNote.getChildren().clear();
 		courseName.setText(this.GetSolvedExam().getCourse().getName());
 		grade.setText(Integer.toString(this.GetSolvedExam().getScore()));
 		if(this.GetSolvedExam().getScore()<55)
 			grade.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
+		
+		if((this.GetSolvedExam().getTeachersScoreChangeNote().isEmpty()))//Explanation if the teacher changed the score.
+		{
+			changeScoreByTeacherNote.setVisible(false);
+			watchExplanationButton.setVisible(false);
+		}	
+	
+		
 		SetQuestionInfo_Answers_StudentScoreAndNoteForQuestion();
 		
 	}
@@ -148,10 +160,12 @@ public class StudentViewExamFrame implements ControlledScreen {
 	 */
 	private void SetQuestionInfo_Answers_StudentScoreAndNoteForQuestion()
 	{
+		
 		int questionIndex=1;
 		Label theRightAnswerIs=new Label();
 		theRightAnswerIs.setId(blackLabel);
 		boolean studentAnswer;
+
 		
 		studentsAnswers=this.GetSolvedExam().getStudentsAnswers();
 		
@@ -205,7 +219,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNote);
 		}
 		questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
-		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
+		answers=new RadioButton[] {new RadioButton((char)(answerIndex+96)+". "+qie.getAnswer(1)),new RadioButton((char)(answerIndex+97)+". "+qie.getAnswer(2)),new RadioButton((char)(answerIndex+98)+". "+qie.getAnswer(3)),new RadioButton((char)(answerIndex+99)+". "+qie.getAnswer(4))};
 		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
 
 		/*Set each of the 4 answers RadioButton of the question on window screen./*/
@@ -307,6 +321,17 @@ public class StudentViewExamFrame implements ControlledScreen {
 	public SolvedExam GetSolvedExam()
 	{
 		return this.solvedExam;
+	}
+	
+	public void WatchScoreChangeExplanationByTheTeacher(ActionEvent event)
+	{
+		//changeScoreByTeacherNote.setVisible(true);
+		//watchExplanationButton.setVisible(true);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Teacher's explenation for grade change");
+		alert.setHeaderText(null);
+		alert.setContentText(this.GetSolvedExam().getTeachersScoreChangeNote());
+		alert.showAndWait();
 	}
 	
 	/**
