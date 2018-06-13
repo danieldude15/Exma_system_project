@@ -1,13 +1,22 @@
 package GUI;
 
-import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-
+import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import logic.*;
+import ocsf.client.ClientGlobals;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
@@ -23,6 +32,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import logic.*;
 import ocsf.client.ClientGlobals;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 public class StudentSolvesExamFrame implements ControlledScreen{
@@ -201,7 +214,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	
 	/**
-	 * Submit process(upload to database the student SolvedExam).
+	 * Submit process(in case that the student has submitted on time).
 	 * @param event
 	 */
 	public void StudentPressedSubmitButton(ActionEvent event)
@@ -209,6 +222,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		submitStudentsExam(true);
 	}
 	
+	/**
+	 * Submit process(check solved exam+sending SolvedExam to generate report in server+confirmation dialog for the student)
+	 * @param inTime
+	 */
 	public void submitStudentsExam(boolean inTime){
 		/*Build solved Exam object/*/
 		SolvedExam sendToGenerateReport=BuildSolvedExamObject(inTime);

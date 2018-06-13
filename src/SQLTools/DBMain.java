@@ -1,29 +1,12 @@
 package SQLTools;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.mysql.jdbc.Statement;
+import logic.*;
+import ocsf.server.ServerGlobals;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.mysql.jdbc.Statement;
-
-import logic.Course;
-import logic.Exam;
-import logic.ExamReport;
-import logic.Field;
-import logic.Globals;
-import logic.Principle;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.User;
-import ocsf.server.ServerGlobals;
 
 
 public class DBMain {
@@ -301,12 +284,13 @@ public class DBMain {
 			System.out.println("SQL:"+prst);
 			ArrayList<Student> result = new ArrayList<>();
 			if (prst.execute()) {
+				//studentid, courseid, fieldid, userid, username, password, fullname, usertype
 				ResultSet rs = prst.getResultSet();
 				while (rs.next()) {
 					int userid = rs.getInt(1);
-					String username = rs.getString(2);
-					String password = rs.getString(3);
-					String fullname = rs.getString(4);
+					String username = rs.getString(5);
+					String password = rs.getString(6);
+					String fullname = rs.getString(7);
 					result.add(new Student(userid,username,password,fullname));
 				}
 			}
@@ -821,8 +805,10 @@ public class DBMain {
 			for(SolvedExam se : eReport.getSolvedExams()) {
 				if(InsertSolvedExam(se)==1)
 					linesEfected++;
-				else 
+				else {
 					deleteExamReport(eReport);
+					return 0;
+				}
 			}
 			return linesEfected;
 		} catch (Exception e) {

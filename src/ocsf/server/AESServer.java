@@ -1,20 +1,6 @@
 package ocsf.server;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
 import SQLTools.DBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,22 +9,17 @@ import javafx.event.EventHandler;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.util.Duration;
-import logic.ActiveExam;
-import logic.AesWordDoc;
-import logic.Course;
-import logic.Exam;
-import logic.ExamReport;
-import logic.Field;
-import logic.Globals;
-import logic.Principle;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.TimeChangeRequest;
-import logic.User;
-import logic.iMessage;
+import logic.*;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class AESServer extends AbstractServer {
 	
@@ -75,8 +56,6 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 	
-	private HashMap<ActiveExam, Long> examTimes;
-	
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
@@ -89,16 +68,15 @@ public class AESServer extends AbstractServer {
 		//wordFiles=new HashMap<ActiveExam,AesWordDoc>();Word Files
 		studentsSolvedExams = new HashMap<>();
 		timeChangeRequests= new HashMap<>();
-		//solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();//Word Files
-		examTimes = new HashMap<>();
+		//solvedExamWordFiles=new HashMap<>();
 		examTimelines = new HashMap<>();
 
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
-		ActiveExam tibisExam = new ActiveExam("ac12", 1, new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("040101"),teacher);
+		ActiveExam tibisExam = new ActiveExam("ac13", 1, new Date(new java.util.Date().getTime()),
+				sqlcon.getExam("010201"),teacher);
 		InitializeActiveExams(tibisExam);
 		
 		/**
@@ -108,7 +86,9 @@ public class AESServer extends AbstractServer {
 		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
 		
-			
+		
+		//AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
+		
 	}
 
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -139,6 +119,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "newTimeChangeRequest":
 				newTimeChangeRequest(o);
+				break;
+			case "studentsInCourse":
+				studentsInCourse(client,o);
 				break;
 			case "timeChangeRequestResponse":
 				timeChangeRequestResponse(o);
@@ -230,21 +213,6 @@ public class AESServer extends AbstractServer {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private void newTimeChangeRequest(Object o) throws IOException {
-		if (o instanceof TimeChangeRequest) {
-			TimeChangeRequest tc = (TimeChangeRequest) o;
-			if (activeExams.get(tc.getActiveExam().getCode())!=null) {
-				timeChangeRequests.put(tc.getActiveExam(), tc);
-				for(User u: connectedUsers.keySet()) {
-					if(u instanceof Principle) {
-						connectedUsers.get(u).sendToClient(new iMessage("newTimeChangeRequest", tc));
-						break;
-					}
-				}
-			}
 		}
 	}
 
@@ -341,23 +309,40 @@ public class AESServer extends AbstractServer {
 
 	public void lockActiveExam(ActiveExam ae)
 	{
-		iMessage msg = new iMessage("ExamLocked", ae);
-		for(Student s: studentsInExam.get(ae)) {
-			Student student = new Student(0, s.getUserName(), s.getPassword(), null);
-			try {
-				if (connectedUsers.get(student)!=null) {
-					connectedUsers.get(student).sendToClient(msg);
+		if (studentsInExam.get(ae)!=null) {
+			iMessage msg = new iMessage("ExamLocked", ae);
+			for(Student s: studentsInExam.get(ae)) {
+				Student student = new Student(0, s.getUserName(), s.getPassword(), null);
+				try {
+					if (connectedUsers.get(student)!=null) {
+						connectedUsers.get(student).sendToClient(msg);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+			//telling the server to wait 7 seconds for all students to send their solved exam to the server
+			Timeline timeline = new Timeline();
+			examTimelines.put(ae, timeline);
+	        timeline.setCycleCount(Timeline.INDEFINITE);
+	        timeline.getKeyFrames().add(
+	                new KeyFrame(Duration.seconds(10),
+	                  new EventHandler() {
+	                    // KeyFrame event handler
+	                    public void handle(Event event) {
+	                    	System.out.println("Server generating Exam report:" + ae.getCode() );
+	                    	timeline.stop();
+	                    	GenerateActiveExamReport(ae);
+	                    }
+	                  }));
+	        timeline.playFromStart();
+		} else {
+			System.out.println(ae + "not found in studentsInExam HashMap!");
 		}
-		//telling the server to wait 7 seconds for all students to send their solved exam to the server
-		setActiveExamTimeline(ae,null);
 	}
 	
 	private void setActiveExamTimeline(ActiveExam ae, TimeChangeRequest tcr) {
-		Long examTime = (long) ae.getDuration();
+		Long examTime = (long) ae.getDuration()*60;
 		if(tcr!=null) {
 			examTimelines.get(ae).stop();
 			examTimelines.remove(ae);
@@ -371,6 +356,7 @@ public class AESServer extends AbstractServer {
                   new EventHandler() {
                     // KeyFrame event handler
                     public void handle(Event event) {
+                    	System.out.println("Server Locking Active Exam:" + ae.getCode() );
                             timeline.stop();
                             lockActiveExam(ae);
                     }
@@ -429,6 +415,13 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+
+	private void studentsInCourse(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Student> students = sqlcon.GetAllStudentsInCourse((Course)o);
+		iMessage im = new iMessage("studentsInCourse",students);
+		client.sendToClient(im);
+	}
+	
 	private void getTeachersExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Exam> exams = sqlcon.getTeachersExams((Teacher) o);
 		iMessage im = new iMessage("TeachersExams",exams);
@@ -617,20 +610,27 @@ public class AESServer extends AbstractServer {
 		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
 		studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
-		Timeline timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.getKeyFrames().add(
-                new KeyFrame(Duration.seconds(ae.getDuration()*60),
-                  new EventHandler() {
-                    // KeyFrame event handler
-                    public void handle(Event event) {
-                            timeline.stop();
-                            lockActiveExam(ae);
-                    }
-                  }));
-        timeline.playFromStart();
+		setActiveExamTimeline(ae,null);
 	}
 	
+	
+
+	private void newTimeChangeRequest(Object o) throws IOException {
+		if (o instanceof TimeChangeRequest) {
+			TimeChangeRequest tc = (TimeChangeRequest) o;
+			if (activeExams.get(tc.getActiveExam().getCode())!=null) {
+				timeChangeRequests.put(tc.getActiveExam(), tc);
+				for(User u: connectedUsers.keySet()) {
+					if(u instanceof Principle) {
+						connectedUsers.get(u).sendToClient(new iMessage("newTimeChangeRequest", tc));
+						break;
+					}
+				}
+			}
+		}
+	}
+
+
 	/**
 	 * Get an object[2] when object[0]=ActiveExam,object[1]=Student and add the student to the list.
 	 * In other words Student is check in to the active exam.
@@ -638,86 +638,86 @@ public class AESServer extends AbstractServer {
 	 * @param o
 	 * @throws IOException 
 	 */
-		private void checkInStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
-			Object[] o = (Object[])obj;
-			ActiveExam ae = (ActiveExam) o[1];
-			Student s = (Student) o[0];
-			if(!isInActiveExam(s, ae)) {
-				if(studentsInExam.get((ActiveExam)o[1])!=null) {
-					studentsInExam.get((ActiveExam)o[1]).add((Student)o[0]);
-					client.sendToClient(new iMessage("StudentCheckedInToExam",true));
-				}
-			} else {
-				client.sendToClient(new iMessage("StudentCantCheckedInToExam",false));
+	private void checkInStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
+		Object[] o = (Object[])obj;
+		ActiveExam ae = (ActiveExam) o[1];
+		Student s = (Student) o[0];
+		if(!isInActiveExam(s, ae)) {
+			if(studentsInExam.get((ActiveExam)o[1])!=null) {
+				studentsInExam.get((ActiveExam)o[1]).add((Student)o[0]);
+				client.sendToClient(new iMessage("StudentCheckedInToExam",true));
 			}
-			
+		} else {
+			client.sendToClient(new iMessage("StudentCantCheckedInToExam",false));
 		}
 
-/*
+		
+	}
+	
+	/*Word Files
 	/**
 	 * Create a Document file when the teacher activate a manual exam.
 	 * @param active
 	 */
-		/*/
-		private void CreateDocFile(ConnectionToClient client,Object obj)
-		{
-			//Create document
-			AesWordDoc doc=new AesWordDoc();
-			ActiveExam active= (ActiveExam) obj;
-			//Create title paragraph
-			XWPFParagraph titleParagraph=doc.createParagraph();
-			titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-			XWPFRun runTitleParagraph=titleParagraph.createRun();
-			runTitleParagraph.setBold(true);
-			runTitleParagraph.setItalic(true);
-			runTitleParagraph.setColor("00FF00");
-			runTitleParagraph.setText(active.getExam().getCourse().getName());
-			runTitleParagraph.addBreak();
-			runTitleParagraph.addBreak();
-			
-			//Create exam details paragraph
-			XWPFParagraph examDetailsParagraph=doc.createParagraph();
-			examDetailsParagraph.setAlignment(ParagraphAlignment.LEFT);
-			XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
-			runOnExamDetailsParagraph.setText("Field: "+active.getExam().getField().getName());
-			runOnExamDetailsParagraph.addBreak();
-			runOnExamDetailsParagraph.setText("Date: "+active.getDate());
-			runOnExamDetailsParagraph.addBreak();
-			
-			//Create question+answers paragraph
-			XWPFParagraph questionsParagraph=doc.createParagraph();
-			questionsParagraph.setAlignment(ParagraphAlignment.LEFT);
-			XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
-			int questionIndex=1;
-			ArrayList<QuestionInExam> questionsInExam=active.getExam().getQuestionsInExam();
-			for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-			{
-				if(qie.getStudentNote()!=null)
+	/*/
+	public void CreateWordFile(ActiveExam activeExam)
+	{
+		//Create document
+				AesWordDoc doc=new AesWordDoc();
+						
+				//Create title paragraph
+				XWPFParagraph titleParagraph=doc.createParagraph();
+				titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+				XWPFRun runTitleParagraph=titleParagraph.createRun();
+				runTitleParagraph.setBold(true);
+				runTitleParagraph.setItalic(true);
+				runTitleParagraph.setColor("00FF00");
+				runTitleParagraph.setText(activeExam.getExam().getCourse().getName());
+				runTitleParagraph.addBreak();
+				runTitleParagraph.addBreak();
+						
+				//Create exam details paragraph
+				XWPFParagraph examDetailsParagraph=doc.createParagraph();
+				examDetailsParagraph.setAlignment(ParagraphAlignment.RIGHT);
+				XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
+				runOnExamDetailsParagraph.setText("Field: "+activeExam.getExam().getField().getName());
+				runOnExamDetailsParagraph.addBreak();
+				runOnExamDetailsParagraph.setText("Date: "+activeExam.getDate());
+				runOnExamDetailsParagraph.addBreak();
+						
+				//Create question+answers paragraph
+				XWPFParagraph questionsParagraph=doc.createParagraph();
+				questionsParagraph.setAlignment(ParagraphAlignment.RIGHT);
+				XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
+				int questionIndex=1;
+				ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+				for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 				{
-					runOnquestionsParagraph.setText(qie.getStudentNote());
+					if(qie.getStudentNote()!=null)
+					{
+						runOnquestionsParagraph.setText(qie.getStudentNote());
+						runOnquestionsParagraph.addBreak();
+					}
+					runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
 					runOnquestionsParagraph.addBreak();
+					for(int i=1;i<5;i++)
+					{
+						runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
+						runOnquestionsParagraph.addBreak();
+					}
 				}
-				runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
 				runOnquestionsParagraph.addBreak();
-				for(int i=0;i<4;i++)
-				{
-					runOnquestionsParagraph.setText(qie.getAnswer(i));
-					runOnquestionsParagraph.addBreak();
-				}
-			}
-			runOnquestionsParagraph.addBreak();
-			runOnquestionsParagraph.addBreak();
-			
-			//Create good luck paragraph
-			XWPFParagraph GoodLuckParagraph=doc.createParagraph();
-			XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
-			runOnGoodLuckParagraph.setText("Good Luck!");
-			
-			AddToWordFileList(active,doc);//Add the word file to the list of word files.
-			
-		}
+				runOnquestionsParagraph.addBreak();
+						
+				//Create good luck paragraph
+				XWPFParagraph GoodLuckParagraph=doc.createParagraph();
+				XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
+				runOnGoodLuckParagraph.setText("Good Luck!");
+				
+				AddToWordFileList(activeExam,doc);
 
-
+	}
+	
 		/**
 		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
 		 * @param active
@@ -727,81 +727,58 @@ public class AESServer extends AbstractServer {
 		 private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
 			wordFiles.put(active, doc);
 		}/*/
+	
+	/*Word Files
+	/**
+	 * Send to client a Manual Exam word File.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 
+	private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
+		// TODO Auto-generated method stub
+		//System.out.print(wordFiles.containsKey((String)o));
+		iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
+		//System.out.println("sdfds");
+		client.sendToClient(im);
 		
-		/*Word Files
-		/**
-		 * Send to client a Manual Exam word File.
-		 * @param client
-		 * @param o
-		 * @throws IOException
-		 */
-		/*/
-		private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
-			// TODO Auto-generated method stub
-			//System.out.print(wordFiles.containsKey((String)o));
-			iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
-			//System.out.println("sdfds");
-			client.sendToClient(im);
-			
-			
-			
-			//FileOutputStream out = new FileOutputStream(new File("manual"));
-			//wordFiles.get((ActiveExam)o).write(out);
-			//out.close();
-			
 		
-			
-		}/*/
 		
-
-		private boolean isInActiveExam(Student s,ActiveExam ae) {
-			return studentsInExam.get(ae).contains(s);
+		/*FileOutputStream out = new FileOutputStream(new File("manual"));
+		wordFiles.get((ActiveExam)o).write(out);
+		out.close();
+		
+	
+		
+	}
+	/*/
+	
+	private boolean isInActiveExam(Student s,ActiveExam ae) {
+		return studentsInExam.get(ae).contains(s);
+	}
+	
+	public void GenerateActiveExamReport(ActiveExam ae) {
+		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
+		int participated = studentsInExam.get(ae).size();
+		int submitted = studentsSolvedExams.get(ae).size();
+		int notInTime = participated-submitted;
+		Date lockDate = new Date(new java.util.Date().getTime()); //now
+		ExamReport eReport = new ExamReport(ae.getCode(), ae.getType(), ae.getDate(), ae, ae.getActivator(), solvedExams, participated, submitted, notInTime, lockDate);
+		if (solvedExams.size()==0) {
+			System.out.println("No one submitted an exam for:" +ae.getCode() + " so a report creation was skiped");
+		} else if (sqlcon.insertCompletedExam(eReport)>0) {
+			System.out.println("Exam:" +ae.getCode() +" was inserted into database.");
+		} else {
+			System.out.println("Somthing went wrong");
 		}
+		activeExams.remove(ae.getCode()); 
+		studentsInExam.remove(ae); 
+		studentsCheckOutFromActiveExam.remove(ae); 
+		studentsSolvedExams.remove(ae); 
+		//wordFiles.remove(ae);
+		timeChangeRequests.remove(ae);
+	}
 
-		public void GenerateActiveExamReport(ActiveExam ae) {
-			ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
-			int participated = studentsInExam.get(ae).size();
-			int submitted = studentsSolvedExams.get(ae).size();
-			int notInTime = participated-submitted;
-			Date lockDate = new Date(new java.util.Date().getTime()); //now
-			ExamReport eReport = new ExamReport(ae.getCode(), ae.getType(), ae.getDate(), ae, ae.getActivator(), solvedExams, participated, submitted, notInTime, lockDate);
-			if (sqlcon.insertCompletedExam(eReport)>0) {
-				//successfully generated and inserted examreport into database 
-				//need to clean hasmaps to remove active exam from server
-				activeExams.remove(ae.getCode()); 
-				studentsInExam.remove(ae); 
-				studentsCheckOutFromActiveExam.remove(ae); 
-				studentsSolvedExams.remove(ae); 
-				//wordFiles.remove(ae);//Word Files
-				timeChangeRequests.remove(ae);
-			} else {
-				//fail to add exam report into database! big balagan!
-			}
-		}
-		
-		/**
-		 * Add solved exam to the list so we can generate all solved exams to report later, 
-		 * and remove the student from the CheckOut list which her purpose is to see if all students have submitted their exam.
-		 * @param obj
-		 * @throws IOException 
-		 */
-		public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
-		{
-			Object[] o = (Object[])obj;
-			ActiveExam e=(ActiveExam) o[0];
-			SolvedExam solved=(SolvedExam) o[1];
-			Student student=(Student) o[2];
-			studentsSolvedExams.get((ActiveExam)o[0]).add((SolvedExam)o[1]);
-			studentsCheckOutFromActiveExam.get((ActiveExam)o[0]).remove((Student)o[2]);
-			if(studentsCheckOutFromActiveExam.isEmpty())//If all students have submitted the exam.
-				GenerateActiveExamReport((ActiveExam)o[0]);
-			/*AesWordDoc doc=(AesWordDoc) o[3];//Word Files
-			if(o[3]!=null)//If it was a manual exam we add it to the list of manual solved exam.
-				solvedExamWordFiles.put((SolvedExam)o[1], (AesWordDoc)o[3]);/*/
-			client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
-			
-
-		}
 
 		/*
 		public void SystemCheckSolvedExam(ConnectionToClient client, Object obj) throws IOException {
@@ -881,5 +858,29 @@ public class AESServer extends AbstractServer {
 
 		}
 /*/
+
+	
+	/**
+	 * Add solved exam to the list so we can generate all solved exams to report later, 
+	 * and remove the student from the CheckOut list which her purpose is to see if all students have submitted their exam.
+	 * @param obj
+	 * @throws IOException 
+	 */
+	public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
+	{
+		Object[] o = (Object[])obj;
+		ActiveExam e=(ActiveExam) o[0];
+		SolvedExam solved=(SolvedExam) o[1];
+		Student student=(Student) o[2];
+		studentsSolvedExams.get(e).add(solved);
+		studentsCheckOutFromActiveExam.get(e).remove(student);
+		if(studentsCheckOutFromActiveExam.get(e).isEmpty())//If all students have submitted the exam.
+			GenerateActiveExamReport(e);
+		//AesWordDoc doc=(AesWordDoc) o[3];
+		//if(doc!=null)//If it was a manual exam we add it to the list of manual solved exam.
+			//solvedExamWordFiles.put(solved, doc);
+		client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
+	}
+
 }
 

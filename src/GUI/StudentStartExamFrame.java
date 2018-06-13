@@ -1,10 +1,6 @@
 package GUI;
 
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import javafx.animation.KeyFrame;
@@ -22,6 +18,10 @@ import logic.ActiveExam;
 import logic.Globals;
 import logic.Student;
 import ocsf.client.ClientGlobals;
+
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class StudentStartExamFrame implements ControlledScreen{
 

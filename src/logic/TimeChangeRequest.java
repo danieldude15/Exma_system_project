@@ -1,7 +1,6 @@
 package logic;
 
 import java.io.Serializable;
-import java.sql.Time;
 
 /**
  * This Class is created to manage Time Change Requests made by Teachers in the system and approved by principles
