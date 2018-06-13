@@ -1,9 +1,5 @@
 package GUI;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,11 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import logic.iMessage;
 import ocsf.server.AESServer;
-import ocsf.server.ConnectionToClient;
 import ocsf.server.ServerGlobals;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ServerFrame implements ControlledScreen,Initializable {
 

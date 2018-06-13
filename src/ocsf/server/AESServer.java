@@ -6,14 +6,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.util.Duration;
 import logic.*;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -135,6 +129,9 @@ public class AESServer extends AbstractServer {
 			case "getAllQuestions":
 				getAllQuestions(client,null);
 				break;
+			case"getAllExams":
+			    getAllExams(client,null);
+			    break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
 				break;
@@ -549,11 +546,29 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+    /**
+     * Method retrieves all written exam templates from the database
+     * @param client - the user currently connected ( used by the Principal )
+     * @param o - parameter for iMessage ( retrieving from a known table - null )
+     * @throws IOException - exception thrown if object construction in the database encounters a problem
+     */
 	private void getAllQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getAllQuestions();
 		iMessage rtrnmsg = new iMessage("AllQuestions", questions);
 		client.sendToClient(rtrnmsg);
 	}
+
+    /**
+     * Method retrieves all written questions from the database
+     * @param client - the user currently connected ( used by the Principal )
+     * @param o - parameter for iMessage ( retrieving from a known table - null )
+     * @throws IOException - exception thrown if object construction in the database encounters a problem
+     */
+    private void getAllExams(ConnectionToClient client, Object o) throws IOException {
+	    ArrayList<Exam> exams = sqlcon.getAllExams();
+	    iMessage rtrnmsg = new iMessage("AllExams",exams);
+	    client.sendToClient(rtrnmsg);
+    }
 
 	/**
 	 * Send to DBMain a request to pull object solved exams from database.

@@ -1,6 +1,7 @@
 package GUI;
 
 import Controllers.ControlledScreen;
+import Controllers.ExamController;
 import Controllers.QuestionController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,11 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import logic.Exam;
 import logic.Globals;
 import logic.Question;
 import ocsf.client.ClientGlobals;
 
 import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -41,34 +45,41 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     @FXML private Button m_backtoMainBtn;
 
     private HashMap<Integer, Question> m_questionsMap;
+    private HashMap<Integer, Exam> m_examsMap;
 
     @Override
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(445);
         Globals.primaryStage.setWidth(515);
         m_questionsMap = new HashMap<>();
-        updateQuestionsList();
+        m_examsMap = new HashMap<>();
     }
 
     @FXML
-    public void viewQuestion(ActionEvent event){
+    public void viewData(ActionEvent event){
 
         PrincipalViewQuestionFrame viewQuestionFrame = (PrincipalViewQuestionFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewQuestionID);
         Dialog<String> noSuchQuestionWarning = new Dialog<>();
         noSuchQuestionWarning.setContentText("There is no such Question in the Database");
 
         if (!m_questionsList.getSelectionModel().isEmpty()){
+            m_searchBox.setText("");
             String questionToBeDisplayed = (String) m_questionsList.getSelectionModel().getSelectedItem();
             String[] splitedQuestion = questionToBeDisplayed.split(" ");
             viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(splitedQuestion[1])));
             Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
         }
         if(!m_searchBox.getText().equals("")){
-            if(m_questionsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
-                viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(m_searchBox.getText())));
-                Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
-            }else{
-                Alert alert = new Alert(Alert.AlertType.ERROR,"There is no such Entry in DataBase",ButtonType.OK);
+            if(isNumeric(m_searchBox.getText())){
+                if (m_questionsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
+                    viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(m_searchBox.getText())));
+                    Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "There is no such Entry in DataBase", ButtonType.OK);
+                    Optional<ButtonType> result = alert.showAndWait();
+                }
+            }else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "You used Invalid characters, please enter Numerical ID.", ButtonType.OK);
                 Optional<ButtonType> result = alert.showAndWait();
             }
         }
@@ -106,12 +117,16 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
     @FXML
     public void onQuestionsTabSelection(Event event) {
+        if(m_questionsList.getItems().isEmpty())
+            updateQuestionsList();
         if(!m_questionsList.getSelectionModel().isEmpty())
             m_questionsList.getSelectionModel().clearSelection();
     }
 
     @FXML
     public void onExamsTabSelection(Event event) {
+        if(m_examsList.getItems().isEmpty())
+            updateExamsList();
         if(!m_examsList.getSelectionModel().isEmpty())
             m_examsList.getSelectionModel().clearSelection();
     }
@@ -128,12 +143,25 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             m_coursesList.getSelectionModel().clearSelection();
     }
 
+    /**
+     *  method checks if the entered id is a number
+     * @param str - ID entered manually by the user
+     * @return True - string is a number, false - string has non-numerical characters in it
+     */
+    public static boolean isNumeric(String str)
+    {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
+    }
+
     private void updateQuestionsList() {
         ArrayList<Question> m_questionsToBeDisplayed = QuestionController.getAllQuestions();
         ArrayList<String> basicQuestionInfo = new ArrayList<>();
         if (m_questionsToBeDisplayed != null) {
             for (Question question : m_questionsToBeDisplayed) {
-                m_questionsMap.put(Integer.parseInt(question.questionIDToString()),question);
+                m_questionsMap.put(Integer.parseInt(question.questionIDToString()), question);
                 String questionInfo = "QuestionID: " + question.questionIDToString() + " | " + question.getQuestionString();
                 basicQuestionInfo.add(questionInfo);
             }
@@ -141,5 +169,20 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             ObservableList<String> list = FXCollections.observableArrayList(basicQuestionInfo);
             m_questionsList.setItems(list);
         }
+    }
+
+    private void updateExamsList() {
+        ArrayList<Exam> m_examsToBeDisplayed = ExamController.getAllExams();
+        ArrayList<String> basicExamInfo = new ArrayList<>();
+        if (m_examsToBeDisplayed != null) {
+            for (Exam exam : m_examsToBeDisplayed) {
+                m_examsMap.put(Integer.parseInt(exam.examIdToString()), exam);
+                String questionInfo = "ExamID: " + exam.examIdToString() + " | Course: " + exam.getCourse().getName() + " Field: " + exam.getField().getName();
+                basicExamInfo.add(questionInfo);
+            }
+        }
+        m_examsList.getItems().clear();
+        ObservableList<String> list1 = FXCollections.observableArrayList(basicExamInfo);
+        m_examsList.setItems(list1);
     }
 }

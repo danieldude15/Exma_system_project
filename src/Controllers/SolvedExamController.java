@@ -1,15 +1,11 @@
 package Controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
-import javafx.scene.control.ToggleGroup;
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
+
+import java.io.IOException;
+import java.util.ArrayList;
 /**
  *  This controller is responsible for all information that has to do with solved exams
  *  it has functionality such as adding/editing solved exams also getting solved exams for informational purpeses.
