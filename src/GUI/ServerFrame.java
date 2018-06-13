@@ -31,13 +31,11 @@ public class ServerFrame implements ControlledScreen,Initializable {
 	@FXML TextField DBPort;
 
 
-	@Override
-	public void runOnScreenChange() {
-		//StartListening(null);
+	@Override public void runOnScreenChange() {
+		StartListening(null);
 	}
 	
-	@FXML
-	public void StartListening(ActionEvent event) {
+	@FXML public void StartListening(ActionEvent event) {
 		if (DBHostTB.isSelected())
 		ServerGlobals.server = new AESServer(
 				DBHostTB.getText(),DBUser.getText(),DBPass.getText(),Integer.parseInt(portnum.getText()));
@@ -48,8 +46,9 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		try {
 			//disconnectUsers(null);
 			ServerGlobals.server.listen();
-			statusLabel.setText("Listening");
+			statusLabel.setText("Listening!!");
 			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#00FF00"));
+			StartListenBotton.setDisable(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			statusLabel.setText("Failed To Listen Try Again");
@@ -57,8 +56,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		}
 	}
 	
-	@FXML
-	public void closeConnectionsBotton(ActionEvent event) {
+	@FXML public void closeConnectionsBotton(ActionEvent event) {
 		try {
 			disconnectUsers(null);
 			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
@@ -67,6 +65,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 			statusLabel.setText("Server Down");
 			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 			portnum.setDisable(false);			
+			StartListenBotton.setDisable(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusLabel.setText("Failed To close connection");
@@ -74,15 +73,13 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		}
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@Override public void initialize(URL location, ResourceBundle resources) {
 		statusLabel.setText("<Status>");
 		statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#FF0000"));
 	}
 	
 	
-	@FXML
-	public void disconnectUsers(ActionEvent event) {
+	@FXML public void disconnectUsers(ActionEvent event) {
 		if (ServerGlobals.server!=null) {
 			ServerGlobals.server.clearHashes();
 		}

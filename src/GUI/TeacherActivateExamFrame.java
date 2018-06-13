@@ -123,7 +123,7 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 						type=0;
 						ActiveExam activeExam = new ActiveExam(code,type,new Date(new java.util.Date().getTime()),examview,(Teacher) ClientGlobals.client.getUser());
 						ActiveExamController.InitializeActiveExam(activeExam);
-						ActiveExamController.CreateDocFile(activeExam);
+						//ActiveExamController.CreateDocFile(activeExam);Word Files
 					}
 					
 					 Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);

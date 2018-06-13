@@ -94,7 +94,8 @@ public class StudentMainFrame implements ControlledScreen{
 				String courseName = s.getCourse().getName();
 				String solvedExamGrade=Integer.toString(s.getScore());
 				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
-				solvedExamsList.getItems().add(courseName+"                                                        "
+				if (s.isTeacherApproved())
+					solvedExamsList.getItems().add(courseName+"                                                        "
 						+ "                                                    "+solvedExamGrade+"\n");
 			}
 		}

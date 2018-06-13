@@ -2,9 +2,11 @@ package Controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import javafx.scene.control.ToggleGroup;
 import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
@@ -83,13 +85,13 @@ public class SolvedExamController {
 	 * @param solvedExam
 	 * @param s
 	 */
-	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam,Student s,XWPFDocument doc)
+	public static void SendFinishedSolvedExam(ActiveExam activeExam,SolvedExam solvedExam,Student s)
 	{
 		Object[] o=new Object[4];
 		o[0]=(ActiveExam)activeExam;
 		o[1]=(SolvedExam)solvedExam;
 		o[2]=(Student)s;
-		o[3]=(XWPFDocument)doc;
+		//o[3]=(XWPFDocument)doc;
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
@@ -102,4 +104,24 @@ public class SolvedExamController {
 		} 
 	}
 
+	/*
+	public static Object[] SystemCheckExam(ActiveExam activeExam,boolean inTime,HashMap<QuestionInExam,ToggleGroup> questionWithAnswers)
+	{
+		Object[] o=new Object[3];
+		o[0]=(ActiveExam)activeExam;
+		o[1]=(boolean)inTime;
+		o[2]=(HashMap<QuestionInExam,ToggleGroup>)questionWithAnswers;
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				client.sendToServer(new iMessage("SystemCheckExam",o));
+				return (Object[])client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		return null;
+	}
+	/*/
 }

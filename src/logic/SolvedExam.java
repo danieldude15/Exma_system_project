@@ -157,7 +157,10 @@ public class SolvedExam extends ActiveExam{
 	 * overriding the toString proc to be used in listViews in GUI
 	 */
 	@Override public String toString() {
-		return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
+		if (teacherApproved)
+			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score + "(COMPLETED)";
+		else
+			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
 	}
 	public HashMap<QuestionInExam, String> getQuestionNoteOnHash() {
 		return questionNoteOnHash;
