@@ -146,11 +146,7 @@ public class SolvedExam extends ActiveExam{
 	 * @return the arraylist of question in this exam
 	 */
 	@Override public ArrayList<QuestionInExam> getQuestionsInExam() {
-		ArrayList<QuestionInExam> questions= new ArrayList<>();
-		for(QuestionInExam q: studentsAnswers.keySet()) {
-			questions.add(q);
-		}
-		return questions;
+		return new ArrayList<>(studentsAnswers.keySet());
 	}
 	
 	/**
