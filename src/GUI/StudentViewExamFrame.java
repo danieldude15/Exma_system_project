@@ -1,28 +1,20 @@
 package GUI;
 
-import java.util.HashMap;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import logic.Globals;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
+
+import java.util.HashMap;
 
 public class StudentViewExamFrame implements ControlledScreen {
 

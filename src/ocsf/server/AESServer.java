@@ -1,42 +1,22 @@
 package ocsf.server;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-
 import SQLTools.DBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import logic.ActiveExam;
-import logic.AesWordDoc;
-import logic.Course;
-import logic.Exam;
-import logic.ExamReport;
-import logic.Field;
-import logic.Globals;
-import logic.Principle;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.TimeChangeRequest;
-import logic.User;
-import logic.iMessage;
+import logic.*;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class AESServer extends AbstractServer {
 	

@@ -1,11 +1,5 @@
 package GUI;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ExamController;
@@ -17,22 +11,19 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import logic.Course;
-import logic.Exam;
-import logic.Field;
-import logic.Globals;
-import logic.Teacher;
+import logic.*;
 import ocsf.client.ClientGlobals;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class TeacherManageExamsFrame implements Initializable, ControlledScreen {
 	enum windowType {

@@ -1,9 +1,5 @@
 package GUI;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
@@ -25,6 +21,10 @@ import logic.ExamReport;
 import logic.Globals;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
 public class TeacherMainFrame implements Initializable,ControlledScreen {
