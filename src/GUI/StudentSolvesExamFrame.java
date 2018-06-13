@@ -66,6 +66,8 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	public void runOnScreenChange() {
 		Globals.primaryStage.setHeight(630);
 		Globals.primaryStage.setWidth(820);
+		
+		
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
 		
@@ -140,7 +142,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 		questionString.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
 		questionsAndAnswers.getChildren().add(questionString);
-		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
+		answers=new RadioButton[] {new RadioButton((char)(97)+". "+qie.getAnswer(1)),new RadioButton((char)(98)+". "+qie.getAnswer(2)),new RadioButton((char)(99)+". "+qie.getAnswer(3)),new RadioButton((char)(100)+". "+qie.getAnswer(4))};
 		for(RadioButton r:answers)//Sets all answers of the question on window screen.
 		{
 			r.setWrapText(true);
@@ -222,7 +224,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			runOnquestionsParagraph.addBreak();
 			for(int i=1;i<5;i++)
 			{
-				runOnquestionsParagraph.setText(qie.getAnswer(i));
+				runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
 				runOnquestionsParagraph.addBreak();
 			}
 		}
@@ -310,19 +312,20 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	public void submitStudentsExam(boolean inTime){
 		/*Build solved Exam object/*/
-		SolvedExam sendToGenerateReport=BuildSolvedExamObject();
+		SolvedExam sendToGenerateReport=BuildSolvedExamObject(inTime);
 		/*Confirmation Dialog/*/
-		ConfirmationDialogForSubmitButton(sendToGenerateReport);		
+		ConfirmationDialogForSubmitButton(sendToGenerateReport,inTime);		
 	}
 
 	/** 
 	 * Build SolvedExam object.
+	 * @param inTime 
 	 * @return SolvedExam
 	 */
-	private SolvedExam BuildSolvedExamObject()
+	private SolvedExam BuildSolvedExamObject(boolean inTime)
 	{
 	
-		Object[] studentAnsersAndScoreForExam=SystemCheckExam();
+		Object[] studentAnsersAndScoreForExam=SystemCheckExam(inTime);
 		HashMap<QuestionInExam,Integer> studentAnswers=(HashMap<QuestionInExam, Integer>) studentAnsersAndScoreForExam[0];
 		int score=(int) studentAnsersAndScoreForExam[1];
 			
@@ -344,15 +347,52 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	* Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
 	* Object[0]=HashMap(QuestionInExam,Integer) which contains the question in exam as key and the student's answer index as value. 
 	* Object[1]=Student's grade for exam.
+	 * @param inTime 
 	* @return Object[] studentAnsersAndScoreForExam
 	*/
-	private Object[] SystemCheckExam()
+	private Object[] SystemCheckExam(boolean inTime)
 	{
 		int score=0;
 		Object[] studentAnsersAndScoreForExam=new Object[2];
 		RadioButton r=new RadioButton();
 		HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
-		if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
+		if(inTime)//Student submit the exam before that the time is over.
+		{
+			
+			if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
+			{
+				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
+				{
+					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
+						studentAnswers.put(qie,0);
+						
+					else//Student choose answer.
+					{
+						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
+						for(int i=1;i<5;i++)//Runs all over question's answers.
+						{
+							if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
+							{
+								studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
+								if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
+									score+=qie.getPointsValue();
+								break;
+							}
+						}
+					}
+				}
+			}
+			else//Active exam is manual so we fabricate student's answers and score.
+			{
+				ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+				for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
+				{
+					studentAnswers.put(qie, 0);
+				}
+				score=-1;
+			}
+		}
+		else//Student did not have time to submit his exam
 		{
 			for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
 			{
@@ -367,22 +407,12 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 						if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
 						{
 							studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-							if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
-								score+=qie.getPointsValue();
 							break;
 						}
 					}
 				}
+				score=0;//His grade is zero if he didn't submit his exam on time.
 			}
-		}
-		else//Active exam is manual so we fabricate student's answers and score.
-		{
-			ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
-			for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-			{
-				studentAnswers.put(qie, 0);
-			}
-			score=-1;
 		}
 		studentAnsersAndScoreForExam[0]=studentAnswers;
 		studentAnsersAndScoreForExam[1]=score;
@@ -396,44 +426,51 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	/**
 	 * When student press submit he gets a confirmation dialog and can press ok for submit,
 	 *  or cancel to go back to the exam.
+	 * @param inTime 
 	 * @param SolvedExam
 	 */
-	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport)
+	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime)
 	{
-		/*Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation");
-		alert.setHeaderText("SubmitExam");
-		alert.setContentText("Are you sure you want to submit?");
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK)//User choose ok for submit.
+		if(inTime)//Student Submit his exam on time.
 		{
-			if(activeExam.getType()==0)//Exam is manual
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation");
+			alert.setHeaderText("SubmitExam");
+			alert.setContentText("Are you sure you want to submit?");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK)//User choose ok for submit.
 			{
-				AesWordDoc doc=ImportWordFile();
-
- 				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
- 				System.out.println(extract.getText());
-				/*Send message to the server to add solved exam to the list,
-				so we can generate a report from all solved exams when the active exam will be lock.
-				in addition the student is removing from the CheckOut list in server.
-				/*/
-				//SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);	
-			/*	SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+				if(activeExam.getType()==0)//Exam is manual
+				{
+					AesWordDoc doc=ImportWordFile();
+	
+	 				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
+	 				System.out.println(extract.getText());
+					/*Send message to the server to add solved exam to the list,
+					so we can generate a report from all solved exams when the active exam will be lock.
+					in addition the student is removing from the CheckOut list in server.
+					/*/
+					//SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),doc);	
+					SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+				}
+				else
+				{
+					SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+				}
+				
+				alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Submit confirmation");
+				alert.setHeaderText(null);
+				alert.setContentText("The exam was submitted successfully!");
+				alert.showAndWait();
+				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+	
 			}
-			else
-			{
-				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
-			}
-			
-			alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Submit confirmation");
-			alert.setHeaderText(null);
-			alert.setContentText("The exam was submitted successfully!");
-			alert.showAndWait();
-			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
-
 		}
-		/*/
+		else//Student didn't submit his exam on time.
+		{
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser(),null);		
+		}
 		System.out.println("daniel is driving me crazy");
 	}
 	

@@ -219,7 +219,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNote);
 		}
 		questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
-		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
+		answers=new RadioButton[] {new RadioButton((char)(answerIndex+96)+". "+qie.getAnswer(1)),new RadioButton((char)(answerIndex+97)+". "+qie.getAnswer(2)),new RadioButton((char)(answerIndex+98)+". "+qie.getAnswer(3)),new RadioButton((char)(answerIndex+99)+". "+qie.getAnswer(4))};
 		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
 
 		/*Set each of the 4 answers RadioButton of the question on window screen./*/
