@@ -68,19 +68,18 @@ public class ActiveExamController {
 		return null;
 	}
 
-	public static Integer lockExam(ActiveExam activeExam) {
+	public static void lockExam(ActiveExam activeExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("LOCKActiveExam",activeExam);
 				client.sendToServer(msg);
-				return (Integer) client.getResponseFromServer().getObj();
+				client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
-		return 0;
 	}
 
 	public static void requestNewTimeChangeForActiveExam(TimeChangeRequest tcr) {

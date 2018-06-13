@@ -1,14 +1,18 @@
 package Controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import logic.Course;
 import logic.Globals;
+import logic.Student;
 import logic.User;
 import logic.iMessage;
 import ocsf.client.ClientGlobals;
 
+@SuppressWarnings("unchecked")
 public class UserController {
 
 	public static void login(String username, String password) {
@@ -60,6 +64,19 @@ public class UserController {
 			e.printStackTrace();
 		}
 		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
+	}
+	
+
+	public static ArrayList<Student> getStudentsInCourse(Course c) {
+		try {
+			if (ClientGlobals.client!=null) {
+				ClientGlobals.client.sendToServer(new iMessage("studentsInCourse",c));
+				return (ArrayList<Student>) ClientGlobals.client.getResponseFromServer().getObj();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

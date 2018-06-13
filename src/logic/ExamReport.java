@@ -211,7 +211,10 @@ public class ExamReport extends ActiveExam {
 		for(SolvedExam se: solvedExams2) {
 			sum+=se.getScore();
 		}
-		return sum/solvedExams2.size();
+		if (solvedExams2.size()==0)
+			return 0;
+		else 
+			return sum/solvedExams2.size();
 	}
 
 	public static HashMap<Integer, Integer> calcDeviation(ArrayList<SolvedExam> solvedExams2) {
