@@ -24,7 +24,9 @@ public class DBMain {
 			"FROM aes.student_in_course as sic, aes.users as u " + 
 			"WHERE sic.studentid=u.userid and u.usertype=0 and sic.fieldid=? and sic.courseid=?");
 	private String getField = new String(""
-			+ "SELECT * from fields where fieldid=?");
+			+ "SELECT * FROM fields WHERE fieldid=?");
+	private String getCourse = new String(""
+			+ "SELECT * from aes.courses as c WHERE c.courseid=? and c.fieldid=?");
 	private String deleteExamReport = new String(""
 			+ "DELETE FROM `aes`.`exams_report` "
 			+ "WHERE `examid`=? and `courseid`=? and `fieldid`=? "
@@ -138,7 +140,9 @@ public class DBMain {
 			+ "(`questionid`,`examid`,`pointsvalue`,`courseid`,`fieldid`,`innernote`,`studentnote` ) "
 			+ "VALUES (?,?,?,?,?,?,?)");
 	private String getAllQuestions = new String(""
-			+ "Select * FROM aes.questions ");
+			+ "SELECT * FROM aes.questions ");
+	private String getAllExams = new String(""
+			+ "SELECT * FROM aes.exams");
 	private String login = new String(""
 			+ "SELECT * FROM aes.users WHERE username=?");
 	private String getUserThroughID = new String(""
@@ -147,7 +151,6 @@ public class DBMain {
 	/*Do not delete me, maybe you will need me later :)
 		private String getStudentsWhoSolvedExam="select u.userid,u.username,u.password,u.fullname from users as u,solved_exams as se where u.userid=se.studentid and se.examid=?";
 		private String getUser="select * from users where userid=?";
-		private String getCourse="select * from courses where courseid=?";
 		private String teachersSolvedExams="select * from solved_exams as se, exams as e where se.examid=e.examid and e.teacherid=?";
 		private String getstudentSolvedExams="select * from solved_exams as se where se.studentid=?";
 	/*/
@@ -375,6 +378,24 @@ public class DBMain {
 		return null;
 	}
 
+	public String getCourseName(int courseID,int fieldID){
+		try {
+			PreparedStatement prst = conn.prepareStatement(getCourse);
+			prst.setInt(1,courseID);
+			prst.setInt(2,fieldID);
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			while(rs.next()) {
+				System.out.println(rs.getString(2));
+				return rs.getString(2);
+			}
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
 	/**
 	 * getFieldCourses returns all field courses
 	 */
@@ -385,6 +406,28 @@ public class DBMain {
 	}
 
 	//  #############################   EXAM HANDELING    ##################################
+
+	public ArrayList<Exam> getAllExams() {
+		try {
+			PreparedStatement prst = conn.prepareStatement(getAllExams);
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			ArrayList<QuestionInExam> questions;
+			ArrayList<Exam> result = new ArrayList<>();
+			while(rs.next()) {
+				int examid = rs.getInt(1);
+				int duration = rs.getInt(2);
+				int teacherId = rs.getInt(5);
+				Course course = new Course(rs.getInt(4), getCourseName(rs.getInt(4),rs.getInt(3)), new Field(rs.getInt(3),getFieldName(rs.getInt(3))));
+				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
+				result.add(new Exam(examid, course, duration, (Teacher)getUser(teacherId), questions));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
 	
 	/**
 	 * gets all teachers Completed Exams
@@ -472,7 +515,7 @@ public class DBMain {
 				else teacherApprove = false;
 				String studentAnswers = rs.getString(11);
 				String teacherNote = rs.getString(15);
-				//int reportid = rs.getInt(12);
+				//int reportid = rs.getInt(12);z
 				int timeCompletedMinutes =rs.getInt(13);
 				Student student = new Student(rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10));
 				Teacher teacher = new Teacher(rs.getInt(16), rs.getString(17), rs.getString(18), rs.getString(19));

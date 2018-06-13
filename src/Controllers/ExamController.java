@@ -1,17 +1,14 @@
 package Controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import logic.Course;
 import logic.Exam;
-import logic.Question;
-import logic.QuestionInExam;
 import logic.Teacher;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class ExamController {
@@ -28,6 +25,21 @@ public class ExamController {
 				e.printStackTrace();
 			}
 		} 
+		return null;
+	}
+
+	public static ArrayList<Exam> getAllExams(){
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getAllExams",null);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Exam>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 
