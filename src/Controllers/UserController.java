@@ -1,16 +1,12 @@
 package Controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import logic.Course;
-import logic.Globals;
-import logic.Student;
-import logic.User;
-import logic.iMessage;
+import logic.*;
 import ocsf.client.ClientGlobals;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class UserController {
