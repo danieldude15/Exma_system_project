@@ -304,7 +304,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 				score=-1;
 			}
 		}
-		else//Student did not have time to submit his exam
+		else//Student did not have time to submit his exam.
 		{
 			for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
 			{

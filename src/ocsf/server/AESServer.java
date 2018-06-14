@@ -660,7 +660,7 @@ public class AESServer extends AbstractServer {
 	 * @param active
 	 */
 	/*/
-	public void CreateWordFile(ActiveExam activeExam)
+	private void CreateWordFile(ActiveExam activeExam)
 	{
 		//Create document
 				AesWordDoc doc=new AesWordDoc();
