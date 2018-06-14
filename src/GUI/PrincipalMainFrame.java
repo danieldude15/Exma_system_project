@@ -14,6 +14,8 @@ import ocsf.client.ClientGlobals;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static ocsf.client.ClientGlobals.PrincipalViewDataID;
+
 /**
  * Frame manages Main Menu Gui window of Principal
  */
@@ -35,6 +37,7 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(535);
         Globals.primaryStage.setWidth(523);
+
 
 
         Principle p = (Principle) ClientGlobals.client.getUser();
@@ -59,7 +62,7 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
 
     @FXML
     public void goToSchoolDataScreen(ActionEvent event){
-        Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewDataID);
+        Globals.mainContainer.setScreen(PrincipalViewDataID);
     }
 
     @FXML

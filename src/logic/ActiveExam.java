@@ -3,10 +3,6 @@ package logic;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import Controllers.CourseFieldController;
-import Controllers.UserController;
-import ocsf.client.ClientGlobals;
-
 /**
  * This is the ActiveExam Entitiy that holds information on active exams 
  * @author Group-12
