@@ -4,6 +4,10 @@ import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 /**
@@ -75,6 +79,39 @@ public class SolvedExamController {
 		return 0;
 	}
 	
+	public static void UploadFile(SolvedExam solvedExam, AesWordDoc doc)
+	{
+		//String name=solvedExam.getCourse().getName();
+		
+		
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			
+			
+			  try {
+				      File file = new File (doc.getFileName());     
+				      byte [] bytes  = new byte [(int)file.length()];
+				      FileInputStream fileInputStream = new FileInputStream(file);
+				      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
+				      doc.initArray(bytes.length);
+				      doc.setSize(bytes.length);
+				      bufferInputStream.read(doc.getbytes(),0,bytes.length);
+				  
+				  
+						
+			      Object[] o=new Object[2];
+			      o[0]=(AesWordDoc)doc;
+			      o[1]=(SolvedExam)solvedExam;
+			
+				client.sendToServer(new iMessage("UploadSolvedExam",o));
+				client.getResponseFromServer();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		} 
+		
+	}
 	/**
 	 * Send message to the server when the student finished his exam.
 	 * @param activeExam

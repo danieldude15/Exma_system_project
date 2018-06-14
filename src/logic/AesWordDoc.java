@@ -15,6 +15,11 @@ import java.util.ArrayList;
 
 public class AesWordDoc extends XWPFDocument implements Serializable {
 
+	private String description=null;
+	private String fileName=null;	
+	private int size=0;
+	public  byte[] bytes;
+	
 	/**
 	 * 
 	 */
@@ -35,8 +40,57 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public XWPFDocument CreateWordFile(ActiveExam activeExam)
+	public void initArray(int size)
 	{
+		bytes = new byte [size];	
+	}
+	
+	public AesWordDoc( String fileName) {
+		this.fileName = fileName;
+	}
+	
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public byte[] getbytes() {
+		return bytes;
+	}
+	
+	public byte getbyte(int i) {
+		return bytes[i];
+	}
+
+	public void setbytes(byte[] bytes) {
+		
+		for(int i=0;i<bytes.length;i++)
+		this.bytes[i] = bytes[i];
+	}
+
+	public String getdescription() {
+		return description;
+	}
+
+	public void setdescription(String description) {
+		description = description;
+	}
+	public void CreateWordFile(ActiveExam activeExam,String path) throws IOException
+	{
+		//FileOutputStream out = new FileOutputStream("C:\\Users\\איציק\\Desktop\\"+ new File(path)+".docx");
+		FileOutputStream out = new FileOutputStream(new File(path)+".docx");
 		//Create document
 		XWPFDocument doc=new XWPFDocument();
 				
@@ -90,10 +144,12 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
 		runOnGoodLuckParagraph.setText("Good Luck!");
 
-		return doc;
+		doc.write(out);
+		out.close();
+		//return doc;
 	}
 
-	
+/*	
 	public void OpenSaveFileDialog(ActiveExam activeExam) throws IOException
 	{
 		FileChooser saveWindow = new FileChooser();
@@ -110,12 +166,14 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
          
         
 	}
+	/*/
 	/**
 	 * Show for the user a save dialog where he can pick his saving path for the word file.
 	 * @param file
 	 * @param doc
 	 * @throws IOException
 	 */
+	/*
 	 private void SaveFile(File file, XWPFDocument doc) throws IOException{
 
             OutputStream outputStream = new FileOutputStream(file);
@@ -132,23 +190,28 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
  }
 
 	 
-		
-	 /**g
+		/*/
+	 /**
 	  * When the student pressed on submit button and the exam is manual,he has to upload his exam back to the system.
 	  */
-	 	public XWPFDocument OpenUploadWordFileDialog() {
+	 	public AesWordDoc OpenUploadWordFileDialog() {
 	 		// TODO Auto-generated method stub
-	 		XWPFDocument doc;
+	 		AesWordDoc doc;
 	  		FileChooser Uploadwindow=new FileChooser();
 	  		Uploadwindow.setTitle("Upload your exam");
 	  		File file=Uploadwindow.showOpenDialog(Globals.primaryStage);
 	  		if(file!=null)
 	  			try {
+	  				
 	  				doc=new AesWordDoc(new FileInputStream(file)) ;
 
 	  				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
 	  				System.out.println("Your solved exam: \n"+extract.getText());
 	  				
+	  				
+	  				System.out.println(file.getName());
+	  				//return file.getName();
+	  				doc.setFileName(file.getName());
 	  				return doc;
 	  				
 	  			} catch (FileNotFoundException e) {

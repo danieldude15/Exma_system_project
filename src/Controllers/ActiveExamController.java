@@ -4,6 +4,8 @@ import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -103,7 +105,7 @@ public class ActiveExamController {
 		}
 		return;
 	}
-	/*Word Files
+	//Word Files
 	public static void CreateDocFile(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -119,20 +121,21 @@ public class ActiveExamController {
 	}
 	
 	
-	public static AesWordDoc GetManualExam(ActiveExam activeExam)
+	public static void GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				return (AesWordDoc) client.getResponseFromServer().getObj();
+				client.getResponseFromServer();
+				//return (AesWordDoc) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
-		return null;
+		//return null;
 	}
 	/*/
 	

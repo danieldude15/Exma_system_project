@@ -1,6 +1,7 @@
 package GUI;
 
 
+import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
@@ -146,7 +147,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void SetDownloadButtonOnScreen() {
 		// TODO Auto-generated method stub
-		submitButton.setDisable(true);
+		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
 	}
 
@@ -159,19 +160,19 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	public void StudentPressedDownloadButton(ActionEvent event) throws IOException
 	{
-		/*AesWordDoc doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
-		FileOutputStream out= new FileOutputStream("ManualExam.docx");
-		doc.write(out);
-		out.close();/*/
 		
 		/*Open save dialog for the student where he can choose where to save the exam on his computer./*/
-		AesWordDoc wordClass=new AesWordDoc();
-		wordClass.OpenSaveFileDialog(this.GetActiveExam());
+		//AesWordDoc wordClass=new AesWordDoc();
+		//wordClass.OpenSaveFileDialog(this.GetActiveExam());
+
 		
+		ActiveExamController.GetManualExam(activeExam);		
+		String popUpTitle="Download "+activeExam.getCourse().getName()+" Succeed";
+		String popUpContentText="The exam is on your desktop, You can open it and start solving!";
+	    PopUp(popUpTitle,popUpContentText);
 		submitButton.setDisable(false);
 		downloadButton.setDisable(true);
 
-		//AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
 	}
 	
 		
@@ -331,8 +332,11 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				if(activeExam.getType()==0)//Exam is manual
 				{
-					XWPFDocument doc=wordClass.OpenUploadWordFileDialog();
+					//String name =wordClass.OpenUploadWordFileDialog();
 					
+					AesWordDoc doc=wordClass.OpenUploadWordFileDialog();
+					
+					SolvedExamController.UploadFile(sendToGenerateReport,doc);
 					//Print the word file.
 	 				//XWPFWordExtractor extract=new XWPFWordExtractor(doc);
 	 				//System.out.println(extract.getText());

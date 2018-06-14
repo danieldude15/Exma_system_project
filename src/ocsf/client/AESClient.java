@@ -1,5 +1,8 @@
 package ocsf.client;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import GUI.StudentSolvesExamFrame;
@@ -78,6 +81,13 @@ public class AESClient extends AbstractClient{
 		case "studentUpdateExamTime":
 			studentUpdateExamTime(o);
 			break;
+		case "DownloadWordFile":
+			try {
+				download(o);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -87,6 +97,15 @@ public class AESClient extends AbstractClient{
 		
 	}
 
+
+	private void download(Object o) throws IOException {
+		// TODO Auto-generated method stub
+		AesWordDoc file=(AesWordDoc) o;
+		File openFile = new File(file.getFileName());
+		FileOutputStream out = new FileOutputStream(openFile);
+		out.write(file.getbytes());
+		out.close();
+	}
 
 	private void copyServerMsg(Object serverMsg) {
 		msg = (iMessage) serverMsg;
