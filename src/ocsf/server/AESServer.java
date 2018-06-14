@@ -6,10 +6,17 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import logic.*;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,13 +47,13 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
-	/*Word Files
+	//Word Files
 	 // HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
 	 
 	private static HashMap<ActiveExam,AesWordDoc> wordFiles;
 	
-	private static HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
-	/*/
+	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
+	
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 	
@@ -62,7 +69,7 @@ public class AESServer extends AbstractServer {
 		//wordFiles=new HashMap<ActiveExam,AesWordDoc>();Word Files
 		studentsSolvedExams = new HashMap<>();
 		timeChangeRequests= new HashMap<>();
-		//solvedExamWordFiles=new HashMap<>();
+		solvedExamWordFiles=new HashMap<SolvedExam,AesWordDoc>();
 		examTimelines = new HashMap<>();
 
 		/**
@@ -186,9 +193,9 @@ public class AESServer extends AbstractServer {
 			case "StudentCheckInToExam":
 				checkInStudentToActiveExam(client, o);
 				break;
-			/*case "GetManualExam"://Word Files
+			case "GetManualExam"://Word Files
 				GetManuelExam(client,o);
-				break;/*/
+				break;
 			case "getcourseExams":
 				getcourseExams(client,o);
 				break;
@@ -204,6 +211,8 @@ public class AESServer extends AbstractServer {
 			/*case "SystemCheckExam":
 				SystemCheckSolvedExam(client,o);
 				break;/*/
+			case "UploadSolvedExam":
+				UploadSolvedExam(o);
 				
 			default:
 				
@@ -677,58 +686,7 @@ public class AESServer extends AbstractServer {
 	/*/
 	private void CreateWordFile(ActiveExam activeExam)
 	{
-		//Create document
-				AesWordDoc doc=new AesWordDoc();
-						
-				//Create title paragraph
-				XWPFParagraph titleParagraph=doc.createParagraph();
-				titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-				XWPFRun runTitleParagraph=titleParagraph.createRun();
-				runTitleParagraph.setBold(true);
-				runTitleParagraph.setItalic(true);
-				runTitleParagraph.setColor("00FF00");
-				runTitleParagraph.setText(activeExam.getExam().getCourse().getName());
-				runTitleParagraph.addBreak();
-				runTitleParagraph.addBreak();
-						
-				//Create exam details paragraph
-				XWPFParagraph examDetailsParagraph=doc.createParagraph();
-				examDetailsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-				XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
-				runOnExamDetailsParagraph.setText("Field: "+activeExam.getExam().getField().getName());
-				runOnExamDetailsParagraph.addBreak();
-				runOnExamDetailsParagraph.setText("Date: "+activeExam.getDate());
-				runOnExamDetailsParagraph.addBreak();
-						
-				//Create question+answers paragraph
-				XWPFParagraph questionsParagraph=doc.createParagraph();
-				questionsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-				XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
-				int questionIndex=1;
-				ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
-				for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-				{
-					if(qie.getStudentNote()!=null)
-					{
-						runOnquestionsParagraph.setText(qie.getStudentNote());
-						runOnquestionsParagraph.addBreak();
-					}
-					runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
-					runOnquestionsParagraph.addBreak();
-					for(int i=1;i<5;i++)
-					{
-						runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
-						runOnquestionsParagraph.addBreak();
-					}
-				}
-				runOnquestionsParagraph.addBreak();
-				runOnquestionsParagraph.addBreak();
-						
-				//Create good luck paragraph
-				XWPFParagraph GoodLuckParagraph=doc.createParagraph();
-				XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
-				runOnGoodLuckParagraph.setText("Good Luck!");
-				
+	
 				AddToWordFileList(activeExam,doc);
 
 	}
@@ -743,30 +701,37 @@ public class AESServer extends AbstractServer {
 			wordFiles.put(active, doc);
 		}/*/
 	
-	/*Word Files
 	/**
-	 * Send to client a Manual Exam word File.
+	 *  Send to client a Manual Exam word File.
 	 * @param client
 	 * @param o
 	 * @throws IOException
-	 
+	 */
 	private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
-		// TODO Auto-generated method stub
-		//System.out.print(wordFiles.containsKey((String)o));
-		iMessage im = new iMessage("ManuelExam",wordFiles.get((ActiveExam)o));
-		//System.out.println("sdfds");
-		client.sendToClient(im);
 		
+		String name=((ActiveExam)o).getCourse().getName();
+ 		AesWordDoc wordClass=new AesWordDoc();
+ 		wordClass.CreateWordFile((ActiveExam)o, name);
+		AesWordDoc retFile= new AesWordDoc(name+".docx");
 		
-		
-		/*FileOutputStream out = new FileOutputStream(new File("manual"));
-		wordFiles.get((ActiveExam)o).write(out);
-		out.close();
-		
-	
+		  try {
+			      File file = new File (name);     
+			      byte [] bytes  = new byte [(int)file.length()];
+			      FileInputStream fileInputStream = new FileInputStream(file);
+			      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
+			      retFile.initArray(bytes.length);
+			      retFile.setSize(bytes.length);
+			      bufferInputStream.read(retFile.getbytes(),0,bytes.length);
+			  
+			      client.sendToClient(new iMessage("DownloadWordFile",retFile));
+					
+			    }
+			catch (Exception e) {
+				System.out.println("Send file from server to client failed!\n");
+			}
 		
 	}
-	/*/
+	
 	
 	private boolean isInActiveExam(Student s,ActiveExam ae) {
 		return studentsInExam.get(ae).contains(s);
@@ -895,6 +860,22 @@ public class AESServer extends AbstractServer {
 		//if(doc!=null)//If it was a manual exam we add it to the list of manual solved exam.
 			//solvedExamWordFiles.put(solved, doc);
 		client.sendToClient(new iMessage("SolvedExamSubmittedSuccessfuly",null));
+	}
+
+
+	private void UploadSolvedExam(Object obj) throws IOException {
+		// TODO Auto-generated method stub
+		Object[] o=(Object[])obj;
+		
+		AesWordDoc file=(AesWordDoc) o[0];
+		File newFile = new File(file.getFileName());
+		FileOutputStream out = new FileOutputStream(newFile);
+		out.write(file.getbytes());
+		out.close();
+		
+		SolvedExam solvedExam=(SolvedExam) o[1];
+		solvedExamWordFiles.put(solvedExam, file);
+		System.out.println("fdsfs");
 	}
 
 }
