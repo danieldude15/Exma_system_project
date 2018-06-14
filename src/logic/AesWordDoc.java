@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -79,6 +80,7 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 				runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
 				runOnquestionsParagraph.addBreak();
 			}
+			questionIndex++;
 		}
 		runOnquestionsParagraph.addBreak();
 		runOnquestionsParagraph.addBreak();
@@ -102,6 +104,7 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
          
          //Show save file dialog
          File file = saveWindow.showSaveDialog(Globals.primaryStage);
+         
          if(file != null)
              SaveFile(file, CreateWordFile(activeExam));
          
@@ -130,7 +133,7 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 
 	 
 		
-	 /**
+	 /**g
 	  * When the student pressed on submit button and the exam is manual,he has to upload his exam back to the system.
 	  */
 	 	public XWPFDocument OpenUploadWordFileDialog() {
@@ -142,10 +145,12 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 	  		if(file!=null)
 	  			try {
 	  				doc=new AesWordDoc(new FileInputStream(file)) ;
+
+	  				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
+	  				System.out.println("Your solved exam: \n"+extract.getText());
+	  				
 	  				return doc;
 	  				
-	  				//XWPFWordExtractor extract=new XWPFWordExtractor(document);
-	  				//System.out.println(extract.getText());
 	  			} catch (FileNotFoundException e) {
 	  				// TODO Auto-generated catch block
 	  				e.printStackTrace();
