@@ -56,8 +56,8 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(680);
-		Globals.primaryStage.setWidth(820);
+		Globals.primaryStage.setHeight(705);
+		Globals.primaryStage.setWidth(813);
 
 		updateCompletedExamListView();
 		

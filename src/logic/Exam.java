@@ -201,6 +201,11 @@ public class Exam implements Serializable{
 					result = 31 * result + q.questionIDToString().hashCode();
 		return result;
 	}
+
+	public void setDuration(int newTime) {
+		Duration = newTime;
+		
+	}
 	
 	
 	

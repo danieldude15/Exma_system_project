@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import GUI.PrincipalMainFrame;
 import GUI.StudentSolvesExamFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -76,7 +77,7 @@ public class AESClient extends AbstractClient{
 			handleExamLocked(o);
 			return;	
 		case "newTimeChangeRequest":
-			newTimeChangeRequest();
+			newTimeChangeRequest(o);
 			break;
 		case "studentUpdateExamTime":
 			studentUpdateExamTime(o);
@@ -97,7 +98,6 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
-
 
 	private void download(Object o) throws IOException {
 		AesWordDoc file=(AesWordDoc) o;
@@ -216,18 +216,16 @@ public class AESClient extends AbstractClient{
 	}
 
 	
-	private void newTimeChangeRequest() {
-		// TODO Auto-generated method stub
-		// nathan needs to handle this and get a popup to the principle 
-		// that a new time change request has been submited!
-		
+	private void newTimeChangeRequest(Object o) {
+		PrincipalMainFrame principalMainFrame = (PrincipalMainFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalMainID);
+		principalMainFrame.setNewRequestArrived(true);
 	}
 	
 
 	private void studentUpdateExamTime(Object o) {
 		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
-		if (o instanceof TimeChangeRequest)
-			sef.updateExamTime((TimeChangeRequest)o);
+		if (o instanceof Long)
+			sef.updateExamTime((Long)o);
 	}
 	
 	private void handleExamLocked(Object o) {

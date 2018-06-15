@@ -1,45 +1,93 @@
 package GUI;
 
 import Controllers.ControlledScreen;
+import Controllers.TimeChangeController;
 import Controllers.UserController;
+import javafx.animation.KeyFrame;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import logic.Globals;
 import logic.Principle;
+import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.sql.Time;
+import java.util.ArrayList;
+
 
 import static ocsf.client.ClientGlobals.PrincipalViewDataID;
 
 /**
  * Frame manages Main Menu Gui window of Principal
  */
-public class PrincipalMainFrame implements Initializable, ControlledScreen {
+public class PrincipalMainFrame implements ControlledScreen {
 
     @FXML private Button m_reportsB;
     @FXML private Button m_SchoolDataB;
     @FXML private Button logoutB;
-    @FXML private ListView m_timeChangeRequestsList;
+    @FXML private ListView<TimeChangeRequest> m_timeChangeRequestsList;
     @FXML private TabPane m_principalTabPane;
     @FXML private Tab m_infoTab;
     @FXML private Tab m_requestsTab;
     @FXML private Label welcome;
+    @FXML private Label requester;
+    @FXML private Label courseRequest;
+    @FXML private Label timeExtention;
+    @FXML private Label reasonForTimeChange;
     @FXML private Label username;
     @FXML private Label userid;
     @FXML private Pane userImage;
-
-    @Override
+    
+    private TimeChangeRequest selectedTCR=null;
+    private boolean newRequestArrived=false;
+    private boolean oneKeyFrame = true;
+    private ArrayList<TimeChangeRequest> requests = new ArrayList<TimeChangeRequest>();
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(535);
         Globals.primaryStage.setWidth(523);
 
+        m_requestsTab.setDisable(true);
+        m_principalTabPane.getSelectionModel().select(m_infoTab);
+        
+        if (oneKeyFrame) {
+        	oneKeyFrame=false;
+        	Timeline timeline = new Timeline();
+	        timeline.setCycleCount(Timeline.INDEFINITE);
+	        timeline.getKeyFrames().add(
+	                new KeyFrame(Duration.seconds(1),
+	                  new EventHandler() {
+	                    // KeyFrame event handler
+	                    public void handle(Event event) {
+	                    	if (newRequestArrived) {
+	                    		newRequestArrived=false;
+	                    		Alert alert = new Alert(AlertType.INFORMATION);
+	                			alert.setTitle("New Time Change Request");
+	                			alert.setHeaderText(null);
+	                			alert.setContentText("A teacher has submitted a new Time Change request for an Active Exam. Please go and handle it!");
+	                			alert.show();
+	                			refreshRequestListView();
+	                    	}
+	                    }
+	                }));
+	        timeline.playFromStart();
+        }
 
-
+        refreshRequestListView();
+        
         Principle p = (Principle) ClientGlobals.client.getUser();
 
         welcome.setText("Welcome: " + p.getName());
@@ -50,23 +98,68 @@ public class PrincipalMainFrame implements Initializable, ControlledScreen {
                 + "-fx-background-repeat: no-repeat;");
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private void refreshRequestListView() {
+		requests = TimeChangeController.getAllRequests();
+		ObservableList<TimeChangeRequest> list = FXCollections.observableArrayList(requests);
+		m_timeChangeRequestsList.setItems(list);//Insert all student's solved exams(courseName+grade) into the ListView "solvedExamList"
+		if (requests.size()==0) {
+			m_requestsTab.setDisable(true);
+			m_principalTabPane.getSelectionModel().select(m_infoTab);
+		}
+	}
 
-    }
-
-    @FXML
-    public void goToReportsScreen(ActionEvent event){
+    @FXML public void goToReportsScreen(ActionEvent event){
         Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
     }
 
-    @FXML
-    public void goToSchoolDataScreen(ActionEvent event){
+    @FXML public void goToSchoolDataScreen(ActionEvent event){
         Globals.mainContainer.setScreen(PrincipalViewDataID);
     }
 
-    @FXML
-    public void logout(ActionEvent event){
+    @FXML public void logout(ActionEvent event){
         UserController.logout();
     }
+
+    @FXML public void approveRequst(ActionEvent event) {
+	   if (selectedTCR!=null) {
+		   selectedTCR.setStatus(true);
+		   TimeChangeController.sendResponse(selectedTCR);
+	   } else {
+		 //selectedTCR is null!
+	   }
+	   refreshRequestListView();
+    }
+    
+    @FXML public void denyRequest(ActionEvent event) {
+    	if (selectedTCR!=null) {
+ 		   selectedTCR.setStatus(false);
+ 		   TimeChangeController.sendResponse(selectedTCR);
+ 	   } else {
+ 		   //selectedTCR is null!
+ 	   }
+    	refreshRequestListView();
+    }
+    
+    @FXML public void timeChangeSelected(MouseEvent event) {
+    	TimeChangeRequest tChangeRequest = m_timeChangeRequestsList.getSelectionModel().getSelectedItem();
+    	if (tChangeRequest!=null) {
+    		m_requestsTab.setDisable(false);
+    		requester.setText(tChangeRequest.getTeacher().getName());;
+    	    courseRequest.setText(tChangeRequest.getActiveExam().getCourse().getName() + " in " + tChangeRequest.getActiveExam().getField().getName());
+    	    timeExtention.setText(Long.toString(tChangeRequest.getNewTime()));
+    	    reasonForTimeChange.setText(tChangeRequest.getReasonForTimeChange());
+    	    selectedTCR = tChangeRequest;
+    	}
+    		
+    		
+    	
+    }
+    
+	public boolean isNewRequestArrived() {
+		return newRequestArrived;
+	}
+
+	public void setNewRequestArrived(boolean newRequestArrived) {
+		this.newRequestArrived = newRequestArrived;
+	}
 }
