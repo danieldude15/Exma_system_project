@@ -104,7 +104,7 @@ public class SolvedExamController {
 			      o[1]=(SolvedExam)solvedExam;
 			
 				client.sendToServer(new iMessage("UploadSolvedExam",o));
-				client.getResponseFromServer();
+				//client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

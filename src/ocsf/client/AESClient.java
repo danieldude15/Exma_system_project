@@ -88,6 +88,7 @@ public class AESClient extends AbstractClient{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -99,7 +100,6 @@ public class AESClient extends AbstractClient{
 
 
 	private void download(Object o) throws IOException {
-		// TODO Auto-generated method stub
 		AesWordDoc file=(AesWordDoc) o;
 		File openFile = new File(file.getFileName());
 		FileOutputStream out = new FileOutputStream(openFile);

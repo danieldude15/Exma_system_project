@@ -96,6 +96,8 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 			courseComboB.setItems(list);
 		}
 		System.out.println(courseComboB.getItems().toString());
+		courseComboB.getSelectionModel().select(new Course(0,"All",null));
+		filterByCourse(null);
 	}
 	
 	@FXML public void filterByCourse(ActionEvent event) {

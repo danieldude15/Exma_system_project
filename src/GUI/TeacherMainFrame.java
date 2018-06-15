@@ -128,18 +128,11 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void goToCheckExams(ActionEvent event) {
+		ExamReport selectedExam = CompletedExamList.getSelectionModel().getSelectedItem();
 		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) return;
-		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
-		System.out.println(selectedExam);
-		String selectedExamid = selectedExam.split(" ")[6];
-		for (ExamReport ce:TeacherCExams) {
-			if(ce.getExam().examIdToString().equals(selectedExamid)) {
-				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
-				teacherCheckExams.setCompletedExams(ce);
-				Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
-				break;
-			}
-		}
+		TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
+		teacherCheckExams.setCompletedExams(selectedExam);
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
 	
 	@FXML public void completeExamsListViewClicked(MouseEvent event) {
