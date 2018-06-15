@@ -61,6 +61,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
         PrincipalViewQuestionFrame viewQuestionFrame = (PrincipalViewQuestionFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewQuestionID);
         PrincipalViewExamFrame viewExamFrame = (PrincipalViewExamFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewExamID);
+        PrincipalViewFieldFrame viewFieldFrame = (PrincipalViewFieldFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewFieldID);
 
         if (!m_questionsList.getSelectionModel().isEmpty()){
             m_searchBox.setText("");
@@ -74,15 +75,24 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             String[] splitedExam = examToBeDisplayed.split(" ");
             viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(splitedExam[1])));
             Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewExamID);
+        }else if(!m_fieldsList.getSelectionModel().isEmpty()){
+            m_searchBox.setText("");
+            String examToBeDisplayed = m_fieldsList.getSelectionModel().getSelectedItem();
+            String[] splitedExam = examToBeDisplayed.split(" ");
+            viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(splitedExam[1])));
+            Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
         }
         if(!m_searchBox.getText().equals("")){
             if(isNumeric(m_searchBox.getText())){
                 if (m_questionsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(m_searchBox.getText())));
                     Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
-                }else if (m_examsMap.containsKey(Integer.parseInt(m_searchBox.getText()))){
+                }else if (m_examsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(m_searchBox.getText())));
-                    Globals.mainContainer.setScreen(ClientGlobals.TeacherViewExamID);
+                    Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewExamID);
+                }else if (m_fieldsMap.containsKey(Integer.parseInt(m_searchBox.getText()))){
+                        viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(m_searchBox.getText())));
+                        Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "There is no such Entry in DataBase", ButtonType.OK);
                     Optional<ButtonType> result = alert.showAndWait();

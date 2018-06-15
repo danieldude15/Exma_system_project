@@ -53,6 +53,9 @@ public class ClientGlobals {
 	public static final String PrincipalViewExamID = "PrincipalViewExam";
 	public static final String PrincipalViewExamPath = "/resources/fxml/PrincipalViewExam.fxml";
 
+	public static final String PrincipalViewFieldID = "PrincipalViewField";
+	public static final String PrincipalViewFieldPath = "/resources/fxml/PrincipalViewField.fxml";
+
 	/*		Principal Screens End		*/
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
