@@ -51,6 +51,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -65,10 +66,8 @@ import ocsf.client.ClientGlobals;
  */
 public class ScreensController  extends StackPane {
     //Holds the screens to be displayed
-	private Stage progressIndicatorStage = new Stage();
-	private Thread progressThread = null;
 	private Integer showProgress = 0;
-	
+	private Timeline task;
 	private String currentScreen =null;
 	
     private HashMap<String, Node> screens = new HashMap<>();
@@ -80,6 +79,20 @@ public class ScreensController  extends StackPane {
     public ScreensController() {
         super();
         Globals.mainContainer=this;
+        ProgressIndicator bar = new ProgressIndicator(-1);
+        bar.setPrefSize(200, 24);
+
+        task = new Timeline(
+            new KeyFrame(
+                    Duration.ZERO,       
+                    new KeyValue(bar.progressProperty(), 0)
+            ),
+            new KeyFrame(
+                    Duration.seconds(2), 
+                    new KeyValue(bar.progressProperty(), 1)
+            )
+        );
+
     }
 
     //Add the screen to the collection
@@ -128,7 +141,10 @@ public class ScreensController  extends StackPane {
     	if (screens.get(name) != null) {   //screen loaded
             final DoubleProperty opacity = opacityProperty();
             if (!getChildren().isEmpty()) {    //if there is more than one screen
-            	showProgressIndicator();
+            	getChildren().remove(0);                    //remove the displayed screen
+            	getController(Globals.ProgressIndicatorID).runOnScreenChange();
+                getChildren().add(0, screens.get(Globals.ProgressIndicatorID));     //add the screen
+                controllers.get(name).runOnScreenChange();
                 Timeline fade = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
                         new KeyFrame(new Duration(250), new EventHandler<ActionEvent>() {
@@ -142,9 +158,7 @@ public class ScreensController  extends StackPane {
                         fadeIn.play();
                     }
                 }, new KeyValue(opacity, 0.0)));
-                controllers.get(name).runOnScreenChange();
                 fade.play();
-                hideProgressIndicator();
             } else {
                 setOpacity(0.0);
                 getChildren().add(screens.get(name));       //no one else been displayed, then just show
@@ -162,17 +176,6 @@ public class ScreensController  extends StackPane {
         }
     }
     
-    private void showProgressIndicator() {
-    	synchronized (showProgress) {
-			setShowProgress(1);;
-		}
-	}
-
-	private void hideProgressIndicator() {
-		synchronized (showProgress) {
-			setShowProgress(0);
-		}
-    }
 
 	//This method will remove the screen with the given name from the collection of screens
     public boolean unloadScreen(String name) {
@@ -188,15 +191,6 @@ public class ScreensController  extends StackPane {
 		return currentScreen;
 	}
 
-	
-	private Integer getShowProgress() {
-		return showProgress;
-	}
-
-	private void setShowProgress(Integer showProgress) {
-		this.showProgress = showProgress;
-		//progressThread.start();
-	}
     
 	
 }
