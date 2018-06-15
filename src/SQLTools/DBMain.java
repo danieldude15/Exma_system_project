@@ -72,6 +72,8 @@ public class DBMain {
 			+ "SELECT e.examid , e.timeduration, c.courseid, c.coursename, f.fieldid, f.fieldname ,e.teacherid "
 			+ "FROM aes.exams as e, aes.courses as c, aes.fields as f "
 			+ "WHERE c.courseid=e.courseid and f.fieldid=e.fieldid and c.fieldid=f.fieldid and e.examid=? and f.fieldid=? and c.courseid=?");
+	private String getFieldTeachers = new String(""
+	+ "SELECT * FROM teacher_fields WHERE fieldid = ?");
 	private String getSolvedExams = new String(""
 			+ "SELECT e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration," + 
 			"		u.userid,u.username,u.password,u.fullname,se.answers," + 
@@ -143,6 +145,8 @@ public class DBMain {
 			+ "SELECT * FROM aes.questions ");
 	private String getAllExams = new String(""
 			+ "SELECT * FROM aes.exams");
+	private String getAllFields = new String(""
+			+ "SELECT * FROM aes.fields");
 	private String login = new String(""
 			+ "SELECT * FROM aes.users WHERE username=?");
 	private String getUserThroughID = new String(""
@@ -305,7 +309,24 @@ public class DBMain {
 	}
 	
 	// ######################### COURSE FIELD HANDELING  ####################################
-	
+
+	public ArrayList<Field> getAllFields(){
+		try {
+			PreparedStatement prst = conn.prepareStatement(getAllFields);
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			ArrayList<Field> fields = new ArrayList<>();
+			while(rs.next()) {
+				int fieldID = rs.getInt(1);
+				String fieldName= rs.getString(2);
+				fields.add(new Field(fieldID,fieldName));
+			}
+			return fields;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
 
 	public ArrayList<Field> getTeacherFields(Teacher o) {
 		ArrayList<Field> fields = new ArrayList<Field>();
@@ -404,6 +425,30 @@ public class DBMain {
 		ArrayList<Field> fields = new ArrayList<>();
 		fields.add(o);
 		return getFieldsCourses(fields);
+	}
+
+	/**
+	 *
+	 * @param field - from which teachers are expected
+	 * @return
+	 */
+	public ArrayList<Teacher> getFieldTeachers(Field field){
+		try {
+			PreparedStatement prst = conn.prepareStatement(getFieldTeachers);
+			prst.setInt(1, field.getID());
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			System.out.println(rs);
+			ArrayList<Teacher> result = new ArrayList<>();
+			while(rs.next()) {
+				int teacherid = rs.getInt(1);
+				result.add(((Teacher)getUser(teacherid)));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
 	}
 
 	//  #############################   EXAM HANDELING    ##################################

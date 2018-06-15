@@ -1,5 +1,7 @@
 package logic;
 
+import Controllers.CourseFieldController;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -37,12 +39,12 @@ public class Field implements Serializable{
 	
 	/**
 	 * copy constructior
-	 * @param Field object
+	 * @param f object
 	 */
 	public Field(Field f) {
 		super();
-		fID=f.getID();
-		fName=new String(f.getName());
+		fID = f.getID();
+		fName = new String(f.getName());
 	}
 
 	/**
@@ -66,7 +68,7 @@ public class Field implements Serializable{
 	 * @return ArrayList of courses in field
 	 */
 	public ArrayList<Course> getCoursesInField(){
-		return null;
+		return CourseFieldController.getFieldCourses(this);
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public class Field implements Serializable{
 	 * @return ArrayList of Teachers in field
 	 */
 	public ArrayList<Teacher> getTeachersInField(){
-		return null;
+		return CourseFieldController.getFieldTeachers(this);
 	}
 
 	/**
@@ -100,7 +102,7 @@ public class Field implements Serializable{
 		if(this==obj)return true;
 		if (obj instanceof Field) {
 			Field field = (Field) obj;
-			if (field.getID()==getID() && field.getName().equals(getName())) return true;
+			return field.getID() == getID() && field.getName().equals(getName());
 		}
 		return false;
 	}

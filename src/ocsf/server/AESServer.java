@@ -6,23 +6,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import logic.*;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class AESServer extends AbstractServer {
 	
@@ -188,6 +179,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "getFieldCourses":
 				getFieldCourses(client,o);
+				break;
+			case "getFieldTeachers":
+				getFieldTeachers(client,o);
 				break;
 			case "addExam":
 				addExam(client,o);
@@ -527,6 +521,12 @@ public class AESServer extends AbstractServer {
 	private void getFieldCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> Courses = sqlcon.getFieldCourses((Field)o);
 		iMessage im = new iMessage("FieldCourses",Courses);
+		client.sendToClient(im);
+	}
+
+	private void getFieldTeachers(ConnectionToClient client, Object o) throws IOException{
+		ArrayList<Teacher> teachers = sqlcon.getFieldTeachers((Field)o);
+		iMessage im = new iMessage("FieldTeachers",teachers);
 		client.sendToClient(im);
 	}
 	
@@ -881,4 +881,3 @@ public class AESServer extends AbstractServer {
 	}
 
 }
-
