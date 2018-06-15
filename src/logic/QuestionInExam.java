@@ -11,15 +11,15 @@ public class QuestionInExam extends Question {
 	/**
 	 * points value of question in an exam
 	 */
-	int PointsValue;
+	private int PointsValue;
 	/**
 	 * a String of Hidden Note that is visiable only yo teachers and not visiable to students
 	 */
-	String innerNote;
+	private String innerNote;
 	/**
 	 * a String visiable to all teachers and student
 	 */
-	String studentNote;
+	private String studentNote;
 	
 	/**
 	 * Constructor to build an Object of type QuestionInExam
@@ -35,16 +35,16 @@ public class QuestionInExam extends Question {
 	 * @param StdNote - visiable to all note
 	 */
 	public QuestionInExam(int iD, Teacher Author, String question, String[] answers, Field field,
-			int correctAnswerIndex, ArrayList<Course> courses,int points, String inNote,String StdNote) {
+						  int correctAnswerIndex, ArrayList<Course> courses,int points, String inNote,String StdNote) {
 		super(iD, Author, question, answers, field, correctAnswerIndex, courses);
 		PointsValue = points;
-		inNote=innerNote;
+		innerNote = inNote;
 		studentNote=StdNote;
 	}
 	public QuestionInExam(Question q,int points, String inNote,String StdNote) {
 		super(q.getID(),q.getAuthor(),q.getQuestionString(),q.getAnswers(),q.getField(),q.getCorrectAnswerIndex(),q.getCourses());
 		PointsValue = points;
-		inNote=innerNote;
+		innerNote = inNote;
 		studentNote=StdNote;
 	}
 	/**
@@ -96,20 +96,20 @@ public class QuestionInExam extends Question {
 	 * overriding the equals method to be able to use hashMap and check for equal objects of this type
 	 * @param obj - the QuestionInExam to check equality to
 	 */
+	@SuppressWarnings("")
 	@Override public boolean equals(Object obj) {
 		if (this==obj)return true;
 		if(obj instanceof QuestionInExam) {
 			QuestionInExam q = (QuestionInExam) obj;
 			if ((super.equals(q) && q.getPointsValue()==PointsValue)) {
-				if ((q.getStudentNote()==studentNote || (q.getStudentNote()!=null && q.getStudentNote().equals(studentNote)))  
-					&& (q.getInnerNote()==innerNote || (q.getInnerNote()!=null && q.getInnerNote().equals(innerNote))))
-				return true;
+				return (q.getStudentNote() == studentNote || (q.getStudentNote() != null && q.getStudentNote().equals(studentNote)))
+						&& (q.getInnerNote() == innerNote || (q.getInnerNote() != null && q.getInnerNote().equals(innerNote)));
 			}
 		}
 		return false;
 	}
 	@Override public String toString() {
-		return new String(String.format( "QuestionID: %s\nQuestion: %d\nAutherName: %s\n ",questionIDToString(),getQuestionString(), getAuthor().getUserName()));
+		return String.format("QuestionID: %s\nQuestion: %s\nAuthorName: %s\n ", questionIDToString(), getQuestionString(), getAuthor().getUserName());
 	}
 
 	/**
