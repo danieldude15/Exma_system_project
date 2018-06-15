@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalMainFrame">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalMainFrame">
    <children>
       <AnchorPane prefHeight="250.0" prefWidth="200.0">
          <children>
@@ -28,7 +37,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="m_timeChangeRequestsList" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="m_timeChangeRequestsList" onMouseClicked="#timeChangeSelected" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </VBox>
             <ProgressIndicator fx:id="m_schoolDataProgressWheel" layoutX="14.0" layoutY="104.0" prefHeight="39.0" prefWidth="29.0" visible="false" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="104.0" />
@@ -72,7 +81,87 @@
           </Tab>
           <Tab fx:id="m_requestsTab" disable="true" text="Request">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: Black;">
+                     <children>
+                        <Button layoutX="414.0" layoutY="162.0" mnemonicParsing="false" onAction="#denyRequest" prefHeight="25.0" prefWidth="63.0" text="Deny" />
+                        <Button layoutX="414.0" layoutY="122.0" mnemonicParsing="false" onAction="#approveRequst" text="Approve" />
+                        <HBox maxWidth="400.0" minWidth="-Infinity">
+                           <children>
+                              <VBox minWidth="-Infinity">
+                                 <children>
+                                    <Label text="Teacher">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Course:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Time extention">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Reason:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="10.0">
+                                 <children>
+                                    <Label fx:id="requester" text="Teacher">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="courseRequest" text="Course:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="timeExtention" text="Time extention">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="reasonForTimeChange" text="Reason:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>

@@ -373,21 +373,24 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 
-	public void updateExamTime(TimeChangeRequest o) {
-		// TODO Auto-generated method stub
-		
+	public void updateExamTime(Long extraTimeInMinutes) {
+		setTimeSeconds(getTimeSeconds()+extraTimeInMinutes*60);
 	}
 
 	public void updateTimeLabel(Long timeInSeconds) {
-		String hour = "" + timeInSeconds/60/60;
-		String minutes = "" + (timeInSeconds/60)%60;
-		String seconds = "" + timeInSeconds%60;
-		String time = hour + ":" + minutes + ":" +seconds;
-		timeLeftLabel.setText(time);
+		synchronized (timeSeconds) {
+			String hour = "" + timeInSeconds/60/60;
+			String minutes = "" + (timeInSeconds/60)%60;
+			String seconds = "" + timeInSeconds%60;
+			String time = hour + ":" + minutes + ":" +seconds;
+			timeLeftLabel.setText(time);
+		}
 	}
 
 	public void setTimeSeconds(Long timeSeconds) {
-		this.timeSeconds = timeSeconds;
+		synchronized (timeSeconds) {
+			this.timeSeconds = timeSeconds;
+		}
 		if (timeSeconds <= 0) {
             String popUpTitle="Exam Over";
 			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
@@ -398,7 +401,11 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 	public Long getTimeSeconds() {
-		return timeSeconds;
+		Long ret;
+		synchronized (timeSeconds) {
+			ret = timeSeconds;
+		}
+		return ret;
 	}
 	
 	public void PopUp(String title,String contentText)

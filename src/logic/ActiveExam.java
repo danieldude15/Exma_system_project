@@ -55,9 +55,9 @@ public class ActiveExam  extends Exam {
 	public ActiveExam(ActiveExam e)/*Copy constructor/*/
 	{
 		super(e);
-		code=e.getCode();
+		code= new String(e.getCode());
 		type=e.getType();
-		dateActivated=e.getDate();
+		dateActivated=new Date(e.getDate().getTime());
 		activator=new Teacher(e.getActivator());
 	}
 	
@@ -136,11 +136,13 @@ public class ActiveExam  extends Exam {
 		if(this==obj)return true;
 		if(obj != null && obj.getClass() == getClass()) {
 			ActiveExam a = (ActiveExam) obj;
-			if (a.getCode()==null || a.getDate()==null || a.getActivator()==null) return false;
-			if (!a.getCode().equals(code) || a.getType()!=type) return false;
-			if (!a.getDate().equals(dateActivated)) return false;
-			if (!a.getActivator().equals(activator)) return false;
-			return super.equals(a);
+			if(!super.equals(a)) return false;
+			if (a.getCode()==getCode() && a.getDate()==getDate() && a.getActivator()==getActivator() && a.getType()==getType()) return true;
+			if (a.getCode()!=null && !a.getCode().equals(code)) return false;
+			if (a.getDate()!=null && !a.getCode().equals(code)) return false;
+			if (a.getActivator()!=null && !a.getActivator().equals(activator)) return false;
+			if (a.getType()!=type) return false;
+			return true;
 		}
 		return false;
 	}
