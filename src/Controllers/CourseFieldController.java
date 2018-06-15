@@ -12,6 +12,21 @@ import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
+
+	public static ArrayList<Field> getAllFields(){
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getAllFields",null);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Field>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * this function will give us all the fields of a teacher.

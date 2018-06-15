@@ -91,7 +91,7 @@ public class Field implements Serializable{
 	 * method to convert field id to a string always max length of 2 chars
 	 * @return the string value of the id
 	 */
-	public String fieldIdToSdting() {
+	public String fieldIdToString() {
 		return new String(String.format("%02d", getID()));
 	}
 

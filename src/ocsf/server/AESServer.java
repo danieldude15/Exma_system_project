@@ -129,9 +129,12 @@ public class AESServer extends AbstractServer {
 			case "getAllQuestions":
 				getAllQuestions(client,null);
 				break;
-			case"getAllExams":
+			case "getAllExams":
 			    getAllExams(client,null);
 			    break;
+            case "getAllFields":
+                getAllFields(client,null);
+                break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
 				break;
@@ -581,7 +584,19 @@ public class AESServer extends AbstractServer {
 	    client.sendToClient(rtrnmsg);
     }
 
-	/**
+    /**
+     * Method retrieves all fields from the database
+     * @param client - the user currently connected ( used by the Principal )
+     * @param o - parameter for iMessage ( retrieving from a known table - null )
+     * @throws IOException - exception thrown if object construction in the database encounters a problem
+     */
+    private void getAllFields(ConnectionToClient client, Object o) throws IOException {
+        ArrayList<Field> fields = sqlcon.getAllFields();
+        iMessage rtrnmsg = new iMessage("AllFields", fields);
+        client.sendToClient(rtrnmsg);
+    }
+
+    /**
 	 * Send to DBMain a request to pull object solved exams from database.
 	 * @param client
 	 * @param o
