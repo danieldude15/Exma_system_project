@@ -51,16 +51,13 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     public void runOnScreenChange() {
         Globals.primaryStage.setHeight(445);
         Globals.primaryStage.setWidth(515);
-        m_questionsMap = new HashMap<>();
-        m_examsMap = new HashMap<>();
     }
 
     @FXML
     public void viewData(ActionEvent event){
 
         PrincipalViewQuestionFrame viewQuestionFrame = (PrincipalViewQuestionFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewQuestionID);
-        Dialog<String> noSuchQuestionWarning = new Dialog<>();
-        noSuchQuestionWarning.setContentText("There is no such Question in the Database");
+        PrincipalViewExamFrame viewExamFrame = (PrincipalViewExamFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewExamID);
 
         if (!m_questionsList.getSelectionModel().isEmpty()){
             m_searchBox.setText("");
@@ -68,12 +65,21 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             String[] splitedQuestion = questionToBeDisplayed.split(" ");
             viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(splitedQuestion[1])));
             Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
+        }else if(!m_examsList.getSelectionModel().isEmpty()){
+            m_searchBox.setText("");
+            String examToBeDisplayed = (String) m_examsList.getSelectionModel().getSelectedItem();
+            String[] splitedExam = examToBeDisplayed.split(" ");
+            viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(splitedExam[1])));
+            Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewExamID);
         }
         if(!m_searchBox.getText().equals("")){
             if(isNumeric(m_searchBox.getText())){
                 if (m_questionsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(m_searchBox.getText())));
                     Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
+                }else if (m_examsMap.containsKey(Integer.parseInt(m_searchBox.getText()))){
+                    viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(m_searchBox.getText())));
+                    Globals.mainContainer.setScreen(ClientGlobals.TeacherViewExamID);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "There is no such Entry in DataBase", ButtonType.OK);
                     Optional<ButtonType> result = alert.showAndWait();
@@ -92,7 +98,8 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        m_questionsMap = new HashMap<>();
+        m_examsMap = new HashMap<>();
     }
 
     // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )
