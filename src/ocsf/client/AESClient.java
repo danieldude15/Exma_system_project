@@ -151,9 +151,8 @@ public class AESClient extends AbstractClient{
 			}
 			count++;
 			if(count>=500) {
-				System.out.println("Server Taking Long Time To Respond...");
-				//Globals.handleException(new Exception("Waited for too long for server response!"));
-				break;
+				System.out.println("Server Taking Long Time To Respond... returning null");
+				return null;
 			}
 			synchronized (stopWaiting) {
 				if (stopWaiting) {
