@@ -17,7 +17,7 @@ import javafx.scene.control.ListView;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes","unchecked"})
 public class PrincipleViewReportFrame implements ControlledScreen {
 	
 	@FXML Label infoTitle1;
@@ -54,8 +54,8 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	private ExamReport examReport=null;
 	
 	@Override public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(620);
-        Globals.primaryStage.setWidth(840);
+        Globals.primaryStage.setHeight(685);
+        Globals.primaryStage.setWidth(815);
 		hideAllLabels();
 		switch(windowType) {
 		case STUDENT:
@@ -115,17 +115,38 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		
 		updateBarChart(examReport.getDeviation());
 		
+		infoTitle1.setText("Exam Course:");
+		infoTitle1.setVisible(true);
+		infoTitle2.setText("Date Activated:");
+		infoTitle2.setVisible(true);
+		infoTitle3.setText("Exam Duration:");
+		infoTitle3.setVisible(true);
+		infoTitle4.setText("Participants:");
+		infoTitle4.setVisible(true);
+		//infoTitle5.setText("Exam Course:");
+		//infoTitle5.setVisible(true);
+		infoValue1.setText(examReport.getCourse().getName());
+		infoValue1.setVisible(true);
+		infoValue2.setText(examReport.getDate().toString());
+		infoValue2.setVisible(true);
+		infoValue3.setText(examReport.getDurationToString());
+		infoValue3.setVisible(true);
+		infoValue4.setText(examReport.getParticipatingStudent()+" Students");
+		infoValue4.setVisible(true);
+		//infoValue5.setText(examReport.getCourse().getName());
+		//infoValue5.setVisible(true);
+		
 	}
-	@SuppressWarnings("unchecked")
+
 	private void updateBarChart(HashMap<Integer, Integer> dev) {
         xAxis.setLabel("Score Range");       
         yAxis.setLabel("precentage");
- 
+        devBarChart.getData().clear();
         XYChart.Series[] series = new XYChart.Series[10];
         for(int i=0;i<10;i++) {
         	series[i] = new XYChart.Series();
-        	String name = "" + (i*10+10);//dev.get(i)
-        	series[i].getData().add(new XYChart.Data(name, i*i+i*1+2));
+        	String name = "" + (i*10+10);
+        	series[i].getData().add(new XYChart.Data(name, dev.get(i)));
         	devBarChart.getData().add(series[i]);
         } 
 	}
@@ -134,29 +155,37 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	private void setupTeacherView() {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	private void setupStudentView() {
 		// TODO Auto-generated method stub
 		
 	}
+
 	public type getWindowType() {
 		return windowType;
 	}
+
 	public void setWindowType(type windowType) {
 		this.windowType = windowType;
 	}
+
 	public void setStudent(Student student) {
 		this.student = student;
 	}
+
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
 	}
+
 	public void setCourse(Course course) {
 		this.course = course;
 	}
+
 	public void setExamReport(ExamReport examReport) {
 		this.examReport = examReport;
 	}

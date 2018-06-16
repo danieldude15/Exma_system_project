@@ -276,5 +276,19 @@ public class ExamReport extends ActiveExam {
 		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f", getCourse().getName(),getDate(),getAvg()));
 	}
 
+	public String getDurationToString() {
+		int minutes = getDuration()%60;
+		int hours = getDuration()/60;
+		if (hours!=0 && minutes!=0) {
+			return hours + " Hours and " + minutes +" Minutes";
+		} else if (hours!=0 && minutes==0) {
+			return hours + " Hours";
+		} else if (hours==0 && minutes!=0) {
+			return minutes + " Minutes";
+		} else {
+			return "0 Minutes";
+		}
+	}
+
 	
 }
