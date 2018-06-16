@@ -6,10 +6,17 @@ import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import logic.*;
 import ocsf.client.ClientGlobals;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -38,7 +45,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
 	
-	
+	private final Image v = new Image("resources/GoodLuck.jpg");
+	private final Background blackBackground = new Background( new BackgroundFill( Color.web( "#000000" ), CornerRadii.EMPTY, Insets.EMPTY ) );
+    private final Background unfocusBackground = new Background( new BackgroundFill( Color.web( "#F4F4F4" ), CornerRadii.EMPTY, Insets.EMPTY ) );
+    private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
 	@Override
 	public void runOnScreenChange() {
@@ -90,7 +100,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private void SetComputerizeExamOnWindowScreen(ActiveExam active) {
 		// TODO Auto-generated method stub
 		int questionIndex=1;
-		ArrayList<QuestionInExam> questionsInExam=active.getExam().getQuestionsInExam();
+		ArrayList<QuestionInExam> questionsInExam=active.getQuestionsInExam();
 		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 		{			
 			SetQuestionOnWindowScreen(qie,questionIndex);
@@ -149,6 +159,22 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		// TODO Auto-generated method stub
 		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
+		downloadButton.setDisable(false);
+		VBox manuelExamStringVBox=new VBox();
+		Label manuelExamString=new Label("Welcome to the manual exam!, you can press the download button and start your exam.");
+		manuelExamString.setId(blackLabel);
+		manuelExamStringVBox.getChildren().add(manuelExamString);
+		manuelExamStringVBox.setBackground(yellowBackground);
+		
+		VBox manuelExamImageVBox=new VBox();
+		ImageView imageView=new ImageView();
+		imageView.setFitHeight(215);
+		imageView.setFitWidth(530);
+		imageView.setImage(v);
+		manuelExamImageVBox.getChildren().add(imageView);		
+		questionsAndAnswers.getChildren().addAll(manuelExamStringVBox,manuelExamImageVBox);
+		
+		
 	}
 
 
@@ -263,10 +289,11 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
 				{
-					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-						studentAnswers.put(qie,0);
-						
-					else//Student choose answer.
+					//if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
+						//studentAnswers.put(qie,0);
+					
+					if(questionWithAnswers.get(qie).getSelectedToggle()!=null)
+					//else//Student choose answer.
 					{
 						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
 						int markedIndex = Integer.parseInt(r.getId());
@@ -396,7 +423,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
             PopUp(popUpTitle,popUpContentText);
 			lockExam();
-            Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+            //Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
         }
 	}
 

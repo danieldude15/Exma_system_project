@@ -16,7 +16,7 @@
          </font>
       </Label>
       <Label fx:id="timeLeftLabel" layoutX="75.0" layoutY="37.0" prefHeight="17.0" prefWidth="147.0" text="Label" />
-      <Label fx:id="courseNameLabel" prefHeight="17.0" prefWidth="600.0" />
+      <Label fx:id="courseNameLabel" prefHeight="17.0" prefWidth="600.0" textFill="#636e35" />
       <ScrollPane hbarPolicy="NEVER" layoutX="33.0" layoutY="63.0" minWidth="-Infinity" prefHeight="234.0" prefWidth="527.0">
          <content>
             <AnchorPane maxWidth="1.7976931348623157E308" minWidth="-Infinity">

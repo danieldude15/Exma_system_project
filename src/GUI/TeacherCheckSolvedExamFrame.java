@@ -124,7 +124,8 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);
 		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		answers[answersHash.get(q)-1].setSelected(true);
+		if(answersHash.get(q)!=null)
+			answers[answersHash.get(q)-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);
@@ -153,7 +154,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		ImageView imageView=new ImageView();
 		imageView.setFitHeight(10);
 		imageView.setFitWidth(10);
-		if (answersHash.get(q)==q.getCorrectAnswerIndex()) {
+		if (answersHash.get(q)!=null && answersHash.get(q)==q.getCorrectAnswerIndex()) {
 			imageView.setImage(v);
 		} else {
 			imageView.setImage(x);
