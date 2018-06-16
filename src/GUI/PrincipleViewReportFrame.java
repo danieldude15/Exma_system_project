@@ -56,8 +56,6 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	private ExamReport examReport=null;
 	
 	@Override public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(685);
-        Globals.primaryStage.setWidth(815);
 		hideAllLabels();
 		switch(windowType) {
 		case STUDENT:

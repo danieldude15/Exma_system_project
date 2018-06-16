@@ -39,9 +39,6 @@ public class StudentViewExamFrame implements ControlledScreen {
 	
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820); 
 		questionInfo_StudentScoreAndNote.getChildren().clear();
 		courseName.setText(this.GetSolvedExam().getCourse().getName());
 		grade.setText(Integer.toString(this.GetSolvedExam().getScore()));

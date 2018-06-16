@@ -43,8 +43,6 @@ public class PrincipalReportsFrame implements ControlledScreen {
     ArrayList<Course> allCourse = null;
     
     @Override public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(445);
-        Globals.primaryStage.setWidth(515);
         m_reportsTabPane.getSelectionModel().select(m_studentsTab);;
         StudentsTabSelected(null);
     }

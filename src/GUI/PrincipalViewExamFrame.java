@@ -31,8 +31,6 @@ public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
 
     @Override
     public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(685);
-        Globals.primaryStage.setWidth(760);
 
         if(exam != null){
             m_examIDlbl.setText("ExamID: " + exam.examIdToString());

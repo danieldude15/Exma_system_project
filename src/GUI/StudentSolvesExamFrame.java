@@ -51,10 +51,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
     private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
 	@Override
-	public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);
-		
+	public void runOnScreenChange() {		
 		
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();

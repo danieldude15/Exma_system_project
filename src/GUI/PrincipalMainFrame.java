@@ -57,9 +57,6 @@ public class PrincipalMainFrame implements ControlledScreen {
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(535);
-        Globals.primaryStage.setWidth(523);
-
         m_requestsTab.setDisable(true);
         m_principalTabPane.getSelectionModel().select(m_infoTab);
         

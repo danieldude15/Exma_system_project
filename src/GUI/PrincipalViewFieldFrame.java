@@ -30,8 +30,6 @@ public class PrincipalViewFieldFrame implements Initializable, ControlledScreen 
 
     @Override
     public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(690);
-        Globals.primaryStage.setWidth(760);
 
         if(field != null){
             m_fieldIDlbl.setText("FieldID: " + field.fieldIdToString());

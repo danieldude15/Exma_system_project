@@ -36,8 +36,6 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 		int type;
 		@Override
 		public void runOnScreenChange() {
-			Globals.primaryStage.setHeight(670);
-			Globals.primaryStage.setWidth(745);
 			ToggleGroup SelectType = new ToggleGroup();
 			ExamId.setText("Exam id : "+examview.examIdToString());
 			Durationid.setText("Duration: "+ examview.getDuration());

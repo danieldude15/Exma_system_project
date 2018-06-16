@@ -12,7 +12,6 @@ public class ProgressIndicatorFrame implements ControlledScreen {
 	@Override public void runOnScreenChange() {		
 		pin.setLayoutX(Globals.mainContainer.getWidth()/2);
 		pin.setLayoutY(Globals.mainContainer.getHeight()/2);
-
 	}
 
 }

@@ -72,9 +72,6 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
      
 	@Override
 	public void runOnScreenChange() {
-
-		Globals.primaryStage.setHeight(670);
-		Globals.primaryStage.setWidth(745);
 		//clear the windows of TeacherBuildNewExam
 		if(type.equals(windowType.Build))
 		{

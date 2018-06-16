@@ -40,9 +40,7 @@ public class TeacherManageExamsFrame implements ControlledScreen {
 	@FXML Button home;
 	@FXML GridPane examListGrid;
 	
-	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(620);			
+	@Override public void runOnScreenChange() {		
 		//loading teacher questions
 		dBExams =  ExamController.getTeachersExams((Teacher)ClientGlobals.client.getUser());
 		if (dBExams!=null) {

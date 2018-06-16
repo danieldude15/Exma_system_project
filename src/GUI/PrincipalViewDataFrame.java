@@ -52,8 +52,6 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
     @Override
     public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(445);
-        Globals.primaryStage.setWidth(515);
     }
 
     @FXML

@@ -26,10 +26,8 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 	ActiveExam activeexamselect;
 	
 	@Override
-	public void runOnScreenChange() 
-	{
-		Globals.primaryStage.setHeight(700); 
-		Globals.primaryStage.setWidth(650);	
+	public void runOnScreenChange(){
+
 		SelectNewTime.setText("");
 		RequestExplenation.setText("");
 		Errorrequest.setVisible(false);

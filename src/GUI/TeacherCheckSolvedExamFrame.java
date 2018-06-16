@@ -55,8 +55,6 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(770);
-		Globals.primaryStage.setWidth(770);
 		questionsView.getChildren().clear();
 		errorLabel.setVisible(false);
 		newScore.setText("");

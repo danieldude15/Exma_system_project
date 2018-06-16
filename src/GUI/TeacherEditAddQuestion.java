@@ -73,9 +73,6 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(656);
-		Globals.primaryStage.setWidth(553);
-		
 		organizedFieldsHashMap();
 		
 		teacherFields.remove(0);

@@ -25,8 +25,6 @@ public class LoginFrame implements ControlledScreen,Initializable {
 	@Override public void initialize(URL location, ResourceBundle resources) {}
 	
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(400);
-		Globals.primaryStage.setWidth(400);
 		error.setText("");
 
 	}

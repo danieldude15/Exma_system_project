@@ -40,8 +40,6 @@ public class StudentMainFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);	
 		courseNameAndExamId.clear();
 		
 		//Get all student solved exams from database and set it to the ListView field on window
@@ -81,8 +79,6 @@ public class StudentMainFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(530);
-		Globals.primaryStage.setWidth(750);	
 		courseNameAndExamId.clear();
 		solvedExamsList.getItems().clear();
 		

@@ -50,14 +50,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import logic.Globals;
-import ocsf.client.ClientGlobals;
 
 /**
  *
@@ -66,8 +62,6 @@ import ocsf.client.ClientGlobals;
  */
 public class ScreensController  extends StackPane {
     //Holds the screens to be displayed
-	private Integer showProgress = 0;
-	private Timeline task;
 	private String currentScreen =null;
 	
     private HashMap<String, Node> screens = new HashMap<>();
@@ -81,17 +75,6 @@ public class ScreensController  extends StackPane {
         Globals.mainContainer=this;
         ProgressIndicator bar = new ProgressIndicator(-1);
         bar.setPrefSize(200, 24);
-
-        task = new Timeline(
-            new KeyFrame(
-                    Duration.ZERO,       
-                    new KeyValue(bar.progressProperty(), 0)
-            ),
-            new KeyFrame(
-                    Duration.seconds(2), 
-                    new KeyValue(bar.progressProperty(), 1)
-            )
-        );
 
     }
 
@@ -141,9 +124,7 @@ public class ScreensController  extends StackPane {
     	if (screens.get(name) != null) {   //screen loaded
             final DoubleProperty opacity = opacityProperty();
             if (!getChildren().isEmpty()) {    //if there is more than one screen
-            	getChildren().remove(0);                    //remove the displayed screen
-            	getController(Globals.ProgressIndicatorID).runOnScreenChange();
-                getChildren().add(0, screens.get(Globals.ProgressIndicatorID));     //add the screen
+            	showProgressIndicator();
                 controllers.get(name).runOnScreenChange();
                 Timeline fade = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
@@ -152,6 +133,12 @@ public class ScreensController  extends StackPane {
                     public void handle(ActionEvent t) {
                         getChildren().remove(0);                    //remove the displayed screen
                         getChildren().add(0, screens.get(name));     //add the screen
+                        if(screens.get(name) instanceof javafx.scene.layout.Region) {
+                        	double width = ((javafx.scene.layout.Region)screens.get(name)).getPrefWidth();
+                        	double height = ((javafx.scene.layout.Region)screens.get(name)).getPrefHeight();
+                        	Globals.primaryStage.setHeight(height+30);
+                    		Globals.primaryStage.setWidth(width+20);
+                        }
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                                 new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0)));
@@ -160,9 +147,9 @@ public class ScreensController  extends StackPane {
                 }, new KeyValue(opacity, 0.0)));
                 fade.play();
             } else {
+            	controllers.get(name).runOnScreenChange();
                 setOpacity(0.0);
                 getChildren().add(screens.get(name));       //no one else been displayed, then just show
-                controllers.get(name).runOnScreenChange();
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                         new KeyFrame(new Duration(600), new KeyValue(opacity, 1.0)));
@@ -191,6 +178,41 @@ public class ScreensController  extends StackPane {
 		return currentScreen;
 	}
 
+	public void showProgressIndicator() {
+		final DoubleProperty opacity = opacityProperty();
+        Timeline fade = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
+                new KeyFrame(new Duration(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                getChildren().remove(0);                    //remove the displayed screen
+                getChildren().add(0, screens.get(Globals.ProgressIndicatorID));     //add the screen
+                controllers.get(Globals.ProgressIndicatorID).runOnScreenChange();
+                Timeline fadeIn = new Timeline(
+                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
+                        new KeyFrame(new Duration(1), new KeyValue(opacity, 1.0)));
+                fadeIn.play();
+            }
+        }, new KeyValue(opacity, 0.0)));
+        fade.play();
+	}
     
+	public void hideProgressIndicator() {
+		final DoubleProperty opacity = opacityProperty();
+        Timeline fade = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
+                new KeyFrame(new Duration(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                getChildren().remove(0);                    //remove the displayed screen
+                getChildren().add(0, screens.get(currentScreen));     //add the screen
+                Timeline fadeIn = new Timeline(
+                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
+                        new KeyFrame(new Duration(1), new KeyValue(opacity, 1.0)));
+                fadeIn.play();
+            }
+        }, new KeyValue(opacity, 0.0)));
+        fade.play();
+	}
 	
 }

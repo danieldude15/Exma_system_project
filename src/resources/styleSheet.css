@@ -135,3 +135,9 @@
 	-fx-background-color:black;
 	-fx-background-radius:10px;
 }
+/*
+ * progress indicator background change 
+ */
+#progressPaneId {
+	-fx-background-color:white;
+}

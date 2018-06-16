@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
-public class TeacherMainFrame implements Initializable,ControlledScreen {
+public class TeacherMainFrame implements ControlledScreen {
 	private ArrayList<ExamReport> TeacherCExams;
 	private ArrayList<ActiveExam> TeacherAExams;
 	
@@ -49,16 +49,9 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Label userid;
 	@FXML Pane userImage;
 	@FXML Label studentsInCourse;
-	
-	@Override public void initialize(URL location, ResourceBundle resources) {
 		
-	}
-	
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(705);
-		Globals.primaryStage.setWidth(813);
-
 		updateCompletedExamListView();
 		
 		updateActiveExamListView();

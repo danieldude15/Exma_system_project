@@ -36,7 +36,6 @@ public class StudentStartExamFrame implements ControlledScreen{
 	
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
 		examCode.clear();
 		studentId.clear();
 		idError.setText("");
