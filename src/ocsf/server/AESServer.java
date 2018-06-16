@@ -831,6 +831,11 @@ public class AESServer extends AbstractServer {
 	}
 	
 	public void GenerateActiveExamReport(ActiveExam ae) {
+		//TODO remove this condition when done developing!
+		if(ae.getCode().equals("d34i")) {
+			System.err.println("Development env active exam report generation being skipped\nTo generate a real report you must go throw the whole proccess of activating the exam by a teacher");
+			return;
+		}
 		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
 		int participated = studentsInExam.get(ae).size();
 		int submitted = studentsSolvedExams.get(ae).size();
