@@ -50,6 +50,6 @@
       </Label>
       <TextField fx:id="m_searchBox" layoutX="14.0" layoutY="361.0" onMouseClicked="#onTextBoxMouseClick" promptText="Enter ID Here" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
       <Button fx:id="m_searchBtn" layoutX="215.0" layoutY="355.0" mnemonicParsing="false" onAction="#viewData" prefHeight="31.0" prefWidth="101.0" text="View Data" AnchorPane.bottomAnchor="14.0" />
-      <Button fx:id="m_backtoMainBtn" layoutX="272.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToMainMenu" text="Back to Main Menu" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <Button fx:id="m_backToMainBtn" layoutX="272.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToMainMenu" text="Back to Main Menu" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>

@@ -1,10 +1,12 @@
 package ocsf.client;
 
+import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import GUI.PrincipalMainFrame;
 import GUI.StudentSolvesExamFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -76,18 +78,19 @@ public class AESClient extends AbstractClient{
 			handleExamLocked(o);
 			return;	
 		case "newTimeChangeRequest":
-			newTimeChangeRequest();
+			newTimeChangeRequest(o);
 			break;
 		case "studentUpdateExamTime":
 			studentUpdateExamTime(o);
 			break;
 		case "DownloadWordFile":
 			try {
-				DownloadWordFile(o);
+				download(o);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -96,10 +99,7 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
-
-
-	private void DownloadWordFile(Object o) throws IOException {
-		// TODO Auto-generated method stub
+	private void download(Object o) throws IOException {
 		AesWordDoc file=(AesWordDoc) o;
 		File openFile = new File(file.getFileName());
 		FileOutputStream out = new FileOutputStream(openFile);
@@ -151,9 +151,12 @@ public class AESClient extends AbstractClient{
 			}
 			count++;
 			if(count>=500) {
-				System.out.println("Server Taking Long Time To Respond...");
-				//Globals.handleException(new Exception("Waited for too long for server response!"));
-				break;
+				System.out.println("Server Taking Long Time To Respond... returning null");
+				return new iMessage("Server Taking Long Time To Respond... returning null", null);
+			}
+			if(!isConnected()) {
+				System.out.println("Lost Connection with Server! returning null");
+				return new iMessage("Lost Connection with Server! returning null", null);
 			}
 			synchronized (stopWaiting) {
 				if (stopWaiting) {
@@ -216,18 +219,16 @@ public class AESClient extends AbstractClient{
 	}
 
 	
-	private void newTimeChangeRequest() {
-		// TODO Auto-generated method stub
-		// nathan needs to handle this and get a popup to the principle 
-		// that a new time change request has been submited!
-		
+	private void newTimeChangeRequest(Object o) {
+		PrincipalMainFrame principalMainFrame = (PrincipalMainFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalMainID);
+		principalMainFrame.setNewRequestArrived(true);
 	}
 	
 
 	private void studentUpdateExamTime(Object o) {
 		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
-		if (o instanceof TimeChangeRequest)
-			sef.updateExamTime((TimeChangeRequest)o);
+		if (o instanceof Long)
+			sef.updateExamTime((Long)o);
 	}
 	
 	private void handleExamLocked(Object o) {

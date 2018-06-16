@@ -97,6 +97,14 @@ public class ClientFrame implements Initializable {
 			System.out.println("failed to load " + ClientGlobals.PrincipalMainID);
 			return;
 		}
+        if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewReportID,ClientGlobals.PrincipalViewReportPath)) {
+			System.out.println("failed to load " + ClientGlobals.PrincipalViewReportID);
+			return;
+		}
+        if(!mainContainer.loadScreen(Globals.ProgressIndicatorID,Globals.ProgressIndicatorPath)) {
+			System.out.println("failed to load " + Globals.ProgressIndicatorID);
+			return;
+		}
 		if(!mainContainer.loadScreen(ClientGlobals.PrincipalReportsID,ClientGlobals.PrincipalReportsPath)) {
 			System.out.println("failed to load " + ClientGlobals.PrincipalReportsID);
 			return;
@@ -109,6 +117,14 @@ public class ClientFrame implements Initializable {
 			System.out.println("failed to load " + ClientGlobals.PrincipalViewQuestionID);
 			return;
 		}
+		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewExamID,ClientGlobals.PrincipalViewExamPath)) {
+			System.out.println("failed to load " + ClientGlobals.PrincipalViewExamID);
+			return;
+		}
+        if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewFieldID,ClientGlobals.PrincipalViewFieldPath)) {
+            System.out.println("failed to load " + ClientGlobals.PrincipalViewFieldID);
+            return;
+        }
 		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
 			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
 			return;

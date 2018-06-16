@@ -41,7 +41,8 @@ public class ClientGlobals {
 	public static final String PrincipalMainID = "PrincipalMain";
 	public static final String PrincipalMainPath = "/resources/fxml/PrincipalMain.fxml";
 
-	public static final String PrincipalReportsID = "PrincipalReports";	public static final String PrincipalReportsPath = "/resources/fxml/PrincipalReports.fxml";
+	public static final String PrincipalReportsID = "PrincipalReports";
+	public static final String PrincipalReportsPath = "/resources/fxml/PrincipalReports.fxml";
 
 	public static final String PrincipalViewDataID = "PrincipalViewData";
 	public static final String PrincipalViewDataPath = "/resources/fxml/PrincipalViewData.fxml";
@@ -49,6 +50,15 @@ public class ClientGlobals {
 	public static final String PrincipalViewQuestionID = "PrincipalViewQuestion";
 	public static final String PrincipalViewQuestionPath ="/resources/fxml/PrincipalViewQuestion.fxml";
 
+	public static final String PrincipalViewExamID = "PrincipalViewExam";
+	public static final String PrincipalViewExamPath = "/resources/fxml/PrincipalViewExam.fxml";
+
+	public static final String PrincipalViewFieldID = "PrincipalViewField";
+	public static final String PrincipalViewFieldPath = "/resources/fxml/PrincipalViewField.fxml";
+
+	public static final String PrincipalViewReportID = "principleViewReport";
+	public static final String PrincipalViewReportPath = "/resources/fxml/PrincipleViewReport.fxml";
+	
 	/*		Principal Screens End		*/
 
 	public static final String ConfigfileName = "ConnectionConfig.txt";
@@ -85,6 +95,7 @@ public class ClientGlobals {
 	public static final String TeacherCheckExamID = "TeacherCheckSolvedExam";
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
 
+
 	/*		Teacher Screens End		*/
 
 	public static void handleIOException(IOException e) {
@@ -94,10 +105,9 @@ public class ClientGlobals {
 		System.out.println("Msg: "+e.getMessage());
 		try {
 				client.closeConnection();
-				//client.stopWaiting();
 				System.out.println("trying to reconnect");
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(400);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -105,6 +115,7 @@ public class ClientGlobals {
 				System.out.println("Client is reconnected:" + client.isConnected());
 		} catch (IOException e1) {
 			System.out.println("Tried to Reconect and Failed! with Exception");
+			e1.printStackTrace();
 		}
 	}
 	

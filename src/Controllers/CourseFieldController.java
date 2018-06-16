@@ -1,15 +1,32 @@
 package Controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-
-import logic.*;
+import logic.Course;
+import logic.Field;
+import logic.Teacher;
+import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
+
+	public static ArrayList<Field> getAllFields(){
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getAllFields",null);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Field>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * this function will give us all the fields of a teacher.
@@ -59,7 +76,7 @@ public class CourseFieldController {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
 				courses = new ArrayList<Course>();
-				if(o!=null && o instanceof ArrayList) {
+				if(o instanceof ArrayList) {
 					ArrayList<Object> TeacherCourses = (ArrayList<Object>) o;
 					if (TeacherCourses.size()==0) return null;
 					Object a = TeacherCourses.get(0);
@@ -89,8 +106,8 @@ public class CourseFieldController {
 			try {
 				client.sendToServer(msg);
 				Object o = client.getResponseFromServer().getObj();
-				courses = new ArrayList<Course>();
-				if(o!=null && o instanceof ArrayList) {
+				courses = new ArrayList<>();
+				if(o instanceof ArrayList) {
 					ArrayList<Object> TeacherCourses = (ArrayList<Object>) o;
 					if (TeacherCourses.size()==0) return null;
 					Object a = TeacherCourses.get(0);
@@ -109,6 +126,38 @@ public class CourseFieldController {
 				ClientGlobals.handleIOException(e);
 			}
 		} 
+		return null;
+	}
+
+	public static ArrayList<Teacher> getFieldTeachers(Field f) {
+		if (f == null) return null;
+		AESClient client = ClientGlobals.client;
+		ArrayList<Teacher> teachers;
+		if (client.isConnected()) {
+			iMessage msg = new iMessage("getFieldTeachers", f);
+			try {
+				client.sendToServer(msg);
+				Object o = client.getResponseFromServer().getObj();
+				teachers = new ArrayList<>();
+				if (o instanceof ArrayList) {
+					ArrayList<Object> FieldTeachers = (ArrayList<Object>) o;
+					if (FieldTeachers.size() == 0) return null;
+					Object a = FieldTeachers.get(0);
+					if (a instanceof Teacher) {
+						ArrayList<Teacher> tc = (ArrayList<Teacher>) o;
+						for (Teacher t : tc) {
+							Teacher teacher = new Teacher(t);
+							teachers.add(teacher);
+						}
+						return teachers;
+					} else {
+						System.out.println("Get Field Teachers got " + o.getClass() + " objects instead of Teacher objects");
+					}
+				}
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+			}
+		}
 		return null;
 	}
 }
