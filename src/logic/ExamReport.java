@@ -183,10 +183,18 @@ public class ExamReport extends ActiveExam {
 	/**
 	 * this function will be responsible for check witch students cheated and return the hashmap of these students
 	 * this is a private method used in the constructor if examReport to genereate these potential cheating students 
-	 * @param solvedExams2 
+	 * @param solvedExams 
 	 * @return hashmap of potential cheating students
 	 */
-	public static HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams2) {
+	public static HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams) {
+		/*for(int i=0;i<solvedExams.size();i++) {
+			for (int j=i+1;j<solvedExams.size();j++) {
+				SolvedExam se1 = solvedExams.get(i);
+				SolvedExam se2 = solvedExams.get(j);
+				ArrayList<QuestionInExam> qie1 = se1.getQuestionsInExam();
+				
+			}
+		}*/
 		return null;
 	}
 	
