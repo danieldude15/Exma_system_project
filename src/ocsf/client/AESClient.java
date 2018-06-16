@@ -99,7 +99,6 @@ public class AESClient extends AbstractClient{
 		}
 		
 	}
-
 	private void download(Object o) throws IOException {
 		AesWordDoc file=(AesWordDoc) o;
 		File openFile = new File(file.getFileName());
