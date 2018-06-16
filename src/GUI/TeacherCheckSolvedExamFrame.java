@@ -132,7 +132,16 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 			r.setId("blackLabel");
 			questionInfo.getChildren().add(r);
 		}
-		
+		if(!q.getInnerNote().equals("")) {
+			Label qinerNote = new Label("question Hidden Note: "+q.getInnerNote());
+			qinerNote.setId("blackLabel");
+			questionInfo.getChildren().add(qinerNote);
+		}
+		if(!q.getStudentNote().equals("")) {
+			Label qistudentNote = new Label("Not For Student: "+q.getStudentNote());
+			qistudentNote.setId("blackLabel");
+			questionInfo.getChildren().add(qistudentNote);
+		}
 		// this HBox will hold the TeacherNote extention
 		HBox questionNoteByTeacher = new HBox();
 		questionNoteByTeacher.setAlignment(Pos.BOTTOM_LEFT);
@@ -180,7 +189,8 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 					solvedExam.setTeachersScoreChangeNote(changeNote.getText());
 					HashMap<QuestionInExam, String> teacherNotes = new HashMap<>();
 					for(QuestionInExam qie: teacherNotesH.keySet()) {
-						teacherNotes.put(qie, teacherNotesH.get(qie).getText());
+						if(!teacherNotesH.get(qie).getText().equals(""))
+							teacherNotes.put(qie, teacherNotesH.get(qie).getText());
 					}
 					solvedExam.setQuestionNoteOnHash(teacherNotes);
 			}

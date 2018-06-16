@@ -134,19 +134,8 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue4.setText(examReport.getParticipatingStudent()+" Students");
 		infoValue4.setVisible(true);
 		
-	}
-
-	private void updateBarChart(HashMap<Integer, Integer> dev) {
-        xAxis.setLabel("Score Range");       
-        yAxis.setLabel("precentage");
-        devBarChart.getData().clear();
-        XYChart.Series[] series = new XYChart.Series[10];
-        for(int i=0;i<10;i++) {
-        	series[i] = new XYChart.Series();
-        	String name = "" + (i*10+10);
-        	series[i].getData().add(new XYChart.Data(name, dev.get(i)));
-        	devBarChart.getData().add(series[i]);
-        } 
+		leftListViewLabel.setText("Students Participated:");
+		
 	}
 
 	private void setupCourseView() {
@@ -197,6 +186,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue4.setText(course.getField().getID()+"");
 		infoValue4.setVisible(true);
 		
+		leftListViewLabel.setText("Exam History:");
 	}
 	
 	private void setupTeacherView() {
@@ -242,7 +232,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue2.setVisible(true);
 		infoValue3.setText(teacher.getUserName());
 		infoValue3.setVisible(true);
-		
+		leftListViewLabel.setText("Exam History:");		
 	}
 	
 	private void setupStudentView() {
@@ -275,7 +265,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue2.setVisible(true);
 		infoValue3.setText(student.getUserName());
 		infoValue3.setVisible(true);
-		
+		leftListViewLabel.setText("Exam History:");
 	}
 
 	public type getWindowType() {
@@ -302,6 +292,17 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		this.examReport = examReport;
 	}
 	
-	
+	private void updateBarChart(HashMap<Integer, Integer> dev) {
+        xAxis.setLabel("Score Range");       
+        yAxis.setLabel("precentage");
+        devBarChart.getData().clear();
+        XYChart.Series[] series = new XYChart.Series[10];
+        for(int i=0;i<10;i++) {
+        	series[i] = new XYChart.Series();
+        	String name = "" + (i*10+10);
+        	series[i].getData().add(new XYChart.Data(name, dev.get(i)));
+        	devBarChart.getData().add(series[i]);
+        } 
+	}
 
 }

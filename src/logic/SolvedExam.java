@@ -154,9 +154,9 @@ public class SolvedExam extends ActiveExam{
 	 */
 	@Override public String toString() {
 		if (teacherApproved)
-			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score + "(COMPLETED)";
+			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"\nCourse: " + getCourse().getName() + "\nCompleted_Time: " + CompletedTimeInMinutes + "\nScore: " + score + " (APPROVED)";
 		else
-			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"| Course: " + getCourse().getName() + " |Completed_Time: " + CompletedTimeInMinutes + " |Score: " + score;
+			return "Exam Owner: " + getStudent().getName() + " ("+ getStudent().getID()+") " +"\nCourse: " + getCourse().getName() + "\nCompleted_Time: " + CompletedTimeInMinutes + "\nScore: " + score;
 	}
 	public HashMap<QuestionInExam, String> getQuestionNoteOnHash() {
 		return questionNoteOnHash;
@@ -209,7 +209,8 @@ public class SolvedExam extends ActiveExam{
 		String[] splitedNotes = Arrays.copyOfRange(temp,1,temp.length);
 		for(String questionNote : splitedNotes) {
 			String[] arr = questionNote.split("<TEACHER-NOTE>");
-			notes.put(arr[0], arr[1]);
+			if(arr.length==2)
+				notes.put(arr[0], arr[1]);
 		}
 		for(QuestionInExam q: questionsInExam) {
 			result.put(q,notes.get(q.questionIDToString()));
