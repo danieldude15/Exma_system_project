@@ -37,7 +37,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		EDIT,ADD
 	}
 	
-	private windowType type = windowType.ADD;
+	private windowType type = null;
 	
 	Question question=null;
 	
@@ -80,7 +80,12 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		ObservableList<Field> list = FXCollections.observableArrayList(teacherFields);
 		fields.setItems(list);
 		fields.getSelectionModel().clearSelection();
-		if (type.equals(windowType.ADD) || question==null) {
+		
+		if (question==null) {
+			backToMenu(null);
+		}
+		
+		if (type.equals(windowType.ADD)) {
 			questionID.setText("Add New Question");
 			questionString.setText("");
 			ta1.setText("");
@@ -90,7 +95,9 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			submitB.setText("Add Question");
 			fields.setDisable(false);
 			courseVbox.getChildren().clear();
-		} else {
+			if (answers.getSelectedToggle()!=null)
+				answers.getSelectedToggle().setSelected(false);
+		} else if (type.equals(windowType.EDIT)){
 			questionID.setText("Edit Question: " + question.questionIDToString());
 			questionString.setText(question.getQuestionString());
 			ta1.setText(question.getAnswer(1));
