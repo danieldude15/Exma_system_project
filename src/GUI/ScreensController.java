@@ -126,9 +126,10 @@ public class ScreensController  extends StackPane {
             if (!getChildren().isEmpty()) {    //if there is more than one screen
             	showProgressIndicator();
                 controllers.get(name).runOnScreenChange();
+                hideProgressIndicator();
                 Timeline fade = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                        new KeyFrame(new Duration(250), new EventHandler<ActionEvent>() {
+                        new KeyFrame(new Duration(400), new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent t) {
                         getChildren().remove(0);                    //remove the displayed screen
@@ -141,7 +142,7 @@ public class ScreensController  extends StackPane {
                         }
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                                new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0)));
+                                new KeyFrame(new Duration(400), new KeyValue(opacity, 1.0)));
                         fadeIn.play();
                     }
                 }, new KeyValue(opacity, 0.0)));
@@ -182,7 +183,7 @@ public class ScreensController  extends StackPane {
 		final DoubleProperty opacity = opacityProperty();
         Timeline fade = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                new KeyFrame(new Duration(1), new EventHandler<ActionEvent>() {
+                new KeyFrame(new Duration(250), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 getChildren().remove(0);                    //remove the displayed screen
@@ -190,7 +191,7 @@ public class ScreensController  extends StackPane {
                 controllers.get(Globals.ProgressIndicatorID).runOnScreenChange();
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                        new KeyFrame(new Duration(1), new KeyValue(opacity, 1.0)));
+                        new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0)));
                 fadeIn.play();
             }
         }, new KeyValue(opacity, 0.0)));
@@ -201,14 +202,14 @@ public class ScreensController  extends StackPane {
 		final DoubleProperty opacity = opacityProperty();
         Timeline fade = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                new KeyFrame(new Duration(1), new EventHandler<ActionEvent>() {
+                new KeyFrame(new Duration(400), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 getChildren().remove(0);                    //remove the displayed screen
                 getChildren().add(0, screens.get(currentScreen));     //add the screen
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                        new KeyFrame(new Duration(1), new KeyValue(opacity, 1.0)));
+                        new KeyFrame(new Duration(400), new KeyValue(opacity, 1.0)));
                 fadeIn.play();
             }
         }, new KeyValue(opacity, 0.0)));
