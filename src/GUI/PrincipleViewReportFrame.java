@@ -156,13 +156,13 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	
 	private void setupTeacherView() {
 		ArrayList<ExamReport> allExams = ReportController.getAllExamReport();
+		ArrayList<ExamReport> teachersExams = new ArrayList<>();
 		float avgSum=0;
 		int examCounter=0;
 		ArrayList<Integer> medianCalc = new ArrayList<>();
 		for(ExamReport er: allExams) {
-			if(!er.getActivator().equals(teacher))
-				allExams.remove(er);
-			else {
+			if(er.getActivator().equals(teacher)) {
+				teachersExams.add(er);
 				examCounter++;
 				avgSum+=er.getAvg();
 				for(SolvedExam se: er.getSolvedExams())
@@ -174,8 +174,8 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		HashMap<Integer, Integer> dev = ExamReport.calcDeviationFromInts(medianCalc);
 		
 		ArrayList<String> leftListStrings = new ArrayList<>();
-		for(ExamReport se:allExams) {
-			leftListStrings.add("Course:" + se.getCourse().getName() + "Grade Average:" + se.getAvg() );
+		for(ExamReport se:teachersExams) {
+			leftListStrings.add(se.toString());
 		}
 		ObservableList<String> list = FXCollections.observableArrayList(leftListStrings);
 		leftListView.setItems(list);
@@ -208,7 +208,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		
 		ArrayList<String> leftListStrings = new ArrayList<>();
 		for(SolvedExam se:studentExams) {
-			leftListStrings.add("Course:" + se.getCourse().getName() + "Grade:" + se.getScore() );
+			leftListStrings.add(se.toString());
 		}
 		ObservableList<String> list = FXCollections.observableArrayList(leftListStrings);
 		leftListView.setItems(list);

@@ -25,9 +25,9 @@ public class PrincipalReportsFrame implements ControlledScreen {
 
     @FXML private TabPane m_reportsTabPane;
     @FXML private Tab m_studentsTab;
-    @FXML private ListView<Student> m_studentsList;
+    @FXML private ListView<User> m_studentsList;
     @FXML private Tab m_teachersTab;
-    @FXML private ListView<Teacher> m_teachersList;
+    @FXML private ListView<User> m_teachersList;
     @FXML private Tab m_coursesTab;
     @FXML private ListView<Course> m_coursesList;
     @FXML private Tab m_examsTab;
@@ -37,7 +37,8 @@ public class PrincipalReportsFrame implements ControlledScreen {
     @FXML private Button m_backtoMainBtn;
 
     ArrayList<ExamReport> examsReports = null;
-    ArrayList<Student> allStudents = null;
+    ArrayList<User> allStudents = null;
+    ArrayList<User> allTeachers = null;
     
     @Override public void runOnScreenChange() {
         Globals.primaryStage.setHeight(445);
@@ -49,7 +50,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
     @FXML public void viewReportButtonPressed(ActionEvent event){
     	Tab selected = m_reportsTabPane.getSelectionModel().getSelectedItem();
     	if (selected.equals(m_studentsTab)) {
-    		Student s = m_studentsList.getSelectionModel().getSelectedItem();
+    		Student s = new Student(m_studentsList.getSelectionModel().getSelectedItem());
         	if (s==null) return;
         	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
         	pvrf.setWindowType(PrincipleViewReportFrame.type.STUDENT);
@@ -57,7 +58,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewReportID);
         	return;
     	} else if (selected.equals(m_teachersTab)) {
-    		Teacher t = m_teachersList.getSelectionModel().getSelectedItem();
+    		Teacher t = new Teacher(m_teachersList.getSelectionModel().getSelectedItem());
         	if (t==null) return;
         	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
         	pvrf.setWindowType(PrincipleViewReportFrame.type.TEACHER);
@@ -91,7 +92,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
     	if (allStudents==null) {
 	    	allStudents = UserController.getAllStudents(); 
     	} 
-		ObservableList<Student> list = FXCollections.observableArrayList(allStudents);
+		ObservableList<User> list = FXCollections.observableArrayList(allStudents);
     	m_studentsList.setItems(list);
     }
     
@@ -110,7 +111,11 @@ public class PrincipalReportsFrame implements ControlledScreen {
     }
     
     @FXML public void teacherTabSeleted(Event event) {
-    	
+    	if (allTeachers==null) {
+	    	allTeachers = UserController.getAllTeachers(); 
+    	} 
+		ObservableList<User> list = FXCollections.observableArrayList(allTeachers);
+    	m_teachersList.setItems(list);
     }
     
     // method handles selection of text box in which you enter id to manually search for data

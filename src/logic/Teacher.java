@@ -25,4 +25,8 @@ public class Teacher extends User{
 	public Teacher(Teacher t) {
 		super(t);
 	}
+	
+	public Teacher(User u) {
+		super(u);
+	}
 }

@@ -23,8 +23,8 @@ public class DBMain {
 			+ "SELECT * " + 
 			"FROM aes.student_in_course as sic, aes.users as u " + 
 			"WHERE sic.studentid=u.userid and u.usertype=0 and sic.fieldid=? and sic.courseid=?");
-	private String getAllStudents = new String(""
-			+ "SELECT * FROM aes.users as u WHERE u.usertype=0 ");
+	private String getAllUsersByType = new String(""
+			+ "SELECT * FROM aes.users as u WHERE u.usertype=? ");
 	private String getField = new String(""
 			+ "SELECT * FROM fields WHERE fieldid=?");
 	private String getCourse = new String(""
@@ -286,11 +286,12 @@ public class DBMain {
 		return null;
 	}
 
-	public ArrayList<Student> GetAllStudents() {
+	public ArrayList<User> GetAllUsersByType(int type) {
 		try {
-			PreparedStatement prst = conn.prepareStatement(getAllStudents);
+			PreparedStatement prst = conn.prepareStatement(getAllUsersByType);
+			prst.setInt(1,type);
 			System.out.println("SQL:"+prst);
-			ArrayList<Student> result = new ArrayList<>();
+			ArrayList<User> result = new ArrayList<>();
 			if (prst.execute()) {
 				//studentid, courseid, fieldid, userid, username, password, fullname, usertype
 				ResultSet rs = prst.getResultSet();
@@ -299,7 +300,13 @@ public class DBMain {
 					String username = rs.getString(2);
 					String password = rs.getString(3);
 					String fullname = rs.getString(4);
-					result.add(new Student(userid,username,password,fullname));
+					if (type==0)
+						result.add(new Student(userid,username,password,fullname));
+					else if (type==1)
+						result.add(new Teacher(userid,username,password,fullname));
+					else if (type==2)
+						result.add(new Principle(userid,username,password,fullname));
+					else return null;
 				}
 			}
 			return result;

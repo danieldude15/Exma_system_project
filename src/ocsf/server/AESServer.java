@@ -128,6 +128,9 @@ public class AESServer extends AbstractServer {
 			case "getAllQuestions":
 				getAllQuestions(client,null);
 				break;
+			case "getAllTeachers":
+				getAllTeachers(client);
+				break;
 			case "getAllExams":
 			    getAllExams(client,null);
 			    break;
@@ -508,8 +511,14 @@ public class AESServer extends AbstractServer {
 	}
 	
 	private void getAllStudents(ConnectionToClient client) throws IOException {
-		ArrayList<Student> students = sqlcon.GetAllStudents();
+		ArrayList<User> students = sqlcon.GetAllUsersByType(0);
 		iMessage im = new iMessage("allStudents",students);
+		client.sendToClient(im);
+	}
+	
+	private void getAllTeachers(ConnectionToClient client) throws IOException {
+		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
+		iMessage im = new iMessage("allTeachers",teachers);
 		client.sendToClient(im);
 	}
 	

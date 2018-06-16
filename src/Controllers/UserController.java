@@ -56,13 +56,11 @@ public class UserController {
 			if (ClientGlobals.client!=null)
 				ClientGlobals.client.sendToServer(new iMessage("logout",ClientGlobals.client.getUser()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Globals.mainContainer.setScreen(ClientGlobals.LogInID);
 	}
 	
-
 	public static ArrayList<Student> getStudentsInCourse(Course c) {
 		try {
 			if (ClientGlobals.client!=null) {
@@ -75,11 +73,23 @@ public class UserController {
 		return null;
 	}
 
-	public static ArrayList<Student> getAllStudents() {
+	public static ArrayList<User> getAllStudents() {
 		try {
 			if (ClientGlobals.client!=null) {
 				ClientGlobals.client.sendToServer(new iMessage("getAllStudents",null));
-				return (ArrayList<Student>) ClientGlobals.client.getResponseFromServer().getObj();
+				return (ArrayList<User>) ClientGlobals.client.getResponseFromServer().getObj();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static ArrayList<User> getAllTeachers() {
+		try {
+			if (ClientGlobals.client!=null) {
+				ClientGlobals.client.sendToServer(new iMessage("getAllTeachers",null));
+				return (ArrayList<User>) ClientGlobals.client.getResponseFromServer().getObj();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
