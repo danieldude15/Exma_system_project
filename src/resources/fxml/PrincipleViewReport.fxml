@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox prefHeight="645.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipleViewReportFrame">
    <children>
       <HBox alignment="TOP_CENTER">
@@ -234,7 +233,7 @@
             </VBox>
             <VBox>
                <children>
-                  <BarChart fx:id="devBarChart" categoryGap="40.0" title="Deviation">
+                  <BarChart fx:id="devBarChart" barGap="0.0" categoryGap="0.0" title="Deviation" verticalGridLinesVisible="false">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" fx:id="xAxis" />
                     </xAxis>
