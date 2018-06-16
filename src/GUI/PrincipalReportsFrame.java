@@ -3,6 +3,7 @@ package GUI;
 import java.util.ArrayList;
 
 import Controllers.ControlledScreen;
+import Controllers.CourseFieldController;
 import Controllers.ReportController;
 import Controllers.UserController;
 import GUI.PrincipleViewReportFrame.type;
@@ -39,11 +40,12 @@ public class PrincipalReportsFrame implements ControlledScreen {
     ArrayList<ExamReport> examsReports = null;
     ArrayList<User> allStudents = null;
     ArrayList<User> allTeachers = null;
+    ArrayList<Course> allCourse = null;
     
     @Override public void runOnScreenChange() {
         Globals.primaryStage.setHeight(445);
         Globals.primaryStage.setWidth(515);
-        //m_reportsTabPane.getSelectionModel().select(m_studentsTab);;
+        m_reportsTabPane.getSelectionModel().select(m_studentsTab);;
         StudentsTabSelected(null);
     }
 
@@ -107,7 +109,11 @@ public class PrincipalReportsFrame implements ControlledScreen {
     }
     
     @FXML public void courseTabSelected(Event event) {
-    	
+    	if (allCourse==null) {
+	    	allCourse = CourseFieldController.getAllCourses(); 
+    	} 
+		ObservableList<Course> list = FXCollections.observableArrayList(allCourse);
+    	m_coursesList.setItems(list);
     }
     
     @FXML public void teacherTabSeleted(Event event) {

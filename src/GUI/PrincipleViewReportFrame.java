@@ -150,7 +150,52 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	}
 
 	private void setupCourseView() {
-		// TODO Auto-generated method stub
+		if(course==null) {
+			backToReports(null);
+			return;
+		}
+		ArrayList<ExamReport> courseExams = new ArrayList<>();
+		int examCounter=0;
+		float avgSum=0;
+		ArrayList<Integer> medianCalc = new ArrayList<>();
+		//update left Listview with examReports Solved Exams
+		ArrayList<String> reportist = new ArrayList<>();
+		for(ExamReport er:ReportController.getAllExamReport()) {
+			if(er.getCourse().equals(course)) {
+				reportist.add(er.toString());
+				courseExams.add(er);
+				examCounter++;
+				avgSum+=er.getAvg();
+				for(SolvedExam se: er.getSolvedExams())
+					medianCalc.add(se.getScore());
+			}
+		}
+		ObservableList<String> list = FXCollections.observableArrayList(reportist);
+		leftListView.setItems(list);
+		float avg = avgSum/examCounter;
+		int median = ExamReport.calcMedianFromInts(medianCalc);
+		HashMap<Integer, Integer> dev = ExamReport.calcDeviationFromInts(medianCalc);
+		averageLabel.setText(avg+"");
+		Median.setText(median+"");
+		
+		updateBarChart(dev);
+		
+		infoTitle1.setText("Course Name:");
+		infoTitle1.setVisible(true);
+		infoTitle2.setText("Course ID:");
+		infoTitle2.setVisible(true);
+		infoTitle3.setText("Field of Course:");
+		infoTitle3.setVisible(true);
+		infoTitle4.setText("Field ID:");
+		infoTitle4.setVisible(true);
+		infoValue1.setText(course.getName());
+		infoValue1.setVisible(true);
+		infoValue2.setText(course.courseIdToString());
+		infoValue2.setVisible(true);
+		infoValue3.setText(course.getField().getName());
+		infoValue3.setVisible(true);
+		infoValue4.setText(course.getField().getID()+"");
+		infoValue4.setVisible(true);
 		
 	}
 	

@@ -69,28 +69,11 @@ public class CourseFieldController {
 	public static ArrayList<Course> getFieldsCourses(ArrayList<Field> f) {
 		if(f==null) return null;
 		AESClient client = ClientGlobals.client;
-		ArrayList<Course> courses;
 		if(client.isConnected()) {
 			iMessage msg= new iMessage("getFieldsCourses",f);
 			try {
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				courses = new ArrayList<Course>();
-				if(o instanceof ArrayList) {
-					ArrayList<Object> TeacherCourses = (ArrayList<Object>) o;
-					if (TeacherCourses.size()==0) return null;
-					Object a = TeacherCourses.get(0);
-					if(a instanceof Course) {
-						ArrayList<Course> tc = (ArrayList<Course>)o;
-						for (Course c: tc) {
-							Course course = new Course(c);
-							courses.add(course);
-						}
-						return courses;
-					} else {
-						System.out.println("Get Field Courses got " +o.getClass()+" objects instead of Course objects");
-					}
-				}
+				return (ArrayList<Course>) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 			}
@@ -158,6 +141,20 @@ public class CourseFieldController {
 				ClientGlobals.handleIOException(e);
 			}
 		}
+		return null;
+	}
+
+	public static ArrayList<Course> getAllCourses() {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getAllCourses",null);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Course>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+			}
+		} 
 		return null;
 	}
 }
