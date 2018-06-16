@@ -55,44 +55,7 @@ public class ExamReport extends ActiveExam {
 	 * the hashMap of all potential cheaters in this exam
 	 */
 	HashMap<Student,Integer> m_cheatingStudents;
-	
-	
-	/**
-	 * this constructor should be used when getting information from database and 
-	 * non of the information needs to be calculated because it is all saved in the database
-	 * @param code - the activeExam code (4 char)
-	 * @param type - the type of exam. {computerized or manual}
-	 * @param dayActivated - the date the exam was activated
-	 * @param activator - the teacher who activated this exam
-	 * @param solvedExams - the ArrayList of all solved exams 
-	 * @param notInTimeStudents - the amount of student that did not submit their exam on time and got 0 for it
-	 * @param submittedStudents - the amount of student that submitted the exam in time 
-	 * @param participatingStudent - the amount of student who participated in the exam 
-	 * @param e - this exam of witch this report is made for
-	 * @param timeLocked -the time when the exam was locked 
-	 * @param median - the median of the scores in this exam
-	 * @param avg - the avg of the scores of the exam
-	 * @param diviation - the diviation values of this exam separeted in 10 points 
-	 * @param dateinitiated -the date that the exam was activated/initiatez 
-	 * @param m_cheatingStudents - the hashmap of cheaters found in this exam.
-	 */
-	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
-			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
-			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
-			int median, float avg, HashMap<Integer, Integer> diviation,
-			HashMap<Student, Integer> m_cheatingStudents) {
-		super(code, type, dayActivated, e, activator);
-		this.solvedExams = solvedExams;
-		this.participatingStudent = participatingStudent;
-		this.submittedStudents = submittedStudents;
-		this.notInTimeStudents = notInTimeStudents;
-		this.timeLocked = timeLocked;
-		this.median = median;
-		this.avg = avg;
-		this.deviation = diviation;
-		this.m_cheatingStudents = m_cheatingStudents;
-	}
-	
+		
 	/**
 	 * this constructor should be called when creating a new exam report before pushing it into the database
 	 * because this constructor uses the solved exams to calculate all the average and median and deviation also 
@@ -121,7 +84,6 @@ public class ExamReport extends ActiveExam {
 		this.median = calcMedian(solvedExams);
 		this.avg = calcAvg(solvedExams);
 		this.deviation = calcDeviation(solvedExams);
-
 		this.m_cheatingStudents = findCheaters(solvedExams);
 	}
 
@@ -293,28 +255,6 @@ public class ExamReport extends ActiveExam {
 		return deviation;
 	}
 
-	public static HashMap<Integer, Integer> parseStringDeviation(String string) {
-		String[] devs = string.split("-");
-		HashMap<Integer, Integer> result = new HashMap<>();
-		if (devs.length!=10) 
-			return null;
-		for(int i=0;i<10;i++) {
-			result.put(i, Integer.parseInt(devs[i]));
-		}
-		return result;
-	}
-
-	public static String convertDeviationToString(HashMap<Integer, Integer> deviation2) {
-		String result = "";
-		if(deviation2.size()!=10)
-			return "0-0-0-0-0-0-0-0-0-0";
-		for(int i=0;i<10;i++) {
-			result= result + "" + deviation2.get(i);
-			if (i!=9)
-				result+= "-";
-		}
-		return result;
-	}
 	
 	/**
 	 * overriding toString method

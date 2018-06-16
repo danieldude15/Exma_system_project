@@ -65,8 +65,8 @@ public class DBMain {
 			+ "(`examid`, `courseid`, `fieldid`, `autherid`, "
 			+ "`activatorid`, `code`, `type`, `dateactivated`, "
 			+ "`date_time_locked`, `participated`, `not_in_time_submitters`, "
-			+ "`submitted`, `median`, `exam_avg`, `deviation`) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + 
+			+ "`submitted`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + 
 			"");
 	private String getcourseExams= new String(""
 			+ "SELECT e.examid ,e.timeduration,e.teacherid,u.fullname,u.password,u.username "
@@ -528,8 +528,7 @@ public class DBMain {
 				 * 1 examid, 2 courseid, 3 fieldid, 
 				 * 4 autherid, 5 activatorid, 6 code, 
 				 * 7 type, 8 date_time_activated, 9 date_time_locked, 
-				 * 10 participated, 11 not_in_time_submitters, 12 submitted, 
-				 * 13 median, 14 exam_avg, 15 deviation
+				 * 10 participated, 11 not_in_time_submitters, 12 submitted
 				 */
 				while (rs.next()) {
 					int examid = rs.getInt(1);
@@ -543,14 +542,10 @@ public class DBMain {
 					int participated = rs.getInt(10);
 					int submitted = rs.getInt(12);
 					int notInTime = rs.getInt(11);
-					int median = rs.getInt(13);
-					float avg = rs.getFloat(14);
-					HashMap<Integer, Integer> deviation =ExamReport.parseStringDeviation(rs.getString(15));
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, t.getID(), code, type, dayActivated);
 					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
 					completedExams.add(new ExamReport(code, type, dayActivated, e, activator, sExams, 
-							participated, submitted, notInTime, timeLocked, median, avg, deviation, 
-							ExamReport.findCheaters(sExams)));
+							participated, submitted, notInTime, timeLocked));
 				}
 				return completedExams;
 			}
@@ -587,14 +582,10 @@ public class DBMain {
 					int participated = rs.getInt(10);
 					int submitted = rs.getInt(12);
 					int notInTime = rs.getInt(11);
-					int median = rs.getInt(13);
-					float avg = rs.getFloat(14);
-					HashMap<Integer, Integer> deviation =ExamReport.parseStringDeviation(rs.getString(15));
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, rs.getInt(4), code, type, dayActivated);
 					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
 					completedExams.add(new ExamReport(code, type, dayActivated, e, activator, sExams, 
-							participated, submitted, notInTime, timeLocked, median, avg, deviation, 
-							ExamReport.findCheaters(sExams)));
+							participated, submitted, notInTime, timeLocked));
 				}
 				return completedExams;
 			}
@@ -946,7 +937,7 @@ public class DBMain {
 		 * `examid`, `courseid`, `fieldid`, `autherid`,
 		   `activatorid`, `code`, `type`, `dateactivated`,
 		   `date_time_locked`, `participated`, `not_in_time_submitters`,
-		   `submitted`, `median`, `exam_avg`, `deviation`
+		   `submitted`
 		 */
 		try {
 			int linesEfected =0;
@@ -963,9 +954,6 @@ public class DBMain {
 			prst.setInt(10, eReport.getParticipatingStudent());
 			prst.setInt(11, eReport.getNotInTimeStudents());
 			prst.setInt(12, eReport.getSubmittedStudents());
-			prst.setInt(13, eReport.getMedian());
-			prst.setFloat(14, eReport.getAvg());
-			prst.setString(15, ExamReport.convertDeviationToString(eReport.getDeviation()));
 			System.out.println("SQL:" + prst);
 			linesEfected = prst.executeUpdate();
 			for(SolvedExam se : eReport.getSolvedExams()) {
