@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Controllers.ControlledScreen;
+import Controllers.ReportController;
 import Controllers.SolvedExamController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -154,7 +155,48 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	}
 	
 	private void setupTeacherView() {
-		// TODO Auto-generated method stub
+		ArrayList<ExamReport> allExams = ReportController.getAllExamReport();
+		float avgSum=0;
+		int examCounter=0;
+		ArrayList<Integer> medianCalc = new ArrayList<>();
+		for(ExamReport er: allExams) {
+			if(!er.getActivator().equals(teacher))
+				allExams.remove(er);
+			else {
+				examCounter++;
+				avgSum+=er.getAvg();
+				for(SolvedExam se: er.getSolvedExams())
+					medianCalc.add(se.getScore());
+			}
+		}
+		float avg = avgSum/examCounter;
+		int median = ExamReport.calcMedianFromInts(medianCalc);
+		HashMap<Integer, Integer> dev = ExamReport.calcDeviationFromInts(medianCalc);
+		
+		ArrayList<String> leftListStrings = new ArrayList<>();
+		for(ExamReport se:allExams) {
+			leftListStrings.add("Course:" + se.getCourse().getName() + "Grade Average:" + se.getAvg() );
+		}
+		ObservableList<String> list = FXCollections.observableArrayList(leftListStrings);
+		leftListView.setItems(list);
+		
+		averageLabel.setText(Float.toString(avg));
+		Median.setText(Integer.toString(median));
+		
+		updateBarChart(dev);
+		
+		infoTitle1.setText("teacher's Name:");
+		infoTitle1.setVisible(true);
+		infoTitle2.setText("teacher's ID:");
+		infoTitle2.setVisible(true);
+		infoTitle3.setText("teacher's UserName:");
+		infoTitle3.setVisible(true);
+		infoValue1.setText(teacher.getName());
+		infoValue1.setVisible(true);
+		infoValue2.setText(teacher.getID()+"");
+		infoValue2.setVisible(true);
+		infoValue3.setText(teacher.getUserName());
+		infoValue3.setVisible(true);
 		
 	}
 	

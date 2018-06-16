@@ -196,9 +196,13 @@ public class ExamReport extends ActiveExam {
 		for(SolvedExam se: solvedExams2) {
 			scores.add(se.getScore());
 		}
-		Collections.sort(scores);
-		if (scores.size()>0)
-			return scores.get(scores.size()/2);
+		return calcMedianFromInts(scores);
+	}
+	
+	public static int calcMedianFromInts(ArrayList<Integer> values) {
+		Collections.sort(values);
+		if (values.size()>0)
+			return values.get(values.size()/2);
 		else 
 			return 0;
 	}
@@ -215,26 +219,33 @@ public class ExamReport extends ActiveExam {
 	}
 
 	public static HashMap<Integer, Integer> calcDeviation(ArrayList<SolvedExam> solvedExams2) {
-		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
+		ArrayList<Integer> values = new ArrayList<>();
 		for(SolvedExam se: solvedExams2) {
-			int score = se.getScore();
-			if (score>90)
+			values.add(se.getScore());
+		}
+		return calcDeviationFromInts(values);
+	}
+	
+	public static HashMap<Integer, Integer> calcDeviationFromInts(ArrayList<Integer> values) {
+		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
+		for(Integer num: values) {
+			if (num>90)
 				devValues[9]++;
-			else if (score>80)
+			else if (num>80)
 				devValues[8]++;
-			else if (score>70)
+			else if (num>70)
 				devValues[7]++;
-			else if (score>60)
+			else if (num>60)
 				devValues[6]++;
-			else if (score>50)
+			else if (num>50)
 				devValues[5]++;
-			else if (score>40)
+			else if (num>40)
 				devValues[4]++;
-			else if (score>30)
+			else if (num>30)
 				devValues[3]++;
-			else if (score>20)
+			else if (num>20)
 				devValues[2]++;
-			else if (score>10)
+			else if (num>10)
 				devValues[1]++;
 			else 
 				devValues[0]++;
