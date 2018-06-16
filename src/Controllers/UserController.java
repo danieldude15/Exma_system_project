@@ -75,4 +75,16 @@ public class UserController {
 		return null;
 	}
 
+	public static ArrayList<Student> getAllStudents() {
+		try {
+			if (ClientGlobals.client!=null) {
+				ClientGlobals.client.sendToServer(new iMessage("getAllStudents",null));
+				return (ArrayList<Student>) ClientGlobals.client.getResponseFromServer().getObj();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

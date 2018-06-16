@@ -1,5 +1,6 @@
 package ocsf.client;
 
+import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -152,7 +153,11 @@ public class AESClient extends AbstractClient{
 			count++;
 			if(count>=500) {
 				System.out.println("Server Taking Long Time To Respond... returning null");
-				return null;
+				return new iMessage("Server Taking Long Time To Respond... returning null", null);
+			}
+			if(!isConnected()) {
+				System.out.println("Lost Connection with Server! returning null");
+				return new iMessage("Lost Connection with Server! returning null", null);
 			}
 			synchronized (stopWaiting) {
 				if (stopWaiting) {

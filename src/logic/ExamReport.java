@@ -44,7 +44,7 @@ public class ExamReport extends ActiveExam {
 	/**
 	 * average of all solvedExams
 	 */
-	int avg;
+	float avg;
 	/**
 	 * deviation value of the report for every 10 points in the solvedExams scores
 	 */
@@ -77,7 +77,7 @@ public class ExamReport extends ActiveExam {
 	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
 			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
 			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
-			int median, int avg, HashMap<Integer, Integer> diviation,
+			int median, float avg, HashMap<Integer, Integer> diviation,
 			HashMap<Student, Integer> m_cheatingStudents) {
 		super(code, type, dayActivated, e, activator);
 		this.solvedExams = solvedExams;
@@ -152,7 +152,7 @@ public class ExamReport extends ActiveExam {
 	 * getAvg
 	 * @return the avarage ofthis exam
 	 */
-	public int getAvg() {
+	public float getAvg() {
 		return avg;
 	}
 
@@ -203,7 +203,7 @@ public class ExamReport extends ActiveExam {
 			return 0;
 	}
 
-	public static int calcAvg(ArrayList<SolvedExam> solvedExams2) {
+	public static float calcAvg(ArrayList<SolvedExam> solvedExams2) {
 		int sum =0;
 		for(SolvedExam se: solvedExams2) {
 			sum+=se.getScore();
@@ -211,7 +211,7 @@ public class ExamReport extends ActiveExam {
 		if (solvedExams2.size()==0)
 			return 0;
 		else 
-			return sum/solvedExams2.size();
+			return (float) ((1.0*sum)/solvedExams2.size());
 	}
 
 	public static HashMap<Integer, Integer> calcDeviation(ArrayList<SolvedExam> solvedExams2) {
@@ -273,7 +273,7 @@ public class ExamReport extends ActiveExam {
 	 * overriding toString method
 	 */
 	@Override public String toString() {
-		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %d", getCourse().getName(),getDate(),getAvg()));
+		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f", getCourse().getName(),getDate(),getAvg()));
 	}
 
 	

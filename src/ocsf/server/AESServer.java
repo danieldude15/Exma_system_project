@@ -120,6 +120,9 @@ public class AESServer extends AbstractServer {
 			case "timeChangeRequestResponse":
 				timeChangeRequestResponse(o);
 				break;
+			case "getAllExamReport":
+				getAllExamReport(client);
+				break;
 			case "getAllTimeChangeRequest":
 				getAllTimeChangeRequest(client);
 				break;
@@ -170,6 +173,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "studentIsInActiveExam":
 				studentIsInActiveExam(client,o);
+				break;
+			case "getAllStudents":
+				getAllStudents(client);
 				break;
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
@@ -242,6 +248,7 @@ public class AESServer extends AbstractServer {
 	* this is part of AbstractServer functionality
 	*/
 	protected void serverClosed() {
+		System.err.println("The server is about to close all its connections\nnotifying clients about disconnection and disconnecting from database");
 		try {
 			ServerGlobals.server.sendToAllClients(new iMessage("closing Connection",null));
 			sqlcon.getConn().close();
@@ -267,7 +274,7 @@ public class AESServer extends AbstractServer {
 	* @param client the connection with the client.
 	*/
 	synchronized protected void clientDisconnected(ConnectionToClient client) {
-		System.out.println("Client: " + client + " has diconnected from the server.");
+		System.err.println("Client: " + client + " has diconnected from the server.");
 	}
 
 	/**
@@ -280,7 +287,9 @@ public class AESServer extends AbstractServer {
 	* @param exception the exception thrown.
 	*/
 	synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
-		System.err.println("Client: " + client + " has thrown an exception:\n" + exception.getStackTrace());
+		System.err.println("A client has thrown an exception: (following exception couse client to disconnect)\n");
+		exception.printStackTrace();
+		System.err.println("End of client exception");
 	}
 
 	/**
@@ -291,7 +300,10 @@ public class AESServer extends AbstractServer {
 	*
 	* @param exception the exception raised.
 	*/
-	protected void listeningException(Throwable exception) {}
+	protected void listeningException(Throwable exception) {
+		System.err.println("the server stops accepting connections because an exception has been raised!");
+		exception.printStackTrace();
+	}
 
 	 /**
 	 * Hook method called when the server starts listening for
@@ -299,7 +311,7 @@ public class AESServer extends AbstractServer {
 	 * The method may be overridden by subclasses.
 	 */
 	protected void serverStarted() {
-		System.out.println("Server Started.");
+		System.err.println("Server Started.");
 	}
 
 	/**
@@ -308,7 +320,7 @@ public class AESServer extends AbstractServer {
 	 * does nothing. This method may be overriden by subclasses.
 	 */
 	protected void serverStopped() {
-		System.out.println("Server Stoped.");
+		System.err.println("Server Stoped.");
 	}
 	
 	// ######################################## TEAM Start Adding Functions from here ###################################################
@@ -502,7 +514,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	
-
+	private void getAllStudents(ConnectionToClient client) throws IOException {
+		ArrayList<Student> students = sqlcon.GetAllStudents();
+		iMessage im = new iMessage("allStudents",students);
+		client.sendToClient(im);
+	}
+	
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
 		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
@@ -630,6 +647,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(rtrnmsg);
 	}
 
+	private void getAllExamReport(ConnectionToClient client) throws IOException {
+		ArrayList<ExamReport> reports = sqlcon.getAllExamReports();
+		iMessage rtrnmsg = new iMessage("AllExamReports", reports);
+		client.sendToClient(rtrnmsg);
+	}
+	
     /**
      * Method retrieves all written questions from the database
      * @param client - the user currently connected ( used by the Principal )

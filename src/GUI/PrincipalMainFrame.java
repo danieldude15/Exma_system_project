@@ -100,11 +100,13 @@ public class PrincipalMainFrame implements ControlledScreen {
 
     private void refreshRequestListView() {
 		requests = TimeChangeController.getAllRequests();
-		ObservableList<TimeChangeRequest> list = FXCollections.observableArrayList(requests);
-		m_timeChangeRequestsList.setItems(list);//Insert all student's solved exams(courseName+grade) into the ListView "solvedExamList"
-		if (requests.size()==0) {
-			m_requestsTab.setDisable(true);
-			m_principalTabPane.getSelectionModel().select(m_infoTab);
+		if (requests!=null) {
+			ObservableList<TimeChangeRequest> list = FXCollections.observableArrayList(requests);
+			m_timeChangeRequestsList.setItems(list);//Insert all student's solved exams(courseName+grade) into the ListView "solvedExamList"
+			if (requests.size()==0) {
+				m_requestsTab.setDisable(true);
+				m_principalTabPane.getSelectionModel().select(m_infoTab);
+			}
 		}
 	}
 

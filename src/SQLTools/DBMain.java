@@ -23,6 +23,8 @@ public class DBMain {
 			+ "SELECT * " + 
 			"FROM aes.student_in_course as sic, aes.users as u " + 
 			"WHERE sic.studentid=u.userid and u.usertype=0 and sic.fieldid=? and sic.courseid=?");
+	private String getAllStudents = new String(""
+			+ "SELECT * FROM aes.users as u WHERE u.usertype=0 ");
 	private String getField = new String(""
 			+ "SELECT * FROM fields WHERE fieldid=?");
 	private String getCourse = new String(""
@@ -44,6 +46,8 @@ public class DBMain {
 			);
 	private String getTExamReports = new String(""
 			+ "SELECT * FROM aes.exams_report where autherid=?");
+	private String getAllExamReports = new String(""
+			+ "SELECT * FROM aes.exams_report");
 	private String getTeachrsSolvedExams = new String(""
 			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration,\n" + 
 			"		u.userid,u.username,u.password,u.fullname,se.answers,\n" + 
@@ -282,6 +286,29 @@ public class DBMain {
 		return null;
 	}
 
+	public ArrayList<Student> GetAllStudents() {
+		try {
+			PreparedStatement prst = conn.prepareStatement(getAllStudents);
+			System.out.println("SQL:"+prst);
+			ArrayList<Student> result = new ArrayList<>();
+			if (prst.execute()) {
+				//studentid, courseid, fieldid, userid, username, password, fullname, usertype
+				ResultSet rs = prst.getResultSet();
+				while (rs.next()) {
+					int userid = rs.getInt(1);
+					String username = rs.getString(2);
+					String password = rs.getString(3);
+					String fullname = rs.getString(4);
+					result.add(new Student(userid,username,password,fullname));
+				}
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
 
 	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
 		try {
@@ -510,7 +537,7 @@ public class DBMain {
 					int submitted = rs.getInt(12);
 					int notInTime = rs.getInt(11);
 					int median = rs.getInt(13);
-					int avg = rs.getInt(14);
+					float avg = rs.getFloat(14);
 					HashMap<Integer, Integer> deviation =ExamReport.parseStringDeviation(rs.getString(15));
 					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, t.getID(), code, type, dayActivated);
 					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
@@ -526,6 +553,50 @@ public class DBMain {
 		return null;
 	}
 
+
+	public ArrayList<ExamReport> getAllExamReports() {
+		ArrayList<ExamReport> completedExams = new ArrayList<ExamReport>();
+		try {
+			PreparedStatement prst = conn.prepareStatement(getAllExamReports);
+			System.out.println("SQL:"+prst);
+			if (prst.execute()) {
+				ResultSet rs = prst.getResultSet();
+				/*
+				 * 1 examid, 2 courseid, 3 fieldid, 
+				 * 4 autherid, 5 activatorid, 6 code, 
+				 * 7 type, 8 date_time_activated, 9 date_time_locked, 
+				 * 10 participated, 11 not_in_time_submitters, 12 submitted, 
+				 * 13 median, 14 exam_avg, 15 deviation
+				 */
+				while (rs.next()) {
+					int examid = rs.getInt(1);
+					int courseid = rs.getInt(2);
+					int fieldid = rs.getInt(3);
+					Teacher activator = (Teacher) getUser(rs.getInt(5));
+					String code = rs.getString(6);
+					int type = rs.getInt(7);
+					Date dayActivated = rs.getDate(8);
+					Date timeLocked = rs.getDate(9);
+					int participated = rs.getInt(10);
+					int submitted = rs.getInt(12);
+					int notInTime = rs.getInt(11);
+					int median = rs.getInt(13);
+					float avg = rs.getFloat(14);
+					HashMap<Integer, Integer> deviation =ExamReport.parseStringDeviation(rs.getString(15));
+					ArrayList<SolvedExam> sExams = getSolvedExams(examid, courseid, fieldid, rs.getInt(4), code, type, dayActivated);
+					Exam  e = getExam(Exam.examIdToString(examid, courseid, fieldid));
+					completedExams.add(new ExamReport(code, type, dayActivated, e, activator, sExams, 
+							participated, submitted, notInTime, timeLocked, median, avg, deviation, 
+							ExamReport.findCheaters(sExams)));
+				}
+				return completedExams;
+			}
+		} catch (Exception e) {
+			ServerGlobals.handleSQLException(new SQLException(e));
+		}
+		return null;
+	}
+	
 	/**
 	 * this methods returns a solved exam by parameters
 	 * @param examid
@@ -886,7 +957,7 @@ public class DBMain {
 			prst.setInt(11, eReport.getNotInTimeStudents());
 			prst.setInt(12, eReport.getSubmittedStudents());
 			prst.setInt(13, eReport.getMedian());
-			prst.setInt(14, eReport.getAvg());
+			prst.setFloat(14, eReport.getAvg());
 			prst.setString(15, ExamReport.convertDeviationToString(eReport.getDeviation()));
 			System.out.println("SQL:" + prst);
 			linesEfected = prst.executeUpdate();
@@ -1175,6 +1246,8 @@ public class DBMain {
 		}		
 		return 0;
 	}
+
+
 
 
 }
