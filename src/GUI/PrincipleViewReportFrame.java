@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -123,8 +124,6 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoTitle3.setVisible(true);
 		infoTitle4.setText("Participants:");
 		infoTitle4.setVisible(true);
-		//infoTitle5.setText("Exam Course:");
-		//infoTitle5.setVisible(true);
 		infoValue1.setText(examReport.getCourse().getName());
 		infoValue1.setVisible(true);
 		infoValue2.setText(examReport.getDate().toString());
@@ -133,8 +132,6 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue3.setVisible(true);
 		infoValue4.setText(examReport.getParticipatingStudent()+" Students");
 		infoValue4.setVisible(true);
-		//infoValue5.setText(examReport.getCourse().getName());
-		//infoValue5.setVisible(true);
 		
 	}
 
@@ -162,7 +159,35 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	}
 	
 	private void setupStudentView() {
-		// TODO Auto-generated method stub
+		ArrayList<SolvedExam> studentExams = SolvedExamController.getSolvedExamsByUser(student);
+		float avg = ExamReport.calcAvg(studentExams);
+		int median = ExamReport.calcMedian(studentExams);
+		HashMap<Integer, Integer> dev = ExamReport.calcDeviation(studentExams);
+		
+		ArrayList<String> leftListStrings = new ArrayList<>();
+		for(SolvedExam se:studentExams) {
+			leftListStrings.add("Course:" + se.getCourse().getName() + "Grade:" + se.getScore() );
+		}
+		ObservableList<String> list = FXCollections.observableArrayList(leftListStrings);
+		leftListView.setItems(list);
+		
+		averageLabel.setText(Float.toString(avg));
+		Median.setText(Integer.toString(median));
+		
+		updateBarChart(dev);
+		
+		infoTitle1.setText("Student's Name:");
+		infoTitle1.setVisible(true);
+		infoTitle2.setText("Student's ID:");
+		infoTitle2.setVisible(true);
+		infoTitle3.setText("Student's UserName:");
+		infoTitle3.setVisible(true);
+		infoValue1.setText(student.getName());
+		infoValue1.setVisible(true);
+		infoValue2.setText(student.getID()+"");
+		infoValue2.setVisible(true);
+		infoValue3.setText(student.getUserName());
+		infoValue3.setVisible(true);
 		
 	}
 
