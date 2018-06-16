@@ -816,7 +816,7 @@ public class AESServer extends AbstractServer {
 		AesWordDoc retFile= new AesWordDoc(name+".docx");
 		
 		  try {
-			      File file = new File (name);     
+			      File file = new File (name+".docx");     
 			      byte [] bytes  = new byte [(int)file.length()];
 			      FileInputStream fileInputStream = new FileInputStream(file);
 			      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  

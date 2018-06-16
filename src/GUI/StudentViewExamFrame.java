@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import logic.Globals;
 import logic.QuestionInExam;
 import logic.SolvedExam;
@@ -32,6 +33,8 @@ public class StudentViewExamFrame implements ControlledScreen {
 	private final Image v = new Image("resources/v.png"); 
 	private final Image x = new Image("resources/x.png"); 
 	private final String blackLabel=new String("blackLabel");
+	private final String redLabel=new String("redLabel");
+	private final String greenLabel=new String("greenLabel");
 	
 	
 	@Override
@@ -75,7 +78,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 		studentsAnswers=this.GetSolvedExam().getStudentsAnswers();
 		
 		/*Set each question and it's data on window screen/*/
-		for(QuestionInExam qie: studentsAnswers.keySet())
+		for(QuestionInExam qie: this.GetSolvedExam().getQuestionsInExam())
 		{
 			theRightAnswerIs.setText(SetQuestionStringAndAnswersOnWindowScreen(qie,questionIndex));
 			studentAnswer=SetScoreFromQuestionAndNoteOnWindowScreen(qie);
@@ -83,8 +86,6 @@ public class StudentViewExamFrame implements ControlledScreen {
 			if(studentAnswer=false)//If student answer is not correct that he gets a note about the real correct answer.
 				questionInfo_StudentScoreAndNote.getChildren().add(theRightAnswerIs);
 			
-			//here we gonna do this line questionNote.setText 
-			//here we gonna do this line questionInfo_StudentScoreAndNote.getChildren().add(questionNote)
 			
 			questionIndex++;
 		}
@@ -133,7 +134,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 			if(answerIndex==qie.getCorrectAnswerIndex())//Save the real correct answer so we can display it to student if he was wrong.
 				theRightAnswerIs=r.getText();
 			
-			if(answerIndex==studentsAnswers.get(qie))//Marked the student answer, and set the icon to v or x.
+			if(studentsAnswers.get(qie)!=null && answerIndex==studentsAnswers.get(qie))//Marked the student answer, and set the icon to v or x.
 			{
 				r.setSelected(true);
 				if(answerIndex==qie.getCorrectAnswerIndex())
@@ -183,15 +184,28 @@ public class StudentViewExamFrame implements ControlledScreen {
 		separator.setMinWidth(690);
 		separator.setMaxHeight(100);
 		
-		if(qie.getCorrectAnswerIndex()!=studentsAnswers.get(qie)) //Student answer's is not correct 
+		if(studentsAnswers.get(qie)!=null)//Student answer on that question
 		{
-			studentGetsPointsFromQuestion.setText(" Score: "+"0"+"/"+Integer.toString(qie.getPointsValue())+" points  ");
-			studentAnswer=false;
+			if(qie.getCorrectAnswerIndex()!=studentsAnswers.get(qie)) //Student answer's is not correct 
+			{
+				//studentGetsPointsFromQuestion.setId(redLabel);
+				studentGetsPointsFromQuestion.setId(redLabel);
+				studentGetsPointsFromQuestion.setText(" Score: "+"0"+"/"+Integer.toString(qie.getPointsValue())+" points  ");
+				studentAnswer=false;
+			}
+			else//Student answer's is correct
+			{
+				studentGetsPointsFromQuestion.setText(" Score: "+Integer.toString(qie.getPointsValue())+"/"+Integer.toString(qie.getPointsValue())+" points  ");
+				studentAnswer=true;
+			}
 		}
-		else//Student answer's is correct
+		
+		else//Student didn't answer on that question
 		{
-			studentGetsPointsFromQuestion.setText(" Score: "+Integer.toString(qie.getPointsValue())+"/"+Integer.toString(qie.getPointsValue())+" points  ");
-			studentAnswer=true;
+			studentGetsPointsFromQuestion.setId(redLabel);
+			studentGetsPointsFromQuestion.setText(" Score: "+"0"+"/"+Integer.toString(qie.getPointsValue())+" points  "+"\nYou didn't answer for that question!");
+			studentAnswer=false;
+			
 		}
 		
 		if(this.GetSolvedExam().getQuestionNoteOnHash().get(qie)!=null)//There is a note for that answer.
