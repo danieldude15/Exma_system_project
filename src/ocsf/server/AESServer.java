@@ -213,7 +213,7 @@ public class AESServer extends AbstractServer {
 				break;/*/
 			case "UploadSolvedExam":
 				UploadSolvedExam(o);
-				
+				break;
 			default:
 				
 			}

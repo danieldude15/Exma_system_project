@@ -83,7 +83,7 @@ public class AESClient extends AbstractClient{
 			break;
 		case "DownloadWordFile":
 			try {
-				download(o);
+				DownloadWordFile(o);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -98,7 +98,7 @@ public class AESClient extends AbstractClient{
 	}
 
 
-	private void download(Object o) throws IOException {
+	private void DownloadWordFile(Object o) throws IOException {
 		// TODO Auto-generated method stub
 		AesWordDoc file=(AesWordDoc) o;
 		File openFile = new File(file.getFileName());

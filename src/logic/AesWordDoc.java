@@ -204,7 +204,10 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 	  			try {
 	  				
 	  				doc=new AesWordDoc(new FileInputStream(file)) ;
-
+	  				//FileOutputStream out = new FileOutputStream(new File(file.getName())+".docx");
+	  				//doc.write(out);
+	  				//out.close();
+	  				
 	  				XWPFWordExtractor extract=new XWPFWordExtractor(doc);
 	  				System.out.println("Your solved exam: \n"+extract.getText());
 	  				
