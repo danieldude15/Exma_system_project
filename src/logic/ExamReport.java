@@ -260,7 +260,12 @@ public class ExamReport extends ActiveExam {
 	 * overriding toString method
 	 */
 	@Override public String toString() {
-		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f", getCourse().getName(),getDate(),getAvg()));
+		for(SolvedExam se: getSolvedExams()) {
+			if (!se.isTeacherApproved()) {
+				return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f", getCourse().getName(),getDate(),getAvg()));
+			}
+		}
+		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f (APPROVED)", getCourse().getName(),getDate(),getAvg()));
 	}
 
 	public String getDurationToString() {

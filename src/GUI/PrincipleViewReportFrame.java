@@ -294,7 +294,6 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	
 	private void updateBarChart(HashMap<Integer, Integer> dev) {
         xAxis.setLabel("Score Range");       
-        yAxis.setLabel("precentage");
         devBarChart.getData().clear();
         XYChart.Series[] series = new XYChart.Series[10];
         for(int i=0;i<10;i++) {

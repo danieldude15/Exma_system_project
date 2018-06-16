@@ -4,14 +4,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import logic.ExamReport;
 import logic.Globals;
@@ -65,7 +68,20 @@ public class TeacherCheckExams implements ControlledScreen, Initializable {
 	}
 	
 	@FXML public void approvedExamClicked(ActionEvent event) {
-		
+		if (selectedExam!=null) {
+			selectedExam.setTeacherApproved(true);
+			if (SolvedExamController.updateSolvedExam(selectedExam)>0) {
+				//successfull insertion
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Exam Check Is Updated Successfully");
+				alert.setHeaderText(null);
+				alert.setContentText("The exam was updated into the system.");
+				alert.show();
+				SolvedExamList.getItems().clear();
+				ObservableList<SolvedExam> list = FXCollections.observableArrayList(completedExam.getSolvedExams());
+				SolvedExamList.setItems(list);
+			}
+		}
 	}
 
 	

@@ -88,7 +88,12 @@ public class StudentMainFrame implements ControlledScreen{
 		
 		//Get all student solved exams from database and set it to the ListView field on window
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
-		ObservableList<SolvedExam> solveds = FXCollections.observableArrayList(mySolvedExam);
+		ArrayList<SolvedExam> myAprovedSolvedExam = new ArrayList<>();
+		for(SolvedExam se: mySolvedExam) {
+			if(se.isTeacherApproved())
+				myAprovedSolvedExam.add(se);
+		}
+		ObservableList<SolvedExam> solveds = FXCollections.observableArrayList(myAprovedSolvedExam);
 		solvedExamsList.setItems(solveds);
 		/*
 		if(!(mySolvedExam.isEmpty()))//If student has already did at least one exam.

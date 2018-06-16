@@ -65,7 +65,7 @@ public class SolvedExamController {
 	}
 
 
-	public static int insertSolvedExam(SolvedExam solvedExam) {
+	public static int updateSolvedExam(SolvedExam solvedExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {

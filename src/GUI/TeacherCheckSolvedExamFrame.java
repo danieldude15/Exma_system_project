@@ -195,7 +195,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 					solvedExam.setQuestionNoteOnHash(teacherNotes);
 			}
 			solvedExam.setTeacherApproved(true);
-			if (SolvedExamController.insertSolvedExam(solvedExam)>0) {
+			if (SolvedExamController.updateSolvedExam(solvedExam)>0) {
 				//successfull insertion
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Exam Check Is Updated Successfully");

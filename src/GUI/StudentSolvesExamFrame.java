@@ -125,7 +125,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		if(qie.getStudentNote()!=null)//If there is a student note on this question we add it to the top of the question.
 		{
-			note.setText(qie.getStudentNote());
+			note.setText("Note:" +qie.getStudentNote());
 			questionsAndAnswers.getChildren().add(note);
 		}
 		questionString.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
