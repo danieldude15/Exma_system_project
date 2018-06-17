@@ -690,6 +690,12 @@ public class AESServer extends AbstractServer {
         client.sendToClient(rtrnmsg);
     }
 
+	/**
+	 * Method retrieves all courses from the database
+	 * @param client - the user currently connected ( used by the Principal )
+	 * @param o - parameter for iMessage ( retrieving from a known table - null )
+	 * @throws IOException - exception thrown if object construction in the database encounters a problem
+	 */
 	private void getAllCourses(ConnectionToClient client, Object o) throws IOException{
 		ArrayList<Course> courses = sqlcon.getAllCourses();
 		iMessage rtrnmsg = new iMessage("AllCourses", courses);
