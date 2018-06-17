@@ -67,10 +67,17 @@ public class AESServer extends AbstractServer {
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
-		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0,
-				new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("030103"),teacher);
+
+		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
+		ActiveExam tibisExam = new ActiveExam("ac13", 1, new Date(new java.util.Date().getTime()),
+				sqlcon.getExam("010101"),teacher);
+		InitializeActiveExams(tibisExam);
+
+		/**
+		 * Added a virtual temporary Active Exam to Server!
+		 */
+		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
+		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
 		
 		
