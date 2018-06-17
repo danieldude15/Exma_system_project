@@ -90,13 +90,15 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		if(type.equals(windowType.Build))
 		{
 		TotalScore.setText("Total Score:");
-		fieldComboB.setDisable(false);
-		courseComboB.setDisable(false);
+		fieldComboB.setVisible(true);
+		courseComboB.setVisible(true);
 		fieldComboB.getItems().clear();
 		courseComboB.getItems().clear();
-		
+		questionsList.getChildren().clear();
 		duration.clear();
-		//clear all the hash map 
+		windowTypeid.setText("Build New Exam");
+		labelselectcourse.setVisible(true);
+		labelselectfield.setVisible(true);
 		questionsinexam.clear();
 		questions.clear();
 		scores.clear();
@@ -288,6 +290,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 
     public void CancelButtonPressed(ActionEvent event)
     {
+    	
     		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
     }
     
