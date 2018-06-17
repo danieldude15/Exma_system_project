@@ -1,9 +1,6 @@
 package GUI;
 
-import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
-import Controllers.ExamController;
-import Controllers.QuestionController;
+import Controllers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,6 +43,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     private HashMap<Integer, Question> m_questionsMap;
     private HashMap<Integer, Exam> m_examsMap;
     private HashMap<Integer, Field> m_fieldsMap;
+    private HashMap<Integer, User> m_studentsAndTeachersMap;
 
     @Override
     public void runOnScreenChange() {
@@ -109,6 +107,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_questionsMap = new HashMap<>();
         m_examsMap = new HashMap<>();
         m_fieldsMap = new HashMap<>();
+        m_studentsAndTeachersMap = new HashMap<>();
         updateStudentsList();
         updateTeachersList();
         updateQuestionsList();
@@ -222,7 +221,17 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     }
 
     private void updateStudentsList(){
-
+        ArrayList<User> m_studentsToBeDisplayed = UserController.getAllStudents();
+        ArrayList<String> toBeDisplayed = new ArrayList<>();
+        if (m_studentsToBeDisplayed != null) {
+            for (User student : m_studentsToBeDisplayed) {
+                m_studentsAndTeachersMap.put(student.getID(), student);
+                toBeDisplayed.add(student.toString());
+            }
+        }
+        m_studentsList.getItems().clear();
+        ObservableList<String> list = FXCollections.observableArrayList(toBeDisplayed);
+        m_studentsList.setItems(list);
     }
 
     private void updateTeachersList(){
