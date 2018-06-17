@@ -87,65 +87,36 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 	public void setdescription(String description) {
 		description = description;
 	}
-	public void CreateWordFile(ActiveExam activeExam,String path) throws IOException
+	public MyFile CreateWordFile(ActiveExam activeExam,String path) throws IOException
 	{
-		//FileOutputStream out = new FileOutputStream("C:\\Users\\איציק\\Desktop\\"+ new File(path)+".docx");
-		FileOutputStream out = new FileOutputStream(new File(path)+".docx");
-		//Create document
-		XWPFDocument doc=new XWPFDocument();
-				
-		//Create title paragraph
-		XWPFParagraph titleParagraph=doc.createParagraph();
-		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-		XWPFRun runTitleParagraph=titleParagraph.createRun();
-		runTitleParagraph.setBold(true);
-		runTitleParagraph.setItalic(true);
-		runTitleParagraph.setColor("00FF00");
-		runTitleParagraph.setText(activeExam.getExam().getCourse().getName());
-		runTitleParagraph.addBreak();
-		runTitleParagraph.addBreak();
-				
-		//Create exam details paragraph
-		XWPFParagraph examDetailsParagraph=doc.createParagraph();
-		examDetailsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-		XWPFRun runOnExamDetailsParagraph=examDetailsParagraph.createRun();
-		runOnExamDetailsParagraph.setText("Field: "+activeExam.getExam().getField().getName());
-		runOnExamDetailsParagraph.addBreak();
-		runOnExamDetailsParagraph.setText("Date: "+activeExam.getDate());
-		runOnExamDetailsParagraph.addBreak();
-				
-		//Create question+answers paragraph
-		XWPFParagraph questionsParagraph=doc.createParagraph();
-		questionsParagraph.setAlignment(ParagraphAlignment.RIGHT);
-		XWPFRun runOnquestionsParagraph=questionsParagraph.createRun();
-		int questionIndex=1;
-		ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+	    writer.write("\t\t"+activeExam.getExam().getCourse().getName()+"\n");
+	    writer.write("\tField: "+activeExam.getExam().getField().getName()+"\n");
+	    writer.write("\tDate: "+activeExam.getDate()+"\n\n");
+		
+	    ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
+	    int questionIndex=1;
 		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 		{
 			if(qie.getStudentNote()!=null)
 			{
-				runOnquestionsParagraph.setText(qie.getStudentNote());
-				runOnquestionsParagraph.addBreak();
+				writer.write("Note:" + qie.getStudentNote()+"\n");
 			}
-			runOnquestionsParagraph.setText(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)");
-			runOnquestionsParagraph.addBreak();
-			for(int i=1;i<5;i++)
-			{
-				runOnquestionsParagraph.setText((char)(i+96)+". "+qie.getAnswer(i));
-				runOnquestionsParagraph.addBreak();
+			writer.write(questionIndex+". "+qie.getQuestionString()+" ("+qie.getPointsValue()+" Points)\n");
+			questionIndex++;
+			for(int i=1;i<5;i++) {
+				writer.write(i+". "+qie.getAnswer(i)+"\n");
 			}
 			questionIndex++;
 		}
-		runOnquestionsParagraph.addBreak();
-		runOnquestionsParagraph.addBreak();
-				
-		//Create good luck paragraph
-		XWPFParagraph GoodLuckParagraph=doc.createParagraph();
-		XWPFRun runOnGoodLuckParagraph=GoodLuckParagraph.createRun();
-		runOnGoodLuckParagraph.setText("Good Luck!");
-
-		doc.write(out);
-		out.close();
+		writer.write("\n\nGood Luck!");
+	    writer.close();
+		return null;
+		
+		
+		
+		//doc.write(out);
+		//out.close();
 		//return doc;
 	}
 

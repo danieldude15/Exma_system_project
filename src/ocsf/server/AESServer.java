@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	
 	
@@ -40,12 +40,7 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
-	//Word Files
-	 // HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
-	 
-	private static HashMap<ActiveExam,AesWordDoc> wordFiles;
-	
-	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
+	private  HashMap<SolvedExam,MyFile> solvedExamWordFiles;
 	
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
@@ -204,7 +199,7 @@ public class AESServer extends AbstractServer {
 				checkInStudentToActiveExam(client, o);
 				break;
 			case "GetManualExam"://Word Files
-				GetManuelExam(client,o);
+				createManualExam(client,o);
 				break;
 			case "getcourseExams":
 				getcourseExams(client,o);
@@ -748,7 +743,6 @@ public class AESServer extends AbstractServer {
 		setActiveExamTimeline(ae,null);
 	}
 	
-	
 
 	private void newTimeChangeRequest(Object o) throws IOException {
 		if (o instanceof TimeChangeRequest) {
@@ -790,58 +784,31 @@ public class AESServer extends AbstractServer {
 		
 	}
 	
-	/*Word Files
-	/**
-	 * Create a Document file when the teacher activate a manual exam.
-	 * @param active
-	 */
-	/*/
-	private void CreateWordFile(ActiveExam activeExam)
-	{
-	
-				AddToWordFileList(activeExam,doc);
-
-	}
-	
-		/**
-		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
-		 * @param active
-		 * @param doc
-		 */
-		/*WordFiles
-		 private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
-			wordFiles.put(active, doc);
-		}/*/
-	
 	/**
 	 *  Send to client a Manual Exam word File.
 	 * @param client
 	 * @param o
 	 * @throws IOException
 	 */
-	private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
+
+	private void createManualExam(ConnectionToClient client, Object o) throws IOException {
+		ActiveExam ae = (ActiveExam)o;
+		MyFile myExamFileDes = new MyFile(ae.examIdToString()+".doc");
+		myExamFileDes.CreateWordFile(ae, ae.examIdToString()+".doc");
 		
-		String name=((ActiveExam)o).getCourse().getName();
- 		AesWordDoc wordClass=new AesWordDoc();
- 		wordClass.CreateWordFile((ActiveExam)o, name);
-		AesWordDoc retFile= new AesWordDoc(name+".docx");
+		File examFile = new File(ae.examIdToString()+".doc");
+		myExamFileDes.setSize((int) examFile.length());
+		myExamFileDes.initArray((int) examFile.length());
 		
-		  try {
-			      File file = new File (name+".docx");     
-			      byte [] bytes  = new byte [(int)file.length()];
-			      FileInputStream fileInputStream = new FileInputStream(file);
-			      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
-			      retFile.initArray(bytes.length);
-			      retFile.setSize(bytes.length);
-			      bufferInputStream.read(retFile.getbytes(),0,bytes.length);
-			  
-			      client.sendToClient(new iMessage("DownloadWordFile",retFile));
-					
-			    }
-			catch (Exception e) {
-				System.out.println("Send file from server to client failed!\n");
-			}
+		FileInputStream fis = new FileInputStream(examFile);
+		BufferedInputStream bis = new BufferedInputStream(fis);
 		
+		bis.read(myExamFileDes.getMybytearray(),0,(int) examFile.length());
+		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+		client.sendToClient(msg);
+		
+		
+ 		
 	}
 	
 	
@@ -877,86 +844,6 @@ public class AESServer extends AbstractServer {
 		timeChangeRequests.remove(ae);
 	}
 
-
-		/*
-		public void SystemCheckSolvedExam(ConnectionToClient client, Object obj) throws IOException {
-			// TODO Auto-generated method stub
-			Object[] o = (Object[])obj;
-			ActiveExam activeExam=(ActiveExam) o[0];
-			boolean inTime=(boolean) o[1];
-			HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=(HashMap<QuestionInExam, ToggleGroup>) o[2];
-			int score=0;
-			Object[] studentAnsersAndScoreForExam=new Object[2];
-			RadioButton r=new RadioButton();
-			HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
-			if(inTime)//Student submit the exam before that the time is over.
-			{
-				
-				if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
-				{
-					for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
-					{
-						if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-							studentAnswers.put(qie,0);
-							
-						else//Student choose answer.
-						{
-							r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-							for(int i=1;i<5;i++)//Runs all over question's answers.
-							{
-								if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-								{
-									studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-									if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
-										score+=qie.getPointsValue();
-									break;
-								}
-							}
-						}
-					}
-				}
-				else//Active exam is manual so we fabricate student's answers and score.
-				{
-					ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
-					for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-					{
-						studentAnswers.put(qie, 0);
-					}
-					score=-1;
-				}
-			}
-			else//Student did not have time to submit his exam
-			{
-				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
-				{
-					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-						studentAnswers.put(qie,0);
-						
-					else//Student choose answer.
-					{
-						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-						for(int i=1;i<5;i++)//Runs all over question's answers.
-						{
-							if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-							{
-								studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-								break;
-							}
-						}
-					}
-					score=0;//His grade is zero if he didn't submit his exam on time.
-				}
-			}
-			studentAnsersAndScoreForExam[0]=studentAnswers;
-			studentAnsersAndScoreForExam[1]=score;
-			iMessage im = new iMessage("SystemCheckSucceed",studentAnsersAndScoreForExam);
-			client.sendToClient(im);
-			
-			//return studentAnsersAndScoreForExam;
-
-		}
-/*/
-
 	
 	/**
 	 * Add solved exam to the list so we can generate all solved exams to report later, 
@@ -982,16 +869,15 @@ public class AESServer extends AbstractServer {
 
 
 	private void UploadSolvedExam(Object obj) throws IOException {
-		// TODO Auto-generated method stub
 		Object[] o=(Object[])obj;
 		
-		AesWordDoc file=(AesWordDoc) o[0];
+		MyFile file=(MyFile) o[0];
+		SolvedExam solvedExam=(SolvedExam) o[1];
 		File newFile = new File(file.getFileName());
 		FileOutputStream out = new FileOutputStream(newFile);
-		out.write(file.getbytes());
+		out.write(file.getMybytearray());
 		out.close();
 		
-		SolvedExam solvedExam=(SolvedExam) o[1];
 		solvedExamWordFiles.put(solvedExam, file);
 		System.out.println("fdsfs");
 	}

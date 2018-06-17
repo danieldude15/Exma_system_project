@@ -36,25 +36,25 @@ public class DBMain {
 	private String questionCourses = new String(""
 			+ "SELECT f.fieldid,f.fieldname,qic.courseid,c.coursename "
 			+ "FROM aes.fields as f,aes.questions_in_course as qic, aes.courses as c "
-			+ "WHERE c.fieldid=f.fieldid and c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=?");
+			+ "WHERE c.fieldid=f.fieldid and c.courseid=qic.courseid and qic.fieldid=f.fieldid and qic.questionid=? and qic.fieldid=? ");
 	private String deleteQuestion = new String(""
 			+ "DELETE FROM aes.questions WHERE questionid=? and fieldid=?");
 	private String deleteExam = new String(""
 			+ "DELETE FROM aes.exams WHERE examid=? and fieldid=?"); 
 	private String teachersQuestions = new String(
-			"select * from aes.questions as q, aes.fields as f where q.fieldid=f.fieldid and q.teacherid=?" 
+			"select * from aes.questions as q, aes.fields as f where q.fieldid=f.fieldid and q.teacherid=? " 
 			);
 	private String getTExamReports = new String(""
 			+ "SELECT * FROM aes.exams_report where autherid=?");
 	private String getAllExamReports = new String(""
 			+ "SELECT * FROM aes.exams_report");
 	private String getTeachrsSolvedExams = new String(""
-			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration,\n" + 
-			"		u.userid,u.username,u.password,u.fullname,se.answers,\n" + 
-			"        se.examreportid,se.score,se.minutescompleted ,se.teacherapproved ,se.teacherschangescorenote \n" + 
-			"FROM aes.users as u, aes.courses as c , aes.fields as f, aes.exams as e, aes.solved_exams as se \n" + 
+			+ "SELECT  e.examid,e.fieldid,f.fieldname ,e.courseid,c.coursename, e.timeduration, " + 
+			"		u.userid,u.username,u.password,u.fullname,se.answers, " + 
+			"        se.examreportid,se.score,se.minutescompleted ,se.teacherapproved ,se.teacherschangescorenote " + 
+			"FROM aes.users as u, aes.courses as c , aes.fields as f, aes.exams as e, aes.solved_exams as se " + 
 			"where e.examid=se.examid and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid "
-			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and e.teacherid=?"
+			+ "and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid and e.teacherid=? "
 			);
 	private String getTeachrsExams = new String(""
 			+ "SELECT e.examid , e.timeduration, c.courseid, c.coursename, f.fieldid, f.fieldname  "
@@ -85,12 +85,12 @@ public class DBMain {
 			"        ,se.teacherschangescorenote , u2.userid , " + 
 			"        u2.username, u2.password, u2.fullname ,se.teacherquestionnote" +
 			" FROM aes.users as u, aes.courses as c , aes.fields as f, " +
-			"	aes.exams as e, aes.solved_exams as se , aes.exams_report as ce, aes.users as u2" +
+			"	aes.exams as e, aes.solved_exams as se , aes.exams_report as ce, aes.users as u2 " +
 			" WHERE ce.examid=e.examid and ce.fieldid=e.fieldid and ce.courseid=e.courseid " +
 			"	and u2.userid=e.teacherid and ce.autherid=e.teacherid and ce.code=se.code and e.examid=se.examid " +
 			"    and e.fieldid=se.fieldid and e.fieldid=f.fieldid and e.courseid=se.courseid " +
 			"    and c.courseid=e.courseid and c.fieldid=e.fieldid and u.userid=se.studentid " + 
-			"    and se.code=? and se.courseid=? and se.fieldid=? and ce.examid=? and ce.type=? and ce.dateactivated=? and ce.autherid=?");
+			"    and se.code=? and se.courseid=? and se.fieldid=? and ce.examid=? and ce.type=? and ce.dateactivated=? and ce.autherid=? ");
 	private String addQuestion = new String(""
 			+ "INSERT INTO `aes`.`questions` "
 			+ "(`questionid`,`question`, `answer1`, `answer2`, `answer3`, `answer4`, `answerindex`, `fieldid`, `teacherid`) "
@@ -126,16 +126,16 @@ public class DBMain {
 			"");
 	private String getQuestionsInExam= new String(""
 			+ "SELECT * " + 
-			"FROM aes.questions as q,aes.questions_in_exam as qe, aes.exams as e,aes.users as u, aes.fields as f\n" + 
+			"FROM aes.questions as q,aes.questions_in_exam as qe, aes.exams as e,aes.users as u, aes.fields as f " + 
 			"WHERE e.examid=qe.examid and u.userid=q.teacherid and q.questionid=qe.questionid and f.fieldid=q.fieldid "
 			+ "and q.fieldid=qe.fieldid and e.fieldid=q.fieldid and e.courseid=qe.courseid "
 			+ "and e.examid=? and e.fieldid=? and e.courseid=?");
 	private String CourseQuestions=new String(""
-		   +"Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex,\n" +
+		   +"Select q.fieldid,q.questionid,q.question,q.answer1,q.answer2,q.answer3,q.answer4,q.answerindex, " +
 			"			u.fullname,u.password,u.userid,u.username,f.fieldname\n" +
-			"			FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u\n" +
-			"						 where c.courseid=qc.courseid and f.fieldid=c.fieldid and c.fieldid=qc.fieldid \n" +
-			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid\n" +
+			"			FROM aes.questions as q, aes.questions_in_course as qc,aes.fields as f,aes.courses as c,aes.users as u " +
+			"						 where c.courseid=qc.courseid and f.fieldid=c.fieldid and c.fieldid=qc.fieldid  " +
+			"			             and  qc.questionid=q.questionid and c.fieldid=q.fieldid " +
 			"			             and u.userid=q.teacherid and c.courseid=? and f.fieldid=?");
 	private String addexam = new String(""
 			+ "INSERT INTO `aes`.`exams` "

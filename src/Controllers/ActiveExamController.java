@@ -88,37 +88,23 @@ public class ActiveExamController {
 		}
 		return;
 	}
-	//Word Files
-	public static void CreateDocFile(ActiveExam AE) {
-		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
-			try {
-				iMessage msg= new iMessage("CreateDocFile",AE);
-				client.sendToServer(msg);
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-				e.printStackTrace();
-			}
-		}
-		return;
-	}
 	
 	
-	public static void GetManualExam(ActiveExam activeExam)
+	public static MyFile GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				client.getResponseFromServer();
-				//return (AesWordDoc) client.getResponseFromServer().getObj();
+				//client.getResponseFromServer();
+				return (MyFile) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
-		//return null;
+		return null;
 	}
 	/*/
 	

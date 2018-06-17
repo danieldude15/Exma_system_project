@@ -21,6 +21,8 @@ import logic.*;
 import ocsf.client.ClientGlobals;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,8 +48,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final String blackLabel=new String("blackLabel");
 	
 	private final Image v = new Image("resources/GoodLuck.jpg");
-	private final Background blackBackground = new Background( new BackgroundFill( Color.web( "#000000" ), CornerRadii.EMPTY, Insets.EMPTY ) );
-    private final Background unfocusBackground = new Background( new BackgroundFill( Color.web( "#F4F4F4" ), CornerRadii.EMPTY, Insets.EMPTY ) );
     private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
 	@Override
@@ -153,8 +153,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @throws IOException
 	 */
 	private void SetDownloadButtonOnScreen() {
-		// TODO Auto-generated method stub
-		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
 		downloadButton.setDisable(false);
 		VBox manuelExamStringVBox=new VBox();
@@ -185,11 +183,14 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	{
 		
 		/*Open save dialog for the student where he can choose where to save the exam on his computer./*/
-		//AesWordDoc wordClass=new AesWordDoc();
-		//wordClass.OpenSaveFileDialog(this.GetActiveExam());
-
+	
+		MyFile recievedFile = ActiveExamController.GetManualExam(activeExam);		
 		
-		ActiveExamController.GetManualExam(activeExam);		
+		File examFile = new File(activeExam.examIdToString()+"StudentsFile.doc");
+		FileOutputStream fos = new FileOutputStream(examFile);
+		fos.write(recievedFile.getMybytearray());
+		fos.close();
+		
 		String popUpTitle="Download "+activeExam.getCourse().getName()+" Succeed";
 		String popUpContentText="The exam is on your desktop, You can open it and start solving!";
 	    PopUp(popUpTitle,popUpContentText);
@@ -344,7 +345,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime)
 	{
-		AesWordDoc wordClass=new AesWordDoc();
 		if(inTime)//Student Submit his exam on time.
 		{
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -352,34 +352,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			alert.setHeaderText("SubmitExam");
 			alert.setContentText("Are you sure you want to submit?");
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK)//User choose ok for submit.
-			{
-				if(activeExam.getType()==0)//Exam is manual
-				{
-					//String name =wordClass.OpenUploadWordFileDialog();
-					
-					AesWordDoc doc=wordClass.OpenUploadWordFileDialog();
-					
-					SolvedExamController.UploadFile(sendToGenerateReport,doc);
-					//Print the word file.
-	 				//XWPFWordExtractor extract=new XWPFWordExtractor(doc);
-	 				//System.out.println(extract.getText());
-					
-					/*Send message to the server to add solved exam to the list,
-					so we can generate a report from all solved exams when the active exam will be lock.
-					in addition the student is removing from the CheckOut list in server.
-					/*/
-					
-							
+			if (result.get() == ButtonType.OK) {
+				if(activeExam.getType()==0)	{				
+					SolvedExamController.UploadFile(sendToGenerateReport);
 				}
-				
-				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
-				
 				String popUpTitle="Submit confirmation";
 				String popUpContentText="The exam was submitted successfully!";
 				PopUp(popUpTitle,popUpContentText);
 				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
-	
+				return;
 			}
 		}
 		else//Student didn't submit his exam on time.

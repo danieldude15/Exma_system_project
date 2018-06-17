@@ -79,32 +79,26 @@ public class SolvedExamController {
 		return 0;
 	}
 	
-	public static void UploadFile(SolvedExam solvedExam, AesWordDoc doc)
+	public static void UploadFile(SolvedExam solvedExam)
 	{
-		//String name=solvedExam.getCourse().getName();
-		
-		
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
-			
-			
-			  try {
-				      File file = new File (doc.getFileName());     
-				      byte [] bytes  = new byte [(int)file.length()];
-				      FileInputStream fileInputStream = new FileInputStream(file);
-				      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
-				      doc.initArray(bytes.length);
-				      doc.setSize(bytes.length);
-				      bufferInputStream.read(doc.getbytes(),0,bytes.length);
-				  
-				  
-						
-			      Object[] o=new Object[2];
-			      o[0]=(AesWordDoc)doc;
-			      o[1]=(SolvedExam)solvedExam;
-			
+			try {
+				MyFile studentsFile = new MyFile(solvedExam.examIdToString()+"StudentsFile.doc");
+			  
+				File examFile = new File(studentsFile.getFileName());
+				studentsFile.setSize((int) examFile.length());
+				studentsFile.initArray((int) examFile.length());
+									
+				FileInputStream fis = new FileInputStream(examFile);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				
+				bis.read(studentsFile.getMybytearray(),0,(int) examFile.length());
+				iMessage msg = new iMessage("yourExamFile", studentsFile);
+				Object[] o=new Object[2];	
+				o[0]=(MyFile)studentsFile;
+				o[1]=(SolvedExam)solvedExam;
 				client.sendToServer(new iMessage("UploadSolvedExam",o));
-				//client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -136,25 +130,4 @@ public class SolvedExamController {
 			}
 		} 
 	}
-
-	/*
-	public static Object[] SystemCheckExam(ActiveExam activeExam,boolean inTime,HashMap<QuestionInExam,ToggleGroup> questionWithAnswers)
-	{
-		Object[] o=new Object[3];
-		o[0]=(ActiveExam)activeExam;
-		o[1]=(boolean)inTime;
-		o[2]=(HashMap<QuestionInExam,ToggleGroup>)questionWithAnswers;
-		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
-			try {
-				client.sendToServer(new iMessage("SystemCheckExam",o));
-				return (Object[])client.getResponseFromServer().getObj();
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-				e.printStackTrace();
-			}
-		} 
-		return null;
-	}
-	/*/
 }
