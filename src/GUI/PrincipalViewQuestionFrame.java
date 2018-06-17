@@ -35,8 +35,6 @@ public class PrincipalViewQuestionFrame implements Initializable, ControlledScre
 
     @Override
     public void runOnScreenChange() {
-        Globals.primaryStage.setHeight(635);
-        Globals.primaryStage.setWidth(815);
         if(question != null) {
             m_questionID.setText(question.questionIDToString());
             m_questionContent.setText(question.getQuestionString());

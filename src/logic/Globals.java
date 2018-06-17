@@ -1,14 +1,7 @@
 package logic;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import GUI.ScreensController;
-import GUI.StudentSolvesExamFrame;
-import javafx.application.Application;
 import javafx.stage.Stage;
-import ocsf.client.ClientGlobals;
-import ocsf.server.ServerGlobals;
 
 /**
  * this class holds global variables that are used globally in the application for easy access and maintanace
@@ -16,6 +9,8 @@ import ocsf.server.ServerGlobals;
  *
  */
 public class Globals {
+	public static final String ProgressIndicatorID = "progressIndicator";
+	public static final String ProgressIndicatorPath = "/resources/fxml/progressIndicator.fxml";
 	/**
 	 * if im a client or a server
 	 */
@@ -42,5 +37,4 @@ public class Globals {
 		e.printStackTrace();
 		System.exit(1);
 	}
-	
 }

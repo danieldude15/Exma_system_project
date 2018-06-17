@@ -4,6 +4,8 @@ import logic.*;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,11 +37,7 @@ public class ActiveExamController {
 			try {
 				msg= new iMessage("getActiveExam",examCode);
 				client.sendToServer(msg);
-				Object o = client.getResponseFromServer().getObj();
-				if(o instanceof ActiveExam) {
-					activeExam=(ActiveExam)o;
-					return activeExam;
-				}
+				return (ActiveExam) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -76,20 +74,7 @@ public class ActiveExamController {
 			}
 		}
 	}
-
-	public static void requestNewTimeChangeForActiveExam(TimeChangeRequest tcr) {
-		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
-			try {
-				iMessage msg= new iMessage("newTimeChangeRequest",tcr);
-				client.sendToServer(msg);
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-				e.printStackTrace();
-			}
-		}
-		return;
-	}
+	
 	public static void InitializeActiveExam(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -103,7 +88,7 @@ public class ActiveExamController {
 		}
 		return;
 	}
-	/*Word Files
+	//Word Files
 	public static void CreateDocFile(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -119,20 +104,21 @@ public class ActiveExamController {
 	}
 	
 	
-	public static AesWordDoc GetManualExam(ActiveExam activeExam)
+	public static void GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				return (AesWordDoc) client.getResponseFromServer().getObj();
+				client.getResponseFromServer();
+				//return (AesWordDoc) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
 			}
 		}
-		return null;
+		//return null;
 	}
 	/*/
 	
@@ -167,7 +153,7 @@ public class ActiveExamController {
 	 * @param s
 	 * @param ae
 	 */
-	public static void StudentCheckedOutFromActiveExam(Student s,ActiveExam ae)
+	public static void studentCheckedOutFromActiveExam(Student s,ActiveExam ae)
 	{
 		Object[] sendObject=new Object[2];
 		sendObject[0]=(Student)s;
@@ -185,6 +171,22 @@ public class ActiveExamController {
 		}
 	}
 
-
+	public static boolean studentIsInActiveExam(Student s,ActiveExam ae) {
+		Object[] sendObject=new Object[2];
+		sendObject[0]=(Student)s;
+		sendObject[1]=(ActiveExam)ae;
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("studentIsInActiveExam",(Object)sendObject);
+				client.sendToServer(msg);
+				return (boolean) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 	
 }

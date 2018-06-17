@@ -1,14 +1,22 @@
 package GUI;
 
 
+import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import logic.*;
 import ocsf.client.ClientGlobals;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -37,13 +45,13 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
 	
-	
+	private final Image v = new Image("resources/GoodLuck.jpg");
+	private final Background blackBackground = new Background( new BackgroundFill( Color.web( "#000000" ), CornerRadii.EMPTY, Insets.EMPTY ) );
+    private final Background unfocusBackground = new Background( new BackgroundFill( Color.web( "#F4F4F4" ), CornerRadii.EMPTY, Insets.EMPTY ) );
+    private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
 	@Override
-	public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);
-		
+	public void runOnScreenChange() {		
 		
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
@@ -89,7 +97,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private void SetComputerizeExamOnWindowScreen(ActiveExam active) {
 		// TODO Auto-generated method stub
 		int questionIndex=1;
-		ArrayList<QuestionInExam> questionsInExam=active.getExam().getQuestionsInExam();
+		ArrayList<QuestionInExam> questionsInExam=active.getQuestionsInExam();
 		for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
 		{			
 			SetQuestionOnWindowScreen(qie,questionIndex);
@@ -114,7 +122,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 		if(qie.getStudentNote()!=null)//If there is a student note on this question we add it to the top of the question.
 		{
-			note.setText(qie.getStudentNote());
+			note.setText("Note:" +qie.getStudentNote());
 			questionsAndAnswers.getChildren().add(note);
 		}
 		questionString.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
@@ -146,8 +154,24 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	private void SetDownloadButtonOnScreen() {
 		// TODO Auto-generated method stub
-		submitButton.setDisable(true);
+		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
+		downloadButton.setDisable(false);
+		VBox manuelExamStringVBox=new VBox();
+		Label manuelExamString=new Label("Welcome to the manual exam!, you can press the download button and start your exam.");
+		manuelExamString.setId(blackLabel);
+		manuelExamStringVBox.getChildren().add(manuelExamString);
+		manuelExamStringVBox.setBackground(yellowBackground);
+		
+		VBox manuelExamImageVBox=new VBox();
+		ImageView imageView=new ImageView();
+		imageView.setFitHeight(215);
+		imageView.setFitWidth(530);
+		imageView.setImage(v);
+		manuelExamImageVBox.getChildren().add(imageView);		
+		questionsAndAnswers.getChildren().addAll(manuelExamStringVBox,manuelExamImageVBox);
+		
+		
 	}
 
 
@@ -159,19 +183,19 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 */
 	public void StudentPressedDownloadButton(ActionEvent event) throws IOException
 	{
-		/*AesWordDoc doc=ActiveExamController.GetManualExam(activeExam.getCode());//The path where to download it.
-		FileOutputStream out= new FileOutputStream("ManualExam.docx");
-		doc.write(out);
-		out.close();/*/
 		
 		/*Open save dialog for the student where he can choose where to save the exam on his computer./*/
-		AesWordDoc wordClass=new AesWordDoc();
-		wordClass.OpenSaveFileDialog(this.GetActiveExam());
+		//AesWordDoc wordClass=new AesWordDoc();
+		//wordClass.OpenSaveFileDialog(this.GetActiveExam());
+
 		
+		ActiveExamController.GetManualExam(activeExam);		
+		String popUpTitle="Download "+activeExam.getCourse().getName()+" Succeed";
+		String popUpContentText="The exam is on your desktop, You can open it and start solving!";
+	    PopUp(popUpTitle,popUpContentText);
 		submitButton.setDisable(false);
 		downloadButton.setDisable(true);
 
-		//AesWordDoc doc=ActiveExamController.GetManualExam(activeExam);
 	}
 	
 		
@@ -262,10 +286,11 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
 				{
-					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-						studentAnswers.put(qie,0);
-						
-					else//Student choose answer.
+					//if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
+						//studentAnswers.put(qie,0);
+					
+					if(questionWithAnswers.get(qie).getSelectedToggle()!=null)
+					//else//Student choose answer.
 					{
 						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
 						int markedIndex = Integer.parseInt(r.getId());
@@ -331,8 +356,11 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			{
 				if(activeExam.getType()==0)//Exam is manual
 				{
-					XWPFDocument doc=wordClass.OpenUploadWordFileDialog();
+					//String name =wordClass.OpenUploadWordFileDialog();
 					
+					AesWordDoc doc=wordClass.OpenUploadWordFileDialog();
+					
+					SolvedExamController.UploadFile(sendToGenerateReport,doc);
 					//Print the word file.
 	 				//XWPFWordExtractor extract=new XWPFWordExtractor(doc);
 	 				//System.out.println(extract.getText());
@@ -369,32 +397,39 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 
-	public void updateExamTime(TimeChangeRequest o) {
-		// TODO Auto-generated method stub
-		
+	public void updateExamTime(Long extraTimeInMinutes) {
+		setTimeSeconds(getTimeSeconds()+extraTimeInMinutes*60);
 	}
 
 	public void updateTimeLabel(Long timeInSeconds) {
-		String hour = "" + timeInSeconds/60/60;
-		String minutes = "" + (timeInSeconds/60)%60;
-		String seconds = "" + timeInSeconds%60;
-		String time = hour + ":" + minutes + ":" +seconds;
-		timeLeftLabel.setText(time);
+		synchronized (timeSeconds) {
+			String hour = "" + timeInSeconds/60/60;
+			String minutes = "" + (timeInSeconds/60)%60;
+			String seconds = "" + timeInSeconds%60;
+			String time = hour + ":" + minutes + ":" +seconds;
+			timeLeftLabel.setText(time);
+		}
 	}
 
 	public void setTimeSeconds(Long timeSeconds) {
-		this.timeSeconds = timeSeconds;
+		synchronized (timeSeconds) {
+			this.timeSeconds = timeSeconds;
+		}
 		if (timeSeconds <= 0) {
             String popUpTitle="Exam Over";
 			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
             PopUp(popUpTitle,popUpContentText);
 			lockExam();
-            Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+            //Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
         }
 	}
 
 	public Long getTimeSeconds() {
-		return timeSeconds;
+		Long ret;
+		synchronized (timeSeconds) {
+			ret = timeSeconds;
+		}
+		return ret;
 	}
 	
 	public void PopUp(String title,String contentText)

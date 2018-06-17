@@ -37,7 +37,7 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 		EDIT,ADD
 	}
 	
-	private windowType type = windowType.ADD;
+	private windowType type = null;
 	
 	Question question=null;
 	
@@ -73,14 +73,18 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(656);
-		Globals.primaryStage.setWidth(553);
 		organizedFieldsHashMap();
+		
 		teacherFields.remove(0);
 		ObservableList<Field> list = FXCollections.observableArrayList(teacherFields);
 		fields.setItems(list);
 		fields.getSelectionModel().clearSelection();
-		if (type.equals(windowType.ADD) || question==null) {
+		
+		if (question==null) {
+			backToMenu(null);
+		}
+		
+		if (type.equals(windowType.ADD)) {
 			questionID.setText("Add New Question");
 			questionString.setText("");
 			ta1.setText("");
@@ -90,7 +94,9 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			submitB.setText("Add Question");
 			fields.setDisable(false);
 			courseVbox.getChildren().clear();
-		} else {
+			if (answers.getSelectedToggle()!=null)
+				answers.getSelectedToggle().setSelected(false);
+		} else if (type.equals(windowType.EDIT)){
 			questionID.setText("Edit Question: " + question.questionIDToString());
 			questionString.setText(question.getQuestionString());
 			ta1.setText(question.getAnswer(1));
@@ -156,18 +162,8 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 
 	
 	@FXML public void submitQuestion(ActionEvent event) {
-		if (questionString.getText().equals("")) 
-			questionError.setVisible(true);;
-		if (ta1.getText().equals("") ||
-			ta2.getText().equals("") ||
-			ta3.getText().equals("") ||
-			ta4.getText().equals("")) 
-			answersError.setVisible(true);
-		if (answers.getSelectedToggle()==null)
-			answerError.setVisible(true);
-		if (fields.getSelectionModel().getSelectedItem()==null)
-			fieldError.setVisible(true);
-		if (!fieldError.isVisible() && !answersError.isVisible() && !answerError.isVisible() && !questionError.isVisible()) {
+		if(!checkFormIsFilled()) return;
+		else {
 			int index = 0;
 			if(answer1.isSelected()) index =1;
 			else if(answer2.isSelected()) index =2;
@@ -221,6 +217,37 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 				}
 			}
 		}
+	}
+
+	private boolean checkFormIsFilled() {
+		if (questionString.getText().equals("")) {
+			questionError.setVisible(true);
+			return false;
+		} else {
+			questionError.setVisible(false);
+		}
+		if (ta1.getText().equals("") ||
+			ta2.getText().equals("") ||
+			ta3.getText().equals("") ||
+			ta4.getText().equals("")) {
+			answersError.setVisible(true);
+			return false;
+		} else {
+			answersError.setVisible(false);
+		}
+		if (answers.getSelectedToggle()==null) {
+			answerError.setVisible(true);
+			return false;
+		} else {
+			answerError.setVisible(false);
+		}
+		if (fields.getSelectionModel().getSelectedItem()==null) {
+			fieldError.setVisible(true);
+			return false;
+		} else {
+			fieldError.setVisible(false);
+		}
+		return true;
 	}
 
 	public windowType getType() {

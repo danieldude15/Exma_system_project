@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
-public class TeacherMainFrame implements Initializable,ControlledScreen {
+public class TeacherMainFrame implements ControlledScreen {
 	private ArrayList<ExamReport> TeacherCExams;
 	private ArrayList<ActiveExam> TeacherAExams;
 	
@@ -49,16 +49,9 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	@FXML Label userid;
 	@FXML Pane userImage;
 	@FXML Label studentsInCourse;
-	
-	@Override public void initialize(URL location, ResourceBundle resources) {
 		
-	}
-	
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(680);
-		Globals.primaryStage.setWidth(820);
-
 		updateCompletedExamListView();
 		
 		updateActiveExamListView();
@@ -128,18 +121,11 @@ public class TeacherMainFrame implements Initializable,ControlledScreen {
 	}
 	
 	@FXML public void goToCheckExams(ActionEvent event) {
+		ExamReport selectedExam = CompletedExamList.getSelectionModel().getSelectedItem();
 		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) return;
-		String selectedExam = CompletedExamList.getSelectionModel().getSelectedItem().toString();
-		System.out.println(selectedExam);
-		String selectedExamid = selectedExam.split(" ")[6];
-		for (ExamReport ce:TeacherCExams) {
-			if(ce.getExam().examIdToString().equals(selectedExamid)) {
-				TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
-				teacherCheckExams.setCompletedExams(ce);
-				Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
-				break;
-			}
-		}
+		TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
+		teacherCheckExams.setCompletedExams(selectedExam);
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
 	
 	@FXML public void completeExamsListViewClicked(MouseEvent event) {

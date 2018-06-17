@@ -1,31 +1,33 @@
 package GUI;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
+
 import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
 import Controllers.ExamController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import logic.*;
+import logic.Course;
+import logic.Exam;
+import logic.Field;
+import logic.Globals;
+import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-public class TeacherManageExamsFrame implements Initializable, ControlledScreen {
+public class TeacherManageExamsFrame implements ControlledScreen {
 	enum windowType {
 		EDIT,Build
 	}
@@ -35,19 +37,10 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 	ArrayList<Course> teachersCourses;
 	ArrayList<Exam> dBExams;
 	@FXML Button newExamB;
-	@FXML ComboBox<Field> fieldComboB;
-	@FXML ComboBox<Course> courseComboB;
-	@FXML VBox examsList;
 	@FXML Button home;
+	@FXML GridPane examListGrid;
 	
-	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(650);		
-		
-		teacherFieldsLoading();
-		
-		teacherCoursesLoading();		
-		
+	@Override public void runOnScreenChange() {		
 		//loading teacher questions
 		dBExams =  ExamController.getTeachersExams((Teacher)ClientGlobals.client.getUser());
 		if (dBExams!=null) {
@@ -55,8 +48,6 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 		}
 	}
 
-	@Override public void initialize(URL arg0, ResourceBundle arg1) {
-	}
 	
 	@FXML public void newExamButtonPressed(ActionEvent event) {
 		 ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setType((TeacherBuildNewExam.windowType.Build));
@@ -67,92 +58,20 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	}
 
-	@FXML void filterByField(ActionEvent event) {
-		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
-			examsList.getChildren().clear();
-			Field selectefield = fieldComboB.getSelectionModel().getSelectedItem();
-			courseComboB.getItems().clear();
-			ObservableList<Course> list;
-			ArrayList<Course> cousesInField = new ArrayList<>();
-			if(selectefield.equals(new Field(-1,"All"))) {
-				for(Exam e:dBExams) {
-					exams.put(e.examIdToString(),e);
-					examsList.getChildren().add(examAdder(e));
-				}
-			} else {
-				for(Course c: teachersCourses) {
-					if(c.getField()==null || c.getField().equals(selectefield)) {
-						cousesInField.add(c);
-					}
-				}
-				for(Exam e:dBExams) {
-					if(e.getField().equals(selectefield)) {
-						exams.put(e.examIdToString(),e);
-						examsList.getChildren().add(examAdder(e));
-					}
-				}
-			}
-			list = FXCollections.observableArrayList(cousesInField);
-			courseComboB.setItems(list);
-		}
-		System.out.println(courseComboB.getItems().toString());
-	}
-	
-	@FXML public void filterByCourse(ActionEvent event) {
-		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
-			examsList.getChildren().clear();
-			Course selectedCourse = courseComboB.getSelectionModel().getSelectedItem();
-			 for (Exam e: dBExams) {
-				 if(selectedCourse.equals(new Course(0,"All",null)) || e.isInCourse(selectedCourse)) {
-					 exams.put(e.examIdToString(),e);
-					 examsList.getChildren().add(examAdder(e));
-				 }
-			 }
-		 }
-	}
-	
 	private void setExamsListInVBox() {
-		examsList.getChildren().clear();
+		examListGrid.getChildren().clear();
 		System.out.println(dBExams);
+		int i=0,j=0;		
 		for(Exam e:dBExams) {
 			exams.put(e.examIdToString(),e);
-			examsList.getChildren().add(examAdder(e));
+			//examsList.getChildren().add(examAdder(e));
+			if(j<9)
+				examListGrid.add(examAdder(e),i,j);
+			i=(i+1)%2;
+			if(i==0)j++;
 		}
 	}
 
-	/**
-	 * setting Course comboBox values by teachers assigned fields
-	 * this comboBox is used to filter out different Questions from the ListView.
-	 */
-	private void teacherCoursesLoading() {
-		ObservableList<Course> list;
-		teachersCourses = CourseFieldController.getFieldsCourses(teachersFields); 
-		if (teachersCourses==null) {
-			teachersCourses.add(new Course(0,"No Courses for teacher.",null));
-		} else {
-			teachersCourses.add(0,new Course(0,"All",null));
-		}
-		list = FXCollections.observableArrayList(teachersCourses);
-		courseComboB.setItems(list);
-		
-	}
-	
-	/**
-	 * Setting comboBox of fields base on teachers assigned fields
-	 */
-	private void teacherFieldsLoading() {
-		exams.clear();
-		
-		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
-		if(teachersFields==null) {
-			teachersFields.add(new Field(-1,"You Have No Assigned Fields..."));
-		} else {
-			teachersFields.add(0,new Field(-1,"All"));
-		}
-		ObservableList<Field> list = FXCollections.observableArrayList(teachersFields);
-		fieldComboB.setItems(list);
-	}
-	
 	private Node examAdder(Exam e) {
 		//HBox main question container
 		HBox hbox = new HBox();
@@ -162,7 +81,7 @@ public class TeacherManageExamsFrame implements Initializable, ControlledScreen 
 		
 		//This VBox holds the question details
 		HBox examInfo = new HBox();
-		Label examString = new Label("Exam ID: "+e.examIdToString() + "Course:" + e.getCourse().getName() + "Field" + e.getField().getName() + "Question Count: " + e.getQuestionsInExam().size());
+		Label examString = new Label("Exam ID: "+e.examIdToString() + "\nCourse: " + e.getCourse().getName() + "\nField: " + e.getField().getName() + "\nQuestion Count: " + e.getQuestionsInExam().size());
 		examString.setStyle("-fx-padding: 10px;");
 		examString.setId("blackLabel");
 		examString.setWrapText(true);

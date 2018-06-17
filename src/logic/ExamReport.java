@@ -17,6 +17,8 @@ public class ExamReport extends ActiveExam {
 	 *  Serializable id give for client server communication
 	 */
 	private static final long serialVersionUID = 4657010598883384610L;
+	
+	public static final int cheatersMaxSimilarMistakeLimit = 1;
 	/**
 	 * ArrayList of all solved exams of this completed exam
 	 */
@@ -44,7 +46,7 @@ public class ExamReport extends ActiveExam {
 	/**
 	 * average of all solvedExams
 	 */
-	int avg;
+	float avg;
 	/**
 	 * deviation value of the report for every 10 points in the solvedExams scores
 	 */
@@ -53,44 +55,7 @@ public class ExamReport extends ActiveExam {
 	 * the hashMap of all potential cheaters in this exam
 	 */
 	HashMap<Student,Integer> m_cheatingStudents;
-	
-	
-	/**
-	 * this constructor should be used when getting information from database and 
-	 * non of the information needs to be calculated because it is all saved in the database
-	 * @param code - the activeExam code (4 char)
-	 * @param type - the type of exam. {computerized or manual}
-	 * @param dayActivated - the date the exam was activated
-	 * @param activator - the teacher who activated this exam
-	 * @param solvedExams - the ArrayList of all solved exams 
-	 * @param notInTimeStudents - the amount of student that did not submit their exam on time and got 0 for it
-	 * @param submittedStudents - the amount of student that submitted the exam in time 
-	 * @param participatingStudent - the amount of student who participated in the exam 
-	 * @param e - this exam of witch this report is made for
-	 * @param timeLocked -the time when the exam was locked 
-	 * @param median - the median of the scores in this exam
-	 * @param avg - the avg of the scores of the exam
-	 * @param diviation - the diviation values of this exam separeted in 10 points 
-	 * @param dateinitiated -the date that the exam was activated/initiatez 
-	 * @param m_cheatingStudents - the hashmap of cheaters found in this exam.
-	 */
-	public ExamReport(String code, int type, Date dayActivated, Exam e, Teacher activator,
-			ArrayList<SolvedExam> solvedExams, Integer participatingStudent, 
-			Integer submittedStudents,Integer notInTimeStudents, Date timeLocked, 
-			int median, int avg, HashMap<Integer, Integer> diviation,
-			HashMap<Student, Integer> m_cheatingStudents) {
-		super(code, type, dayActivated, e, activator);
-		this.solvedExams = solvedExams;
-		this.participatingStudent = participatingStudent;
-		this.submittedStudents = submittedStudents;
-		this.notInTimeStudents = notInTimeStudents;
-		this.timeLocked = timeLocked;
-		this.median = median;
-		this.avg = avg;
-		this.deviation = diviation;
-		this.m_cheatingStudents = m_cheatingStudents;
-	}
-	
+		
 	/**
 	 * this constructor should be called when creating a new exam report before pushing it into the database
 	 * because this constructor uses the solved exams to calculate all the average and median and deviation also 
@@ -119,7 +84,6 @@ public class ExamReport extends ActiveExam {
 		this.median = calcMedian(solvedExams);
 		this.avg = calcAvg(solvedExams);
 		this.deviation = calcDeviation(solvedExams);
-
 		this.m_cheatingStudents = findCheaters(solvedExams);
 	}
 
@@ -152,7 +116,7 @@ public class ExamReport extends ActiveExam {
 	 * getAvg
 	 * @return the avarage ofthis exam
 	 */
-	public int getAvg() {
+	public float getAvg() {
 		return avg;
 	}
 
@@ -183,11 +147,45 @@ public class ExamReport extends ActiveExam {
 	/**
 	 * this function will be responsible for check witch students cheated and return the hashmap of these students
 	 * this is a private method used in the constructor if examReport to genereate these potential cheating students 
-	 * @param solvedExams2 
+	 * @param solvedExams 
 	 * @return hashmap of potential cheating students
 	 */
-	public static HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams2) {
-		return null;
+	public static HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams) {
+		HashMap<Student, Integer> cheaters = new HashMap<>();
+		for(int i=0;i<solvedExams.size();i++) {
+			for (int j=i+1;j<solvedExams.size();j++) {
+				//first we create a hashmap of the uncorrect answers of student i
+				HashMap<QuestionInExam, Integer> studentiAnswers = solvedExams.get(i).getStudentsAnswers();
+				HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
+				for(QuestionInExam qie: studentiAnswers.keySet()) {
+					if(studentiAnswers.get(qie)!=qie.getCorrectAnswerIndex()) {
+						studentiMistakes.put(qie, studentiAnswers.get(qie));
+					}
+				}
+				int similarCounter=0;
+				HashMap<QuestionInExam, Integer> studentjAnswers = solvedExams.get(j).getStudentsAnswers();
+				for(QuestionInExam qie: studentiMistakes.keySet()) {
+					if(studentjAnswers.get(qie)!=null && studentjAnswers.get(qie)==studentiMistakes.get(qie)) {
+						similarCounter++;
+					}
+				}
+				if(similarCounter>=cheatersMaxSimilarMistakeLimit) {
+					Student cheateri = solvedExams.get(i).getStudent();
+					Integer cheatCount = cheaters.get(cheateri);
+					if((cheatCount!=null && cheatCount<similarCounter) ||
+							cheatCount==null) {
+						cheaters.put(cheateri, similarCounter);
+					}
+					Student cheaterj = solvedExams.get(j).getStudent();
+					cheatCount = cheaters.get(cheaterj);
+					if((cheatCount!=null && cheatCount<similarCounter) ||
+							cheatCount==null) {
+						cheaters.put(cheaterj, similarCounter);
+					}
+				}
+			}
+		}
+		return cheaters;
 	}
 	
 
@@ -196,14 +194,18 @@ public class ExamReport extends ActiveExam {
 		for(SolvedExam se: solvedExams2) {
 			scores.add(se.getScore());
 		}
-		Collections.sort(scores);
-		if (scores.size()>0)
-			return scores.get(scores.size()/2);
+		return calcMedianFromInts(scores);
+	}
+	
+	public static int calcMedianFromInts(ArrayList<Integer> values) {
+		Collections.sort(values);
+		if (values.size()>0)
+			return values.get(values.size()/2);
 		else 
 			return 0;
 	}
 
-	public static int calcAvg(ArrayList<SolvedExam> solvedExams2) {
+	public static float calcAvg(ArrayList<SolvedExam> solvedExams2) {
 		int sum =0;
 		for(SolvedExam se: solvedExams2) {
 			sum+=se.getScore();
@@ -211,30 +213,37 @@ public class ExamReport extends ActiveExam {
 		if (solvedExams2.size()==0)
 			return 0;
 		else 
-			return sum/solvedExams2.size();
+			return (float) ((1.0*sum)/solvedExams2.size());
 	}
 
 	public static HashMap<Integer, Integer> calcDeviation(ArrayList<SolvedExam> solvedExams2) {
-		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
+		ArrayList<Integer> values = new ArrayList<>();
 		for(SolvedExam se: solvedExams2) {
-			int score = se.getScore();
-			if (score>90)
+			values.add(se.getScore());
+		}
+		return calcDeviationFromInts(values);
+	}
+	
+	public static HashMap<Integer, Integer> calcDeviationFromInts(ArrayList<Integer> values) {
+		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
+		for(Integer num: values) {
+			if (num>90)
 				devValues[9]++;
-			else if (score>80)
+			else if (num>80)
 				devValues[8]++;
-			else if (score>70)
+			else if (num>70)
 				devValues[7]++;
-			else if (score>60)
+			else if (num>60)
 				devValues[6]++;
-			else if (score>50)
+			else if (num>50)
 				devValues[5]++;
-			else if (score>40)
+			else if (num>40)
 				devValues[4]++;
-			else if (score>30)
+			else if (num>30)
 				devValues[3]++;
-			else if (score>20)
+			else if (num>20)
 				devValues[2]++;
-			else if (score>10)
+			else if (num>10)
 				devValues[1]++;
 			else 
 				devValues[0]++;
@@ -246,34 +255,31 @@ public class ExamReport extends ActiveExam {
 		return deviation;
 	}
 
-	public static HashMap<Integer, Integer> parseStringDeviation(String string) {
-		String[] devs = string.split("-");
-		HashMap<Integer, Integer> result = new HashMap<>();
-		if (devs.length!=10) 
-			return null;
-		for(int i=0;i<10;i++) {
-			result.put(i, Integer.parseInt(devs[i]));
-		}
-		return result;
-	}
-
-	public static String convertDeviationToString(HashMap<Integer, Integer> deviation2) {
-		String result = "";
-		if(deviation2.size()!=10)
-			return "0-0-0-0-0-0-0-0-0-0";
-		for(int i=0;i<10;i++) {
-			result= result + "" + deviation2.get(i);
-			if (i!=9)
-				result+= "-";
-		}
-		return result;
-	}
 	
 	/**
 	 * overriding toString method
 	 */
 	@Override public String toString() {
-		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %d", getCourse().getName(),getDate(),getAvg()));
+		for(SolvedExam se: getSolvedExams()) {
+			if (!se.isTeacherApproved()) {
+				return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f", getCourse().getName(),getDate(),getAvg()));
+			}
+		}
+		return new String(String.format("Course: %s \nActivated On: %s \nAverage: %.2f (APPROVED)", getCourse().getName(),getDate(),getAvg()));
+	}
+
+	public String getDurationToString() {
+		int minutes = getDuration()%60;
+		int hours = getDuration()/60;
+		if (hours!=0 && minutes!=0) {
+			return hours + " Hours and " + minutes +" Minutes";
+		} else if (hours!=0 && minutes==0) {
+			return hours + " Hours";
+		} else if (hours==0 && minutes!=0) {
+			return minutes + " Minutes";
+		} else {
+			return "0 Minutes";
+		}
 	}
 
 	

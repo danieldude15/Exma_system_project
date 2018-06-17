@@ -55,8 +55,6 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 	}
 
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(770);
-		Globals.primaryStage.setWidth(770);
 		questionsView.getChildren().clear();
 		errorLabel.setVisible(false);
 		newScore.setText("");
@@ -124,14 +122,24 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);
 		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		answers[answersHash.get(q)-1].setSelected(true);
+		if(answersHash.get(q)!=null)
+			answers[answersHash.get(q)-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
 			r.setWrapText(true);
 			r.setId("blackLabel");
 			questionInfo.getChildren().add(r);
 		}
-		
+		if(!q.getInnerNote().equals("")) {
+			Label qinerNote = new Label("question Hidden Note: "+q.getInnerNote());
+			qinerNote.setId("blackLabel");
+			questionInfo.getChildren().add(qinerNote);
+		}
+		if(!q.getStudentNote().equals("")) {
+			Label qistudentNote = new Label("Not For Student: "+q.getStudentNote());
+			qistudentNote.setId("blackLabel");
+			questionInfo.getChildren().add(qistudentNote);
+		}
 		// this HBox will hold the TeacherNote extention
 		HBox questionNoteByTeacher = new HBox();
 		questionNoteByTeacher.setAlignment(Pos.BOTTOM_LEFT);
@@ -153,7 +161,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		ImageView imageView=new ImageView();
 		imageView.setFitHeight(10);
 		imageView.setFitWidth(10);
-		if (answersHash.get(q)==q.getCorrectAnswerIndex()) {
+		if (answersHash.get(q)!=null && answersHash.get(q)==q.getCorrectAnswerIndex()) {
 			imageView.setImage(v);
 		} else {
 			imageView.setImage(x);
@@ -179,12 +187,13 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 					solvedExam.setTeachersScoreChangeNote(changeNote.getText());
 					HashMap<QuestionInExam, String> teacherNotes = new HashMap<>();
 					for(QuestionInExam qie: teacherNotesH.keySet()) {
-						teacherNotes.put(qie, teacherNotesH.get(qie).getText());
+						if(!teacherNotesH.get(qie).getText().equals(""))
+							teacherNotes.put(qie, teacherNotesH.get(qie).getText());
 					}
 					solvedExam.setQuestionNoteOnHash(teacherNotes);
 			}
 			solvedExam.setTeacherApproved(true);
-			if (SolvedExamController.insertSolvedExam(solvedExam)>0) {
+			if (SolvedExamController.updateSolvedExam(solvedExam)>0) {
 				//successfull insertion
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Exam Check Is Updated Successfully");

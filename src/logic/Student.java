@@ -25,5 +25,9 @@ public class Student extends User {
 	public Student(Student s) {
 		super(s);
 	}
+	
+	public Student(User u) {
+		super(u);
+	}
 
 }

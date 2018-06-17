@@ -26,8 +26,6 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 	Exam examview=null;	
 	@Override
 	public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(670);
-		Globals.primaryStage.setWidth(745);
 		questionInfo_StudentScoreAndNote.getChildren().clear();
 		examinfo.setText(String.format("View Exam in course:%s in filed:%s", examview.getCourse().getName() , examview.getField().getName()));
 		int questionIndex=0;

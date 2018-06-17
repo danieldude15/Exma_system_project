@@ -2,6 +2,7 @@ package GUI;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
+import Controllers.TimeChangeController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,10 +26,8 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 	ActiveExam activeexamselect;
 	
 	@Override
-	public void runOnScreenChange() 
-	{
-		Globals.primaryStage.setHeight(700); 
-		Globals.primaryStage.setWidth(650);	
+	public void runOnScreenChange(){
+
 		SelectNewTime.setText("");
 		RequestExplenation.setText("");
 		Errorrequest.setVisible(false);
@@ -55,7 +54,7 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 	    {
 	    	TimeChangeRequest tc=new TimeChangeRequest((Long.valueOf(SelectNewTime.getText())),RequestExplenation.getText(),false,activeexamselect,(Teacher) ClientGlobals.client.getUser());
 	    	System.out.println(tc);
-	    	ActiveExamController.requestNewTimeChangeForActiveExam(tc);
+	    	TimeChangeController.requestNewTimeChangeForActiveExam(tc);
 	    	Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	    }
 	}

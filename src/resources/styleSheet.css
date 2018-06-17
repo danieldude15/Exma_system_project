@@ -19,6 +19,7 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 .button:hover {
+	-fx-cursor: hand;
 	-fx-background-color: 
         linear-gradient(#f2f2f2, #d6d6d6),
         linear-gradient(#fcfcfc 0%, #d9d9d9 50%, #d6d6d6 100%),
@@ -74,6 +75,7 @@
 
 .list-cell:filled:hover {
     -fx-background-color: #aaaaaa;
+    -fx-cursor: hand;
 }
 .list-cell:empty {
     visibility:hidden;
@@ -132,4 +134,10 @@
 #blackbg {
 	-fx-background-color:black;
 	-fx-background-radius:10px;
+}
+/*
+ * progress indicator background change 
+ */
+#progressPaneId {
+	-fx-background-color:white;
 }

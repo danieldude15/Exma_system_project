@@ -50,9 +50,6 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 	@FXML Button home;
 	
 	@Override public void runOnScreenChange() {
-		Globals.primaryStage.setHeight(700);
-		Globals.primaryStage.setWidth(570);		
-		
 		teacherFieldsLoading();
 		
 		teacherCoursesLoading();		

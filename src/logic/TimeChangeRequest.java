@@ -15,7 +15,9 @@ public class TimeChangeRequest implements Serializable{
 	private static final long serialVersionUID = -1250807178967814960L;
 
 	/**
-	 * the New Time requested by the teacher to override the exam duration time
+	 * the New Time Extention requested by the teacher to override the exam duration time
+	 * so for example if the exam is 2 hours and the newTime is 10
+	 * this means the teacher wants the exam to be 2 hours and 10 minutes
 	 */
 	private Long newTime;
 	/**
@@ -93,6 +95,11 @@ public class TimeChangeRequest implements Serializable{
 		return this.status;
 	}
 	
+	
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
 	/**
 	 * 
 	 * @returnthe Active Exam of with this timechangerequest belongs to

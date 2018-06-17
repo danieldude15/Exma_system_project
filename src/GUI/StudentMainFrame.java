@@ -4,8 +4,11 @@ package GUI;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import Controllers.UserController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -22,7 +25,7 @@ import java.util.HashMap;
 
 public class StudentMainFrame implements ControlledScreen{
 
-	@FXML ListView<String> solvedExamsList;
+	@FXML ListView<SolvedExam> solvedExamsList;
 	@FXML Label welcome;
 	@FXML Label username;
 	@FXML Label userid;
@@ -37,8 +40,6 @@ public class StudentMainFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(630);
-		Globals.primaryStage.setWidth(820);	
 		courseNameAndExamId.clear();
 		
 		//Get all student solved exams from database and set it to the ListView field on window
@@ -78,14 +79,19 @@ public class StudentMainFrame implements ControlledScreen{
 	@Override
 	public void runOnScreenChange() {
 		// TODO Auto-generated method stub
-		Globals.primaryStage.setHeight(530);
-		Globals.primaryStage.setWidth(750);	
 		courseNameAndExamId.clear();
 		solvedExamsList.getItems().clear();
 		
 		//Get all student solved exams from database and set it to the ListView field on window
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
-		
+		ArrayList<SolvedExam> myAprovedSolvedExam = new ArrayList<>();
+		for(SolvedExam se: mySolvedExam) {
+			if(se.isTeacherApproved())
+				myAprovedSolvedExam.add(se);
+		}
+		ObservableList<SolvedExam> solveds = FXCollections.observableArrayList(myAprovedSolvedExam);
+		solvedExamsList.setItems(solveds);
+		/*
 		if(!(mySolvedExam.isEmpty()))//If student has already did at least one exam.
 			{
 			//solvedExamsList.getItems().add("All");
@@ -96,13 +102,14 @@ public class StudentMainFrame implements ControlledScreen{
 				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
 				if (s.isTeacherApproved())
 					solvedExamsList.getItems().add(courseName+"                                                        "
-						+ "                                                    "+solvedExamGrade+"\n");
+						+ "                                          "+solvedExamGrade+"\n");
 			}
 		}
 		else
 			solvedExamsList.getItems().add("You Have No Assigned Solved Exams...");
 		
 		Collections.sort(solvedExamsList.getItems());//Sort the ListView by alphabet.
+		/*/
 		setStudentInfo();
 		
 		
@@ -150,6 +157,13 @@ public class StudentMainFrame implements ControlledScreen{
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		//if student choose course solved exam to view from list.
+		if(solvedExamsList.getSelectionModel().getSelectedItem()!=null)  {
+			SolvedExam se = solvedExamsList.getSelectionModel().getSelectedItem();
+			studentViewExam.SetSolvedExam(se);//Send student solved exam to the studentViewExam window.
+			Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
+			return;
+		}
+		/*
 		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null &&
 				!(((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("You Have No Assigned Solved Exams...")) 
 				&& !((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("All"))
@@ -163,15 +177,18 @@ public class StudentMainFrame implements ControlledScreen{
 				if(s.getCourse().getName().equals(CourseNameAndGrade[0]) && ExamId.equals(courseNameAndExamId.get(CourseNameAndGrade[0])))
 				{
 					studentViewExam.SetSolvedExam(s);//Send student solved exam to the studentViewExam window.
-					break;
+					Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
+					return;
 				}
 
 			}
-			Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
+			
 		}
+		/*/
 		//if student pressed to view solved exam and didn't choose any course name, he gets an error.
 		else
 		{
+		
 			alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("View exam Failed!");
 			alert.setHeaderText(null);
