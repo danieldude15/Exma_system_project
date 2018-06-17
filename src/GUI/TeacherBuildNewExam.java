@@ -221,7 +221,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				score.setPromptText("score point");
 				score.setMaxWidth(80);
 				scores.put(q.questionIDToString(),score);
-				score.addEventHandler(KeyEvent.KEY_TYPED, new MyAddRemoveEdit());
+				score.addEventHandler(KeyEvent.KEY_PRESSED, new MyAddRemoveEdit());
 				questionAddRemove.getChildren().add(score);
 				
 				
@@ -259,7 +259,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	
 	@Override
 	   public void handle(KeyEvent keyEvent) {
-		if(keyEvent.getCode() == KeyCode.BACK_SPACE){
+		if( keyEvent.getCode() == KeyCode.BACK_SPACE){
 			calcNewScore(((Control)keyEvent.getSource()).getId() ,keyEvent.getCharacter().charAt(0),true);
 		}
 		else if (!Character.isDigit(keyEvent.getCharacter().charAt(0))) {
@@ -273,8 +273,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	private void calcNewScore(String curKey, char c,boolean backspace) {
 		String cur ="";
 		if (backspace) {
-			if(scores.get(curKey).getText().length()>0)
-				cur = scores.get(curKey).getText().substring(0, scores.get(curKey).getText().length()-1);
+				cur = scores.get(curKey).getText();
 		} else 
 			cur = scores.get(curKey).getText()+c;
 		int xsum = 0;
