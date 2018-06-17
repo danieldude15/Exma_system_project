@@ -6,25 +6,25 @@ This README would normally document whatever steps are necessary to get your app
 
 College Mini-project Built by an amazing team of 4: Daniel Tibi, Niv Mizrahi, Itzik Mizrachi and Nathan Khuthorskoy
 The project is about a college exam building system that manages questions and allows students take exams on a computer in realtime.
-* Version 0.0: No code in project currently
+* Version 0.8: Advanced Alpha phase
 
 ### How do I get set up? ###
 
 * Summary of set up:
-no code yet so no setup...
+Pending review
 
 * Configuration: 
-probably some mysql software will need to be installed in order to run the program. 
-still unsure...
+Client config file writes server data upon connection
 
 * Dependencies:
-what the fuck is dependencies
+- Apache Poi Library
+- 
 
 * Database configuration:
-unknown at the moment
+AES Database currently configured locally
 
 * How to run tests:
-still learning don't know how tests are made...
+not tests yet
 
 * Deployment instructions:
 hmmm yes....
