@@ -95,7 +95,7 @@ public class Course implements Serializable{
 	 * overriding the toString method for Courses
 	 */
 	@Override public String toString() {
-		if(getField()!=null) {
+		if(getField() != null) {
 			return new String(String.format("%s - %s", courseIdToString() , getName()));
 		} else {
 			return new String(String.format("%s", getName()));

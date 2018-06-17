@@ -66,7 +66,7 @@ public class DBMain {
 			+ "`activatorid`, `code`, `type`, `dateactivated`, "
 			+ "`date_time_locked`, `participated`, `not_in_time_submitters`, "
 			+ "`submitted`) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + 
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
 			"");
 	private String getcourseExams= new String(""
 			+ "SELECT e.examid ,e.timeduration,e.teacherid,u.fullname,u.password,u.username "
@@ -151,6 +151,8 @@ public class DBMain {
 			+ "SELECT * FROM aes.exams");
 	private String getAllFields = new String(""
 			+ "SELECT * FROM aes.fields");
+	private String getAllCourses = new String(""
+			+ "SELECT * FROM aes.courses");
 	private String login = new String(""
 			+ "SELECT * FROM aes.users WHERE username=?");
 	private String getUserThroughID = new String(""
@@ -362,6 +364,25 @@ public class DBMain {
 		return null;
 	}
 
+	public ArrayList<Course> getAllCourses(){
+		try {
+			PreparedStatement prst = conn.prepareStatement(getAllCourses);
+			System.out.println("SQL:" + prst);
+			ResultSet rs = prst.executeQuery();
+			ArrayList<Course> courses = new ArrayList<>();
+			while(rs.next()) {
+				int courseID = rs.getInt(1);
+				String courseName = rs.getString(2);
+				Field field = new Field(rs.getInt(3),getFieldName(rs.getInt(3)));
+				courses.add(new Course(courseID,courseName,field));
+			}
+			return courses;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
+	}
+
 	public ArrayList<Field> getTeacherFields(Teacher o) {
 		ArrayList<Field> fields = new ArrayList<Field>();
 		try {
@@ -564,10 +585,10 @@ public class DBMain {
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
 				/*
-				 * 1 examid, 2 courseid, 3 fieldid, 
-				 * 4 autherid, 5 activatorid, 6 code, 
-				 * 7 type, 8 date_time_activated, 9 date_time_locked, 
-				 * 10 participated, 11 not_in_time_submitters, 12 submitted, 
+				 * 1 examid, 2 courseid, 3 fieldid,
+				 * 4 autherid, 5 activatorid, 6 code,
+				 * 7 type, 8 date_time_activated, 9 date_time_locked,
+				 * 10 participated, 11 not_in_time_submitters, 12 submitted,
 				 * 13 median, 14 exam_avg, 15 deviation
 				 */
 				while (rs.next()) {

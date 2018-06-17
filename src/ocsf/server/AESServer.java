@@ -63,12 +63,12 @@ public class AESServer extends AbstractServer {
 		studentsSolvedExams = new HashMap<>();
 		timeChangeRequests= new HashMap<>();
 		solvedExamWordFiles=new HashMap<>();
-		examTimelines = new HashMap<>();		
+		examTimelines = new HashMap<>();
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0, 
+		ActiveExam nivsExam = new ActiveExam("d34i", 0,
 				new Date(new java.util.Date().getTime()),
 				sqlcon.getExam("030103"),teacher);
 		InitializeActiveExams(nivsExam);
@@ -125,11 +125,14 @@ public class AESServer extends AbstractServer {
 			case "getFieldsCourses":
 				getFieldsCourses(client,o);
 				break;
-			case "getAllQuestions":
-				getAllQuestions(client,null);
+			case "getAllStudents":
+				getAllStudents(client);
 				break;
 			case "getAllTeachers":
 				getAllTeachers(client);
+				break;
+			case "getAllQuestions":
+				getAllQuestions(client,null);
 				break;
 			case "getAllExams":
 			    getAllExams(client,null);
@@ -137,6 +140,9 @@ public class AESServer extends AbstractServer {
             case "getAllFields":
                 getAllFields(client,null);
                 break;
+			case "getAllCourses":
+				getAllCourses(client,null);
+				break;
 			case "getTeachersQuestions":
 				getTeacherQuestions(client,o);
 				break;
@@ -169,12 +175,6 @@ public class AESServer extends AbstractServer {
 				break;
 			case "studentIsInActiveExam":
 				studentIsInActiveExam(client,o);
-				break;
-			case "getAllStudents":
-				getAllStudents(client);
-				break;
-			case "getAllCourses":
-				getAllCourses(client);
 				break;
 			case "getTeacherSolvedExams":
 				getSolvedExam(client,o);
@@ -519,13 +519,13 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("allStudents",students);
 		client.sendToClient(im);
 	}
-	
+
 	private void getAllTeachers(ConnectionToClient client) throws IOException {
 		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
 		iMessage im = new iMessage("allTeachers",teachers);
 		client.sendToClient(im);
 	}
-	
+
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
 		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
@@ -573,13 +573,6 @@ public class AESServer extends AbstractServer {
 	private void getFieldCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> Courses = sqlcon.getFieldCourses((Field)o);
 		iMessage im = new iMessage("FieldCourses",Courses);
-		client.sendToClient(im);
-	}
-	
-
-	private void getAllCourses(ConnectionToClient client) throws IOException {
-		ArrayList<Course> Courses = sqlcon.getFieldsCourses(sqlcon.getAllFields());
-		iMessage im = new iMessage("AllCourses",Courses);
 		client.sendToClient(im);
 	}
 
@@ -665,7 +658,7 @@ public class AESServer extends AbstractServer {
 		iMessage rtrnmsg = new iMessage("AllExamReports", reports);
 		client.sendToClient(rtrnmsg);
 	}
-	
+
     /**
      * Method retrieves all written questions from the database
      * @param client - the user currently connected ( used by the Principal )
@@ -688,6 +681,12 @@ public class AESServer extends AbstractServer {
         ArrayList<Field> fields = sqlcon.getAllFields();
         iMessage rtrnmsg = new iMessage("AllFields", fields);
         client.sendToClient(rtrnmsg);
+    }
+
+	private void getAllCourses(ConnectionToClient client, Object o) throws IOException{
+		ArrayList<Course> courses = sqlcon.getAllCourses();
+		iMessage rtrnmsg = new iMessage("AllCourses", courses);
+		client.sendToClient(rtrnmsg);
     }
 
     /**
@@ -736,7 +735,7 @@ public class AESServer extends AbstractServer {
 	}
 	/**
 	 * When teacher activate an exam he add it to the ActiveExams lists.
-	 * @param ae
+	 * @param o
 	 */
 	private void InitializeActiveExams( Object o)
 	{
@@ -770,7 +769,7 @@ public class AESServer extends AbstractServer {
 	 * Get an object[2] when object[0]=ActiveExam,object[1]=Student and add the student to the list.
 	 * In other words Student is check in to the active exam.
 	 * @param client
-	 * @param o
+	 * @param obj
 	 * @throws IOException 
 	 */
 	private void checkInStudentToActiveExam(ConnectionToClient client,Object obj) throws IOException {
@@ -827,7 +826,7 @@ public class AESServer extends AbstractServer {
 		AesWordDoc retFile= new AesWordDoc(name+".docx");
 		
 		  try {
-			      File file = new File (name+".docx");     
+			      File file = new File (name+".docx");
 			      byte [] bytes  = new byte [(int)file.length()];
 			      FileInputStream fileInputStream = new FileInputStream(file);
 			      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
