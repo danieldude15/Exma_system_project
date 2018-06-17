@@ -235,7 +235,17 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     }
 
     private void updateTeachersList(){
-
+        ArrayList<User> m_teachersToBeDisplayed = UserController.getAllTeachers();
+        ArrayList<String> toBeDisplayed = new ArrayList<>();
+        if (m_teachersToBeDisplayed != null) {
+            for (User teacher : m_teachersToBeDisplayed) {
+                m_studentsAndTeachersMap.put(teacher.getID(), teacher);
+                toBeDisplayed.add(teacher.toString());
+            }
+        }
+        m_teachersList.getItems().clear();
+        ObservableList<String> list = FXCollections.observableArrayList(toBeDisplayed);
+        m_teachersList.setItems(list);
     }
 
     private void updateQuestionsList() {
