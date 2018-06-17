@@ -823,6 +823,7 @@ public class AESServer extends AbstractServer {
 			System.err.println("Development env active exam report generation being skipped\nTo generate a real report you must go throw the whole proccess of activating the exam by a teacher");
 			return;
 		}
+		
 		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
 		int participated = studentsInExam.get(ae).size();
 		int submitted = studentsSolvedExams.get(ae).size();
@@ -853,6 +854,7 @@ public class AESServer extends AbstractServer {
 	 */
 	public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
 	{
+		System.out.println("Checking out student to remember he already submitted his exam");
 		Object[] o = (Object[])obj;
 		ActiveExam e=(ActiveExam) o[0];
 		SolvedExam solved=(SolvedExam) o[1];
@@ -869,6 +871,7 @@ public class AESServer extends AbstractServer {
 
 
 	private void UploadSolvedExam(Object obj) throws IOException {
+		System.out.println("Student Uploaded Solved Exam");
 		Object[] o=(Object[])obj;
 		
 		MyFile file=(MyFile) o[0];

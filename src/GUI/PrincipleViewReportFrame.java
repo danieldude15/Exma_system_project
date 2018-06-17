@@ -113,7 +113,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		averageLabel.setText(Float.toString(examReport.getAvg()));
 		Median.setText(Integer.toString(examReport.getMedian()));
 		
-		updateBarChart(examReport.getDeviation());
+		updateBarChart(examReport.getDeviation(),"Solved Exams Deviation");
 		
 		infoTitle1.setText("Exam Course:");
 		infoTitle1.setVisible(true);
@@ -165,7 +165,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		averageLabel.setText(avg+"");
 		Median.setText(median+"");
 		
-		updateBarChart(dev);
+		updateBarChart(dev,"Course Exams Deviation");
 		
 		infoTitle1.setText("Course Name:");
 		infoTitle1.setVisible(true);
@@ -198,8 +198,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 				teachersExams.add(er);
 				examCounter++;
 				avgSum+=er.getAvg();
-				for(SolvedExam se: er.getSolvedExams())
-					medianCalc.add(se.getScore());
+				medianCalc.add((int) er.getAvg());
 			}
 		}
 		float avg = avgSum/examCounter;
@@ -216,7 +215,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		averageLabel.setText(Float.toString(avg));
 		Median.setText(Integer.toString(median));
 		
-		updateBarChart(dev);
+		updateBarChart(dev,"Teachers Exams Deviation");
 		
 		infoTitle1.setText("teacher's Name:");
 		infoTitle1.setVisible(true);
@@ -249,7 +248,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		averageLabel.setText(Float.toString(avg));
 		Median.setText(Integer.toString(median));
 		
-		updateBarChart(dev);
+		updateBarChart(dev,"Students Exams Deviation");
 		
 		infoTitle1.setText("Student's Name:");
 		infoTitle1.setVisible(true);
@@ -290,16 +289,18 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		this.examReport = examReport;
 	}
 	
-	private void updateBarChart(HashMap<Integer, Integer> dev) {
-        xAxis.setLabel("Score Range");       
+	private void updateBarChart(HashMap<Integer, Integer> dev, String seriesName) {
+        xAxis.setLabel("Score Range");    
+        xAxis.setId("whiteLabel");
         devBarChart.getData().clear();
-        XYChart.Series[] series = new XYChart.Series[10];
+        XYChart.Series series = new XYChart.Series();
         for(int i=0;i<10;i++) {
-        	series[i] = new XYChart.Series();
-        	String name = "" + (i*10+10);
-        	series[i].getData().add(new XYChart.Data(name, dev.get(i)));
-        	devBarChart.getData().add(series[i]);
+        	String name = i*10 + "-" + (i*10+10);
+        	series.getData().add(new XYChart.Data(name, dev.get(i)));
+        	
         } 
+        series.setName(seriesName);
+        devBarChart.getData().add(series);
 	}
 
 }

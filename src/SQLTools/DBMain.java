@@ -370,7 +370,7 @@ public class DBMain {
 			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
-				System.out.println(rs);
+				
 				while (rs.next()) {
 					int fieldsid = rs.getInt(1);
 					String fieldName = rs.getString(2);
@@ -396,7 +396,7 @@ public class DBMain {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
 			System.out.println("SQL:" + statement);
 			ResultSet rs = statement.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Course> result = new ArrayList<>();
 			while(rs.next()) {
 				int courseid = rs.getInt(1);
@@ -423,7 +423,7 @@ public class DBMain {
 			prst.setInt(1,fieldID);
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			while(rs.next()) {
 				System.out.println(rs.getString(2));
 				return rs.getString(2);
@@ -441,9 +441,8 @@ public class DBMain {
 			prst.setInt(2,fieldID);
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			while(rs.next()) {
-				System.out.println(rs.getString(2));
 				return rs.getString(2);
 			}
 		} catch (SQLException e) {
@@ -472,7 +471,7 @@ public class DBMain {
 			prst.setInt(1, field.getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Teacher> result = new ArrayList<>();
 			while(rs.next()) {
 				int teacherid = rs.getInt(1);
@@ -523,7 +522,7 @@ public class DBMain {
 			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
-				System.out.println(rs);
+				
 				/*
 				 * 1 examid, 2 courseid, 3 fieldid, 
 				 * 4 autherid, 5 activatorid, 6 code, 
@@ -616,7 +615,7 @@ public class DBMain {
 			prst.setInt(7, teacherid);
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
 			ArrayList<SolvedExam> result = new ArrayList<>();
 			while(rs.next()) {		
@@ -690,7 +689,7 @@ public class DBMain {
 			prst.setInt(1, o.getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
 			ArrayList<SolvedExam> result = new ArrayList<>();
 			while(rs.next()) {		
@@ -731,7 +730,7 @@ public class DBMain {
 			prst.setInt(1, s.getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<QuestionInExam> questions = new ArrayList<>();
 			ArrayList<SolvedExam> result = new ArrayList<>();
 			while(rs.next()) {		
@@ -1000,7 +999,7 @@ public class DBMain {
 			PreparedStatement prst = conn.prepareStatement(getAllQuestions);
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Question> result = new ArrayList<>();
 			while(rs.next()) {
 				int questionid = rs.getInt(1);
@@ -1031,7 +1030,7 @@ public class DBMain {
 			prst.setInt(1,t.getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Question> result = new ArrayList<>();
 			while(rs.next()) {
 				int questionid = rs.getInt(1);
@@ -1068,7 +1067,7 @@ public class DBMain {
 			} else return null;
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Course> result = new ArrayList<>();
 			while(rs.next()) {
 				int fieldid = rs.getInt(1);
@@ -1092,7 +1091,7 @@ public class DBMain {
 			prst.setInt(2,c.getField().getID());
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<Question> result = new ArrayList<>();
 			while(rs.next()) {
 				int questionid = rs.getInt(2);
@@ -1135,7 +1134,7 @@ public class DBMain {
 			prst.setInt(3,courseid);
 			System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
-			System.out.println(rs);
+			
 			ArrayList<QuestionInExam> result = new ArrayList<>();
 			while(rs.next()) {
 				int questionid = rs.getInt(1);

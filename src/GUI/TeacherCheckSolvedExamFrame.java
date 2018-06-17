@@ -122,7 +122,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);
 		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		if(answersHash.get(q)!=null)
+		if(answersHash.get(q)!=null && answersHash.get(q)!=0)
 			answers[answersHash.get(q)-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
