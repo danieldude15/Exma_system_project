@@ -70,7 +70,7 @@ public class AESServer extends AbstractServer {
 		 */
 		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
 		ActiveExam tibisExam = new ActiveExam("ac13", 1, new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("010201"),teacher);
+				sqlcon.getExam("010101"),teacher);
 		InitializeActiveExams(tibisExam);
 		
 		/**
