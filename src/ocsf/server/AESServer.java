@@ -75,7 +75,7 @@ public class AESServer extends AbstractServer {
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d35i", 0, 
+		ActiveExam nivsExam = new ActiveExam("d36i", 0, 
 				new Date(new java.util.Date().getTime()),
 				sqlcon.getExam("030107"),teacher);
 		InitializeActiveExams(nivsExam);
@@ -907,10 +907,15 @@ public class AESServer extends AbstractServer {
 	}
 	
 	public void GenerateActiveExamReport(ActiveExam ae) {
+		//handeling student who did not participate at all
+		int notInTime = 0;
+		int submitted = studentsSolvedExams.get(ae).size();
+		for(Student s: studentsCheckOutFromActiveExam.get(ae)) {
+			studentsSolvedExams.get(ae).add(new SolvedExam(0, false, new HashMap<>(), s, "", new HashMap<>(), 0, ae.getCode(), ae.getType(), ae.getDate(), ae.getActivator(), ae));
+			notInTime++;
+		}
 		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
 		int participated = studentsInExam.get(ae).size();
-		int submitted = studentsSolvedExams.get(ae).size();
-		int notInTime = participated-submitted;
 		Date lockDate = new Date(new java.util.Date().getTime()); //now
 		ExamReport eReport = new ExamReport(ae.getCode(), ae.getType(), ae.getDate(), ae, ae.getActivator(), solvedExams, participated, submitted, notInTime, lockDate);
 		if (solvedExams.size()==0) {

@@ -5,17 +5,19 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherCheckExams">
+<VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="663.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherCheckExams">
    <children>
       <HBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox>
                      <children>
                         <VBox>
                            <children>
@@ -43,11 +45,22 @@
                                     <Insets left="40.0" />
                                  </VBox.margin>
                               </Label>
+                              <Label layoutX="50.0" layoutY="10.0" text="Student In Course">
+                                 <VBox.margin>
+                                    <Insets left="40.0" />
+                                 </VBox.margin>
+                              </Label>
                            </children>
                         </VBox>
                         <VBox layoutX="363.0" layoutY="10.0">
                            <children>
                               <Label fx:id="checkOutOf" text="Checked Exams:" />
+                              <Label fx:id="studentInCourse" layoutX="10.0" layoutY="10.0" text="Checked Exams:" />
+                              <ImageView fx:id="doneImage" fitHeight="65.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../images/completed-stamp.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -55,16 +68,36 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Label text="Solved Exams:">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ListView fx:id="SolvedExamList" onMouseClicked="#solvedExamsListViewClicked" prefHeight="224.0" prefWidth="600.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </ListView>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label text="Solved Exams:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="223.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label layoutX="240.0" layoutY="10.0" text="Cheaters Table">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <ListView fx:id="SolvedExamList" onMouseClicked="#solvedExamsListViewClicked" prefHeight="200.0" prefWidth="280.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets right="40.0" />
+                           </HBox.margin>
+                        </ListView>
+                        <ListView fx:id="cheatersList" disable="true" prefHeight="218.0" prefWidth="280.0" style="-fx-opacity: 1.0;" />
+                     </children>
+                  </HBox>
                   <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <Button fx:id="backB" mnemonicParsing="false" onAction="#backToHome" text="Back" />
