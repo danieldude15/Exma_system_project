@@ -53,13 +53,13 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	HashMap<String,QuestionInExam> questionsinexam = new HashMap<>();
 	HashMap<String,Question> questions = new HashMap<>();
 	HashMap<String,TextField> scores = new HashMap<>();
-	HashMap<String,TextField> NoteTeacherts = new HashMap<>();
-	HashMap<String,TextField> NoteStudents = new HashMap<>();
+	HashMap<String,TextField> noteTeacherts = new HashMap<>();
+	HashMap<String,TextField> noteStudents = new HashMap<>();
+	HashMap<String, ImageView> imageViews = new HashMap<>();
 	ArrayList<Field> teachersFields;
 	ArrayList<Course> teachersCourses;
 	ArrayList<Question> DBquestions;
-	Label errorLabel;
-	@FXML Label TotalScore;
+	@FXML Label totalScore;
 	@FXML Label labelselectfield;
 	@FXML Label labelselectcourse;
 	@FXML Label windowTypeid;
@@ -72,14 +72,13 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	Course publicCourse;
 	Field publicField;
 	TextField score=new TextField();
-	TextField NoteTeachert;
-	TextField NoteStudent;
+	TextField noteTeachert;
+	TextField noteStudent;
     int sum;
     Exam examedit;
     int point;
  	String notestd=null;
  	String notetech=null;
- 	Label v_Icon; 
  	ImageView imageView;
  	private final Image v = new Image("resources/v.png"); 
  	
@@ -87,32 +86,29 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	public void runOnScreenChange() {
 
 		//clear the windows of TeacherBuildNewExam
-		if(type.equals(windowType.Build))
-		{
-		TotalScore.setText("Total Score:");
-		fieldComboB.setVisible(true);
-		courseComboB.setVisible(true);
-		fieldComboB.getItems().clear();
-		courseComboB.getItems().clear();
-		questionsList.getChildren().clear();
-		duration.clear();
-		windowTypeid.setText("Build New Exam");
-		labelselectcourse.setVisible(true);
-		labelselectfield.setVisible(true);
-		questionsinexam.clear();
-		questions.clear();
-		scores.clear();
-		NoteTeacherts.clear();
-		NoteStudents.clear();
-		
-		sum=0;
-		teacherFieldsLoading();
-		}
-		else
-		{
+		if(type.equals(windowType.Build)) {
+			totalScore.setText("Total Score:");
+			fieldComboB.setVisible(true);
+			courseComboB.setVisible(true);
+			fieldComboB.getItems().clear();
+			courseComboB.getItems().clear();
+			questionsList.getChildren().clear();
+			duration.clear();
+			windowTypeid.setText("Build New Exam");
+			labelselectcourse.setVisible(true);
+			labelselectfield.setVisible(true);
+			questionsinexam.clear();
+			questions.clear();
+			scores.clear();
+			noteTeacherts.clear();
+			noteStudents.clear();
+			
+			sum=0;
+			teacherFieldsLoading();
+		} else {
 			sum=100;
 			questionsList.getChildren().clear();
-			TotalScore.setText("Total Score:100");
+			totalScore.setText("Total Score: 100");
 			fieldComboB.setVisible(false);
 			courseComboB.setVisible(false);
 			windowTypeid.setText("Edit exam: "+examedit.examIdToString());
@@ -139,9 +135,8 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 
 	@FXML 
 	public void filterByField(ActionEvent event) {
-			if(fieldComboB.getSelectionModel().getSelectedItem()!=null) 
-			{
-			
+		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
+			questionsList.getChildren().clear();
 			publicField=fieldComboB.getSelectionModel().getSelectedItem();
 			ObservableList<Course> list;
 			courseComboB.getItems().clear();
@@ -156,8 +151,8 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	@FXML 
 	public void filterByCourse(ActionEvent event) 
 	{
-		if(courseComboB.getSelectionModel().getSelectedItem()!=null) 
-		{
+		if(courseComboB.getSelectionModel().getSelectedItem()!=null) {
+			questionsList.getChildren().clear();
 			publicCourse=courseComboB.getSelectionModel().getSelectedItem();
 			 DBquestions =  QuestionController.getCourseQuestions(publicCourse);
 				if (DBquestions!=null) 
@@ -179,7 +174,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			//questionsList.
 			for(QuestionInExam q :examedit.getQuestionsInExam()) {
 				questionsinexam.put(q.questionIDToString(), q);
-				questionsList.getChildren().add(questionInExamAdder(q));
+				questionsList.getChildren().add(questionAdder(q));
 		}
 		}
 	}
@@ -211,46 +206,57 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			questionInfo.getChildren().add(r);
 		}
 		// this HBox will hold the AddRemove buttons
-				VBox  questionAddRemove = new VBox ();
-				questionAddRemove.setStyle("-fx-margin:20px");
-				questionAddRemove.setMinWidth(280);
-				questionAddRemove.setMaxWidth(280);
-				
-				score=new TextField();
-				score.setId(q.questionIDToString());
-				score.setPromptText("score point");
-				score.setMaxWidth(80);
-				scores.put(q.questionIDToString(),score);
-				score.addEventHandler(KeyEvent.KEY_TYPED, new MyAddRemoveEdit());
-				questionAddRemove.getChildren().add(score);
-				
-				
-				errorLabel = new Label ("You mast enter onle numbers in the field");
-				errorLabel.setTextFill(Color.RED);
-				errorLabel.setVisible(false);
-				questionAddRemove.getChildren().add(errorLabel);
-				NoteStudent=new TextField();
-				NoteStudent.setId(q.questionIDToString());
-				NoteStudent.setPromptText("Note for student");
-				NoteStudent.setMaxWidth(300);
-				NoteStudents.put(q.questionIDToString(),NoteStudent);
-				questionAddRemove.getChildren().add(NoteStudent);
-				
-				NoteTeachert=new TextField();
-				NoteTeachert.setId(q.questionIDToString());
-				NoteTeachert.setPromptText("Note for teachert");
-				NoteTeachert.setMaxWidth(300);
-				NoteTeacherts.put(q.questionIDToString(),NoteTeachert);
-				questionAddRemove.getChildren().add(NoteTeachert);
-				
-				v_Icon = new Label(null, new ImageView());
-				imageView=new ImageView();
-				imageView.setFitHeight(10);
-				imageView.setFitWidth(10);
-				
-				hbox.getChildren().addAll(imageView,questionInfo,questionAddRemove);
-								
-				return hbox;
+		VBox  questionAddRemove = new VBox ();
+		questionAddRemove.setStyle("-fx-margin:20px");
+		questionAddRemove.setMinWidth(280);
+		questionAddRemove.setMaxWidth(280);
+		
+		score=new TextField();
+		score.setId(q.questionIDToString());
+		score.setPromptText("score point");
+		score.setMaxWidth(80);
+		scores.put(q.questionIDToString(),score);
+		score.addEventHandler(KeyEvent.KEY_TYPED, new MyAddRemoveEdit());
+		questionAddRemove.getChildren().add(score);
+		
+		noteStudent=new TextField();
+		noteStudent.setId(q.questionIDToString());
+		noteStudent.setPromptText("Note for student");
+		noteStudent.setMaxWidth(300);
+		noteStudents.put(q.questionIDToString(),noteStudent);
+		questionAddRemove.getChildren().add(noteStudent);
+		
+		noteTeachert=new TextField();
+		noteTeachert.setId(q.questionIDToString());
+		noteTeachert.setPromptText("Note for teachert");
+		noteTeachert.setMaxWidth(300);
+		noteTeacherts.put(q.questionIDToString(),noteTeachert);
+		questionAddRemove.getChildren().add(noteTeachert);
+		
+		
+		imageView=new ImageView();
+		imageView.setFitHeight(10);
+		imageView.setFitWidth(10);
+		imageView.setImage(v);
+		imageView.setVisible(false);
+		imageViews.put(q.questionIDToString(), imageView);
+		hbox.getChildren().addAll(imageView,questionInfo,questionAddRemove);
+		
+		if(q instanceof QuestionInExam) {
+			QuestionInExam qie = (QuestionInExam) q;
+			score.setText(qie.getPointsValue()+"");
+			if(qie.getStudentNote() !=null && !qie.getStudentNote().equals("") )
+				noteStudent.setText(qie.getStudentNote());
+			else
+				noteStudent.setPromptText("Note for student");
+			if(qie.getInnerNote() !=null && !qie.getInnerNote().equals("") )
+				noteTeachert.setText(qie.getInnerNote());
+			else
+				noteTeachert.setPromptText("Note for teacher");
+			imageView.setVisible(true);
+		}
+		
+		return hbox;
 	
 	}
 	
@@ -259,14 +265,27 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 	
 	@Override
 	   public void handle(KeyEvent keyEvent) {
-		if( keyEvent.getCode() == KeyCode.BACK_SPACE){
-			calcNewScore(((Control)keyEvent.getSource()).getId() ,keyEvent.getCharacter().charAt(0),true);
-		}
-		else if (!Character.isDigit(keyEvent.getCharacter().charAt(0))) {
+			String questionId = ((Control)keyEvent.getSource()).getId();
+			char c = keyEvent.getCharacter().charAt(0);
+			String curText = scores.get(questionId).getText();
+			if( c == '\b'){
+				calcNewScore(questionId,c,true);
+				if(curText.isEmpty()) {
+					imageViews.get(questionId).setVisible(false);
+				}
+			} else if (!Character.isDigit(c) || new String(curText+c).equals("0")) {
 				keyEvent.consume();
-				errorLabel.setVisible(true);
-		} else 
-				calcNewScore(((Control)keyEvent.getSource()).getId() ,keyEvent.getCharacter().charAt(0),false);
+			} else {
+				calcNewScore(questionId ,c,false);
+				imageViews.get(questionId).setVisible(true);
+			}
+			if(sum==0) {
+				courseComboB.setDisable(false);
+				fieldComboB.setDisable(false);
+			} else {
+				courseComboB.setDisable(true);
+				fieldComboB.setDisable(true);
+			}
 	    }
 	}
 
@@ -284,7 +303,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				xsum+= Integer.parseInt(scores.get(key).getText());
 		}
 		sum=xsum;
-		TotalScore.setText("Total Score: "+Integer.toString(sum));
+		totalScore.setText("Total Score: "+Integer.toString(sum));
 	}
 
     public void CancelButtonPressed(ActionEvent event)
@@ -299,7 +318,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 
 		if(sum!=100)
 		{
-			Alert alert = new Alert(AlertType.CONFIRMATION);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Exam error");
 			alert.setHeaderText(null);
 			alert.setContentText("The total score of the exam isn't 100 you need to change the exam ");
@@ -308,7 +327,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		}
 		else if(duration.getText().equals("") || !duration.getText().matches("[0-9]+")) 
 		{
-			Alert alert = new Alert(AlertType.CONFIRMATION);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Estimated exam time error");
 			alert.setHeaderText(null);
 			alert.setContentText("Please enter the time to take the exam");
@@ -322,7 +341,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			for(String q: scores.keySet())
 				if(!scores.get(q).getText().equals(""))
 				   questionsIn.add(new QuestionInExam(questions.get(q),Integer.parseInt(scores.get(q).getText()),
-						   NoteTeacherts.get(q).getText(),NoteStudents.get(q).getText()));
+						   noteTeacherts.get(q).getText(),noteStudents.get(q).getText()));
 			if(type.equals(windowType.Build))
 			{
 			ExamController.addExam(new Exam (0,publicCourse,x, (Teacher) ClientGlobals.client.getUser(),questionsIn));
@@ -337,79 +356,6 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		}
 	}
 
-	private HBox questionInExamAdder(QuestionInExam q) {
-		HBox hbox = new HBox();
-		hbox.setStyle("-fx-border-color:black;"
-					+ "-fx-border-radius:10px;"
-					+ "-fx-padding:10px;");
-		
-		//This VBox holds the question details
-		VBox questionInfo = new VBox();
-		Label questionString = new Label("Question: "+q.getQuestionString());
-		questionString.setId("blackLabel");
-		questionString.setWrapText(true);
-		questionInfo.setMinWidth(330);
-		questionInfo.setMaxWidth(330);
-		Label qid = new Label("QID: "+q.questionIDToString());
-		qid.setId("blackLabel");
-		questionInfo.getChildren().add(qid);
-		questionInfo.getChildren().add(questionString);
-		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		answers[q.getCorrectAnswerIndex()-1].setSelected(true);
-		for(RadioButton r:answers) {
-			r.setDisable(true);
-			r.setWrapText(true);
-			r.setId("blackLabel");
-			questionInfo.getChildren().add(r);
-		}
-		// this HBox will hold the AddRemove buttons
-				VBox  questionAddRemove = new VBox ();
-				questionAddRemove.setStyle("-fx-margin:20px");
-				questionAddRemove.setMinWidth(349);
-				questionAddRemove.setMaxWidth(349);
-				score=new TextField();
-				score.setId(q.questionIDToString());
-				score.setText(Integer.valueOf(q.getPointsValue()).toString());
-				score.setMaxWidth(80);
-				scores.put(q.questionIDToString(),score);
-				score.addEventHandler(KeyEvent.KEY_TYPED, new MyAddRemoveEdit());
-				questionAddRemove.getChildren().add(score);
-				errorLabel = new Label ("You mast enter onle numbers in the field");
-				errorLabel.setTextFill(Color.RED);
-				errorLabel.setVisible(false);
-				questionAddRemove.getChildren().add(errorLabel);
-				NoteStudent=new TextField();
-				NoteStudent.setId(q.questionIDToString());
-				if(q.getStudentNote() !=null && !q.getStudentNote().equals("") )
-					NoteStudent.setText(q.getStudentNote());
-				else
-					NoteStudent.setPromptText("NoteForTeacher");
-				NoteStudent.setMaxWidth(300);
-				NoteStudents.put(q.questionIDToString(),NoteStudent);
-				questionAddRemove.getChildren().add(NoteStudent);
-				
-				NoteTeachert=new TextField();
-				NoteTeachert.setId(q.questionIDToString());
-				if(q.getInnerNote() !=null && !q.getInnerNote().equals("") )
-					NoteTeachert.setText(q.getInnerNote());
-				else
-					NoteTeachert.setPromptText("NoteForTeacher");
-				NoteTeachert.setPromptText("NoteForStudent");
-				NoteTeachert.setMaxWidth(300);
-				NoteTeacherts.put(q.questionIDToString(),NoteTeachert);
-				questionAddRemove.getChildren().add(NoteTeachert);
-				
-				v_Icon = new Label(null, new ImageView());
-				imageView=new ImageView();
-				imageView.setFitHeight(10);
-				imageView.setFitWidth(10);
-				
-				hbox.getChildren().addAll(imageView,questionInfo,questionAddRemove);
-								
-				return hbox;
-	
-	}
-	
 	public void setType(windowType type) {
 		this.type = type;
 		

@@ -1,40 +1,31 @@
 package GUI;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.ResourceBundle;
 
-import javax.lang.model.util.SimpleElementVisitor6;
 import javax.swing.filechooser.FileSystemView;
 
-import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextFlow;
 import logic.Globals;
 import logic.MyFile;
 import logic.QuestionInExam;
@@ -56,7 +47,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 	@FXML Label studentName;
 	@FXML Label score;
 	@FXML Label timeCompleted;
-	@FXML ImageView doneImage;	
+	@FXML ImageView doneImage;
 	@FXML Button DownloadB;
 	@FXML Label manualLabel;
 	@FXML Button approveB;

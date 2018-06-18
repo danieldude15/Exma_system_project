@@ -28,9 +28,6 @@ import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 public class TeacherManageExamsFrame implements ControlledScreen {
-	enum windowType {
-		EDIT,Build
-	}
 	
 	HashMap<String,Exam> exams = new HashMap<>();
 	ArrayList<Field> teachersFields;

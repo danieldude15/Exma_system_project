@@ -17,46 +17,46 @@ public class ClientGlobals {
 	
 	
 	
-	public static final String LogInID = "LogIn";
+	public static final String LogInID = "Log-In";
 	public static final String LogInPath = "/resources/fxml/Login.fxml";
 
-	public static final String TeacherManageQuestionsID = "TeacherManageQuestions";
+	public static final String TeacherManageQuestionsID = "Teacher Manage Questions";
 	public static final String TeacherManageQuestionsPath = "/resources/fxml/TeacherManageQuestions.fxml";
 	
-	public static final String StudentMainID = "StudentMain";
+	public static final String StudentMainID = "Student Main";
 	public static final String StudentMainPath = "/resources/fxml/StudentMain.fxml";
 	
-	public static final String StudentStartExamID = "StudentStartExam";
+	public static final String StudentStartExamID = "Student Start Exam";
 	public static final String StudentStartExamPath = "/resources/fxml/StudentStartExam.fxml";
 	
 
-	public static final String StudentViewExamID = "StudentExamView";
+	public static final String StudentViewExamID = "Student Exam View";
 	public static final String StudentViewExamPath = "/resources/fxml/StudentExamView.fxml";
 
-	public static final String StudentSolvesExamID = "StudentSolvesExam";
+	public static final String StudentSolvesExamID = "Student Solves Exam";
 	public static final String StudentSolvesExamPath = "/resources/fxml/StudentSolvesExam.fxml";
 
 	/*		Principal Screens Start		*/
 
-	public static final String PrincipalMainID = "PrincipalMain";
+	public static final String PrincipalMainID = "Principal Main";
 	public static final String PrincipalMainPath = "/resources/fxml/PrincipalMain.fxml";
 
-	public static final String PrincipalReportsID = "PrincipalReports";
+	public static final String PrincipalReportsID = "Principal Reports";
 	public static final String PrincipalReportsPath = "/resources/fxml/PrincipalReports.fxml";
 
-	public static final String PrincipalViewDataID = "PrincipalViewData";
+	public static final String PrincipalViewDataID = "Principal View Data";
 	public static final String PrincipalViewDataPath = "/resources/fxml/PrincipalViewData.fxml";
 
-	public static final String PrincipalViewQuestionID = "PrincipalViewQuestion";
+	public static final String PrincipalViewQuestionID = "Principal View Question";
 	public static final String PrincipalViewQuestionPath ="/resources/fxml/PrincipalViewQuestion.fxml";
 
-	public static final String PrincipalViewExamID = "PrincipalViewExam";
+	public static final String PrincipalViewExamID = "Principal View Exam";
 	public static final String PrincipalViewExamPath = "/resources/fxml/PrincipalViewExam.fxml";
 
-	public static final String PrincipalViewFieldID = "PrincipalViewField";
+	public static final String PrincipalViewFieldID = "Principal View Field";
 	public static final String PrincipalViewFieldPath = "/resources/fxml/PrincipalViewField.fxml";
 
-	public static final String PrincipalViewReportID = "principleViewReport";
+	public static final String PrincipalViewReportID = "principle View Report";
 	public static final String PrincipalViewReportPath = "/resources/fxml/PrincipleViewReport.fxml";
 	
 	/*		Principal Screens End		*/
@@ -65,34 +65,34 @@ public class ClientGlobals {
 	
 	/*		Teacher Screens Start		*/
 	
-	public static final String TeacherMainID = "TeacherMain";
+	public static final String TeacherMainID = "Teacher Main";
 	public static final String TeacherMainPath = "/resources/fxml/TeacherMain.fxml";
 	
-	public static final String TeacherEditAddQuestionID = "TeacherEditAddQuestion";
+	public static final String TeacherEditAddQuestionID = "Teacher Edit/Add Question";
 	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
 
 	public static final String InitializeExamID = "Initialize Exam";
-	public static final String InitializeExamPath = "/resources/fxml/Initialize Exam.fxml";
+	public static final String InitializeExamPath = "/resources/fxml/TeacherInitializeChooseExam.fxml";
 	
-	public static final String TeacherCheckExamsID = "TeacherCheckExams";
+	public static final String TeacherCheckExamsID = "Teacher Check Exams";
 	public static final String TeacherCheckExamsPath = "/resources/fxml/TeacherCheckExams.fxml";
 	
-	public static final String TeacherViewExamID = "TeacherViewExam";
+	public static final String TeacherViewExamID = "Teacher View Exam";
 	public static final String TeacherViewExamPath = "/resources/fxml/TeacherViewExam.fxml";
 	
-	public static final String ActiveExamID = "ActiveExam";
-	public static final String ActiveExamPath = "/resources/fxml/ActiveExam.fxml";
+	public static final String ActiveExamID = "Activate Exam";
+	public static final String ActiveExamPath = "/resources/fxml/TeacherInitializeExam.fxml";
 	
-	public static final String TeacherTimeChangeRequestID = "TeacherTimeChangeRequest";
+	public static final String TeacherTimeChangeRequestID = "Teacher Time Change Request";
 	public static final String TeacherTimeChangeRequestPath = "/resources/fxml/TeacherTimeChangeRequest.fxml";
 	
-	public static final String TeacherBuildNewExamID = "TeacherBuildNewExam";
+	public static final String TeacherBuildNewExamID = "Teacher Build New Exam";
 	public static final String TeacherBuildNewExamPath = "/resources/fxml/TeacherBuildNewExam.fxml";
 
-	public static final String TeacherManageExamsID = "TeacherManageExams";
+	public static final String TeacherManageExamsID = "Teacher Manage Exams";
 	public static final String TeacherManageExamsPath = "/resources/fxml/TeacherManageExams.fxml";
 
-	public static final String TeacherCheckExamID = "TeacherCheckSolvedExam";
+	public static final String TeacherCheckExamID = "Teacher Check Solved Exam";
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
 
 

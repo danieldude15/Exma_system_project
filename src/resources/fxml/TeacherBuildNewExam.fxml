@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherBuildNewExam">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TeacherBuildNewExam">
    <children>
       <Label fx:id="windowTypeid" text="Build New Exam">
          <font>
@@ -72,7 +72,7 @@
                   <Insets right="350.0" />
                </HBox.margin>
             </TextField>
-            <Label fx:id="TotalScore" prefHeight="10.0" prefWidth="118.0" text="Total Score:">
+            <Label fx:id="totalScore" prefHeight="10.0" prefWidth="118.0" text="Total Score:">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

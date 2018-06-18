@@ -29,7 +29,7 @@ import javafx.scene.control.Alert.AlertType;
 
 
 
-public class InitializeExam implements Initializable, ControlledScreen {
+public class TeacherInitializeExam implements Initializable, ControlledScreen {
 
 
 	

@@ -111,7 +111,7 @@
 }
 
 #blackLabel , #blackLabel:disabled {
-	-fx-text-fill:black;
+	-fx-text-fill:black!important;
 	-fx-opacity: 1.0;
 }
 #whiteLabel , #blackLabel:disabled {
