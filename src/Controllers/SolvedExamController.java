@@ -79,28 +79,30 @@ public class SolvedExamController {
 		return 0;
 	}
 	
-	public static void UploadFile(SolvedExam solvedExam, AesWordDoc doc)
+	public static void UploadFile(SolvedExam solvedExam, AesWordDoc retFile)
 	{
-		//String name=solvedExam.getCourse().getName();
+		String name=solvedExam.getCourse().getName();
+		
+		
+		//AesWordDoc retFile= new AesWordDoc(name+".docx");
+		
 		
 		
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			
-			
-			  try {
-				      File file = new File (doc.getFileName());     
-				      byte [] bytes  = new byte [(int)file.length()];
-				      FileInputStream fileInputStream = new FileInputStream(file);
-				      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
-				      doc.initArray(bytes.length);
-				      doc.setSize(bytes.length);
-				      bufferInputStream.read(doc.getbytes(),0,bytes.length);
-				  
+			try{
+		      File file = new File (retFile.getFileName());     
+		      byte [] bytes  = new byte [(int)file.length()];
+		      FileInputStream fileInputStream = new FileInputStream(file);
+		      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
+		      retFile.initArray(bytes.length);
+		      retFile.setSize(bytes.length);
+		      bufferInputStream.read(retFile.getbytes(),0,bytes.length);
 				  
 						
 			      Object[] o=new Object[2];
-			      o[0]=(AesWordDoc)doc;
+			      o[0]=(AesWordDoc)retFile;
 			      o[1]=(SolvedExam)solvedExam;
 			
 				client.sendToServer(new iMessage("UploadSolvedExam",o));

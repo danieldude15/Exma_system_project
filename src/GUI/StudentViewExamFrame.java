@@ -34,8 +34,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 	private final Image x = new Image("resources/x.png"); 
 	private final String blackLabel=new String("blackLabel");
 	private final String redLabel=new String("redLabel");
-	private final String greenLabel=new String("greenLabel");
-	
+
 	
 	@Override
 	public void runOnScreenChange() {
