@@ -145,3 +145,12 @@
 #progressPaneId {
 	-fx-background-color:white;
 }
+
+#requestHbox {
+	-fx-background-radius: 20px;
+	-fx-background-color: rgba(240,240,240,0.2);
+	-fx-border-color: white;
+	-fx-border-radius: 20px ;
+	-fx-border-width: 3px;
+	-fx-border-style: solid inside;
+}

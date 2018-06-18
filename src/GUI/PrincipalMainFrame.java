@@ -19,9 +19,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import logic.Globals;
@@ -38,9 +37,6 @@ public class PrincipalMainFrame implements ControlledScreen {
     @FXML private Button m_SchoolDataB;
     @FXML private Button logoutB;
     @FXML private ListView<TimeChangeRequest> m_timeChangeRequestsList;
-    @FXML private TabPane m_principalTabPane;
-    @FXML private Tab m_infoTab;
-    @FXML private Tab m_requestsTab;
     @FXML private Label welcome;
     @FXML private Label requester;
     @FXML private Label courseRequest;
@@ -49,6 +45,7 @@ public class PrincipalMainFrame implements ControlledScreen {
     @FXML private Label username;
     @FXML private Label userid;
     @FXML private Pane userImage;
+    @FXML private HBox requestInfo;
     
     private TimeChangeRequest selectedTCR=null;
     private boolean newRequestArrived=false;
@@ -57,10 +54,9 @@ public class PrincipalMainFrame implements ControlledScreen {
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-    public void runOnScreenChange() {
-        m_requestsTab.setDisable(true);
-        m_principalTabPane.getSelectionModel().select(m_infoTab);
-        
+    public void runOnScreenChange() {   
+    	requestInfo.setVisible(false);
+    	
         if (oneKeyFrame) {
         	oneKeyFrame=false;
         	Timeline timeline = new Timeline();
@@ -88,7 +84,7 @@ public class PrincipalMainFrame implements ControlledScreen {
         username.setText("UserName: " + p.getUserName());
         userid.setText("UserID: " + p.getID());
         userImage.setStyle("-fx-background-image: url(\"resources/profile/" + p.getID()+".PNG\");"
-                + "-fx-background-size: 150px 150px;"
+                + "-fx-background-size: 100px 100px;"
                 + "-fx-background-repeat: no-repeat;");
     }
 
@@ -98,8 +94,7 @@ public class PrincipalMainFrame implements ControlledScreen {
 			ObservableList<TimeChangeRequest> list = FXCollections.observableArrayList(requests);
 			m_timeChangeRequestsList.setItems(list);//Insert all student's solved exams(courseName+grade) into the ListView "solvedExamList"
 			if (requests.size()==0) {
-				m_requestsTab.setDisable(true);
-				m_principalTabPane.getSelectionModel().select(m_infoTab);
+				requestInfo.setVisible(false);
 			}
 		}
 	}
@@ -139,7 +134,7 @@ public class PrincipalMainFrame implements ControlledScreen {
     @FXML public void timeChangeSelected(MouseEvent event) {
     	TimeChangeRequest tChangeRequest = m_timeChangeRequestsList.getSelectionModel().getSelectedItem();
     	if (tChangeRequest!=null) {
-    		m_requestsTab.setDisable(false);
+    		requestInfo.setVisible(true);
     		requester.setText(tChangeRequest.getTeacher().getName());;
     	    courseRequest.setText(tChangeRequest.getActiveExam().getCourse().getName() + " in " + tChangeRequest.getActiveExam().getField().getName());
     	    timeExtention.setText(Long.toString(tChangeRequest.getNewTime()));

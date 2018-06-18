@@ -406,8 +406,8 @@ public class AESServer extends AbstractServer {
 		Long examTime = (long) ae.getDuration()*60;
 		TimeChangeRequest tcr = timeChangeRequests.get(ae);
 		if(tcr!=null) {
-			examTimelines.get(ae).stop();
-			examTimelines.remove(ae);
+			Timeline tm = examTimelines.remove(ae);
+			if(tm!=null) tm.stop();
 			examTime = tcr.getNewTime()-(((new Date(new java.util.Date().getTime()).getTime()-ae.getDate().getTime()))/60000);
 		}
 		Timeline timeline = new Timeline();
