@@ -66,13 +66,13 @@ public class SolvedExamController {
 		return null;
 	}
 
-	public static MyFile getStudentsManulaExam(SolvedExam se) {
+	public static AesWordDoc getStudentsManulaExam(SolvedExam se) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetStudentsManualExam",se);
 				client.sendToServer(msg);
-				return (MyFile) client.getResponseFromServer().getObj();
+				return (AesWordDoc) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
@@ -102,7 +102,7 @@ public class SolvedExamController {
 		if(!client.isConnected()) 
 			return false;
 		try {
-			MyFile studentsFile = new MyFile(solvedExam.examIdToString()+"StudentsFile.doc");
+			AesWordDoc studentsFile = new AesWordDoc(solvedExam.examIdToString()+"StudentsFile.doc");
 		  
 			File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+studentsFile.getFileName());
 			studentsFile.setSize((int) examFile.length());
@@ -115,7 +115,7 @@ public class SolvedExamController {
 			try {
 				iMessage msg = new iMessage("yourExamFile", studentsFile);
 				Object[] o=new Object[2];	
-				o[0]=(MyFile)studentsFile;
+				o[0]=(AesWordDoc)studentsFile;
 				o[1]=(SolvedExam)solvedExam;
 				client.sendToServer(new iMessage("UploadSolvedExam",o));
 			} catch (IOException e) {

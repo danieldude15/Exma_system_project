@@ -44,7 +44,7 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
-	private  HashMap<SolvedExam,MyFile> solvedExamWordFiles;
+	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
@@ -568,7 +568,7 @@ public class AESServer extends AbstractServer {
 
 		// if the directory does not exist, create it
 		if (examFile.exists()) {
-			MyFile myExamFileDes = new MyFile(filePath);
+			AesWordDoc myExamFileDes = new AesWordDoc(filePath);
 			myExamFileDes.setSize((int) examFile.length());
 			myExamFileDes.initArray((int) examFile.length());
 			
@@ -874,7 +874,7 @@ public class AESServer extends AbstractServer {
 
 	private void createManualExam(ConnectionToClient client, Object o) throws IOException {
 		ActiveExam ae = (ActiveExam)o;
-		MyFile myExamFileDes = new MyFile(ae.examIdToString()+".doc");
+		AesWordDoc myExamFileDes = new AesWordDoc(ae.examIdToString()+".doc");
 		myExamFileDes.CreateWordFile(ae, examFilesPath+"\\"+ae.examIdToString()+".doc");
 		
 		File examFile = new File(examFilesPath+"\\"+ae.examIdToString()+".doc");
@@ -963,7 +963,7 @@ public class AESServer extends AbstractServer {
 		System.out.println("Student Uploaded Solved Exam");
 		Object[] o=(Object[])obj;
 		
-		MyFile file=(MyFile) o[0];
+		AesWordDoc file=(AesWordDoc) o[0];
 		SolvedExam solvedExam=(SolvedExam) o[1];
 		String savePath = studentsExamsPath+"/"+solvedExam.getStudent().getID();
 		File theDir = new File(savePath);

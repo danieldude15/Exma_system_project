@@ -182,7 +182,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML public void StudentPressedDownloadButton(ActionEvent event) throws IOException
 	{	
 		//getting the File from server
-		MyFile recievedFile = ActiveExamController.GetManualExam(activeExam);		
+		AesWordDoc recievedFile = ActiveExamController.GetManualExam(activeExam);		
 		
 		//saving it in the desktop
 		File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+activeExam.examIdToString()+"StudentsFile.doc");

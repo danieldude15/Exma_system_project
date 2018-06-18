@@ -26,7 +26,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import logic.Globals;
-import logic.MyFile;
+import logic.AesWordDoc;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
@@ -185,7 +185,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 	}
 	
 	@FXML public void DownloadStudentsExam(ActionEvent event) {
-		MyFile recievedFile = SolvedExamController.getStudentsManulaExam(solvedExam);		
+		AesWordDoc recievedFile = SolvedExamController.getStudentsManulaExam(solvedExam);		
 		
 		//saving it in the desktop
 		File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+solvedExam.examIdToString()+"TeacherCheck.doc");

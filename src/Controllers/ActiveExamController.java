@@ -90,14 +90,14 @@ public class ActiveExamController {
 	}
 	
 	
-	public static MyFile GetManualExam(ActiveExam activeExam)
+	public static AesWordDoc GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				return (MyFile) client.getResponseFromServer().getObj();
+				return (AesWordDoc) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();

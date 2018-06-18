@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MyFile implements Serializable {
+public class AesWordDoc implements Serializable {
 	
 	private String examId=null;
 	private String fileName=null;	
@@ -19,7 +19,7 @@ public class MyFile implements Serializable {
 		mybytearray = new byte [size];	
 	}
 	
-	public MyFile( String pathname) {
+	public AesWordDoc( String pathname) {
 		this.fileName = pathname; 
 	}
 	
@@ -62,7 +62,7 @@ public class MyFile implements Serializable {
 		examId = description;
 	}	
 	
-	public MyFile CreateWordFile(ActiveExam activeExam,String path) throws IOException
+	public AesWordDoc CreateWordFile(ActiveExam activeExam,String path) throws IOException
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 	    writer.write("\t\t"+activeExam.getExam().getCourse().getName()+"\n");
@@ -88,7 +88,7 @@ public class MyFile implements Serializable {
 		
 		
 		
-		return new MyFile(path);
+		return new AesWordDoc(path);
 	}
 }
 
