@@ -6,16 +6,15 @@ import java.io.IOException;
 
 public class ClientGlobals {
 	public static AESClient client = null;
+	public static boolean kill = false;
+	public static String[] initialArgs =null;
+	public static ClientFrame ClientConnectionController;
 	
 	/*
 	 * Screen Controllers ID's and Paths!
 	 */
-	public static final String ClientConnectionScreenPath = "/resources/fxml/ClientGui.fxml";
-	public static ClientFrame ClientConnectionController;
-
-	public static boolean kill = false;
-	
-	
+	public static final String ClientConnectionScreenID = "Client Configuration";
+	public static final String ClientConnectionScreenPath = "/resources/fxml/ClientGui.fxml";	
 	
 	public static final String LogInID = "Log-In";
 	public static final String LogInPath = "/resources/fxml/Login.fxml";
@@ -94,6 +93,7 @@ public class ClientGlobals {
 
 	public static final String TeacherCheckExamID = "Teacher Check Solved Exam";
 	public static final String TeacherManageExamPath = "/resources/fxml/TeacherCheckSolvedExam.fxml";
+
 
 
 	/*		Teacher Screens End		*/

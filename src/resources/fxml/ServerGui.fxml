@@ -13,12 +13,12 @@
    <children>
       <Button fx:id="StartListenBotton" layoutX="42.0" layoutY="173.0" mnemonicParsing="false" onAction="#StartListening" text="Start Server (Listen)" />
       <Button fx:id="closeConnectionBotton" layoutX="42.0" layoutY="202.0" mnemonicParsing="false" onAction="#closeConnectionsBotton" text="Kill Server" />
-      <Label layoutX="28.0" layoutY="214.0" prefHeight="78.0" prefWidth="235.0" text="ServerStatus:">
+      <Label layoutX="23.0" layoutY="228.0" prefHeight="78.0" prefWidth="235.0" text="ServerStatus:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="statusLabel" layoutX="182.0" layoutY="240.0" text="Status">
+      <Label fx:id="statusLabel" layoutX="182.0" layoutY="254.0" text="Status">
          <font>
             <Font size="18.0" />
          </font>
