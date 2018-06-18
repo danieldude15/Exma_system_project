@@ -105,7 +105,7 @@ public class User implements Serializable{
 	 * will print "ID: <id>  UserName:<userName> FullName:<name>
 	 */
 	@Override public String toString() {
-		return new String("ID:"+id+" UserName:"+userName+" FullName:"+name);
+		return new String("ID: " + id + " | User Name: " + userName + " | Full Name: " + name);
 	}
 	
 	/**

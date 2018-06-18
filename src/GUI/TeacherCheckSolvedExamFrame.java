@@ -1,39 +1,37 @@
 package GUI;
 
-import java.net.URL;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.ResourceBundle;
 
-import javax.lang.model.util.SimpleElementVisitor6;
+import javax.swing.filechooser.FileSystemView;
 
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextFlow;
 import logic.Globals;
+import logic.MyFile;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
 
-public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScreen {
+public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 
 	private SolvedExam solvedExam = null;
 	private HashMap<QuestionInExam, TextField> teacherNotesH = new HashMap<>();
@@ -48,11 +46,10 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 	@FXML Label studentName;
 	@FXML Label score;
 	@FXML Label timeCompleted;
-	@FXML ImageView doneImage;	
-	
-	@Override public void initialize(URL location, ResourceBundle resources) {
-
-	}
+	@FXML ImageView doneImage;
+	@FXML Button DownloadB;
+	@FXML Label manualLabel;
+	@FXML Button approveB;
 
 	@Override public void runOnScreenChange() {
 		questionsView.getChildren().clear();
@@ -64,21 +61,30 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		score.setText(Integer.toString(solvedExam.getScore()));
 		newScore.setDisable(false);
 		changeNote.setDisable(false);
-		timeCompleted.setText(solvedExam.getCompletedTimeInMinutes() + " Min");
+		timeCompleted.setText(solvedExam.getCompletedTimeInMinutes() + " Minutes");
 		doneImage.setVisible(false);
+		if (solvedExam!=null) {
+			approveB.setVisible(true);
+			if (solvedExam.getType()==1) {
+				manualLabel.setVisible(false);
+				DownloadB.setVisible(false);
+				for(QuestionInExam q : solvedExam.getQuestionsInExam()) 
+					questionsView.getChildren().add(questionAdder(q,solvedExam.getStudentsAnswers()));
+			} else {
+				manualLabel.setVisible(true);
+				DownloadB.setVisible(true);
+			}
+		} else 
+			backButton(null);
 		if (solvedExam.isTeacherApproved()) {
 			newScore.setText(Integer.toString(solvedExam.getScore()));
 			newScore.setDisable(true);
 			changeNote.setText(solvedExam.getTeachersScoreChangeNote());
 			changeNote.setDisable(true);
 			doneImage.setVisible(true);
+			approveB.setVisible(false);
 		}
-		if (solvedExam!=null) {
-			for(QuestionInExam q : solvedExam.getQuestionsInExam()) {
-				questionsView.getChildren().add(questionAdder(q,solvedExam.getStudentsAnswers()));
-			}
-		} else 
-			backButton(null);
+		
 	}
 
 	@FXML public void testDigitOnly(KeyEvent keyEvent) {
@@ -122,7 +128,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		questionInfo.getChildren().add(qid);
 		questionInfo.getChildren().add(questionString);
 		RadioButton answers[] = new RadioButton[] {new RadioButton(q.getAnswer(1)),new RadioButton(q.getAnswer(2)),new RadioButton(q.getAnswer(3)),new RadioButton(q.getAnswer(4))};
-		if(answersHash.get(q)!=null)
+		if(answersHash.get(q)!=null && answersHash.get(q)!=0)
 			answers[answersHash.get(q)-1].setSelected(true);
 		for(RadioButton r:answers) {
 			r.setDisable(true);
@@ -178,6 +184,24 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
 	
+	@FXML public void DownloadStudentsExam(ActionEvent event) {
+		MyFile recievedFile = SolvedExamController.getStudentsManulaExam(solvedExam);		
+		
+		//saving it in the desktop
+		File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+solvedExam.examIdToString()+"TeacherCheck.doc");
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(examFile);
+			fos.write(recievedFile.getMybytearray());
+			fos.close();
+			Globals.popUp(AlertType.INFORMATION,"Download "+solvedExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and check it.");
+		} catch (IOException e) {
+			System.err.println("Could not write to file:"+examFile.getPath());
+			e.printStackTrace();
+		}
+
+	}
+	
 	@FXML public void submitButton(ActionEvent event) {
 		if (!newScore.getText().equals("") && changeNote.getText().equals("")) {
 			noteErrorLabel.setVisible(true);
@@ -195,11 +219,7 @@ public class TeacherCheckSolvedExamFrame implements Initializable, ControlledScr
 			solvedExam.setTeacherApproved(true);
 			if (SolvedExamController.updateSolvedExam(solvedExam)>0) {
 				//successfull insertion
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Exam Check Is Updated Successfully");
-				alert.setHeaderText(null);
-				alert.setContentText("The exam was updated into the system.");
-				alert.showAndWait();
+				Globals.popUp(AlertType.INFORMATION,"Exam Check Is Updated Successfully","The exam was updated into the system.");
 				doneImage.setVisible(true);
 				score.setText(Integer.toString(solvedExam.getScore()));
 			} else {

@@ -13,6 +13,29 @@ import java.util.ArrayList;
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
 
+	/**
+	 * Method returns all courses registered in database
+	 * @return
+	 */
+	public static ArrayList<Course> getAllCourses(){
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getAllCourses",null);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Course>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method returns all Fields registered in database
+	 * @return ArrayList<Field> - array list containing all fields registered
+	 */
 	public static ArrayList<Field> getAllFields(){
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -141,20 +164,6 @@ public class CourseFieldController {
 				ClientGlobals.handleIOException(e);
 			}
 		}
-		return null;
-	}
-
-	public static ArrayList<Course> getAllCourses() {
-		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
-			iMessage msg= new iMessage("getAllCourses",null);
-			try {
-				client.sendToServer(msg);
-				return (ArrayList<Course>) client.getResponseFromServer().getObj();
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-			}
-		} 
 		return null;
 	}
 }

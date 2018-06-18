@@ -12,8 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,9 +25,7 @@ import logic.Globals;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 
 public class TeacherMainFrame implements ControlledScreen {
@@ -84,11 +80,7 @@ public class TeacherMainFrame implements ControlledScreen {
 		ActiveExam selected = ActiveExamsList.getSelectionModel().getSelectedItem();
 		if (selected!=null) {
 			ActiveExamController.lockExam(selected);
-			Alert alert = new Alert(AlertType.INFORMATION);
-    		alert.setTitle("Locked Active Exam");
-			alert.setHeaderText("");
-    		alert.setContentText("this may take some time for all the students that \nare still in the exam to send their exam to the system.\nIn 10 seconds the list of active and completed exams will refresh and you will be able to check the active exam that you locked");
-    		alert.show();
+			Globals.popUp(AlertType.INFORMATION,"Locked Active Exam","this may take some time for all the students that \nare still in the exam to send their exam to the system.\nIn 10 seconds the list of active and completed exams will refresh and you will be able to check the active exam that you locked");
     		Timeline timeline = new Timeline();
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.getKeyFrames().add(
@@ -105,24 +97,25 @@ public class TeacherMainFrame implements ControlledScreen {
             timeline.playFromStart();
     		
 		} else {
-			Alert alert = new Alert(AlertType.ERROR);
-    		alert.setTitle("No Active Exam Selected");
-			alert.setHeaderText("");
-    		alert.setContentText("You must select an Active Exam from the list to lock an Active Exam");
-    		alert.show();
+			Globals.popUp(AlertType.ERROR,"No Active Exam Selected","You must select an Active Exam from the list to lock an Active Exam");
 		}
 	}
 	
 	@FXML public void requestTimeChangeClicked(ActionEvent event) {
-		if(ActiveExamsList.getSelectionModel().getSelectedItem()!=null)
-		{ ((TeacherTimeChangeRequest)Globals.mainContainer.getController(ClientGlobals.TeacherTimeChangeRequestID)).SetActiveExam((ActiveExam) ActiveExamsList.getSelectionModel().getSelectedItem());
-		Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
+		if(ActiveExamsList.getSelectionModel().getSelectedItem()!=null) { 
+			((TeacherTimeChangeRequest)Globals.mainContainer.getController(ClientGlobals.TeacherTimeChangeRequestID)).SetActiveExam((ActiveExam) ActiveExamsList.getSelectionModel().getSelectedItem());
+			Globals.mainContainer.setScreen(ClientGlobals.TeacherTimeChangeRequestID);
+		} else {
+			Globals.popUp(AlertType.ERROR,"No Active Exam Selected","You must select an Active Exam from the list to make a request for it");
 		}
 	}
 	
 	@FXML public void goToCheckExams(ActionEvent event) {
 		ExamReport selectedExam = CompletedExamList.getSelectionModel().getSelectedItem();
-		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) return;
+		if(CompletedExamList.getSelectionModel().getSelectedItem()==null) {
+			Globals.popUp(AlertType.ERROR,"No Exam Selected","You must select an Exam from the list if you want to check its solved exams");
+			return;
+		}
 		TeacherCheckExams teacherCheckExams = (TeacherCheckExams) Globals.mainContainer.getController(ClientGlobals.TeacherCheckExamsID);
 		teacherCheckExams.setCompletedExams(selectedExam);
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);

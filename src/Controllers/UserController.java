@@ -1,12 +1,15 @@
 package Controllers;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import logic.*;
-import ocsf.client.ClientGlobals;
-
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javafx.scene.control.Alert.AlertType;
+import logic.Course;
+import logic.Globals;
+import logic.Student;
+import logic.User;
+import logic.iMessage;
+import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
 public class UserController {
@@ -19,7 +22,6 @@ public class UserController {
 			iMessage message = ClientGlobals.client.getResponseFromServer();
 			String usertype = message.getCommand();
 			u = (User)message.getObj();
-			Alert alert;
 			switch (usertype) {
 			case "Student":
 				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
@@ -31,18 +33,10 @@ public class UserController {
 				Globals.mainContainer.setScreen(ClientGlobals.PrincipalMainID);
 				break;
 			case "AlreadyLoggedIn":
-				alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Failed to Log-In");
-				alert.setHeaderText(null);
-				alert.setContentText("You Are Already Logged In From Another Computer!\n Please LogOut And Then Try Again.");
-				alert.showAndWait();
+				Globals.popUp(AlertType.INFORMATION, "Failed to Log-In", "You Are Already Logged In From Another Computer!\n Please LogOut And Then Try Again.");
 				break;
 			case "failedAuth":
-				alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Failed to Log-In");
-				alert.setHeaderText(null);
-				alert.setContentText("UserName or Password are incorrect.");
-				alert.showAndWait();
+				Globals.popUp(AlertType.INFORMATION,"Failed to Log-In","UserName or Password are incorrect.");
 				break;
 			}
 		} catch (IOException e) {

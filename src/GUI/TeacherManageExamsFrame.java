@@ -28,9 +28,6 @@ import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 public class TeacherManageExamsFrame implements ControlledScreen {
-	enum windowType {
-		EDIT,Build
-	}
 	
 	HashMap<String,Exam> exams = new HashMap<>();
 	ArrayList<Field> teachersFields;
@@ -104,8 +101,8 @@ public class TeacherManageExamsFrame implements ControlledScreen {
         	{
            Exam exam = exams.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
-           teachersCourses.remove(0);
-           teachersFields.remove(0);
+         //  teachersCourses.remove(0);
+          // teachersFields.remove(0);
            
            ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setType((TeacherBuildNewExam.windowType.EDIT));
            ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setExam(exam);
@@ -126,23 +123,16 @@ public class TeacherManageExamsFrame implements ControlledScreen {
 				Exam exam = exams.get(((Control)evt.getSource()).getId());
 	        	int effectedRows = ExamController.deleteExam(exam);
 	        	if(effectedRows>0) {
-	        		alert = new Alert(AlertType.INFORMATION);
-	        		alert.setTitle("Exam Deleted Succesfully");
-	    			alert.setHeaderText("");
-	        		alert.setContentText("Exam Info:"
+	        		Globals.popUp(AlertType.INFORMATION,"Exam Deleted Succesfully","Exam Info:"
 	        				+ "\n" + exam +""
     						+ "\n\n Was deleted Successfully");
-	        		alert.show();
 	        		runOnScreenChange();
 	        		System.out.println("Question Deleted!");
+	        		return;
 	        	} else {
-	        		alert = new Alert(AlertType.ERROR);
-	        		alert.setTitle("Deletion Error");
-	    			alert.setHeaderText(null);
-	        		alert.setContentText("Could not delete Exam\n"
+	        		Globals.popUp(AlertType.ERROR,"Deletion Error","Could not delete Exam\n"
 	        				+ "This Exam is already in Use in an existing Solved Exam / Completed Exam.\n"
 	        				+ "you may not delete Exams that other people are relaying on. ");
-	        		alert.show();
 	        	}
 			} else {
 			    System.out.println("user chose CANCEL or closed the dialog");

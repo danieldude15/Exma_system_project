@@ -103,7 +103,7 @@
  * when every screens comes up so we can have an id of all panes to be editable in css file 
  */
 #pane{
-    -fx-background-image: url("/resources/darkBG.jpg");
+    -fx-background-image: url("/resources/Abstract-Light-Dark.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: top left;
@@ -111,7 +111,11 @@
 }
 
 #blackLabel , #blackLabel:disabled {
-	-fx-text-fill:black;
+	-fx-text-fill:black!important;
+	-fx-opacity: 1.0;
+}
+#whiteLabel , #blackLabel:disabled {
+	-fx-text-fill:white;
 	-fx-opacity: 1.0;
 }
 #redLabel , #redLabel:disabled {

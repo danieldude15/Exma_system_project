@@ -3,7 +3,7 @@ package ocsf.server;
 import java.sql.SQLException;
 
 public class ServerGlobals {
-	public static final String ServerGuiID = "ServerGui";
+	public static final String ServerGuiID = "Server Configuration";
 	public static final String ServerGuiPath = "/resources/fxml/ServerGui.fxml";
 	public static AESServer server = null;
 	

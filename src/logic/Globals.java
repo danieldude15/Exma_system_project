@@ -1,6 +1,8 @@
 package logic;
 
 import GUI.ScreensController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 /**
@@ -9,6 +11,7 @@ import javafx.stage.Stage;
  *
  */
 public class Globals {
+		
 	public static final String ProgressIndicatorID = "progressIndicator";
 	public static final String ProgressIndicatorPath = "/resources/fxml/progressIndicator.fxml";
 	/**
@@ -33,8 +36,16 @@ public class Globals {
 	 * @param e the exception thrown
 	 */
 	public static void handleException(Exception e) {
-		
 		e.printStackTrace();
 		System.exit(1);
+	}
+	
+	public static void popUp(AlertType type, String title,String contentText)
+	{
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(contentText);
+		alert.show();
 	}
 }

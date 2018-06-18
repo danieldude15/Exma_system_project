@@ -1,11 +1,13 @@
 package GUI;
 
+import static ocsf.client.ClientGlobals.PrincipalViewDataID;
+
+import java.util.ArrayList;
+
 import Controllers.ControlledScreen;
 import Controllers.TimeChangeController;
 import Controllers.UserController;
 import javafx.animation.KeyFrame;
-import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,20 +15,19 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import logic.Globals;
 import logic.Principle;
 import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
-
-import java.sql.Time;
-import java.util.ArrayList;
-
-
-import static ocsf.client.ClientGlobals.PrincipalViewDataID;
 
 /**
  * Frame manages Main Menu Gui window of Principal
@@ -71,11 +72,7 @@ public class PrincipalMainFrame implements ControlledScreen {
 	                    public void handle(Event event) {
 	                    	if (newRequestArrived) {
 	                    		newRequestArrived=false;
-	                    		Alert alert = new Alert(AlertType.INFORMATION);
-	                			alert.setTitle("New Time Change Request");
-	                			alert.setHeaderText(null);
-	                			alert.setContentText("A teacher has submitted a new Time Change request for an Active Exam. Please go and handle it!");
-	                			alert.show();
+	                    		Globals.popUp(AlertType.INFORMATION,"New Time Change Request","A teacher has submitted a new Time Change request for an Active Exam. Please go and handle it!");
 	                			refreshRequestListView();
 	                    	}
 	                    }

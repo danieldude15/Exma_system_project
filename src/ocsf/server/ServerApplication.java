@@ -19,7 +19,7 @@ public class ServerApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Globals.mainContainer = new ScreensController();
-		Globals.primaryStage = new Stage();
+		Globals.primaryStage = primaryStage;
         if(!Globals.mainContainer.loadScreen(ServerGlobals.ServerGuiID, ServerGlobals.ServerGuiPath)) {
         	System.out.println("failed to load "+ ServerGlobals.ServerGuiID);
         }

@@ -30,7 +30,13 @@ public class ServerFrame implements ControlledScreen,Initializable {
 
 
 	@Override public void runOnScreenChange() {
-		StartListening(null);
+		StartListenBotton.setDisable(false);
+		closeConnectionBotton.setDisable(true);
+		try {
+			//StartListening(null);
+		} catch (Exception e) {
+			System.out.println("Could not Connect to Server");
+		}
 	}
 	
 	@FXML public void StartListening(ActionEvent event) {
@@ -44,6 +50,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 		try {
 			//disconnectUsers(null);
 			ServerGlobals.server.listen();
+			closeConnectionBotton.setDisable(false);
 			statusLabel.setText("Listening!!");
 			statusLabel.setTextFill(javafx.scene.paint.Paint.valueOf("#00FF00"));
 			StartListenBotton.setDisable(true);

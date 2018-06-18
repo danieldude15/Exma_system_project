@@ -45,24 +45,26 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 		HBox answerAndv_xIcon=new HBox(); //here we gonna put the answer RadioButton together with v or x icon.
 		answerAndv_xIcon.setSpacing(20);
 		
-		if(qie.getStudentNote()!=null)//If question contains note for student, we add it at the top of the question.
+		questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
+		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
+		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
+
+
+		if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for student, we add it at the top of the question.
 		{
 			Label questionNoteforstudent=new Label();
 			questionNoteforstudent.setText("Note for student: "+qie.getStudentNote());
 			questionNoteforstudent.setId("blackLabel");
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforstudent);
 		}
-		if(qie.getInnerNote()!=null)//If question contains note for teacher, we add it at the top of the question.
+		if(qie.getStudentNote() != null && !qie.getStudentNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
 		{
 			Label questionNoteforteacher=new Label();
 			questionNoteforteacher.setText("Note for teacher: "+qie.getStudentNote());
 			questionNoteforteacher.setId("blackLabel");
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforteacher);
 		}
-		questionStringAndPointsValue.setText(Integer.toString(questionIndex)+". "+qie.getQuestionString()+" ("+Integer.toString(qie.getPointsValue())+" Points"+")" );
-		answers=new RadioButton[] {new RadioButton(qie.getAnswer(1)),new RadioButton(qie.getAnswer(2)),new RadioButton(qie.getAnswer(3)),new RadioButton(qie.getAnswer(4))};
-		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
-
+		
 		/*Set each of the 4 answers RadioButton of the question on window screen./*/
 		for(RadioButton r:answers)
 		{
@@ -75,6 +77,7 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 			r.setId("blackLabel");
             questionInfo_StudentScoreAndNote.getChildren().add(r);
 			
+            
 		
 		}
 

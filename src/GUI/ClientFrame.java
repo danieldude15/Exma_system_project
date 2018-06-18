@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import logic.Globals;
 import logic.iMessage;
 import ocsf.client.AESClient;
+import ocsf.client.ClientApplication;
 import ocsf.client.ClientGlobals;
 
 import java.io.BufferedWriter;
@@ -20,7 +21,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientFrame implements Initializable {
+import Controllers.ControlledScreen;
+
+public class ClientFrame implements ControlledScreen ,Initializable {
 	
 	@FXML TextField hostval;
 	@FXML TextField portval;
@@ -34,8 +37,7 @@ public class ClientFrame implements Initializable {
 		ClientGlobals.ClientConnectionController = this; 
 	}
 
-	@FXML
-	public void DisconnectFromServer(ActionEvent event) {
+	@FXML public void DisconnectFromServer(ActionEvent event) {
 		try {
 			if (event!=null)ClientGlobals.client.closeConnection();
 			ClientGlobals.client=null;
@@ -51,8 +53,7 @@ public class ClientFrame implements Initializable {
 		}
 	}
 	
-	@FXML
-	public void ConnectToServer(ActionEvent event) {
+	@FXML public void ConnectToServer(ActionEvent event) {
 		ClientGlobals.client = new AESClient(hostval.getText(), Integer.parseInt(portval.getText()));
 		try {
 			ClientGlobals.client.openConnection();
@@ -67,129 +68,9 @@ public class ClientFrame implements Initializable {
 		}
 	}
 	
-	@FXML
-	public void LaunchApp(ActionEvent event) {
-		Stage primaryStage = new Stage();
-		Globals.mainContainer = new ScreensController();
-		Globals.primaryStage = primaryStage;
-		ScreensController mainContainer = Globals.mainContainer;
-		if (!mainContainer.loadScreen(ClientGlobals.LogInID, ClientGlobals.LogInPath)) {
-        	System.out.println("failed to load "+ ClientGlobals.LogInID);
-        	return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherBuildNewExamID, ClientGlobals.TeacherBuildNewExamPath)) {
-        	System.out.println("failed to load "+ ClientGlobals.TeacherBuildNewExamID);
-        	return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherMainID, ClientGlobals.TeacherMainPath)) {
-        	System.out.println("failed to load "+ ClientGlobals.TeacherMainID);
-        	return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherManageQuestionsID, ClientGlobals.TeacherManageQuestionsPath)) {
-        	System.out.println("failed to load "+ ClientGlobals.TeacherManageQuestionsID);
-        	return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherEditAddQuestionID, ClientGlobals.TeacherEditAddQuestionPath)) {
-        	System.out.println("failed to load "+ ClientGlobals.TeacherEditAddQuestionID);
-        	return;
-        }
-        if(!mainContainer.loadScreen(ClientGlobals.PrincipalMainID,ClientGlobals.PrincipalMainPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalMainID);
-			return;
-		}
-        if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewReportID,ClientGlobals.PrincipalViewReportPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewReportID);
-			return;
-		}
-        if(!mainContainer.loadScreen(Globals.ProgressIndicatorID,Globals.ProgressIndicatorPath)) {
-			System.out.println("failed to load " + Globals.ProgressIndicatorID);
-			return;
-		}
-		if(!mainContainer.loadScreen(ClientGlobals.PrincipalReportsID,ClientGlobals.PrincipalReportsPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalReportsID);
-			return;
-		}
-		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewDataID,ClientGlobals.PrincipalViewDataPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewDataID);
-			return;
-		}
-		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewQuestionID,ClientGlobals.PrincipalViewQuestionPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewQuestionID);
-			return;
-		}
-		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewExamID,ClientGlobals.PrincipalViewExamPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewExamID);
-			return;
-		}
-        if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewFieldID,ClientGlobals.PrincipalViewFieldPath)) {
-            System.out.println("failed to load " + ClientGlobals.PrincipalViewFieldID);
-            return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.StudentMainID, ClientGlobals.StudentMainPath)) {
-			System.out.println("failed to load "+ ClientGlobals.StudentMainID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamID, ClientGlobals.TeacherManageExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherCheckExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherManageExamsID, ClientGlobals.TeacherManageExamsPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherManageExamsID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherTimeChangeRequestID, ClientGlobals.TeacherTimeChangeRequestPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherTimeChangeRequestID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.StudentStartExamID, ClientGlobals.StudentStartExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.StudentStartExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.StudentViewExamID, ClientGlobals.StudentViewExamPath)) {
-				System.out.println("failed to load "+ ClientGlobals.StudentViewExamID);
-				return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.StudentSolvesExamID, ClientGlobals.StudentSolvesExamPath)) {
-				System.out.println("failed to load "+ ClientGlobals.StudentSolvesExamID);
-				return;
-        }
-		if (!mainContainer.loadScreen(ClientGlobals.InitializeExamID, ClientGlobals.InitializeExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.InitializeExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.ActiveExamID, ClientGlobals.ActiveExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.ActiveExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherViewExamID, ClientGlobals.TeacherViewExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherViewExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamsID, ClientGlobals.TeacherCheckExamsPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherCheckExamsID);
-			return;
-		}
-		
-		mainContainer.setScreen(ClientGlobals.LogInID);
-		
-		AnchorPane root = new AnchorPane();
-		root.getChildren().addAll(mainContainer);
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest(closeUpdate ->
-	    {
-	        try {
-				if(ClientGlobals.client!=null) {
-					ClientGlobals.kill=true;
-					if (ClientGlobals.client.getUser()!=null)
-						ClientGlobals.client.sendToServer(new iMessage("disconnect",ClientGlobals.client.getUser()));
-					System.exit(0);
-				}
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-			}
-	    });
-        primaryStage.show();
+	@FXML public void LaunchApp(ActionEvent event) {
+		if(ClientGlobals.client!=null && ClientGlobals.client.isConnected())
+			Globals.mainContainer.setScreen(ClientGlobals.LogInID);
 	}
 	
 	/**
@@ -225,5 +106,11 @@ public class ClientFrame implements Initializable {
             // Or we could just do this:
             // ex.printStackTrace();
         }
+	}
+
+	@Override
+	public void runOnScreenChange() {
+		// TODO Auto-generated method stub
+		
 	}
 }

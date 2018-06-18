@@ -134,12 +134,6 @@ public class ScreensController  extends StackPane {
                     public void handle(ActionEvent t) {
                         getChildren().remove(0);                    //remove the displayed screen
                         getChildren().add(0, screens.get(name));     //add the screen
-                        if(screens.get(name) instanceof javafx.scene.layout.Region) {
-                        	double width = ((javafx.scene.layout.Region)screens.get(name)).getPrefWidth();
-                        	double height = ((javafx.scene.layout.Region)screens.get(name)).getPrefHeight();
-                        	Globals.primaryStage.setHeight(height+30);
-                    		Globals.primaryStage.setWidth(width+20);
-                        }
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                                 new KeyFrame(new Duration(400), new KeyValue(opacity, 1.0)));
@@ -157,6 +151,13 @@ public class ScreensController  extends StackPane {
                 fadeIn.play();
             }
             currentScreen=name;
+            Globals.primaryStage.setTitle(name);
+            if(screens.get(name) instanceof javafx.scene.layout.Region) {
+            	double width = ((javafx.scene.layout.Region)screens.get(name)).getPrefWidth();
+            	double height = ((javafx.scene.layout.Region)screens.get(name)).getPrefHeight();
+            	Globals.primaryStage.setHeight(height+30);
+        		Globals.primaryStage.setWidth(width+20);
+            }
             return true;
         } else {
             System.out.println("screen hasn't been loaded!!! \n");

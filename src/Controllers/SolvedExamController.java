@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.filechooser.FileSystemView;
 /**
  *  This controller is responsible for all information that has to do with solved exams
  *  it has functionality such as adding/editing solved exams also getting solved exams for informational purpeses.
@@ -64,6 +66,20 @@ public class SolvedExamController {
 		return null;
 	}
 
+	public static MyFile getStudentsManulaExam(SolvedExam se) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			try {
+				iMessage msg= new iMessage("GetStudentsManualExam",se);
+				client.sendToServer(msg);
+				return (MyFile) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 
 	public static int updateSolvedExam(SolvedExam solvedExam) {
 		AESClient client = ClientGlobals.client;
@@ -79,40 +95,40 @@ public class SolvedExamController {
 		return 0;
 	}
 	
-	public static void UploadFile(SolvedExam solvedExam, AesWordDoc retFile)
+
+	public static boolean UploadFile(SolvedExam solvedExam)
 	{
-		String name=solvedExam.getCourse().getName();
-		
-		
-		//AesWordDoc retFile= new AesWordDoc(name+".docx");
-		
-		
-		
 		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
+		if(!client.isConnected()) 
+			return false;
+		try {
+			MyFile studentsFile = new MyFile(solvedExam.examIdToString()+"StudentsFile.doc");
+		  
+			File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+studentsFile.getFileName());
+			studentsFile.setSize((int) examFile.length());
+			studentsFile.initArray((int) examFile.length());
+								
+			FileInputStream fis = new FileInputStream(examFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
 			
-			try{
-		      File file = new File (retFile.getFileName());     
-		      byte [] bytes  = new byte [(int)file.length()];
-		      FileInputStream fileInputStream = new FileInputStream(file);
-		      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
-		      retFile.initArray(bytes.length);
-		      retFile.setSize(bytes.length);
-		      bufferInputStream.read(retFile.getbytes(),0,bytes.length);
-				  
-						
-			      Object[] o=new Object[2];
-			      o[0]=(AesWordDoc)retFile;
-			      o[1]=(SolvedExam)solvedExam;
-			
+			bis.read(studentsFile.getMybytearray(),0,(int) examFile.length());
+			try {
+				iMessage msg = new iMessage("yourExamFile", studentsFile);
+				Object[] o=new Object[2];	
+				o[0]=(MyFile)studentsFile;
+				o[1]=(SolvedExam)solvedExam;
 				client.sendToServer(new iMessage("UploadSolvedExam",o));
-				//client.getResponseFromServer();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
 				e.printStackTrace();
+				return false;
 			}
+		} catch (IOException e) {
+			System.err.println("Could not read from file");
+			e.printStackTrace();
+			return false;
 		} 
-		
+		return true;
 	}
 	/**
 	 * Send message to the server when the student finished his exam.
@@ -138,25 +154,4 @@ public class SolvedExamController {
 			}
 		} 
 	}
-
-	/*
-	public static Object[] SystemCheckExam(ActiveExam activeExam,boolean inTime,HashMap<QuestionInExam,ToggleGroup> questionWithAnswers)
-	{
-		Object[] o=new Object[3];
-		o[0]=(ActiveExam)activeExam;
-		o[1]=(boolean)inTime;
-		o[2]=(HashMap<QuestionInExam,ToggleGroup>)questionWithAnswers;
-		AESClient client = ClientGlobals.client;
-		if(client.isConnected()) {
-			try {
-				client.sendToServer(new iMessage("SystemCheckExam",o));
-				return (Object[])client.getResponseFromServer().getObj();
-			} catch (IOException e) {
-				ClientGlobals.handleIOException(e);
-				e.printStackTrace();
-			}
-		} 
-		return null;
-	}
-	/*/
 }

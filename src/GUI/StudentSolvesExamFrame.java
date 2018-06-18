@@ -19,12 +19,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import logic.*;
 import ocsf.client.ClientGlobals;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+
+import javax.swing.filechooser.FileSystemView;
 
 @SuppressWarnings("unchecked")
 public class StudentSolvesExamFrame implements ControlledScreen{
@@ -46,12 +49,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final String blackLabel=new String("blackLabel");
 	
 	private final Image v = new Image("resources/GoodLuck.jpg");
-	private final Background blackBackground = new Background( new BackgroundFill( Color.web( "#000000" ), CornerRadii.EMPTY, Insets.EMPTY ) );
-    private final Background unfocusBackground = new Background( new BackgroundFill( Color.web( "#F4F4F4" ), CornerRadii.EMPTY, Insets.EMPTY ) );
     private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
-	@Override
-	public void runOnScreenChange() {		
+	@Override public void runOnScreenChange() {		
 		
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
@@ -153,8 +153,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @throws IOException
 	 */
 	private void SetDownloadButtonOnScreen() {
-		// TODO Auto-generated method stub
-		//submitButton.setDisable(true);
 		downloadButton.setVisible(true);
 		downloadButton.setDisable(false);
 		VBox manuelExamStringVBox=new VBox();
@@ -181,18 +179,18 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @param event
 	 * @throws IOException
 	 */
-	public void StudentPressedDownloadButton(ActionEvent event) throws IOException
-	{
+	@FXML public void StudentPressedDownloadButton(ActionEvent event) throws IOException
+	{	
+		//getting the File from server
+		MyFile recievedFile = ActiveExamController.GetManualExam(activeExam);		
 		
-		/*Open save dialog for the student where he can choose where to save the exam on his computer./*/
-		//AesWordDoc wordClass=new AesWordDoc();
-		//wordClass.OpenSaveFileDialog(this.GetActiveExam());
-
+		//saving it in the desktop
+		File examFile = new File(FileSystemView.getFileSystemView().getHomeDirectory()+"/"+activeExam.examIdToString()+"StudentsFile.doc");
+		FileOutputStream fos = new FileOutputStream(examFile);
+		fos.write(recievedFile.getMybytearray());
+		fos.close();
 		
-		ActiveExamController.GetManualExam(activeExam);		
-		String popUpTitle="Download "+activeExam.getCourse().getName()+" Succeed";
-		String popUpContentText="The exam is on your desktop, You can open it and start solving!";
-	    PopUp(popUpTitle,popUpContentText);
+	    Globals.popUp(AlertType.INFORMATION,"Download "+activeExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and start solving!");
 		submitButton.setDisable(false);
 		downloadButton.setDisable(true);
 
@@ -222,7 +220,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * Submit process(in case that the student has submitted on time).
 	 * @param event
 	 */
-	public void StudentPressedSubmitButton(ActionEvent event)
+	@FXML public void StudentPressedSubmitButton(ActionEvent event)
 	{	
 		submitStudentsExam(true);
 	}
@@ -243,27 +241,21 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	 * @param inTime 
 	 * @return SolvedExam
 	 */
-	private SolvedExam BuildSolvedExamObject(boolean inTime)
-	{
+	private SolvedExam BuildSolvedExamObject(boolean inTime) {
 	
 		Object[] studentAnsersAndScoreForExam=SystemCheckExam(inTime);
-		//Object[] studentAnsersAndScoreForExam=SolvedExamController.SystemCheckExam(activeExam, inTime, questionWithAnswers);
 		HashMap<QuestionInExam,Integer> studentAnswers=(HashMap<QuestionInExam, Integer>) studentAnsersAndScoreForExam[0];
 		int score=(int) studentAnsersAndScoreForExam[1];
 			
 		boolean teacherApproved=false;
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
 		String teachersScoreChangeNote=null;
-		int CompletedTimeInMinutes=0;//need to take care of it with the timer.
+		int CompletedTimeInMinutes=(int) ((activeExam.getDuration()*60-timeSeconds)/60);
 		SolvedExam sendToGenerateReport=new SolvedExam(score, teacherApproved, studentAnswers,
 				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),activeExam.getExam());
 
 		return sendToGenerateReport;
 	}
-	
-	
-
-
 
 	/**
 	* Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
@@ -307,7 +299,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 				{
 					studentAnswers.put(qie, 0);
 				}
-				score=-1;
+				score=0;
 			}
 		}
 		else//Student did not have time to submit his exam.
@@ -332,70 +324,52 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		return studentAnsersAndScoreForExam;
 	}
 
-
-
-
-
 	/**
 	 * When student press submit he gets a confirmation dialog and can press ok for submit,
 	 *  or cancel to go back to the exam.
 	 * @param inTime 
 	 * @param SolvedExam
 	 */
-	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime)
-	{
-		AesWordDoc wordClass=new AesWordDoc();
-		if(inTime)//Student Submit his exam on time.
-		{
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Confirmation");
-			alert.setHeaderText("SubmitExam");
-			alert.setContentText("Are you sure you want to submit?");
-			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK)//User choose ok for submit.
-			{
-				if(activeExam.getType()==0)//Exam is manual
-				{
-					//String name =wordClass.OpenUploadWordFileDialog();
-					
-					AesWordDoc doc=wordClass.OpenUploadWordFileDialog();
-					
-					SolvedExamController.UploadFile(sendToGenerateReport,doc);
-					//Print the word file.
-	 				//XWPFWordExtractor extract=new XWPFWordExtractor(doc);
-	 				//System.out.println(extract.getText());
-					
-					/*Send message to the server to add solved exam to the list,
-					so we can generate a report from all solved exams when the active exam will be lock.
-					in addition the student is removing from the CheckOut list in server.
-					/*/
-					
-							
-				}
-				
-				SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
-				
-				String popUpTitle="Submit confirmation";
-				String popUpContentText="The exam was submitted successfully!";
-				PopUp(popUpTitle,popUpContentText);
-				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
-	
-			}
+	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime) {
+		if(!inTime) {//Student didn't submit his exam on time.
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
+			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+			return;
 		}
-		else//Student didn't submit his exam on time.
-		{
-			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());		
+		
+		//Student Submit his exam on time.
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation");
+		alert.setHeaderText("SubmitExam");
+		alert.setContentText("Are you sure you want to submit?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() != ButtonType.OK) 
+			return;
+		if(activeExam.getType()!=0)	
+			return;
+		if(SolvedExamController.UploadFile(sendToGenerateReport)) {
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
+			String popUpTitle="Submit confirmation";
+			String popUpContentText="The exam was submitted successfully!";
+			Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
+			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+			return;
 		}
-	
 	}
 	
 	
-	//don't need it, here for compilation
-	public void StudentPressedExitButton(ActionEvent event)
-	{
-		Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
+	@FXML public void StudentPressedExitButton(ActionEvent event) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation");
+		alert.setHeaderText("SubmitExam");
+		alert.setContentText("Are you sure you want to Exit without submitting the exam? This means you are submitting an empty exam!");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			SolvedExam sendToGenerateReport=BuildSolvedExamObject(false);
+			/*Confirmation Dialog/*/
+			ConfirmationDialogForSubmitButton(sendToGenerateReport,false);
+		}
 	}
-
 
 	public void updateExamTime(Long extraTimeInMinutes) {
 		setTimeSeconds(getTimeSeconds()+extraTimeInMinutes*60);
@@ -418,7 +392,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		if (timeSeconds <= 0) {
             String popUpTitle="Exam Over";
 			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
-            PopUp(popUpTitle,popUpContentText);
+			Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
 			lockExam();
             //Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
         }
@@ -432,14 +406,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		return ret;
 	}
 	
-	public void PopUp(String title,String contentText)
-	{
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(contentText);
-		alert.show();
-	}
 	
 	
 }

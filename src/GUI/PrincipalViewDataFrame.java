@@ -1,9 +1,6 @@
 package GUI;
 
-import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
-import Controllers.ExamController;
-import Controllers.QuestionController;
+import Controllers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,10 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import logic.Exam;
-import logic.Field;
-import logic.Globals;
-import logic.Question;
+import logic.*;
 import ocsf.client.ClientGlobals;
 
 import java.net.URL;
@@ -24,7 +18,6 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
@@ -49,6 +42,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     private HashMap<Integer, Question> m_questionsMap;
     private HashMap<Integer, Exam> m_examsMap;
     private HashMap<Integer, Field> m_fieldsMap;
+    private HashMap<Integer, User> m_studentsAndTeachersMap;
 
     @Override
     public void runOnScreenChange() {
@@ -92,12 +86,10 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                         viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(m_searchBox.getText())));
                         Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING, "There is no such Entry in DataBase", ButtonType.OK);
-                    Optional<ButtonType> result = alert.showAndWait();
+                	Globals.popUp(Alert.AlertType.WARNING, "not Entry" ,"There is no such Entry in DataBase");
                 }
             }else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "You used Invalid characters, please enter Numerical ID.", ButtonType.OK);
-                Optional<ButtonType> result = alert.showAndWait();
+            	Globals.popUp(Alert.AlertType.WARNING, "Invalid character" ,"You used Invalid characters, please enter Numerical ID.");
             }
         }
     }
@@ -112,6 +104,14 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_questionsMap = new HashMap<>();
         m_examsMap = new HashMap<>();
         m_fieldsMap = new HashMap<>();
+        m_studentsAndTeachersMap = new HashMap<>();
+        updateStudentsList();
+        updateTeachersList();
+        updateQuestionsList();
+        updateExamsList();
+        updateFieldsList();
+        updateCoursesList();
+        m_coursesList.setFocusTraversable(false);
     }
 
     // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )
@@ -126,12 +126,27 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     public void onStudentsTabSelection(Event event) {
         if(!m_studentsList.getSelectionModel().isEmpty())
             m_studentsList.getSelectionModel().clearSelection();
+        try{
+            if(m_searchBtn.isDisabled()){
+                m_searchBtn.setDisable(false);
+            }
+        }catch (NullPointerException e){
+            System.out.println("No Object Yet");
+        }
+
     }
 
     @FXML
     public void onTeachersTabSelection(Event event) {
         if(!m_teachersList.getSelectionModel().isEmpty())
             m_teachersList.getSelectionModel().clearSelection();
+        try{
+            if(m_searchBtn.isDisabled()){
+                m_searchBtn.setDisable(false);
+            }
+        }catch (NullPointerException e){
+            System.out.println("No Object Yet");
+        }
     }
 
     @FXML
@@ -140,6 +155,13 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             updateQuestionsList();
         if(!m_questionsList.getSelectionModel().isEmpty())
             m_questionsList.getSelectionModel().clearSelection();
+        try{
+            if(m_searchBtn.isDisabled()){
+                m_searchBtn.setDisable(false);
+            }
+        }catch (NullPointerException e){
+            System.out.println("No Object Yet");
+        }
     }
 
     @FXML
@@ -148,6 +170,13 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             updateExamsList();
         if(!m_examsList.getSelectionModel().isEmpty())
             m_examsList.getSelectionModel().clearSelection();
+        try{
+            if(m_searchBtn.isDisabled()){
+                m_searchBtn.setDisable(false);
+            }
+        }catch (NullPointerException e){
+            System.out.println("No Object Yet");
+        }
     }
 
     @FXML
@@ -156,12 +185,23 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             updateFieldsList();
         if(!m_fieldsList.getSelectionModel().isEmpty())
             m_fieldsList.getSelectionModel().clearSelection();
+        try{
+            if(m_searchBtn.isDisabled()){
+                m_searchBtn.setDisable(false);
+            }
+        }catch (NullPointerException e){
+            System.out.println("No Object Yet");
+        }
     }
 
     @FXML
     public void onCoursesTabSelection(Event event) {
+        if(m_coursesList.getItems().isEmpty()){
+            updateCoursesList();
+        }
         if(!m_coursesList.getSelectionModel().isEmpty())
             m_coursesList.getSelectionModel().clearSelection();
+        m_searchBtn.setDisable(true);
     }
 
     /**
@@ -175,6 +215,34 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         ParsePosition pos = new ParsePosition(0);
         formatter.parse(str, pos);
         return str.length() == pos.getIndex();
+    }
+
+    private void updateStudentsList(){
+        ArrayList<User> m_studentsToBeDisplayed = UserController.getAllStudents();
+        ArrayList<String> toBeDisplayed = new ArrayList<>();
+        if (m_studentsToBeDisplayed != null) {
+            for (User student : m_studentsToBeDisplayed) {
+                m_studentsAndTeachersMap.put(student.getID(), student);
+                toBeDisplayed.add(student.toString());
+            }
+        }
+        m_studentsList.getItems().clear();
+        ObservableList<String> list = FXCollections.observableArrayList(toBeDisplayed);
+        m_studentsList.setItems(list);
+    }
+
+    private void updateTeachersList(){
+        ArrayList<User> m_teachersToBeDisplayed = UserController.getAllTeachers();
+        ArrayList<String> toBeDisplayed = new ArrayList<>();
+        if (m_teachersToBeDisplayed != null) {
+            for (User teacher : m_teachersToBeDisplayed) {
+                m_studentsAndTeachersMap.put(teacher.getID(), teacher);
+                toBeDisplayed.add(teacher.toString());
+            }
+        }
+        m_teachersList.getItems().clear();
+        ObservableList<String> list = FXCollections.observableArrayList(toBeDisplayed);
+        m_teachersList.setItems(list);
     }
 
     private void updateQuestionsList() {
@@ -220,5 +288,19 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_fieldsList.getItems().clear();
         ObservableList<String> list1 = FXCollections.observableArrayList(basicFieldInfo);
         m_fieldsList.setItems(list1);
+    }
+
+    private void updateCoursesList(){
+        ArrayList<Course> m_coursesToBeDisplayed = CourseFieldController.getAllCourses();
+        ArrayList<String> coursesInfo = new ArrayList<>();
+        if (m_coursesToBeDisplayed != null) {
+            for (Course course : m_coursesToBeDisplayed) {
+                String courseInfo = "CourseID: " + course.courseIdToString() + " | Course Name: " + course.getName() + " | Field: " + course.getField().getName();
+                coursesInfo.add(courseInfo);
+            }
+        }
+        m_coursesList.getItems().clear();
+        ObservableList<String> list1 = FXCollections.observableArrayList(coursesInfo);
+        m_coursesList.setItems(list1);
     }
 }

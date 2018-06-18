@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -172,48 +171,36 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			String[] answers = {ta1.getText(),ta2.getText(),ta3.getText(),ta4.getText()};
 			int questionid = 0;
 			if(question!=null) questionid = question.getID();
-			question = new Question(questionid, (Teacher) ClientGlobals.client.getUser(), 
-					questionString.getText(), answers, 
-					fields.getSelectionModel().getSelectedItem(), index, questionCourses);
-			Alert alert;
+			if (questionCourses.size()>0) {
+				question = new Question(questionid, (Teacher) ClientGlobals.client.getUser(), 
+					questionString.getText(), answers, fields.getSelectionModel().getSelectedItem(), 
+					index, questionCourses);
+			} else {
+				Globals.popUp(AlertType.ERROR, "No Course Selected!", "in order to create a new question you msut select at least 1 course!");
+				return;
+			}
 			if (type.equals(windowType.ADD)) {
 				if (QuestionController.addQuestion(question)>0) {
 					System.out.println("ADDED QUESTION!");
-					alert = new Alert(AlertType.INFORMATION);
-	        		alert.setTitle("Question Created Succesfully");
-	    			alert.setHeaderText("");
-	        		alert.setContentText("Question Info:"
+					Globals.popUp(AlertType.INFORMATION,"Question Created Succesfully","Question Info:"
 	        				+ "\n" + question +""
     						+ "\n\n Was Created Successfully");
-	        		alert.show();
 	        		backToMenu(null);
 				} else {
-					alert = new Alert(AlertType.ERROR);
-	        		alert.setTitle("Creation Error");
-	    			alert.setHeaderText(null);
-	        		alert.setContentText("Could not Insert question into Database!\n"
+					Globals.popUp(AlertType.ERROR,"Creation Error","Could not Insert question into Database!\n"
 	        				+ "if this happens again please contact DBAdmin. ");
-	        		alert.show();
 				}
 			} else {
 				if (QuestionController.editQuestion(question)>0) {
-					alert = new Alert(AlertType.INFORMATION);
-	        		alert.setTitle("Question Updated Succesfully");
-	    			alert.setHeaderText("");
-	        		alert.setContentText("Question Info:"
+					Globals.popUp(AlertType.INFORMATION,"Question Updated Succesfully","Question Info:"
 	        				+ "\n" + question +""
     						+ "\n\n Was Updated Successfully");
-	        		alert.show();
 	        		backToMenu(null);
 				} else {
-					alert = new Alert(AlertType.ERROR);
-	        		alert.setTitle("Update Error");
-	    			alert.setHeaderText(null);
-	        		alert.setContentText("Could not Update question in Database!\n"
+					Globals.popUp(AlertType.ERROR,"Update Error","Could not Update question in Database!\n"
 	        				+ "This Is probably because this question is already in use!\n"
 	        				+ "If you think this error is wrong\n"
 	        				+ "Please contact DBAdmin. ");
-	        		alert.show();
 				}
 			}
 		}

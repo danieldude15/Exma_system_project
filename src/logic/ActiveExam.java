@@ -86,8 +86,9 @@ public class ActiveExam  extends Exam {
 	}
 	
 	/**
-	 * getType
-	 * @return the type of this exam. either computerized or manual
+	 * getType will return 1 or 0
+	 * 
+	 * @return the type of this exam. either computerized or manual. (0=manual exam) , (1=computerized exam)
 	 */
 	public int getType() {
 		return this.type;
