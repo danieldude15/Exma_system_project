@@ -42,6 +42,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	@FXML Label Median;
 	@FXML Label leftListViewLabel;	
 	@FXML ListView<String> leftListView;
+	@FXML ListView<String> secondLeftListView;
 	@FXML BarChart<String, Integer> devBarChart;
 	@FXML CategoryAxis xAxis;
 	@FXML NumberAxis yAxis;
@@ -56,7 +57,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	private ExamReport examReport=null;
 	
 	@Override public void runOnScreenChange() {
-		hideAllLabels();
+		hideAll();
 		switch(windowType) {
 		case STUDENT:
 			setupStudentView();
@@ -74,7 +75,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 
 	}
 	
-	private void hideAllLabels() {
+	private void hideAll() {
 		infoTitle1.setVisible(false);
 		infoTitle2.setVisible(false);
 		infoTitle3.setVisible(false);
@@ -91,24 +92,35 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue6.setVisible(false);
 		infoValue7.setVisible(false);
 		infoValue8.setVisible(false);
+		secondLeftListView.setVisible(false);
 	}
 
 	@FXML public void backToReports(ActionEvent event) {
 		Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
 	}
 	
+	
 	private void setupExamReportView() {
 		if(examReport==null) {
 			backToReports(null);
 			return;
 		}
+		secondLeftListView.setVisible(true);
 		//update left Listview with examReports Solved Exams
-		ArrayList<String> solvedList = new ArrayList<>();
+		ArrayList<String> listViewOfStrings = new ArrayList<>();
 		for(SolvedExam se:examReport.getSolvedExams()) {
-			solvedList.add("Student:(" +se.getStudent().getID()+")"+se.getStudent().getName()+" Grade:"+se.getScore());
+			listViewOfStrings.add("Student:(" +se.getStudent().getID()+")"+se.getStudent().getName()+" Grade:"+se.getScore());
 		}
-		ObservableList<String> list = FXCollections.observableArrayList(solvedList);
+		ObservableList<String> list = FXCollections.observableArrayList(listViewOfStrings);
 		leftListView.setItems(list);
+		
+		HashMap<Student, Integer> cheaters = examReport.getM_cheatingStudents();
+		listViewOfStrings.clear();
+		for(Student cheater: cheaters.keySet()) {
+			listViewOfStrings.add(cheater.getName()+" - "+cheaters.get(cheater)+"% Matched");
+		}
+		list = FXCollections.observableArrayList(listViewOfStrings);
+		secondLeftListView.setItems(list);
 		
 		averageLabel.setText(Float.toString(examReport.getAvg()));
 		Median.setText(Integer.toString(examReport.getMedian()));

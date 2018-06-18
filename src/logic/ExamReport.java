@@ -18,7 +18,7 @@ public class ExamReport extends ActiveExam {
 	 */
 	private static final long serialVersionUID = 4657010598883384610L;
 	
-	public static final int cheatersMaxSimilarMistakeLimit = 1;
+	public static final int cheatersMaxSimilarMistakeprecentage = 50;
 	/**
 	 * ArrayList of all solved exams of this completed exam
 	 */
@@ -150,18 +150,18 @@ public class ExamReport extends ActiveExam {
 	 * @param solvedExams 
 	 * @return hashmap of potential cheating students
 	 */
-	public static HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams) {
+	private HashMap<Student, Integer> findCheaters(ArrayList<SolvedExam> solvedExams) {
 		HashMap<Student, Integer> cheaters = new HashMap<>();
 		for(int i=0;i<solvedExams.size();i++) {
-			for (int j=i+1;j<solvedExams.size();j++) {
-				//first we create a hashmap of the uncorrect answers of student i
-				HashMap<QuestionInExam, Integer> studentiAnswers = solvedExams.get(i).getStudentsAnswers();
-				HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
-				for(QuestionInExam qie: studentiAnswers.keySet()) {
-					if(studentiAnswers.get(qie)!=qie.getCorrectAnswerIndex()) {
-						studentiMistakes.put(qie, studentiAnswers.get(qie));
-					}
+			//first we create a hashmap of the uncorrect answers of student i
+			HashMap<QuestionInExam, Integer> studentiAnswers = solvedExams.get(i).getStudentsAnswers();
+			HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
+			for(QuestionInExam qie: studentiAnswers.keySet()) {
+				if(studentiAnswers.get(qie)!=qie.getCorrectAnswerIndex()) {
+					studentiMistakes.put(qie, studentiAnswers.get(qie));
 				}
+			}
+			for (int j=i+1;j<solvedExams.size();j++) {
 				int similarCounter=0;
 				HashMap<QuestionInExam, Integer> studentjAnswers = solvedExams.get(j).getStudentsAnswers();
 				for(QuestionInExam qie: studentiMistakes.keySet()) {
@@ -169,18 +169,20 @@ public class ExamReport extends ActiveExam {
 						similarCounter++;
 					}
 				}
-				if(similarCounter>=cheatersMaxSimilarMistakeLimit) {
+				int similarPrecentage = (int) ((100.0*similarCounter)/getQuestionsInExam().size());
+				if(similarPrecentage>=cheatersMaxSimilarMistakeprecentage) {
 					Student cheateri = solvedExams.get(i).getStudent();
-					Integer cheatCount = cheaters.get(cheateri);
-					if((cheatCount!=null && cheatCount<similarCounter) ||
-							cheatCount==null) {
-						cheaters.put(cheateri, similarCounter);
+					Integer cheatCountprecentage = cheaters.get(cheateri);
+					int precentageOfCheat = (int) ((100.0*similarCounter)/getQuestionsInExam().size());
+					if((cheatCountprecentage!=null && cheatCountprecentage<similarCounter) ||
+							cheatCountprecentage==null) {
+						cheaters.put(cheateri, precentageOfCheat);
 					}
 					Student cheaterj = solvedExams.get(j).getStudent();
-					cheatCount = cheaters.get(cheaterj);
-					if((cheatCount!=null && cheatCount<similarCounter) ||
-							cheatCount==null) {
-						cheaters.put(cheaterj, similarCounter);
+					cheatCountprecentage = cheaters.get(cheaterj);
+					if((cheatCountprecentage!=null && cheatCountprecentage<similarCounter) ||
+							cheatCountprecentage==null) {
+						cheaters.put(cheaterj, precentageOfCheat);
 					}
 				}
 			}

@@ -70,14 +70,6 @@ public class AESServer extends AbstractServer {
 		timeChangeRequests= new HashMap<>();
 		solvedExamWordFiles=new HashMap<>();
 		examTimelines = new HashMap<>();
-		/**
-		 * Added a virtual temporary Active Exam to Server!
-		 */
-		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d35i", 0, 
-				new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("030104"),teacher);
-		InitializeActiveExams(nivsExam);
 		
 		setupServerFolders();
 		
@@ -813,12 +805,14 @@ public class AESServer extends AbstractServer {
 	 */
 	private void InitializeActiveExams( Object o)
 	{
-		ActiveExam ae=(ActiveExam)o;
-		studentsInExam.put(ae, new ArrayList<Student>());
-		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
-		activeExams.put(ae.getCode(), ae);
-		studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
-		setActiveExamTimeline(ae);
+		if(o instanceof ActiveExam) {
+			ActiveExam ae=(ActiveExam)o;
+			studentsInExam.put(ae, new ArrayList<Student>());
+			studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
+			activeExams.put(ae.getCode(), ae);
+			studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
+			setActiveExamTimeline(ae);
+		}
 	}
 	
 

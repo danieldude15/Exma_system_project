@@ -83,14 +83,6 @@ public class AESClient extends AbstractClient{
 		case "studentUpdateExamTime":
 			studentUpdateExamTime(o);
 			break;
-		case "DownloadWordFile":
-			try {
-				download(o);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			break;
 		default:
 			copyServerMsg(ServerMsg);
 		}
@@ -98,13 +90,6 @@ public class AESClient extends AbstractClient{
 			stopWaiting=true;	
 		}
 		
-	}
-	private void download(Object o) throws IOException {
-		AesWordDoc file=(AesWordDoc) o;
-		File openFile = new File(file.getFileName());
-		FileOutputStream out = new FileOutputStream(openFile);
-		//out.write(file.getbytes());
-		out.close();
 	}
 
 	private void copyServerMsg(Object serverMsg) {

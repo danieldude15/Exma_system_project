@@ -55,7 +55,7 @@ public class ClientGlobals {
 	public static final String PrincipalViewFieldID = "Principal View Field";
 	public static final String PrincipalViewFieldPath = "/resources/fxml/PrincipalViewField.fxml";
 
-	public static final String PrincipalViewReportID = "principle View Report";
+	public static final String PrincipalViewReportID = "Principle View Report";
 	public static final String PrincipalViewReportPath = "/resources/fxml/PrincipleViewReport.fxml";
 	
 	/*		Principal Screens End		*/

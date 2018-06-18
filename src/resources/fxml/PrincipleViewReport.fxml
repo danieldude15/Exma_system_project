@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="645.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipleViewReportFrame">
+<VBox prefHeight="680.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipleViewReportFrame">
    <children>
       <HBox alignment="TOP_CENTER">
          <children>
@@ -221,7 +221,12 @@
                   </Label>
                   <ListView fx:id="leftListView">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets bottom="20.0" top="10.0" />
+                     </VBox.margin>
+                  </ListView>
+                  <ListView fx:id="secondLeftListView">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
                      </VBox.margin>
                   </ListView>
                   <Button mnemonicParsing="false" onAction="#backToReports" text="back">
@@ -251,6 +256,9 @@
                </children>
             </VBox>
          </children>
+         <padding>
+            <Insets bottom="33.0" />
+         </padding>
       </HBox>
    </children>
 </VBox>
