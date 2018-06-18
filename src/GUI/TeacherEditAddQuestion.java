@@ -171,9 +171,14 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 			String[] answers = {ta1.getText(),ta2.getText(),ta3.getText(),ta4.getText()};
 			int questionid = 0;
 			if(question!=null) questionid = question.getID();
-			question = new Question(questionid, (Teacher) ClientGlobals.client.getUser(), 
-					questionString.getText(), answers, 
-					fields.getSelectionModel().getSelectedItem(), index, questionCourses);
+			if (questionCourses.size()>0) {
+				question = new Question(questionid, (Teacher) ClientGlobals.client.getUser(), 
+					questionString.getText(), answers, fields.getSelectionModel().getSelectedItem(), 
+					index, questionCourses);
+			} else {
+				Globals.popUp(AlertType.ERROR, "No Course Selected!", "in order to create a new question you msut select at least 1 course!");
+				return;
+			}
 			if (type.equals(windowType.ADD)) {
 				if (QuestionController.addQuestion(question)>0) {
 					System.out.println("ADDED QUESTION!");
