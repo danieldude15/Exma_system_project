@@ -177,10 +177,14 @@ public class Exam implements Serializable{
 			if(e.getAuthor()==null || e.getCourse()==null )
 			if (e.getID()!=ID || e.getDuration()!=Duration) return false;
 			if (!e.getCourse().equals(course) || !e.getAuthor().equals(Author)) return false;
-			for(int i=0;i<questionsInExam.size();i++) {
-				if (questionsInExam.get(i)==null) return false;
-				if (!questionsInExam.get(i).equals(e.getQuestionsInExam().get(i))) return false;
-			}
+			if(e.getQuestionsInExam()==null && getQuestionsInExam()!=null) return false;
+			if(e.getQuestionsInExam()!=null && getQuestionsInExam()==null) return false;
+			if(e.getQuestionsInExam().size()!=getQuestionsInExam().size()) return false;
+			if(e.getQuestionsInExam().size()!=0)
+				for(int i=0;i<questionsInExam.size();i++) {
+					if (questionsInExam.get(i)==null ) return false;
+					if (!questionsInExam.get(i).equals(e.getQuestionsInExam().get(i))) return false;
+				}
 			return true;
 		}
 		return false;
