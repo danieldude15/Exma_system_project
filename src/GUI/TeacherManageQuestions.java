@@ -254,23 +254,16 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 				Question question = questions.get(((Control)evt.getSource()).getId());
 	        	int effectedRows = QuestionController.deleteQuestion(question);
 	        	if(effectedRows>0) {
-	        		alert = new Alert(AlertType.INFORMATION);
-	        		alert.setTitle("Question Deleted Succesfully");
-	    			alert.setHeaderText("");
-	        		alert.setContentText("Question Info:"
+	        		Globals.popUp(AlertType.INFORMATION,"Question Deleted Succesfully","Question Info:"
 	        				+ "\n" + question +""
     						+ "\n\n Was deleted Successfully");
-	        		alert.show();
 	        		runOnScreenChange();
 	        		System.out.println("Question Deleted!");
+	        		return;
 	        	} else {
-	        		alert = new Alert(AlertType.ERROR);
-	        		alert.setTitle("Deletion Error");
-	    			alert.setHeaderText(null);
-	        		alert.setContentText("Could not delete question\n"
+	        		Globals.popUp(AlertType.ERROR,"Deletion Error","Could not delete question\n"
 	        				+ "This question is already in Use in an existing Exam / Solved Exam / Completed Exam.\n"
 	        				+ "you may not delete questions that other people are relaying on. ");
-	        		alert.show();
 	        	}
 			} else {
 			    System.out.println("user chose CANCEL or closed the dialog");

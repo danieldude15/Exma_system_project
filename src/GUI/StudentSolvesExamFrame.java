@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import logic.*;
 import ocsf.client.ClientGlobals;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -192,7 +191,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		fos.write(recievedFile.getMybytearray());
 		fos.close();
 		
-	    Globals.PopUp_INFORMATION("Download "+activeExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and start solving!");
+	    Globals.popUp(AlertType.INFORMATION,"Download "+activeExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and start solving!");
 		submitButton.setDisable(false);
 		downloadButton.setDisable(true);
 
@@ -360,7 +359,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
 			String popUpTitle="Submit confirmation";
 			String popUpContentText="The exam was submitted successfully!";
-			Globals.PopUp_INFORMATION(popUpTitle,popUpContentText);
+			Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
 			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 			return;
 		}
@@ -379,7 +378,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			if(SolvedExamController.UploadFile(sendToGenerateReport)) {
 				String popUpTitle="Submit confirmation";
 				String popUpContentText="The exam was submitted successfully!";
-				Globals.PopUp_INFORMATION(popUpTitle,popUpContentText);
+				Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
 				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 			}
 		}
@@ -406,7 +405,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		if (timeSeconds <= 0) {
             String popUpTitle="Exam Over";
 			String popUpContentText="The Exam time is up and thus submitted with no answers. next time pay attention to the time.";
-			Globals.PopUp_INFORMATION(popUpTitle,popUpContentText);
+			Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
 			lockExam();
             //Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
         }

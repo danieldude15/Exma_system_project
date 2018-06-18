@@ -8,8 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -20,7 +18,6 @@ import logic.Student;
 import ocsf.client.ClientGlobals;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class StudentMainFrame implements ControlledScreen{
@@ -153,7 +150,6 @@ public class StudentMainFrame implements ControlledScreen{
 	 */
 	public void ViewExamButtonPressed(ActionEvent event)
 	{
-		Alert alert;
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		StudentViewExamFrame studentViewExam = (StudentViewExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentViewExamID);
 		//if student choose course solved exam to view from list.
@@ -188,13 +184,7 @@ public class StudentMainFrame implements ControlledScreen{
 		//if student pressed to view solved exam and didn't choose any course name, he gets an error.
 		else
 		{
-		
-			alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("View exam Failed!");
-			alert.setHeaderText(null);
-			alert.setContentText("You have to choose exam first! ");
-			alert.showAndWait();
-			
+			Globals.popUp(AlertType.INFORMATION,"View exam Failed!","You have to choose exam first! ");
 		}
 	}
 	

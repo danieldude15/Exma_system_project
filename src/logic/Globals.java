@@ -40,9 +40,9 @@ public class Globals {
 		System.exit(1);
 	}
 	
-	public static void PopUp_INFORMATION(String title,String contentText)
+	public static void popUp(AlertType type, String title,String contentText)
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
+		Alert alert = new Alert(type);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(contentText);

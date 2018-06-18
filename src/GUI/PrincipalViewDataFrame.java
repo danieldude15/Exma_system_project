@@ -18,7 +18,6 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
@@ -87,12 +86,10 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                         viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(m_searchBox.getText())));
                         Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING, "There is no such Entry in DataBase", ButtonType.OK);
-                    Optional<ButtonType> result = alert.showAndWait();
+                	Globals.popUp(Alert.AlertType.WARNING, "not Entry" ,"There is no such Entry in DataBase");
                 }
             }else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "You used Invalid characters, please enter Numerical ID.", ButtonType.OK);
-                Optional<ButtonType> result = alert.showAndWait();
+            	Globals.popUp(Alert.AlertType.WARNING, "Invalid character" ,"You used Invalid characters, please enter Numerical ID.");
             }
         }
     }

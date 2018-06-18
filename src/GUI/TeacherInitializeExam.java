@@ -1,35 +1,24 @@
 package GUI;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ExamController;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-
 import logic.*;
 import ocsf.client.ClientGlobals;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Alert.AlertType;
 
 
 
 
-public class TeacherInitializeExam implements Initializable, ControlledScreen {
+public class TeacherInitializeExam implements ControlledScreen {
 
 
 	
@@ -54,12 +43,6 @@ public class TeacherInitializeExam implements Initializable, ControlledScreen {
 		Globals.primaryStage.setHeight(670);
 		Globals.primaryStage.setWidth(745);
 		teacherFieldsLoading();
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void teacherFieldsLoading() {

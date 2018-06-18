@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -195,7 +194,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			fos = new FileOutputStream(examFile);
 			fos.write(recievedFile.getMybytearray());
 			fos.close();
-			Globals.PopUp_INFORMATION("Download "+solvedExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and check it.");
+			Globals.popUp(AlertType.INFORMATION,"Download "+solvedExam.getCourse().getName()+" Succeed","The exam is on your desktop, You can open it and check it.");
 		} catch (IOException e) {
 			System.err.println("Could not write to file:"+examFile.getPath());
 			e.printStackTrace();
@@ -220,11 +219,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			solvedExam.setTeacherApproved(true);
 			if (SolvedExamController.updateSolvedExam(solvedExam)>0) {
 				//successfull insertion
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Exam Check Is Updated Successfully");
-				alert.setHeaderText(null);
-				alert.setContentText("The exam was updated into the system.");
-				alert.showAndWait();
+				Globals.popUp(AlertType.INFORMATION,"Exam Check Is Updated Successfully","The exam was updated into the system.");
 				doneImage.setVisible(true);
 				score.setText(Integer.toString(solvedExam.getScore()));
 			} else {

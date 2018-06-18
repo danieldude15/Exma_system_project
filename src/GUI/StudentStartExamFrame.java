@@ -3,7 +3,6 @@ package GUI;
 
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
 import Controllers.UserController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -53,16 +51,11 @@ public class StudentStartExamFrame implements ControlledScreen{
 	{
 		idError.setText("");
 		examCodeError.setText("");
-		Alert alert;
 		String sid=Integer.toString(ClientGlobals.client.getUser().getID());
 		//If some of the fields is empty, then the student get an error.
 		if(studentId.getText().isEmpty() || examCode.getText().isEmpty())
 		{
-			alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Start exam Failed!");
-			alert.setHeaderText(null);
-			alert.setContentText("You have missing fields!, please fill those fields and try again..");
-			alert.showAndWait();
+			Globals.popUp(AlertType.INFORMATION,"Start exam Failed!","You have missing fields!, please fill those fields and try again..");
 			return;
 		}
 		//Two fields are filled
@@ -82,11 +75,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 		}
 		
 		if (!(UserController.getStudentsInCourse(active.getCourse()).contains((Student)ClientGlobals.client.getUser()))) {
-			alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Not Signed In To Course");
-			alert.setHeaderText(null);
-			alert.setContentText("You are not signed in to this course:" + active.getCourse().getName() + "\n You may not participate in an Exam that you are not signed in to!");
-			alert.showAndWait();
+			Globals.popUp(AlertType.INFORMATION,"Not Signed In To Course","You are not signed in to this course:" + active.getCourse().getName() + "\n You may not participate in an Exam that you are not signed in to!");
 			return;
 		} 
 		Boolean canStart = ActiveExamController.StudentCheckedInToActiveExam((Student) ClientGlobals.client.getUser(), active);
@@ -94,11 +83,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 			startStudentsExam(active);
 			Globals.mainContainer.setScreen(ClientGlobals.StudentSolvesExamID);
 		} else {
-			alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Can Not Start Exam");
-			alert.setHeaderText(null);
-			alert.setContentText("It seems as you already submitted your exam and cannot start again.");
-			alert.showAndWait();
+			Globals.popUp(AlertType.INFORMATION,"Can Not Start Exam","It seems as you already submitted your exam and cannot start again.");
 		}
 		
 	}
