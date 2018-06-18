@@ -104,8 +104,8 @@ public class TeacherManageExamsFrame implements ControlledScreen {
         	{
            Exam exam = exams.get(((Control)evt.getSource()).getId());
            // removing the "All" field to avoid gettin nullPointerException in next window
-           teachersCourses.remove(0);
-           teachersFields.remove(0);
+         //  teachersCourses.remove(0);
+          // teachersFields.remove(0);
            
            ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setType((TeacherBuildNewExam.windowType.EDIT));
            ((TeacherBuildNewExam)Globals.mainContainer.getController(ClientGlobals.TeacherBuildNewExamID)).setExam(exam);

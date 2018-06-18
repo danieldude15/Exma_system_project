@@ -221,7 +221,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				score.setPromptText("score point");
 				score.setMaxWidth(80);
 				scores.put(q.questionIDToString(),score);
-				score.addEventHandler(KeyEvent.KEY_PRESSED, new MyAddRemoveEdit());
+				score.addEventHandler(KeyEvent.KEY_TYPED, new MyAddRemoveEdit());
 				questionAddRemove.getChildren().add(score);
 				
 				
@@ -231,14 +231,14 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				questionAddRemove.getChildren().add(errorLabel);
 				NoteStudent=new TextField();
 				NoteStudent.setId(q.questionIDToString());
-				NoteStudent.setPromptText("NoteForTeacher");
+				NoteStudent.setPromptText("Note for student");
 				NoteStudent.setMaxWidth(300);
 				NoteStudents.put(q.questionIDToString(),NoteStudent);
 				questionAddRemove.getChildren().add(NoteStudent);
 				
 				NoteTeachert=new TextField();
 				NoteTeachert.setId(q.questionIDToString());
-				NoteTeachert.setPromptText("NoteForStudent");
+				NoteTeachert.setPromptText("Note for teachert");
 				NoteTeachert.setMaxWidth(300);
 				NoteTeacherts.put(q.questionIDToString(),NoteTeachert);
 				questionAddRemove.getChildren().add(NoteTeachert);
@@ -380,13 +380,20 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				questionAddRemove.getChildren().add(errorLabel);
 				NoteStudent=new TextField();
 				NoteStudent.setId(q.questionIDToString());
-				NoteStudent.setPromptText("NoteForTeacher");
+				if(q.getStudentNote() !=null && !q.getStudentNote().equals("") )
+					NoteStudent.setText(q.getStudentNote());
+				else
+					NoteStudent.setPromptText("NoteForTeacher");
 				NoteStudent.setMaxWidth(300);
 				NoteStudents.put(q.questionIDToString(),NoteStudent);
 				questionAddRemove.getChildren().add(NoteStudent);
 				
 				NoteTeachert=new TextField();
 				NoteTeachert.setId(q.questionIDToString());
+				if(q.getInnerNote() !=null && !q.getInnerNote().equals("") )
+					NoteTeachert.setText(q.getInnerNote());
+				else
+					NoteTeachert.setPromptText("NoteForTeacher");
 				NoteTeachert.setPromptText("NoteForStudent");
 				NoteTeachert.setMaxWidth(300);
 				NoteTeacherts.put(q.questionIDToString(),NoteTeachert);
