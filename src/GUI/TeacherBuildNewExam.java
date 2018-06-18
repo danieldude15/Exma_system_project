@@ -174,7 +174,7 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		else {
 			//questionsList.
 			for(QuestionInExam q :examedit.getQuestionsInExam()) {
-				questionsinexam.put(q.questionIDToString(), q);
+				questions.put(q.questionIDToString(), q);
 				questionsList.getChildren().add(questionAdder(q));
 		}
 		}

@@ -31,8 +31,8 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 	public void runOnScreenChange() {
 		questionInfo_StudentScoreAndNote.getChildren().clear();
 		examinfo.setText("Exam id: "+examview.examIdToString());
-		feildinfo.setText("Feild id: "+examview.getField().fieldIdToString());
-		courseinfo.setText("Course id: "+examview.getCourse().courseIdToString());
+		feildinfo.setText("Feild id: "+examview.getField().getName());
+		courseinfo.setText("Course id: "+examview.getCourse().getName());
 		durationinfo.setText("Duration: "+String.valueOf(examview.getDuration()));
 		int questionIndex=0;
 		for(QuestionInExam qie: examview.getQuestionsInExam() )
@@ -57,14 +57,14 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
 
 
-		if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for student, we add it at the top of the question.
+		if(qie.getStudentNote() != null && !qie.getStudentNote().isEmpty())//If question contains note for student, we add it at the top of the question.
 		{
 			Label questionNoteforstudent=new Label();
 			questionNoteforstudent.setText("Note for student: "+qie.getStudentNote());
 			questionNoteforstudent.setId("blackLabel");
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforstudent);
 		}
-		if(qie.getStudentNote() != null && !qie.getStudentNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
+		if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
 		{
 			Label questionNoteforteacher=new Label();
 			questionNoteforteacher.setText("Note for teacher: "+qie.getStudentNote());
