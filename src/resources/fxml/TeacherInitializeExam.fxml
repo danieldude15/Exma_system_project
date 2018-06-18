@@ -15,7 +15,7 @@
    <children>
       <HBox prefHeight="21.0" prefWidth="540.0">
          <children>
-            <Label prefHeight="20.0" prefWidth="102.0" text="Active Exam">
+            <Label prefHeight="35.0" prefWidth="138.0" text="Active Exam">
                <font>
                   <Font size="24.0" />
                </font>
@@ -99,12 +99,12 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="41.0" prefWidth="540.0">
          <children>
-            <Button fx:id="Cancel" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel">
+            <Button fx:id="Cancel" mnemonicParsing="false" onAction="#CancelButtonPressed" prefHeight="25.0" prefWidth="65.0" text="Back">
                <HBox.margin>
                   <Insets right="200.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="Active" mnemonicParsing="false" onAction="#ActiveButtonPressed" text="Active" />
+            <Button fx:id="Active" mnemonicParsing="false" onAction="#ActiveButtonPressed" prefHeight="25.0" prefWidth="63.0" text="Active" />
          </children>
       </HBox>
    </children>

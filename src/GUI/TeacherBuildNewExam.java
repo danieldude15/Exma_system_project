@@ -88,6 +88,9 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 		//clear the windows of TeacherBuildNewExam
 		if(type.equals(windowType.Build)) {
 			totalScore.setText("Total Score:");
+			sum=0;
+			courseComboB.setDisable(false);
+			fieldComboB.setDisable(false);
 			fieldComboB.setVisible(true);
 			courseComboB.setVisible(true);
 			fieldComboB.getItems().clear();
@@ -102,8 +105,6 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			scores.clear();
 			noteTeacherts.clear();
 			noteStudents.clear();
-			
-			sum=0;
 			teacherFieldsLoading();
 		} else {
 			sum=100;
@@ -351,6 +352,9 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 				publicCourse=examedit.getCourse();
 				ExamController.deleteExam(examedit);
 				ExamController.addExam(new Exam (0,publicCourse,x, (Teacher) ClientGlobals.client.getUser(),questionsIn));
+				sum=0;
+				fieldComboB.setVisible(true);
+				courseComboB.setVisible(true);
 				Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
 		}
 		}
