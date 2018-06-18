@@ -73,8 +73,11 @@
                      <children>
                         <Label text="New Score">
                            <HBox.margin>
-                              <Insets right="82.0" />
+                              <Insets right="108.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
                         </Label>
                         <TextField fx:id="newScore" onKeyTyped="#testDigitOnly" />
                         <Label id="redLabel" fx:id="errorLabel" text="*Digits only! between 0-100." textFill="RED" visible="false">
@@ -104,6 +107,9 @@
                            <HBox.margin>
                               <Insets right="25.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
                         </Label>
                         <TextArea fx:id="changeNote" prefHeight="73.0" prefWidth="425.0" />
                      </children>
@@ -119,6 +125,19 @@
                         <Insets left="140.0" />
                      </VBox.margin>
                   </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="manualLabel" text="This Exam Is A Manual Exam Press To Download The File And Check It">
+                           <HBox.margin>
+                              <Insets right="32.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="DownloadB" mnemonicParsing="false" onAction="#DownloadStudentsExam" text="Download" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
@@ -139,12 +158,12 @@
       </ScrollPane>
       <HBox alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#backButton" text="back">
+            <Button mnemonicParsing="false" onAction="#backButton" text="Back">
                <HBox.margin>
                   <Insets right="150.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#submitButton" text="submit">
+            <Button fx:id="approveB" mnemonicParsing="false" onAction="#submitButton" text="Approve">
                <HBox.margin>
                   <Insets left="150.0" />
                </HBox.margin>

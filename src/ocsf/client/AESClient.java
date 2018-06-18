@@ -103,7 +103,7 @@ public class AESClient extends AbstractClient{
 		AesWordDoc file=(AesWordDoc) o;
 		File openFile = new File(file.getFileName());
 		FileOutputStream out = new FileOutputStream(openFile);
-		out.write(file.getbytes());
+		//out.write(file.getbytes());
 		out.close();
 	}
 
