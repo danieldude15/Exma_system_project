@@ -12,9 +12,12 @@ import logic.*;
 import java.io.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
-@SuppressWarnings({ "unchecked", "rawtypes" })
+
+import javax.swing.filechooser.FileSystemView;
+@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	
 	
@@ -40,18 +43,20 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
 	
-	//Word Files
-	 // HashMap with Key - ActiveExam and Value holds the Word files (Only for manual).
-	 
-	private static HashMap<ActiveExam,AesWordDoc> wordFiles;
-	
-	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
+	private  HashMap<SolvedExam,MyFile> solvedExamWordFiles;
 	
 	
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
 	
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
+	
+	String serverDirPath = FileSystemView.getFileSystemView().getHomeDirectory()+"\\ServerFiles";
+	
+	String studentsExamsPath = serverDirPath+"\\Students_Exams";
+	
+	String examFilesPath = serverDirPath+"\\Exam_Files";
+	
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
@@ -67,22 +72,50 @@ public class AESServer extends AbstractServer {
 		/**
 		 * Added a virtual temporary Active Exam to Server!
 		 */
-
-		Teacher teacher = new Teacher(302218136, "daniel", "tibi", "Daniel Tibi");
-		ActiveExam tibisExam = new ActiveExam("ac13", 1, new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("010101"),teacher);
-		InitializeActiveExams(tibisExam);
-
-		/**
-		 * Added a virtual temporary Active Exam to Server!
-		 */
-		teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0, new Date(new java.util.Date().getTime()),sqlcon.getExam("030103"),teacher);
+		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
+		ActiveExam nivsExam = new ActiveExam("d35i", 0, 
+				new Date(new java.util.Date().getTime()),
+				sqlcon.getExam("030104"),teacher);
 		InitializeActiveExams(nivsExam);
+		
+		setupServerFolders();
 		
 		
 		//AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
 		
+	}
+
+	private void setupServerFolders() {
+		
+		File theDir = new File(serverDirPath);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + serverDirPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
+		theDir = new File(studentsExamsPath);
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + studentsExamsPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
+		theDir = new File(examFilesPath);
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + examFilesPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
 	}
 
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -211,7 +244,7 @@ public class AESServer extends AbstractServer {
 				checkInStudentToActiveExam(client, o);
 				break;
 			case "GetManualExam"://Word Files
-				GetManuelExam(client,o);
+				createManualExam(client,o);
 				break;
 			case "getcourseExams":
 				getcourseExams(client,o);
@@ -222,12 +255,9 @@ public class AESServer extends AbstractServer {
 			case "InitializeActiveExams":
 				InitializeActiveExams(o);
 				break;
-			/*case "CreateDocFile":
-				CreateDocFile(client,o);
-				break;/*/
-			/*case "SystemCheckExam":
-				SystemCheckSolvedExam(client,o);
-				break;/*/
+			case "GetStudentsManualExam":
+				GetStudentsManualExam(client,o);
+				break;
 			case "UploadSolvedExam":
 				UploadSolvedExam(o);
 				break;
@@ -367,12 +397,13 @@ public class AESServer extends AbstractServer {
 	                  }));
 	        timeline.playFromStart();
 		} else {
-			System.out.println(ae + "not found in studentsInExam HashMap!");
+			System.err.println(ae + "not found in studentsInExam HashMap!");
 		}
 	}
 	
-	private void setActiveExamTimeline(ActiveExam ae, TimeChangeRequest tcr) {
+	private void setActiveExamTimeline(ActiveExam ae) {
 		Long examTime = (long) ae.getDuration()*60;
+		TimeChangeRequest tcr = timeChangeRequests.get(ae);
 		if(tcr!=null) {
 			examTimelines.get(ae).stop();
 			examTimelines.remove(ae);
@@ -527,6 +558,34 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	private void GetStudentsManualExam(ConnectionToClient client, Object o) throws IOException {
+		SolvedExam se = (SolvedExam)o;
+		String filePath = studentsExamsPath+"\\"+se.getStudent().getID()+"\\"+se.examIdToString()+".doc";
+		
+		File examFile = new File(filePath);
+
+		// if the directory does not exist, create it
+		if (examFile.exists()) {
+			MyFile myExamFileDes = new MyFile(filePath);
+			myExamFileDes.setSize((int) examFile.length());
+			myExamFileDes.initArray((int) examFile.length());
+			
+			try {
+				FileInputStream fis = new FileInputStream(examFile);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				bis.read(myExamFileDes.getMybytearray(),0,(int) examFile.length());
+			} catch (IOException e) {
+				System.err.println("Could Not read from the Exam File Buffer");
+				e.printStackTrace();
+			}
+			
+			iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+			client.sendToClient(msg);
+	    } else {
+	    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath());
+	    }
+	}
+	
 	private void getAllTeachers(ConnectionToClient client) throws IOException {
 		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
 		iMessage im = new iMessage("allTeachers",teachers);
@@ -606,6 +665,7 @@ public class AESServer extends AbstractServer {
 					}
 				}
 				updateActiveExamHashmaps(tc.getActiveExam().getCode(),tc.getNewTime());
+				setActiveExamTimeline(tc.getActiveExam());
 			}
 			timeChangeRequests.remove(tc.getActiveExam());
 		}
@@ -757,9 +817,8 @@ public class AESServer extends AbstractServer {
 		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
 		studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
-		setActiveExamTimeline(ae,null);
+		setActiveExamTimeline(ae);
 	}
-	
 	
 
 	private void newTimeChangeRequest(Object o) throws IOException {
@@ -802,58 +861,39 @@ public class AESServer extends AbstractServer {
 		
 	}
 	
-	/*Word Files
-	/**
-	 * Create a Document file when the teacher activate a manual exam.
-	 * @param active
-	 */
-	/*/
-	private void CreateWordFile(ActiveExam activeExam)
-	{
-	
-				AddToWordFileList(activeExam,doc);
-
-	}
-	
-		/**
-		 * Add Document file exam to the list of word file exams(export as word file in the StudentSolvesExamFrame).
-		 * @param active
-		 * @param doc
-		 */
-		/*WordFiles
-		 private void AddToWordFileList(ActiveExam active, AesWordDoc doc) {
-			wordFiles.put(active, doc);
-		}/*/
-	
 	/**
 	 *  Send to client a Manual Exam word File.
 	 * @param client
 	 * @param o
 	 * @throws IOException
 	 */
-	private void GetManuelExam(ConnectionToClient client, Object o) throws IOException {
+
+	private void createManualExam(ConnectionToClient client, Object o) throws IOException {
+		ActiveExam ae = (ActiveExam)o;
+		MyFile myExamFileDes = new MyFile(ae.examIdToString()+".doc");
+		myExamFileDes.CreateWordFile(ae, examFilesPath+"\\"+ae.examIdToString()+".doc");
 		
-		String name=((ActiveExam)o).getCourse().getName();
- 		AesWordDoc wordClass=new AesWordDoc();
- 		wordClass.CreateWordFile((ActiveExam)o, name);
-		AesWordDoc retFile= new AesWordDoc(name+".docx");
+		File examFile = new File(examFilesPath+"\\"+ae.examIdToString()+".doc");
+		myExamFileDes.setSize((int) examFile.length());
+		myExamFileDes.initArray((int) examFile.length());
 		
-		  try {
-			      File file = new File (name+".docx");
-			      byte [] bytes  = new byte [(int)file.length()];
-			      FileInputStream fileInputStream = new FileInputStream(file);
-			      BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);			  
-			      retFile.initArray(bytes.length);
-			      retFile.setSize(bytes.length);
-			      bufferInputStream.read(retFile.getbytes(),0,bytes.length);
-			  
-			      client.sendToClient(new iMessage("DownloadWordFile",retFile));
-					
-			    }
-			catch (Exception e) {
-				System.out.println("Send file from server to client failed!\n");
-			}
+		FileInputStream fis = new FileInputStream(examFile);
+		BufferedInputStream bis = new BufferedInputStream(fis);
 		
+		bis.read(myExamFileDes.getMybytearray(),0,(int) examFile.length());
+		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+		client.sendToClient(msg);
+		
+		try {
+			if(examFile.delete())
+				System.out.println("file was deleted!");
+			else 
+				System.err.println("File could not be deleted");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+ 		
 	}
 	
 	
@@ -863,11 +903,6 @@ public class AESServer extends AbstractServer {
 	}
 	
 	public void GenerateActiveExamReport(ActiveExam ae) {
-		//TODO remove this condition when done developing!
-		if(ae.getCode().equals("d34i")) {
-			System.err.println("Development env active exam report generation being skipped\nTo generate a real report you must go throw the whole proccess of activating the exam by a teacher");
-			return;
-		}
 		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
 		int participated = studentsInExam.get(ae).size();
 		int submitted = studentsSolvedExams.get(ae).size();
@@ -879,7 +914,7 @@ public class AESServer extends AbstractServer {
 		} else if (sqlcon.insertCompletedExam(eReport)>0) {
 			System.out.println("Exam:" +ae.getCode() +" was inserted into database.");
 		} else {
-			System.out.println("Somthing went wrong");
+			System.err.println("there were solved exams in hash map but could not insert the examReport into database - Somthing went wrong");
 		}
 		activeExams.remove(ae.getCode()); 
 		studentsInExam.remove(ae); 
@@ -888,86 +923,6 @@ public class AESServer extends AbstractServer {
 		//wordFiles.remove(ae);
 		timeChangeRequests.remove(ae);
 	}
-
-
-		/*
-		public void SystemCheckSolvedExam(ConnectionToClient client, Object obj) throws IOException {
-			// TODO Auto-generated method stub
-			Object[] o = (Object[])obj;
-			ActiveExam activeExam=(ActiveExam) o[0];
-			boolean inTime=(boolean) o[1];
-			HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=(HashMap<QuestionInExam, ToggleGroup>) o[2];
-			int score=0;
-			Object[] studentAnsersAndScoreForExam=new Object[2];
-			RadioButton r=new RadioButton();
-			HashMap<QuestionInExam,Integer> studentAnswers=new HashMap<QuestionInExam,Integer>();
-			if(inTime)//Student submit the exam before that the time is over.
-			{
-				
-				if(activeExam.getType()==1)//Active exam is computerize so we save student answer and check his exam.
-				{
-					for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
-					{
-						if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-							studentAnswers.put(qie,0);
-							
-						else//Student choose answer.
-						{
-							r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-							for(int i=1;i<5;i++)//Runs all over question's answers.
-							{
-								if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-								{
-									studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-									if(qie.getCorrectAnswerIndex()==i)//Student's answer is correct(he gets all points from the question).
-										score+=qie.getPointsValue();
-									break;
-								}
-							}
-						}
-					}
-				}
-				else//Active exam is manual so we fabricate student's answers and score.
-				{
-					ArrayList<QuestionInExam> questionsInExam=activeExam.getExam().getQuestionsInExam();
-					for(QuestionInExam qie:questionsInExam)//Sets all questions with their info on screen.
-					{
-						studentAnswers.put(qie, 0);
-					}
-					score=-1;
-				}
-			}
-			else//Student did not have time to submit his exam
-			{
-				for (QuestionInExam qie : questionWithAnswers.keySet())//Runs all over questions. 
-				{
-					if(questionWithAnswers.get(qie).getSelectedToggle()==null)//Student didn't choose any answer.
-						studentAnswers.put(qie,0);
-						
-					else//Student choose answer.
-					{
-						r=(RadioButton) questionWithAnswers.get(qie).getSelectedToggle();
-						for(int i=1;i<5;i++)//Runs all over question's answers.
-						{
-							if(r.getText().equals(qie.getAnswer(i)))//Student answer equal to answer in index i(1-4).
-							{
-								studentAnswers.put(qie,i);//Insert the question and student's index of answer to HashMap.
-								break;
-							}
-						}
-					}
-					score=0;//His grade is zero if he didn't submit his exam on time.
-				}
-			}
-			studentAnsersAndScoreForExam[0]=studentAnswers;
-			studentAnsersAndScoreForExam[1]=score;
-			iMessage im = new iMessage("SystemCheckSucceed",studentAnsersAndScoreForExam);
-			client.sendToClient(im);
-			
-			//return studentAnsersAndScoreForExam;
-
-		}
-/*/
 
 	
 	/**
@@ -978,6 +933,7 @@ public class AESServer extends AbstractServer {
 	 */
 	public void SetFinishedSolvedExam(ConnectionToClient client,Object obj) throws IOException
 	{
+		System.out.println("Checking out student to remember he already submitted his exam");
 		Object[] o = (Object[])obj;
 		ActiveExam e=(ActiveExam) o[0];
 		SolvedExam solved=(SolvedExam) o[1];
@@ -994,18 +950,38 @@ public class AESServer extends AbstractServer {
 
 
 	private void UploadSolvedExam(Object obj) throws IOException {
-		// TODO Auto-generated method stub
+		System.out.println("Student Uploaded Solved Exam");
 		Object[] o=(Object[])obj;
 		
-		AesWordDoc file=(AesWordDoc) o[0];
-		File newFile = new File(file.getFileName());
-		FileOutputStream out = new FileOutputStream(newFile);
-		out.write(file.getbytes());
-		out.close();
-		
+		MyFile file=(MyFile) o[0];
 		SolvedExam solvedExam=(SolvedExam) o[1];
-		solvedExamWordFiles.put(solvedExam, file);
-		System.out.println("fdsfs");
+		String savePath = studentsExamsPath+"/"+solvedExam.getStudent().getID();
+		File theDir = new File(savePath);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + savePath);
+		    boolean result = false;
+		    try{
+		        theDir.mkdir();
+		        result = true;
+		    } 
+		    catch(SecurityException se){
+		        System.err.println("could not create Dir!");
+		    }        
+		    if(result) {    
+		        System.out.println("DIR created now saving file in dir:"+savePath);  
+		        File newFile = new File(savePath+"/"+solvedExam.examIdToString()+".doc");
+				FileOutputStream out = new FileOutputStream(newFile);
+				out.write(file.getMybytearray());
+				out.close();
+				
+				solvedExamWordFiles.put(solvedExam, file);
+				System.out.println("Students Exam File was Created and is in:"+newFile.getPath());
+		    } else {
+		    	System.err.println("Failed to create Diractory and upload file to server!");
+		    }
+		}
 	}
 
 }

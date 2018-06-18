@@ -157,6 +157,7 @@ public class ScreensController  extends StackPane {
                 fadeIn.play();
             }
             currentScreen=name;
+            Globals.primaryStage.setTitle(name);
             return true;
         } else {
             System.out.println("screen hasn't been loaded!!! \n");

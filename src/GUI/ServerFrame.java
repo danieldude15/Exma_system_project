@@ -30,7 +30,11 @@ public class ServerFrame implements ControlledScreen,Initializable {
 
 
 	@Override public void runOnScreenChange() {
-		StartListening(null);
+		try {
+			//StartListening(null);
+		} catch (Exception e) {
+			System.out.println("Could not Connect to Server");
+		}
 	}
 	
 	@FXML public void StartListening(ActionEvent event) {
