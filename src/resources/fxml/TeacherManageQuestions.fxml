@@ -84,7 +84,7 @@
       </VBox>
       <HBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Button fx:id="home" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#BackToMainMenu" text="Home">
+            <Button fx:id="home" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#BackToMainMenu" prefHeight="25.0" prefWidth="71.0" text="Back">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>

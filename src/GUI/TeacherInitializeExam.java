@@ -40,8 +40,9 @@ public class TeacherInitializeExam implements ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		
-		Globals.primaryStage.setHeight(670);
-		Globals.primaryStage.setWidth(745);
+		examsList.getItems().clear();
+		fieldComboB.getItems().clear();
+		courseComboB.getItems().clear();
 		teacherFieldsLoading();
 	}
 
@@ -85,15 +86,19 @@ public class TeacherInitializeExam implements ControlledScreen {
     
 	@FXML
     public void MyViewHandler (ActionEvent event) {
+		if(examsList.getSelectionModel().getSelectedItem()!=null)
+		{
 		   ((TeacherViewExam)Globals.mainContainer.getController(ClientGlobals.TeacherViewExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
            Globals.mainContainer.setScreen(ClientGlobals.TeacherViewExamID);
+		}
 		}        
    
 	@FXML
     public void MyActiveHandler(ActionEvent event) {
-				
+		if(examsList.getSelectionModel().getSelectedItem()!=null) {
               ((TeacherActivateExamFrame)Globals.mainContainer.getController(ClientGlobals.ActiveExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
                Globals.mainContainer.setScreen(ClientGlobals.ActiveExamID);
+		}
 			 	}
 		
 	@FXML

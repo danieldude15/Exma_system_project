@@ -42,8 +42,10 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 			Field.setText("Field: "+ examview.getField().getName());
 			CourseId.setText("Course: "+ examview.getCourse().getName());
 			ComputerizedExamId.setSelected(true);
+			ComputerizedExamId.setId("whiteLabel");
 			ComputerizedExamId.setToggleGroup(SelectType);
 			MonualExamId.setToggleGroup(SelectType);
+			MonualExamId.setId("whiteLabel");
 		}
 
 		@Override
@@ -121,7 +123,7 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 		@FXML
 	    public void CancelButtonPressed(ActionEvent event)
 			    {
-			     Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
+			     Globals.mainContainer.setScreen(ClientGlobals.InitializeExamID);
 			    }
 	
 

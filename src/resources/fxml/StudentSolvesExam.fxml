@@ -30,7 +30,7 @@
          <children>
             <Button fx:id="downloadButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#StudentPressedDownloadButton" text="Download" />
             <Button fx:id="submitButton" layoutX="119.0" layoutY="14.0" mnemonicParsing="false" onAction="#StudentPressedSubmitButton" text="Submit" />
-            <Button fx:id="exitButton" layoutX="196.0" layoutY="14.0" mnemonicParsing="false" onAction="#StudentPressedExitButton" prefHeight="25.0" prefWidth="54.0" text="Exit" />
+            <Button fx:id="exitButton" layoutX="196.0" layoutY="14.0" mnemonicParsing="false" onAction="#StudentPressedExitButton" prefHeight="25.0" prefWidth="54.0" text="Back" />
          </children>
       </Pane>
       <Label layoutX="33.0" layoutY="17.0" prefHeight="17.0" prefWidth="54.0" text="Teacher:">

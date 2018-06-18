@@ -67,9 +67,18 @@ public class AESServer extends AbstractServer {
 		studentsCheckOutFromActiveExam=new HashMap<>();
 		//wordFiles=new HashMap<ActiveExam,AesWordDoc>();Word Files
 		studentsSolvedExams = new HashMap<>();
+
 		timeChangeRequests= new HashMap<>();
 		solvedExamWordFiles=new HashMap<>();
 		examTimelines = new HashMap<>();
+		/**
+		 * Added a virtual temporary Active Exam to Server!
+		 */
+		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
+		ActiveExam nivsExam = new ActiveExam("d35i", 0, 
+				new Date(new java.util.Date().getTime()),
+				sqlcon.getExam("030107"),teacher);
+		InitializeActiveExams(nivsExam);
 		
 		setupServerFolders();
 		

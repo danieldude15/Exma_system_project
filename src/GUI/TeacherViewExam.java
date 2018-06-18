@@ -21,13 +21,19 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 
 	@FXML VBox questionInfo_StudentScoreAndNote;
 	@FXML Label examinfo;
+	@FXML Label feildinfo;
+	@FXML Label courseinfo;
+	@FXML Label durationinfo;
 	@FXML Button active;
 	@FXML Button Back;
 	Exam examview=null;	
 	@Override
 	public void runOnScreenChange() {
 		questionInfo_StudentScoreAndNote.getChildren().clear();
-		examinfo.setText(String.format("View Exam in course:%s in filed:%s", examview.getCourse().getName() , examview.getField().getName()));
+		examinfo.setText("Exam id: "+examview.examIdToString());
+		feildinfo.setText("Feild id: "+examview.getField().getName());
+		courseinfo.setText("Course id: "+examview.getCourse().getName());
+		durationinfo.setText("Duration: "+String.valueOf(examview.getDuration()));
 		int questionIndex=0;
 		for(QuestionInExam qie: examview.getQuestionsInExam() )
 		{
@@ -35,6 +41,7 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 			SetQuestionStringAndAnswersOnWindowScreen(qie , questionIndex);
 		}
 	}
+	
 	private void SetQuestionStringAndAnswersOnWindowScreen(QuestionInExam qie ,int questionIndex) {
 		// TODO Auto-generated method stub
 		int answerIndex=1;
@@ -50,14 +57,14 @@ public class TeacherViewExam implements Initializable, ControlledScreen {
 		questionInfo_StudentScoreAndNote.getChildren().add(questionStringAndPointsValue);
 
 
-		if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for student, we add it at the top of the question.
+		if(qie.getStudentNote() != null && !qie.getStudentNote().isEmpty())//If question contains note for student, we add it at the top of the question.
 		{
 			Label questionNoteforstudent=new Label();
 			questionNoteforstudent.setText("Note for student: "+qie.getStudentNote());
 			questionNoteforstudent.setId("blackLabel");
 			questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforstudent);
 		}
-		if(qie.getStudentNote() != null && !qie.getStudentNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
+		if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
 		{
 			Label questionNoteforteacher=new Label();
 			questionNoteforteacher.setText("Note for teacher: "+qie.getStudentNote());
