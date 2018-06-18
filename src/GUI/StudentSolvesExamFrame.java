@@ -51,8 +51,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final Image v = new Image("resources/GoodLuck.jpg");
     private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
-	@Override
-	public void runOnScreenChange() {		
+	@Override public void runOnScreenChange() {		
 		
 		questionsAndAnswers.getChildren().clear();
 		questionWithAnswers.clear();
@@ -257,10 +256,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 		return sendToGenerateReport;
 	}
-	
-	
-
-
 
 	/**
 	* Called from BuildSolvedExamObject method and runs all over student's answers for each question in the exam and return an Object[].
@@ -329,10 +324,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		return studentAnsersAndScoreForExam;
 	}
 
-
-
-
-
 	/**
 	 * When student press submit he gets a confirmation dialog and can press ok for submit,
 	 *  or cancel to go back to the exam.
@@ -342,6 +333,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private void ConfirmationDialogForSubmitButton(SolvedExam sendToGenerateReport, boolean inTime) {
 		if(!inTime) {//Student didn't submit his exam on time.
 			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
+			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 			return;
 		}
 		
@@ -375,12 +367,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		if (result.get() == ButtonType.OK) {
 			SolvedExam sendToGenerateReport=BuildSolvedExamObject(false);
 			/*Confirmation Dialog/*/
-			if(SolvedExamController.UploadFile(sendToGenerateReport)) {
-				String popUpTitle="Submit confirmation";
-				String popUpContentText="The exam was submitted successfully!";
-				Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
-				Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
-			}
+			ConfirmationDialogForSubmitButton(sendToGenerateReport,false);
 		}
 	}
 

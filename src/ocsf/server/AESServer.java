@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PrimitiveIterator.OfDouble;
 
 import javax.swing.filechooser.FileSystemView;
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
@@ -938,7 +939,13 @@ public class AESServer extends AbstractServer {
 		ActiveExam e=(ActiveExam) o[0];
 		SolvedExam solved=(SolvedExam) o[1];
 		Student student=(Student) o[2];
-		studentsSolvedExams.get(e).add(solved);
+		ArrayList<SolvedExam> studentExams = studentsSolvedExams.get(e);
+		if(studentExams==null) {
+			System.err.println("Did not find the active exam:" + e.toString());
+			return;
+		}
+		studentExams.add(solved);
+		studentsSolvedExams.put(e, studentExams);
 		studentsCheckOutFromActiveExam.get(e).remove(student);
 		if(studentsCheckOutFromActiveExam.get(e).isEmpty())//If all students have submitted the exam.
 			GenerateActiveExamReport(e);
