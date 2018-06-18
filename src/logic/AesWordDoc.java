@@ -185,7 +185,11 @@ public class AesWordDoc extends XWPFDocument implements Serializable {
 	  				
 	  				System.out.println(file.getName());
 	  				//return file.getName();
+	  				
 	  				doc.setFileName(file.getName());
+	  				System.out.println(file.getCanonicalPath());
+	  				file.toPath();
+	  				System.out.println(file.getCanonicalPath());
 	  				return doc;
 	  				
 	  			} catch (FileNotFoundException e) {
