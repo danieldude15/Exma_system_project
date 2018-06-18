@@ -12,8 +12,11 @@ import logic.*;
 import java.io.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.swing.filechooser.FileSystemView;
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	
@@ -47,6 +50,13 @@ public class AESServer extends AbstractServer {
 	
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
+	
+	String serverDirPath = FileSystemView.getFileSystemView().getHomeDirectory()+"\\ServerFiles";
+	
+	String studentsExamsPath = serverDirPath+"\\Students_Exams";
+	
+	String examFilesPath = serverDirPath+"\\Exam_Files";
+	
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
@@ -63,14 +73,49 @@ public class AESServer extends AbstractServer {
 		 * Added a virtual temporary Active Exam to Server!
 		 */
 		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d34i", 0, 
+		ActiveExam nivsExam = new ActiveExam("d35i", 0, 
 				new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("030103"),teacher);
+				sqlcon.getExam("030104"),teacher);
 		InitializeActiveExams(nivsExam);
+		
+		setupServerFolders();
 		
 		
 		//AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
 		
+	}
+
+	private void setupServerFolders() {
+		
+		File theDir = new File(serverDirPath);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + serverDirPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
+		theDir = new File(studentsExamsPath);
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + studentsExamsPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
+		theDir = new File(examFilesPath);
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + examFilesPath);
+		    try{
+		        theDir.mkdir();
+		    } catch (Exception e) {
+				System.err.println("Could not create a directory for server");
+			}
+		}
 	}
 
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -210,12 +255,9 @@ public class AESServer extends AbstractServer {
 			case "InitializeActiveExams":
 				InitializeActiveExams(o);
 				break;
-			/*case "CreateDocFile":
-				CreateDocFile(client,o);
-				break;/*/
-			/*case "SystemCheckExam":
-				SystemCheckSolvedExam(client,o);
-				break;/*/
+			case "GetStudentsManualExam":
+				GetStudentsManualExam(client,o);
+				break;
 			case "UploadSolvedExam":
 				UploadSolvedExam(o);
 				break;
@@ -355,12 +397,13 @@ public class AESServer extends AbstractServer {
 	                  }));
 	        timeline.playFromStart();
 		} else {
-			System.out.println(ae + "not found in studentsInExam HashMap!");
+			System.err.println(ae + "not found in studentsInExam HashMap!");
 		}
 	}
 	
-	private void setActiveExamTimeline(ActiveExam ae, TimeChangeRequest tcr) {
+	private void setActiveExamTimeline(ActiveExam ae) {
 		Long examTime = (long) ae.getDuration()*60;
+		TimeChangeRequest tcr = timeChangeRequests.get(ae);
 		if(tcr!=null) {
 			examTimelines.get(ae).stop();
 			examTimelines.remove(ae);
@@ -514,6 +557,37 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("allStudents",students);
 		client.sendToClient(im);
 	}
+
+
+	private void GetStudentsManualExam(ConnectionToClient client, Object o) throws IOException {
+		SolvedExam se = (SolvedExam)o;
+		String filePath = studentsExamsPath+"\\"+se.getStudent().getID()+"\\"+se.examIdToString()+".doc";
+		
+		File examFile = new File(filePath);
+
+		// if the directory does not exist, create it
+		if (examFile.exists()) {
+			MyFile myExamFileDes = new MyFile(filePath);
+			myExamFileDes.setSize((int) examFile.length());
+			myExamFileDes.initArray((int) examFile.length());
+			
+			
+			
+			try {
+				FileInputStream fis = new FileInputStream(examFile);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				bis.read(myExamFileDes.getMybytearray(),0,(int) examFile.length());
+			} catch (IOException e) {
+				System.err.println("Could Not read from the Exam File Buffer");
+				e.printStackTrace();
+			}
+			iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+			client.sendToClient(msg);
+		    } else {
+		    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath());
+		    }
+		}
+		
 	
 	private void getAllTeachers(ConnectionToClient client) throws IOException {
 		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
@@ -601,6 +675,7 @@ public class AESServer extends AbstractServer {
 					}
 				}
 				updateActiveExamHashmaps(tc.getActiveExam().getCode(),tc.getNewTime());
+				setActiveExamTimeline(tc.getActiveExam());
 			}
 			timeChangeRequests.remove(tc.getActiveExam());
 		}
@@ -740,7 +815,7 @@ public class AESServer extends AbstractServer {
 		studentsSolvedExams.put(ae, new ArrayList<SolvedExam>());
 		activeExams.put(ae.getCode(), ae);
 		studentsCheckOutFromActiveExam.put(ae, sqlcon.GetAllStudentsInCourse(ae.getCourse()));
-		setActiveExamTimeline(ae,null);
+		setActiveExamTimeline(ae);
 	}
 	
 
@@ -794,9 +869,9 @@ public class AESServer extends AbstractServer {
 	private void createManualExam(ConnectionToClient client, Object o) throws IOException {
 		ActiveExam ae = (ActiveExam)o;
 		MyFile myExamFileDes = new MyFile(ae.examIdToString()+".doc");
-		myExamFileDes.CreateWordFile(ae, ae.examIdToString()+".doc");
+		myExamFileDes.CreateWordFile(ae, examFilesPath+"\\"+ae.examIdToString()+".doc");
 		
-		File examFile = new File(ae.examIdToString()+".doc");
+		File examFile = new File(examFilesPath+"\\"+ae.examIdToString()+".doc");
 		myExamFileDes.setSize((int) examFile.length());
 		myExamFileDes.initArray((int) examFile.length());
 		
@@ -807,6 +882,14 @@ public class AESServer extends AbstractServer {
 		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
 		client.sendToClient(msg);
 		
+		try {
+			if(examFile.delete())
+				System.out.println("file was deleted!");
+			else 
+				System.err.println("File could not be deleted");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
  		
 	}
@@ -818,12 +901,6 @@ public class AESServer extends AbstractServer {
 	}
 	
 	public void GenerateActiveExamReport(ActiveExam ae) {
-		//TODO remove this condition when done developing!
-		if(ae.getCode().equals("d34i")) {
-			System.err.println("Development env active exam report generation being skipped\nTo generate a real report you must go throw the whole proccess of activating the exam by a teacher");
-			return;
-		}
-		
 		ArrayList<SolvedExam> solvedExams = studentsSolvedExams.get(ae);
 		int participated = studentsInExam.get(ae).size();
 		int submitted = studentsSolvedExams.get(ae).size();
@@ -835,7 +912,7 @@ public class AESServer extends AbstractServer {
 		} else if (sqlcon.insertCompletedExam(eReport)>0) {
 			System.out.println("Exam:" +ae.getCode() +" was inserted into database.");
 		} else {
-			System.out.println("Somthing went wrong");
+			System.err.println("there were solved exams in hash map but could not insert the examReport into database - Somthing went wrong");
 		}
 		activeExams.remove(ae.getCode()); 
 		studentsInExam.remove(ae); 
@@ -876,13 +953,33 @@ public class AESServer extends AbstractServer {
 		
 		MyFile file=(MyFile) o[0];
 		SolvedExam solvedExam=(SolvedExam) o[1];
-		File newFile = new File(file.getFileName());
-		FileOutputStream out = new FileOutputStream(newFile);
-		out.write(file.getMybytearray());
-		out.close();
-		
-		solvedExamWordFiles.put(solvedExam, file);
-		System.out.println("fdsfs");
+		String savePath = studentsExamsPath+"/"+solvedExam.getStudent().getID();
+		File theDir = new File(savePath);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + savePath);
+		    boolean result = false;
+		    try{
+		        theDir.mkdir();
+		        result = true;
+		    } 
+		    catch(SecurityException se){
+		        System.err.println("could not create Dir!");
+		    }        
+		    if(result) {    
+		        System.out.println("DIR created now saving file in dir:"+savePath);  
+		        File newFile = new File(savePath+"/"+solvedExam.examIdToString()+".doc");
+				FileOutputStream out = new FileOutputStream(newFile);
+				out.write(file.getMybytearray());
+				out.close();
+				
+				solvedExamWordFiles.put(solvedExam, file);
+				System.out.println("Students Exam File was Created and is in:"+newFile.getPath());
+		    } else {
+		    	System.err.println("Failed to create Diractory and upload file to server!");
+		    }
+		}
 	}
 
 }

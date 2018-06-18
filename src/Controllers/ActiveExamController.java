@@ -97,7 +97,6 @@ public class ActiveExamController {
 			try {
 				iMessage msg= new iMessage("GetManualExam",activeExam);
 				client.sendToServer(msg);
-				//client.getResponseFromServer();
 				return (MyFile) client.getResponseFromServer().getObj();
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
@@ -174,5 +173,6 @@ public class ActiveExamController {
 		}
 		return false;
 	}
+
 	
 }
