@@ -179,9 +179,8 @@ public class AESClient extends AbstractClient{
 			alert.setHeaderText(null);
 			alert.setContentText("Server Has Closed Its Connection! Someone Closed The Server!");
 			alert.showAndWait();
-			Globals.primaryStage.close();
+			Globals.mainContainer.setScreen(ClientGlobals.ClientConnectionScreenID);
 			ClientGlobals.ClientConnectionController.DisconnectFromServer(null);
-			System.exit(1);
 			});
 	}
 	  
