@@ -20,7 +20,14 @@ import logic.*;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public class PrincipleViewReportFrame implements ControlledScreen {
+public class ViewReportFrame implements ControlledScreen {
+	
+	enum user {
+		Principle , Teacher
+	}
+	public enum type {
+		STUDENT,TEACHER,COURSE,EXAM
+	}
 	
 	@FXML Label infoTitle1;
 	@FXML Label infoTitle2;
@@ -48,9 +55,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	@FXML CategoryAxis xAxis;
 	@FXML NumberAxis yAxis;
 	
-	public enum type {
-		STUDENT,TEACHER,COURSE,EXAM
-	}
+	private user me;
 	private type windowType; 
 	private Student student =null;
 	private Teacher teacher =null;
@@ -98,7 +103,10 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	}
 
 	@FXML public void backToReports(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
+		if(getMe()==user.Principle)
+			Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
+		else 
+			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
 	
 	
@@ -307,15 +315,28 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	private void updateBarChart(HashMap<Integer, Integer> dev, String seriesName) {
         xAxis.setLabel("Score Range");    
         xAxis.setId("whiteLabel");
+        xAxis.setStyle("-fx-fill-text:white;");
         devBarChart.getData().clear();
         XYChart.Series series = new XYChart.Series();
         for(int i=0;i<10;i++) {
-        	String name = i*10 + "-" + (i*10+10);
+        	String name = i*10 + "-" + (i*10+9);
+        	if (i==9)
+        		name = i*10 + "-" + (i*10+10);
         	series.getData().add(new XYChart.Data(name, dev.get(i)));
         	
         } 
         series.setName(seriesName);
         devBarChart.getData().add(series);
 	}
+
+	public user getMe() {
+		return me;
+	}
+
+	public void setMe(user me) {
+		this.me = me;
+	}
+	
+	
 
 }

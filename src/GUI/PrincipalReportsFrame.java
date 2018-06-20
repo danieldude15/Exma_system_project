@@ -6,7 +6,7 @@ import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ReportController;
 import Controllers.UserController;
-import GUI.PrincipleViewReportFrame.type;
+import GUI.ViewReportFrame.type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,34 +53,35 @@ public class PrincipalReportsFrame implements ControlledScreen {
     	if (selected.equals(m_studentsTab)) {
     		Student s = new Student(m_studentsList.getSelectionModel().getSelectedItem());
         	if (s==null) return;
-        	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
-        	pvrf.setWindowType(PrincipleViewReportFrame.type.STUDENT);
+        	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
+        	pvrf.setWindowType(ViewReportFrame.type.STUDENT);
         	pvrf.setStudent(s);
-        	Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewReportID);
+        	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
     	} else if (selected.equals(m_teachersTab)) {
     		Teacher t = new Teacher(m_teachersList.getSelectionModel().getSelectedItem());
         	if (t==null) return;
-        	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
-        	pvrf.setWindowType(PrincipleViewReportFrame.type.TEACHER);
+        	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
+        	pvrf.setWindowType(ViewReportFrame.type.TEACHER);
         	pvrf.setTeacher(t);
-        	Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewReportID);
+        	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_coursesTab)) {
         	Course c = m_coursesList.getSelectionModel().getSelectedItem();
         	if (c==null) return;
-        	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
-        	pvrf.setWindowType(PrincipleViewReportFrame.type.COURSE);
+        	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
+        	pvrf.setWindowType(ViewReportFrame.type.COURSE);
         	pvrf.setCourse(c);
-        	Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewReportID);
+        	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_examsTab)) {
         	ExamReport er = m_examsList.getSelectionModel().getSelectedItem();
         	if (er==null) return;
-        	PrincipleViewReportFrame pvrf = (PrincipleViewReportFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewReportID);
-        	pvrf.setWindowType(PrincipleViewReportFrame.type.EXAM);
+        	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
+        	pvrf.setWindowType(ViewReportFrame.type.EXAM);
         	pvrf.setExamReport(er);
-        	Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewReportID);
+        	pvrf.setMe(ViewReportFrame.user.Principle);
+        	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         }
     }

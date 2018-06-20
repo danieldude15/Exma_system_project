@@ -119,8 +119,8 @@ public class ClientApplication extends Application {
 			System.out.println("failed to load " + ClientGlobals.PrincipalMainID);
 			return;
 		}
-        if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewReportID,ClientGlobals.PrincipalViewReportPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewReportID);
+        if(!mainContainer.loadScreen(ClientGlobals.ViewReportID,ClientGlobals.ViewReportPath)) {
+			System.out.println("failed to load " + ClientGlobals.ViewReportID);
 			return;
 		}
 		if(!mainContainer.loadScreen(ClientGlobals.PrincipalReportsID,ClientGlobals.PrincipalReportsPath)) {

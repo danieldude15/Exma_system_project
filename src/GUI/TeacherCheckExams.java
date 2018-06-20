@@ -106,6 +106,14 @@ public class TeacherCheckExams implements ControlledScreen {
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	}
 
+	@FXML void viewReportButtonClicked(ActionEvent event) {
+		ViewReportFrame reportFrame = ((ViewReportFrame)Globals.mainContainer.getController(ClientGlobals.ViewReportID));
+		reportFrame.setExamReport(completedExam);
+		reportFrame.setMe(ViewReportFrame.user.Teacher);
+		reportFrame.setWindowType(ViewReportFrame.type.EXAM);
+		Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
+	}
+	
 	public void setCompletedExams(ExamReport ce) {
 		this.completedExam = ce;
 	}

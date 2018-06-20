@@ -94,7 +94,6 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			keyEvent.consume();
 		} else 
 			errorLabel.setVisible(false);
-		System.out.println(keyEvent.getCharacter().charAt(0));
 		try {
 			Integer score = Integer.parseInt(newScore.getText() + keyEvent.getCharacter().charAt(0));
 			if (score>100 || score <0) {
@@ -222,6 +221,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 				Globals.popUp(AlertType.INFORMATION,"Exam Check Is Updated Successfully","The exam was updated into the system.");
 				doneImage.setVisible(true);
 				score.setText(Integer.toString(solvedExam.getScore()));
+				approveB.setVisible(false);
+				score.setDisable(true);
+				changeNote.setDisable(true);
 			} else {
 				//Failed To insert!
 			}
