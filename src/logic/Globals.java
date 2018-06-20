@@ -12,8 +12,6 @@ import javafx.stage.Stage;
  */
 public class Globals {
 		
-	public static final String ProgressIndicatorID = "progressIndicator";
-	public static final String ProgressIndicatorPath = "/resources/fxml/progressIndicator.fxml";
 	/**
 	 * if im a client or a server
 	 */

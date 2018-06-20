@@ -123,10 +123,6 @@ public class ClientApplication extends Application {
 			System.out.println("failed to load " + ClientGlobals.PrincipalViewReportID);
 			return;
 		}
-        if(!mainContainer.loadScreen(Globals.ProgressIndicatorID,Globals.ProgressIndicatorPath)) {
-			System.out.println("failed to load " + Globals.ProgressIndicatorID);
-			return;
-		}
 		if(!mainContainer.loadScreen(ClientGlobals.PrincipalReportsID,ClientGlobals.PrincipalReportsPath)) {
 			System.out.println("failed to load " + ClientGlobals.PrincipalReportsID);
 			return;
