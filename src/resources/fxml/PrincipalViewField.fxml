@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewFieldFrame">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalViewFieldFrame">
    <children>
       <HBox prefHeight="42.0" prefWidth="685.0">
          <children>
@@ -77,7 +72,7 @@
       </HBox>
       <AnchorPane prefHeight="55.0" prefWidth="688.0">
          <children>
-            <Button fx:id="m_backBtn" alignment="CENTER" contentDisplay="RIGHT" layoutX="538.0" layoutY="14.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#BackToViewData" prefHeight="25.0" prefWidth="85.0" text="Back " textAlignment="CENTER" />
+            <Button fx:id="m_backBtn" alignment="CENTER" contentDisplay="RIGHT" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#BackToViewData" prefHeight="25.0" prefWidth="85.0" text="Back " textAlignment="CENTER" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />

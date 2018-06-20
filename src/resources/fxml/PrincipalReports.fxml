@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalReportsFrame">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox prefHeight="553.0" prefWidth="585.0" spacing="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PrincipalReportsFrame">
    <children>
-      <TabPane fx:id="m_reportsTabPane" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="572.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+      <TabPane fx:id="m_reportsTabPane" prefHeight="437.0" prefWidth="557.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="m_studentsTab" onSelectionChanged="#StudentsTabSelected" text="Students">
                <content>
@@ -35,17 +30,35 @@
                </content>
             </Tab>
         </tabs>
+         <VBox.margin>
+            <Insets left="14.0" right="14.0" top="14.0" />
+         </VBox.margin>
       </TabPane>
-      <Label layoutX="14.0" layoutY="313.0" text="Search By ID:">
+      <Label text="Search By ID:">
          <font>
             <Font size="18.0" />
          </font>
-         <padding>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
+         <VBox.margin>
+            <Insets bottom="5.0" left="215.0" right="14.0" top="14.0" />
+         </VBox.margin>
       </Label>
-      <TextField fx:id="m_searchBox" layoutX="14.0" layoutY="361.0" onMouseClicked="#onTextBoxMouseClick" promptText="Enter ID Here" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-      <Button fx:id="m_searchBtn" layoutX="217.0" layoutY="355.0" mnemonicParsing="false" onAction="#viewReportButtonPressed" text="View Report" />
-      <Button fx:id="m_backtoMainBtn" layoutX="272.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="25.0" prefWidth="74.0" text="Back " AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <HBox alignment="CENTER" spacing="126.0">
+         <children>
+            <Button fx:id="m_backtoMainBtn" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="25.0" prefWidth="74.0" text="Back ">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <TextField fx:id="m_searchBox" onMouseClicked="#onTextBoxMouseClick" promptText="Enter ID Here">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </TextField>
+            <Button fx:id="m_searchBtn" mnemonicParsing="false" onAction="#viewReportButtonPressed" text="View Report" />
+         </children>
+         <VBox.margin>
+            <Insets left="14.0" right="14.0" />
+         </VBox.margin>
+      </HBox>
    </children>
-</AnchorPane>
+</VBox>
