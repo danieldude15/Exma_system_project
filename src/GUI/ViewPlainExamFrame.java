@@ -3,7 +3,6 @@ package GUI;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -13,9 +12,6 @@ import logic.Exam;
 import logic.Globals;
 import logic.QuestionInExam;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class ViewPlainExamFrame implements ControlledScreen {
 	enum user {
@@ -116,6 +112,12 @@ public class ViewPlainExamFrame implements ControlledScreen {
             questionNoteforteacher.setPadding(new Insets(5,5,5,5));
             questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforteacher);
         }
+
+        Label seperator = new Label();
+        seperator.setText("-----------------------------------------------------------------------------------------------------------");
+        seperator.setId("blackLabel");
+        seperator.setPadding(new Insets(5,5,5,5));
+        questionInfo_StudentScoreAndNote.getChildren().add(seperator);
 
     }
 }
