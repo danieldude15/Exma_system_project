@@ -101,8 +101,9 @@ public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
         if(qie.getInnerNote() != null && !qie.getInnerNote().isEmpty())//If question contains note for teacher, we add it at the top of the question.
         {
             Label questionNoteforteacher = new Label();
-            questionNoteforteacher.setText("Note for teacher: "+qie.getStudentNote());
+            questionNoteforteacher.setText("Note for teacher: "+qie.getInnerNote());
             questionNoteforteacher.setId("blackLabel");
+            questionNoteforteacher.setPadding(new Insets(5,5,5,5));
             questionInfo_StudentScoreAndNote.getChildren().add(questionNoteforteacher);
         }
 
