@@ -71,14 +71,6 @@ public class AESServer extends AbstractServer {
 		timeChangeRequests= new HashMap<>();
 		solvedExamWordFiles=new HashMap<>();
 		examTimelines = new HashMap<>();
-		/**
-		 * Added a virtual temporary Active Exam to Server!
-		 */
-		Teacher teacher = new Teacher(204360317, "niv", "mizrahi", "Niv Mizrahi");
-		ActiveExam nivsExam = new ActiveExam("d36i", 0, 
-				new Date(new java.util.Date().getTime()),
-				sqlcon.getExam("030107"),teacher);
-		InitializeActiveExams(nivsExam);
 		
 		setupServerFolders();
 		
@@ -157,6 +149,9 @@ public class AESServer extends AbstractServer {
 				break;
 			case "getAllExamReport":
 				getAllExamReport(client);
+				break;
+			case "getStudentsCourses":
+				getStudentsCourses(client,o);
 				break;
 			case "getAllTimeChangeRequest":
 				getAllTimeChangeRequest(client);
@@ -530,6 +525,14 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+
+
+	private void getStudentsCourses(ConnectionToClient client, Object o) throws IOException {
+		ArrayList<Course> courses = sqlcon.getStudentsCourses((User)o);
+		iMessage im = new iMessage("studentsCourses",courses);
+		client.sendToClient(im);
+	}
+	
 	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<ExamReport> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
 		iMessage im = new iMessage("TeacherCompletedExams", completedExams);

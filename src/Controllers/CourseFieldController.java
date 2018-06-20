@@ -3,12 +3,15 @@ package Controllers;
 import logic.Course;
 import logic.Field;
 import logic.Teacher;
+import logic.User;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javafx.util.Callback;
 
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
@@ -162,6 +165,21 @@ public class CourseFieldController {
 				}
 			} catch (IOException e) {
 				ClientGlobals.handleIOException(e);
+			}
+		}
+		return null;
+	}
+
+	public static ArrayList<Course> getStudentCourses(User user) {
+		AESClient client = ClientGlobals.client;
+		if(client.isConnected()) {
+			iMessage msg= new iMessage("getStudentsCourses",user);
+			try {
+				client.sendToServer(msg);
+				return (ArrayList<Course>) client.getResponseFromServer().getObj();
+			} catch (IOException e) {
+				ClientGlobals.handleIOException(e);
+				e.printStackTrace();
 			}
 		}
 		return null;

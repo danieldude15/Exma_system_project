@@ -15,6 +15,10 @@ public class DBMain {
 	private String pass;
 	private Connection conn;
 
+	private String getStudentsCourses= new String(""
+			+ "SELECT c.courseid, c.coursename, f.fieldid, f.fieldname "
+			+ "FROM aes.courses as c, aes.fields as f,aes.student_in_course as sic , aes.users as u "
+			+ "WHERE sic.studentid=u.userid and c.fieldid=f.fieldid and c.courseid=sic.courseid and sic.fieldid=f.fieldid and u.userid=?");
 	private String teacherFields = new String(
 			"SELECT distinct (f.fieldid),f.fieldname "
 			+ "FROM aes.teacher_fields as tf,fields as f "
@@ -1260,6 +1264,27 @@ public class DBMain {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+
+	public ArrayList<Course> getStudentsCourses(User o) {
+		try {
+			PreparedStatement statement = conn.prepareStatement(getStudentsCourses);
+			statement.setInt(1, o.getID());
+			System.out.println("SQL:" + statement);
+			ResultSet rs = statement.executeQuery();
+			ArrayList<Course> result = new ArrayList<>();
+			while(rs.next()) {
+				int courseid = rs.getInt(1);
+				String coursename = rs.getString(2);
+				int fieldsid = rs.getInt(3);
+				String fieldName = rs.getString(4);
+				result.add(new Course(courseid,coursename,new Field(fieldsid,fieldName)));
+			}
+			return result;
+		} catch (SQLException e) {
+			ServerGlobals.handleSQLException(e);
+		}
+		return null;
 	}
 
 

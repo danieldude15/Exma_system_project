@@ -2,6 +2,7 @@ package GUI;
 
 
 import Controllers.ControlledScreen;
+import Controllers.CourseFieldController;
 import Controllers.SolvedExamController;
 import Controllers.UserController;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import logic.Course;
 import logic.Globals;
 import logic.SolvedExam;
 import logic.Student;
@@ -27,6 +29,7 @@ public class StudentMainFrame implements ControlledScreen{
 	@FXML Label username;
 	@FXML Label userid;
 	@FXML Pane userImage;
+	@FXML ListView<Course> courseList;
 	
 	//HashMap<Key(String CourseName),Value(String SolvedExam id)>
 	private HashMap<String,String> courseNameAndExamId=new HashMap<String,String>();
@@ -75,10 +78,9 @@ public class StudentMainFrame implements ControlledScreen{
 	
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
 		courseNameAndExamId.clear();
 		solvedExamsList.getItems().clear();
-		
+		courseList.setItems(FXCollections.observableArrayList(CourseFieldController.getStudentCourses(ClientGlobals.client.getUser())));
 		//Get all student solved exams from database and set it to the ListView field on window
 		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExamsByUser((Student)ClientGlobals.client.getUser());
 		ArrayList<SolvedExam> myAprovedSolvedExam = new ArrayList<>();
