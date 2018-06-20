@@ -46,6 +46,15 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
     @Override
     public void runOnScreenChange() {
+        updateStudentsList();
+        updateTeachersList();
+        updateQuestionsList();
+        updateExamsList();
+        updateFieldsList();
+        updateCoursesList();
+        m_coursesList.setFocusTraversable(false);
+        m_teachersList.setFocusTraversable(false);
+        m_studentsList.setFocusTraversable(false);
     }
 
     @FXML
@@ -105,13 +114,6 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_examsMap = new HashMap<>();
         m_fieldsMap = new HashMap<>();
         m_studentsAndTeachersMap = new HashMap<>();
-        updateStudentsList();
-        updateTeachersList();
-        updateQuestionsList();
-        updateExamsList();
-        updateFieldsList();
-        updateCoursesList();
-        m_coursesList.setFocusTraversable(false);
     }
 
     // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )
@@ -133,6 +135,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }catch (NullPointerException e){
             System.out.println("No Object Yet");
         }
+        m_searchBtn.setDisable(true);
 
     }
 
@@ -147,6 +150,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }catch (NullPointerException e){
             System.out.println("No Object Yet");
         }
+        m_searchBtn.setDisable(true);
     }
 
     @FXML
