@@ -46,6 +46,15 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
 
     @Override
     public void runOnScreenChange() {
+        updateStudentsList();
+        updateTeachersList();
+        updateQuestionsList();
+        updateExamsList();
+        updateFieldsList();
+        updateCoursesList();
+        m_coursesList.setFocusTraversable(false);
+        m_teachersList.setFocusTraversable(false);
+        m_studentsList.setFocusTraversable(false);
     }
 
     @FXML
@@ -105,13 +114,6 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_examsMap = new HashMap<>();
         m_fieldsMap = new HashMap<>();
         m_studentsAndTeachersMap = new HashMap<>();
-        updateStudentsList();
-        updateTeachersList();
-        updateQuestionsList();
-        updateExamsList();
-        updateFieldsList();
-        updateCoursesList();
-        m_coursesList.setFocusTraversable(false);
     }
 
     // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )
@@ -127,11 +129,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         if(!m_studentsList.getSelectionModel().isEmpty())
             m_studentsList.getSelectionModel().clearSelection();
         try{
-            if(m_searchBtn.isDisabled()){
-                m_searchBtn.setDisable(false);
-            }
-        }catch (NullPointerException e){
-            System.out.println("No Object Yet");
+            m_searchBtn.setDisable(true);
+        }catch (NullPointerException e) {
+            System.out.println( e.getClass().getName() + "No Object Yet");
         }
 
     }
@@ -141,12 +141,11 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         if(!m_teachersList.getSelectionModel().isEmpty())
             m_teachersList.getSelectionModel().clearSelection();
         try{
-            if(m_searchBtn.isDisabled()){
-                m_searchBtn.setDisable(false);
-            }
+            m_searchBtn.setDisable(true);
         }catch (NullPointerException e){
-            System.out.println("No Object Yet");
+            System.out.println(e.getClass().getName() + "No Object Yet");
         }
+        m_searchBtn.setDisable(true);
     }
 
     @FXML
@@ -160,7 +159,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                 m_searchBtn.setDisable(false);
             }
         }catch (NullPointerException e){
-            System.out.println("No Object Yet");
+            System.out.println(e.getClass().getName() + "No Object Yet");
         }
     }
 
@@ -175,7 +174,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                 m_searchBtn.setDisable(false);
             }
         }catch (NullPointerException e){
-            System.out.println("No Object Yet");
+            System.out.println(e.getClass().getName() + "No Object Yet");
         }
     }
 
@@ -190,7 +189,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                 m_searchBtn.setDisable(false);
             }
         }catch (NullPointerException e){
-            System.out.println("No Object Yet");
+            System.out.println(e.getClass().getName() + "No Object Yet");
         }
     }
 
