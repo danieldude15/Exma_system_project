@@ -18,7 +18,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
-
+	enum user {
+		Teacher,Principle
+	}
 
     @FXML private Label m_examIDlbl;
     @FXML private Label m_courseNamelbl;
