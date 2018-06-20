@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import logic.Globals;
 import logic.iMessage;
 import ocsf.server.AESServer;
 import ocsf.server.ServerGlobals;
@@ -30,6 +31,7 @@ public class ServerFrame implements ControlledScreen,Initializable {
 
 
 	@Override public void runOnScreenChange() {
+		portnum.setText(Globals.port);
 		StartListenBotton.setDisable(false);
 		closeConnectionBotton.setDisable(true);
 		try {

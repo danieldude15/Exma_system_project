@@ -32,8 +32,7 @@ public class ClientFrame implements ControlledScreen ,Initializable {
 	@FXML Button disconnectB;
 	@FXML Button launchapp;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	@Override public void initialize(URL location, ResourceBundle resources) {
 		ClientGlobals.ClientConnectionController = this; 
 	}
 
@@ -110,7 +109,6 @@ public class ClientFrame implements ControlledScreen ,Initializable {
 
 	@Override
 	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
-		
+		portval.setText(Globals.port);
 	}
 }

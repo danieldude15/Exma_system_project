@@ -67,7 +67,6 @@ public class ClientApplication extends Application {
 		
 		leadAllScreens();
 		
-		
 		if(connected) {
 			Globals.mainContainer.setScreen(ClientGlobals.LogInID);
 		} else {

@@ -5,6 +5,7 @@ import GUI.ClientFrame;
 import java.io.IOException;
 
 public class ClientGlobals {
+	
 	public static AESClient client = null;
 	public static boolean kill = false;
 	public static String[] initialArgs =null;
@@ -118,63 +119,6 @@ public class ClientGlobals {
 			e1.printStackTrace();
 		}
 	}
-	
-	
-	
-	/*
-	#####################   NIV's Globals!    #########################
-	*/
-	
-	
-	
-	
-	/*
-	#####################  END OF NIV's Globals!    #########################
-	*/
-	
-	
-	
-	
-	
-	/*
-	#####################   ITZIKS's Globals!    #########################
-	*/
-
-
-
-
-	/*
-	#####################  END OF ITZIKS's Globals!    #########################
-	*/
-	
-	
-	
-	
-	
-	/*
-	#####################   NATHAN's Globals!    #########################
-	*/
-
-
-	/*
-	#####################  END OF NATHAN's Globals!    #########################
-	*/
-	
-	
-	
-	
-	
-	
-	/*
-	#####################   DANIEL's Globals!    #########################
-	*/
-
-
-
-
-	/*
-	#####################  END OF DANIEL's Globals!    #########################
-	*/
 	
 	
 }

@@ -30,6 +30,7 @@ public class Globals {
 	 * this is the mainContainer that holds all the nodes of contents of all screens and used to pass by different screens information
 	 */
 	public static ScreensController mainContainer;
+	public static String port = "5555";
 	/**
 	 * handle a core exception when the program cannot continue to function after this type of exception
 	 * this function should show and alert with exception details and than System.exit(1) at the end of it.
