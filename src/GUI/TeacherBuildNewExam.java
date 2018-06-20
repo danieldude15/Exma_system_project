@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class TeacherBuildNewExam implements Initializable, ControlledScreen {
+public class TeacherBuildNewExam implements ControlledScreen {
 	
 	enum windowType {
 		EDIT,Build
@@ -119,12 +119,6 @@ public class TeacherBuildNewExam implements Initializable, ControlledScreen {
 			setQuestionsListInVBox();
 		}
 	}
-	
-	 @Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-			// TODO Auto-generated method stub
-			
-		}
 
 	private void teacherFieldsLoading() {
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());

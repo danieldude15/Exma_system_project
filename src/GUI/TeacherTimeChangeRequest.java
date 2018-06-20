@@ -17,7 +17,7 @@ import ocsf.client.ClientGlobals;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TeacherTimeChangeRequest implements Initializable, ControlledScreen{
+public class TeacherTimeChangeRequest implements ControlledScreen{
 
 	@FXML TextField SelectNewTime;
 	@FXML TextField RequestExplenation;
@@ -34,11 +34,6 @@ public class TeacherTimeChangeRequest implements Initializable, ControlledScreen
 		Errortime.setVisible(false);
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
-	}
 	@FXML
 	private void SubmitRequest (ActionEvent event)
 	{

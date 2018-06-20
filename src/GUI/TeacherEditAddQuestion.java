@@ -31,7 +31,7 @@ import logic.Question;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
-public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
+public class TeacherEditAddQuestion implements ControlledScreen {
 	enum windowType {
 		EDIT,ADD
 	}
@@ -67,9 +67,6 @@ public class TeacherEditAddQuestion implements ControlledScreen, Initializable {
 	@FXML VBox courseVbox;
 	@FXML Button submitB;
 	
-	@Override public void initialize(URL arg0, ResourceBundle arg1) {
-
-	}
 
 	@Override public void runOnScreenChange() {
 		organizedFieldsHashMap();

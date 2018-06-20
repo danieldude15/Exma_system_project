@@ -135,8 +135,8 @@ public class ClientApplication extends Application {
 			System.out.println("failed to load " + ClientGlobals.PrincipalViewQuestionID);
 			return;
 		}
-		if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewExamID,ClientGlobals.PrincipalViewExamPath)) {
-			System.out.println("failed to load " + ClientGlobals.PrincipalViewExamID);
+		if(!mainContainer.loadScreen(ClientGlobals.ViewPlainExamID,ClientGlobals.ViewPlainExamPath)) {
+			System.out.println("failed to load " + ClientGlobals.ViewPlainExamID);
 			return;
 		}
         if(!mainContainer.loadScreen(ClientGlobals.PrincipalViewFieldID,ClientGlobals.PrincipalViewFieldPath)) {
@@ -171,16 +171,12 @@ public class ClientApplication extends Application {
 				System.out.println("failed to load "+ ClientGlobals.StudentSolvesExamID);
 				return;
         }
-		if (!mainContainer.loadScreen(ClientGlobals.InitializeExamID, ClientGlobals.InitializeExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.InitializeExamID);
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherInitializeExamID, ClientGlobals.TeacherInitializeExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherInitializeExamID);
 			return;
 		}
-		if (!mainContainer.loadScreen(ClientGlobals.ActiveExamID, ClientGlobals.ActiveExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.ActiveExamID);
-			return;
-		}
-		if (!mainContainer.loadScreen(ClientGlobals.TeacherViewExamID, ClientGlobals.TeacherViewExamPath)) {
-			System.out.println("failed to load "+ ClientGlobals.TeacherViewExamID);
+		if (!mainContainer.loadScreen(ClientGlobals.TeacherActiveExamID, ClientGlobals.TeacherActiveExamPath)) {
+			System.out.println("failed to load "+ ClientGlobals.TeacherActiveExamID);
 			return;
 		}
 		if (!mainContainer.loadScreen(ClientGlobals.TeacherCheckExamsID, ClientGlobals.TeacherCheckExamsPath)) {

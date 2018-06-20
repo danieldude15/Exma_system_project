@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 
 	
-public class TeacherActivateExamFrame implements Initializable, ControlledScreen  {
+public class TeacherActivateExamFrame implements ControlledScreen  {
 	
 		@FXML Label ExamId;
 		@FXML Label Durationid;
@@ -48,11 +48,6 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 			MonualExamId.setId("whiteLabel");
 		}
 
-		@Override
-		public void initialize(URL location, ResourceBundle resources) {
-			// TODO Auto-generated method stub
-			
-		}
 		public void setExam(Exam e) {
 			examview=e;
 			
@@ -123,7 +118,7 @@ public class TeacherActivateExamFrame implements Initializable, ControlledScreen
 		@FXML
 	    public void CancelButtonPressed(ActionEvent event)
 			    {
-			     Globals.mainContainer.setScreen(ClientGlobals.InitializeExamID);
+			     Globals.mainContainer.setScreen(ClientGlobals.TeacherInitializeExamID);
 			    }
 	
 

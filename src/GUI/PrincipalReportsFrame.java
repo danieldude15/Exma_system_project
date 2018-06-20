@@ -43,8 +43,9 @@ public class PrincipalReportsFrame implements ControlledScreen {
     ArrayList<Course> allCourse = null;
     
     @Override public void runOnScreenChange() {
-        m_reportsTabPane.getSelectionModel().select(m_studentsTab);;
-        StudentsTabSelected(null);
+    	if (allStudents==null) {
+	    	allStudents = UserController.getAllStudents(); 
+    	} 
     }
 
     @FXML public void viewReportButtonPressed(ActionEvent event){
@@ -89,11 +90,10 @@ public class PrincipalReportsFrame implements ControlledScreen {
     }
 
     @FXML public void StudentsTabSelected(Event event) {
-    	if (allStudents==null) {
-	    	allStudents = UserController.getAllStudents(); 
-    	} 
-		ObservableList<User> list = FXCollections.observableArrayList(allStudents);
-    	m_studentsList.setItems(list);
+    	if(allStudents!=null) {
+			ObservableList<User> list = FXCollections.observableArrayList(allStudents);
+	    	m_studentsList.setItems(list);
+    	}
     }
     
     @FXML public void examTabSelected(Event event) {

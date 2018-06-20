@@ -72,7 +72,7 @@ public class TeacherMainFrame implements ControlledScreen {
 	}
 	
 	@FXML public void goToInitiateExam(ActionEvent event) {
-		Globals.mainContainer.setScreen(ClientGlobals.InitializeExamID);
+		Globals.mainContainer.setScreen(ClientGlobals.TeacherInitializeExamID);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

@@ -37,7 +37,7 @@ import javafx.scene.layout.VBox;
 import logic.*;
 import ocsf.client.ClientGlobals;
 
-public class TeacherManageQuestions implements Initializable, ControlledScreen {
+public class TeacherManageQuestions implements ControlledScreen {
 	
 	HashMap<String,Question> questions = new HashMap<>();
 	ArrayList<Field> teachersFields;
@@ -61,8 +61,6 @@ public class TeacherManageQuestions implements Initializable, ControlledScreen {
 		}
 	}
 
-	@Override public void initialize(URL arg0, ResourceBundle arg1) {
-	}
 	
 	@FXML public void newQuestionButtonPressed(ActionEvent event) {
 		((TeacherEditAddQuestion)Globals.mainContainer.getController(ClientGlobals.TeacherEditAddQuestionID)).setFieldsAndCourses(teachersCourses,teachersFields);

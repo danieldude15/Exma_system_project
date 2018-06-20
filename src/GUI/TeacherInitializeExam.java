@@ -88,16 +88,17 @@ public class TeacherInitializeExam implements ControlledScreen {
     public void MyViewHandler (ActionEvent event) {
 		if(examsList.getSelectionModel().getSelectedItem()!=null)
 		{
-		   ((TeacherViewExam)Globals.mainContainer.getController(ClientGlobals.TeacherViewExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
-           Globals.mainContainer.setScreen(ClientGlobals.TeacherViewExamID);
+			((ViewPlainExamFrame)Globals.mainContainer.getController(ClientGlobals.ViewPlainExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
+			((ViewPlainExamFrame)Globals.mainContainer.getController(ClientGlobals.ViewPlainExamID)).setMe(ViewPlainExamFrame.user.Teacher);
+			Globals.mainContainer.setScreen(ClientGlobals.ViewPlainExamID);
 		}
 		}        
    
 	@FXML
     public void MyActiveHandler(ActionEvent event) {
 		if(examsList.getSelectionModel().getSelectedItem()!=null) {
-              ((TeacherActivateExamFrame)Globals.mainContainer.getController(ClientGlobals.ActiveExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
-               Globals.mainContainer.setScreen(ClientGlobals.ActiveExamID);
+              ((TeacherActivateExamFrame)Globals.mainContainer.getController(ClientGlobals.TeacherActiveExamID)).setExam((Exam) examsList.getSelectionModel().getSelectedItem());
+               Globals.mainContainer.setScreen(ClientGlobals.TeacherActiveExamID);
 		}
 			 	}
 		

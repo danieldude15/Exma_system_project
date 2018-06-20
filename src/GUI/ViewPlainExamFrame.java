@@ -17,7 +17,7 @@ import ocsf.client.ClientGlobals;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
+public class ViewPlainExamFrame implements ControlledScreen {
 	enum user {
 		Teacher,Principle
 	}
@@ -30,6 +30,7 @@ public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
     @FXML private VBox questionInfo_StudentScoreAndNote;
 
     private Exam exam;
+    private user me;
 
     @Override
     public void runOnScreenChange() {
@@ -49,22 +50,29 @@ public class PrincipalViewExamFrame implements Initializable, ControlledScreen {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     public void setExam(Exam m_examToBeDisplayed) {
         exam = m_examToBeDisplayed;
     }
 
-    @FXML
-    public void BackToViewData(ActionEvent event) {
-        questionInfo_StudentScoreAndNote.getChildren().clear();
-        Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewDataID);
+    @FXML public void BackToViewData(ActionEvent event) {
+    	questionInfo_StudentScoreAndNote.getChildren().clear();
+    	if (me==user.Principle) {
+    		Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewDataID);
+    	} else {
+    		Globals.mainContainer.setScreen(ClientGlobals.TeacherInitializeExamID);
+    	}
     }
 
-    private void SetQuestionStringAndAnswersOnWindowScreen(QuestionInExam qie , int questionIndex) {
+    public user getMe() {
+		return me;
+	}
+
+	public void setMe(user me) {
+		this.me = me;
+	}
+
+	private void SetQuestionStringAndAnswersOnWindowScreen(QuestionInExam qie , int questionIndex) {
 
         int answerIndex = 1;
 

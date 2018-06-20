@@ -50,8 +50,8 @@ public class ClientGlobals {
 	public static final String PrincipalViewQuestionID = "Principal View Question";
 	public static final String PrincipalViewQuestionPath ="/resources/fxml/PrincipalViewQuestion.fxml";
 
-	public static final String PrincipalViewExamID = "Principal View Exam";
-	public static final String PrincipalViewExamPath = "/resources/fxml/PrincipalViewExam.fxml";
+	public static final String ViewPlainExamID = "Principal View Exam";
+	public static final String ViewPlainExamPath = "/resources/fxml/PrincipalViewExam.fxml";
 
 	public static final String PrincipalViewFieldID = "Principal View Field";
 	public static final String PrincipalViewFieldPath = "/resources/fxml/PrincipalViewField.fxml";
@@ -71,17 +71,14 @@ public class ClientGlobals {
 	public static final String TeacherEditAddQuestionID = "Teacher Edit/Add Question";
 	public static final String TeacherEditAddQuestionPath = "/resources/fxml/TeacherEditAddQuestion.fxml";
 
-	public static final String InitializeExamID = "Initialize Exam";
-	public static final String InitializeExamPath = "/resources/fxml/TeacherInitializeChooseExam.fxml";
+	public static final String TeacherInitializeExamID = "Initialize Exam";
+	public static final String TeacherInitializeExamPath = "/resources/fxml/TeacherInitializeChooseExam.fxml";
 	
 	public static final String TeacherCheckExamsID = "Teacher Check Exams";
 	public static final String TeacherCheckExamsPath = "/resources/fxml/TeacherCheckExams.fxml";
 	
-	public static final String TeacherViewExamID = "Teacher View Exam";
-	public static final String TeacherViewExamPath = "/resources/fxml/TeacherViewExam.fxml";
-	
-	public static final String ActiveExamID = "Activate Exam";
-	public static final String ActiveExamPath = "/resources/fxml/TeacherInitializeExam.fxml";
+	public static final String TeacherActiveExamID = "Activate Exam";
+	public static final String TeacherActiveExamPath = "/resources/fxml/TeacherInitializeExam.fxml";
 	
 	public static final String TeacherTimeChangeRequestID = "Teacher Time Change Request";
 	public static final String TeacherTimeChangeRequestPath = "/resources/fxml/TeacherTimeChangeRequest.fxml";

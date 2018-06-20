@@ -61,7 +61,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     public void viewData(ActionEvent event){
 
         PrincipalViewQuestionFrame viewQuestionFrame = (PrincipalViewQuestionFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewQuestionID);
-        PrincipalViewExamFrame viewExamFrame = (PrincipalViewExamFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewExamID);
+        ViewPlainExamFrame viewExamFrame = (ViewPlainExamFrame) Globals.mainContainer.getController(ClientGlobals.ViewPlainExamID);
         PrincipalViewFieldFrame viewFieldFrame = (PrincipalViewFieldFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalViewFieldID);
 
         if (!m_questionsList.getSelectionModel().isEmpty()){
@@ -75,7 +75,8 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             String examToBeDisplayed = m_examsList.getSelectionModel().getSelectedItem();
             String[] splitedExam = examToBeDisplayed.split(" ");
             viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(splitedExam[1])));
-            Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewExamID);
+            ((ViewPlainExamFrame)Globals.mainContainer.getController(ClientGlobals.ViewPlainExamID)).setMe(ViewPlainExamFrame.user.Principle);
+            Globals.mainContainer.setScreen(ClientGlobals.ViewPlainExamID);
         }else if(!m_fieldsList.getSelectionModel().isEmpty()){
             m_searchBox.setText("");
             String examToBeDisplayed = m_fieldsList.getSelectionModel().getSelectedItem();
@@ -90,7 +91,7 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
                     Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
                 }else if (m_examsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(m_searchBox.getText())));
-                    Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewExamID);
+                    Globals.mainContainer.setScreen(ClientGlobals.ViewPlainExamID);
                 }else if (m_fieldsMap.containsKey(Integer.parseInt(m_searchBox.getText()))){
                         viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(m_searchBox.getText())));
                         Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
@@ -128,12 +129,8 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     public void onStudentsTabSelection(Event event) {
         if(!m_studentsList.getSelectionModel().isEmpty())
             m_studentsList.getSelectionModel().clearSelection();
-        try{
+        if(m_searchBtn!=null)
             m_searchBtn.setDisable(true);
-        }catch (NullPointerException e) {
-            System.out.println( e.getClass().getName() + "No Object Yet");
-        }
-
     }
 
     @FXML

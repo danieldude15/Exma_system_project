@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class PrincipalViewQuestionFrame implements Initializable, ControlledScreen {
+public class PrincipalViewQuestionFrame implements ControlledScreen {
 
     private Question question;
 
@@ -47,10 +47,6 @@ public class PrincipalViewQuestionFrame implements Initializable, ControlledScre
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     /**
      *  method returns you to ViewData screen
