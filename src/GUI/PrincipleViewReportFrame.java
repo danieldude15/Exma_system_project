@@ -41,6 +41,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 	@FXML Label averageLabel;
 	@FXML Label Median;
 	@FXML Label leftListViewLabel;	
+	@FXML Label cheatLabel;
 	@FXML ListView<String> leftListView;
 	@FXML ListView<String> secondLeftListView;
 	@FXML BarChart<String, Integer> devBarChart;
@@ -93,6 +94,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 		infoValue7.setVisible(false);
 		infoValue8.setVisible(false);
 		secondLeftListView.setVisible(false);
+		cheatLabel.setVisible(false);
 	}
 
 	@FXML public void backToReports(ActionEvent event) {
@@ -105,6 +107,7 @@ public class PrincipleViewReportFrame implements ControlledScreen {
 			backToReports(null);
 			return;
 		}
+		cheatLabel.setVisible(true);
 		secondLeftListView.setVisible(true);
 		//update left Listview with examReports Solved Exams
 		ArrayList<String> listViewOfStrings = new ArrayList<>();
