@@ -1,12 +1,9 @@
 package GUI;
 
-import java.util.ArrayList;
-
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ReportController;
 import Controllers.UserController;
-import GUI.ViewReportFrame.type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,9 +11,10 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import logic.ExamReport;
 import logic.*;
 import ocsf.client.ClientGlobals;
+
+import java.util.ArrayList;
 
 
 /**
@@ -44,7 +42,9 @@ public class PrincipalReportsFrame implements ControlledScreen {
     
     @Override public void runOnScreenChange() {
     	if (allStudents==null) {
-	    	allStudents = UserController.getAllStudents(); 
+	    	allStudents = UserController.getAllStudents();
+			ObservableList<User> list = FXCollections.observableArrayList(allStudents);
+			m_studentsList.setItems(list);
     	} 
     }
 
@@ -56,6 +56,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.STUDENT);
         	pvrf.setStudent(s);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
     	} else if (selected.equals(m_teachersTab)) {
@@ -64,6 +65,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.TEACHER);
         	pvrf.setTeacher(t);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_coursesTab)) {
@@ -72,6 +74,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.COURSE);
         	pvrf.setCourse(c);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_examsTab)) {
