@@ -42,6 +42,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	@FXML Button exitButton;
 	String timeLeft = "";
 	private Long timeSeconds;
+	public Long timeChanged=(long)0;
 	private HashMap<QuestionInExam,ToggleGroup> questionWithAnswers=new HashMap<QuestionInExam,ToggleGroup>();//So we can get the student answer on question.
 	private ActiveExam activeExam;
 	boolean activeExamIsLocked=false; 
@@ -203,9 +204,6 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		this.activeExamIsLocked=true;
 	}
 
-	 
-	 
-	 
 	/**
 	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
 	 */
@@ -377,6 +375,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 	public void updateExamTime(Long extraTimeInMinutes) {
+		timeChanged=extraTimeInMinutes;
 		setTimeSeconds(getTimeSeconds()+extraTimeInMinutes*60);
 	}
 
@@ -410,7 +409,5 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 		return ret;
 	}
-	
-	
-	
+		
 }

@@ -116,6 +116,6 @@ public class TimeChangeRequest implements Serializable{
 		return this.teacher;
 	}
 	@Override public String toString() {
-		return new String(String.format( "ExamID: %s\nDuration: %d\nAutherName: %s\n ",getActiveExam().examIdToString(),getActiveExam().getDuration(),getActiveExam().getActivator().getName()));
+		return new String(String.format( "ExamID: %s\nDuration: %d\nAuthorName: %s\n ",getActiveExam().examIdToString(),getActiveExam().getDuration(),getActiveExam().getActivator().getName()));
 	}
 }

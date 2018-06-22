@@ -158,9 +158,8 @@ public class ExamReport extends ActiveExam {
 			HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
 			if (studentiAnswers!=null)
 				for(QuestionInExam qie: studentiAnswers.keySet()) {
-					if (studentiAnswers.get(qie)==null) {
+					if (studentiAnswers.get(qie)==null)
 						continue;
-					}
 					int correctIndex = qie.getCorrectAnswerIndex();
 					if(studentiAnswers.get(qie)!=correctIndex) {
 						studentiMistakes.put(qie, studentiAnswers.get(qie));
@@ -170,6 +169,8 @@ public class ExamReport extends ActiveExam {
 				int similarCounter=0;
 				HashMap<QuestionInExam, Integer> studentjAnswers = solvedExams.get(j).getStudentsAnswers();
 				for(QuestionInExam qie: studentiMistakes.keySet()) {
+					if(studentjAnswers.get(qie)==null)
+						continue;
 					if(studentjAnswers.get(qie)!=null && studentjAnswers.get(qie)==studentiMistakes.get(qie)) {
 						similarCounter++;
 					}
