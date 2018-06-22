@@ -1,14 +1,12 @@
 package GUI;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import Controllers.ControlledScreen;
 import Controllers.ReportController;
 import Controllers.SolvedExamController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -16,8 +14,12 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import logic.*;
 import ocsf.client.ClientGlobals;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class ViewReportFrame implements ControlledScreen {
@@ -63,6 +65,8 @@ public class ViewReportFrame implements ControlledScreen {
 	private ExamReport examReport=null;
 	
 	@Override public void runOnScreenChange() {
+		leftListView.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);			// overrides the click on items in the listview
+		secondLeftListView.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
 		hideAll();
 		switch(windowType) {
 		case STUDENT:

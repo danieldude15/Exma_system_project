@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * Frame manages The screen where the principal views all the data placed in the database
+ */
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
 
     @FXML private TabPane m_dataTabPane;
@@ -289,6 +292,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_fieldsList.setItems(list1);
     }
 
+    /**
+     * Method updates the listview of courses
+     */
     private void updateCoursesList(){
         ArrayList<Course> m_coursesToBeDisplayed = CourseFieldController.getAllCourses();
         ArrayList<String> coursesInfo = new ArrayList<>();
