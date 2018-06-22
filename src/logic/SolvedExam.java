@@ -142,15 +142,6 @@ public class SolvedExam extends ActiveExam{
 		this.teachersScoreChangeNote = teachersScoreChangeNote;
 	}
 	
-	/**
-	 * @return the arraylist of question in this exam
-	 */
-	@Override public ArrayList<QuestionInExam> getQuestionsInExam() {
-		if (studentsAnswers!=null)
-			return new ArrayList<QuestionInExam>(studentsAnswers.keySet());
-		else 
-			return new ArrayList<QuestionInExam>();
-	}
 	
 	/**
 	 * overriding the toString proc to be used in listViews in GUI

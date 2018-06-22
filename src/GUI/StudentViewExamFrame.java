@@ -130,7 +130,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 			if(answerIndex==qie.getCorrectAnswerIndex())//Save the real correct answer so we can display it to student if he was wrong.
 				theRightAnswerIs=r.getText();
 			
-			if(studentsAnswers.get(qie)!=null && answerIndex==studentsAnswers.get(qie))//Marked the student answer, and set the icon to v or x.
+			if(studentsAnswers!=null && studentsAnswers.get(qie)!=null && answerIndex==studentsAnswers.get(qie))//Marked the student answer, and set the icon to v or x.
 			{
 				r.setSelected(true);
 				if(answerIndex==qie.getCorrectAnswerIndex())
@@ -180,7 +180,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 		separator.setMinWidth(690);
 		separator.setMaxHeight(100);
 		
-		if(studentsAnswers.get(qie)!=null)//Student answer on that question
+		if(studentsAnswers!=null && studentsAnswers.get(qie)!=null)//Student answer on that question
 		{
 			if(qie.getCorrectAnswerIndex()!=studentsAnswers.get(qie)) //Student answer's is not correct 
 			{
