@@ -353,7 +353,7 @@ public class DBMain {
 	public ArrayList<Field> getAllFields(){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllFields);
-			System.out.println("SQL:" + prst);
+			//System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			ArrayList<Field> fields = new ArrayList<>();
 			while(rs.next()) {
@@ -371,7 +371,7 @@ public class DBMain {
 	public ArrayList<Course> getAllCourses(){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllCourses);
-			System.out.println("SQL:" + prst);
+			//System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			ArrayList<Course> courses = new ArrayList<>();
 			while(rs.next()) {
@@ -392,7 +392,7 @@ public class DBMain {
 		try {
 			PreparedStatement prst = conn.prepareStatement(teacherFields);
 			prst.setInt(1, o.getID());
-			System.out.println("SQL:"+prst);
+			//System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
 				
@@ -419,7 +419,7 @@ public class DBMain {
 		sqlQuery = sqlQuery + "0)";
 		try {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
-			System.out.println("SQL:" + statement);
+			//System.out.println("SQL:" + statement);
 			ResultSet rs = statement.executeQuery();
 			
 			ArrayList<Course> result = new ArrayList<>();
@@ -446,7 +446,7 @@ public class DBMain {
 		try {
 			PreparedStatement prst = conn.prepareStatement(getField);
 			prst.setInt(1,fieldID);
-			System.out.println("SQL:" + prst);
+			//System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			
 			while(rs.next()) {
@@ -464,7 +464,7 @@ public class DBMain {
 			PreparedStatement prst = conn.prepareStatement(getCourse);
 			prst.setInt(1,courseID);
 			prst.setInt(2,fieldID);
-			System.out.println("SQL:" + prst);
+			//System.out.println("SQL:" + prst);
 			ResultSet rs = prst.executeQuery();
 			
 			while(rs.next()) {
