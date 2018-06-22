@@ -371,7 +371,7 @@ public class AESServer extends AbstractServer {
 			iMessage msg = new iMessage("ExamLocked", ae);
 			for(Student s: studentsInExam.get(ae)) {
 				try {
-					if (connectedUsers.get(s)!=null) {
+					if (connectedUsers.get(s)!=null && studentsCheckOutFromActiveExam.get(ae).contains(s)) {
 						connectedUsers.get(s).sendToClient(msg);
 					}
 				} catch (IOException e) {
@@ -957,7 +957,9 @@ public class AESServer extends AbstractServer {
 		}
 		studentExams.add(solved);
 		studentsSolvedExams.put(e, studentExams);
-		studentsCheckOutFromActiveExam.get(e).remove(student);
+		ArrayList<Student> checkedout = studentsCheckOutFromActiveExam.get(e);
+		if(!checkedout.remove(student))
+			System.err.println("Coulnd not remove:" +student + " from checkout students");
 		if(studentsCheckOutFromActiveExam.get(e).isEmpty())//If all students have submitted the exam.
 			GenerateActiveExamReport(e);
 		//AesWordDoc doc=(AesWordDoc) o[3];

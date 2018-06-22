@@ -128,9 +128,9 @@ public class TeacherMainFrame implements ControlledScreen {
 	
 	@FXML public void activeExamsListViewClicked(MouseEvent event) {
 		CompletedExamList.getSelectionModel().clearSelection();
-		ActiveExam aExam = ActiveExamsList.getSelectionModel().getSelectedItem();
-		if (aExam!=null)
-			studentsInCourse.setText("Students In Selected Course:"+UserController.getStudentsInCourse(aExam.getCourse()).size());
+		//ActiveExam aExam = ActiveExamsList.getSelectionModel().getSelectedItem();
+		//if (aExam!=null)
+			//studentsInCourse.setText("Students In Selected Course:"+UserController.getStudentsInCourse(aExam.getCourse()).size());
 	}
 	
 	@FXML public void logout(ActionEvent event) {
