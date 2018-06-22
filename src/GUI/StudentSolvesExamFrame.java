@@ -73,17 +73,28 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 	}
 
-
+	/**
+	 * Set text on time label(set new time).
+	 * @param event
+	 */
 	@FXML public void refreshTimer(MouseEvent event) {
 		timeLeftLabel.setText(timeLeft);
 	}
 	
+	/**
+	 * Active exam setter.
+	 * @param activeE
+	 */
 	public void SetActiveExam(ActiveExam activeE) {
 		// TODO Auto-generated method stub
 		this.activeExam=activeE;
 		
 	}
 
+	/**
+	 * Active exam getter.
+	 * @return
+	 */
 	public ActiveExam GetActiveExam()
 	{
 		return this.activeExam;
@@ -149,7 +160,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	
 	/**
-	 * The student can download the manual exam from the system.
+	 * Sets manual exam on screen (Good luck image,download button).
 	 * @throws IOException
 	 */
 	private void SetDownloadButtonOnScreen() {
@@ -175,7 +186,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 
 	/**
-	 * When the student pressed on Download button he can download the exam to any path he choose.
+	 * When the student is pressing on the Download button he gets the manual exam to his desktop.
 	 * @param event
 	 * @throws IOException
 	 */
@@ -198,7 +209,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 		
 
-		
+	/**
+	 * Sets true on activeExamIsLocked.
+	 */
 	public void lockExam() {
 		this.activeExamIsLocked=true;
 	}
