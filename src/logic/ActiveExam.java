@@ -114,7 +114,7 @@ public class ActiveExam  extends Exam {
 		if (type==1) examType = "Computerized";
 		else examType = "Manual";
 		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy  (HH:mm)");
-		return new String(String.format("Course: %s\nActivated On: %s\nLocks On: %s\nType: %s", getCourse().getName(),DATE_FORMAT.format(getDate()),DATE_FORMAT.format(new Date(getDate().getTime()+getDuration()*60000)) ,examType));
+		return new String(String.format("Course: %s\nActivated On: %s\nLocks On: %s\nType: %s\nCode exam:%s", getCourse().getName(),DATE_FORMAT.format(getDate()),DATE_FORMAT.format(new Date(getDate().getTime()+getDuration()*60000)) ,examType, getCode()));
 	}
 
 	
