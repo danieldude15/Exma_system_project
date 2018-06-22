@@ -136,12 +136,12 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			questionInfo.getChildren().add(r);
 		}
 		if(!q.getInnerNote().equals("")) {
-			Label qinerNote = new Label("question Hidden Note: "+q.getInnerNote());
+			Label qinerNote = new Label("Teacher Hidden Note: "+q.getInnerNote());
 			qinerNote.setId("blackLabel");
 			questionInfo.getChildren().add(qinerNote);
 		}
 		if(!q.getStudentNote().equals("")) {
-			Label qistudentNote = new Label("Not For Student: "+q.getStudentNote());
+			Label qistudentNote = new Label("Note For Student: "+q.getStudentNote());
 			qistudentNote.setId("blackLabel");
 			questionInfo.getChildren().add(qistudentNote);
 		}
