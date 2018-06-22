@@ -345,8 +345,14 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() != ButtonType.OK) 
 			return;
-		if(activeExam.getType()!=0)	
+		if(activeExam.getType()!=0)	{
+			String popUpTitle="Submit confirmation";
+			String popUpContentText="The exam was submitted successfully!";
+			Globals.popUp(AlertType.INFORMATION,popUpTitle,popUpContentText);
+			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
+			Globals.mainContainer.setScreen(ClientGlobals.StudentMainID);
 			return;
+		}
 		if(SolvedExamController.UploadFile(sendToGenerateReport)) {
 			SolvedExamController.SendFinishedSolvedExam(this.activeExam,sendToGenerateReport,(Student)ClientGlobals.client.getUser());
 			String popUpTitle="Submit confirmation";
