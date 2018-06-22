@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -75,11 +76,19 @@
             </VBox>
             <VBox alignment="CENTER">
                <children>
-                  <Label text="Active Exams:">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="248.0">
+                     <children>
+                        <Label text="Active Exams:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ImageView fx:id="refresh" fitHeight="26.0" fitWidth="36.0" onMouseClicked="#updateActiveExamListView" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
                   <ListView fx:id="ActiveExamsList" onMouseClicked="#activeExamsListViewClicked">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -120,14 +129,17 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity">
+            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="258.0">
                <children>
-                  <Label text="Completed Exams:">
+                  <Label prefHeight="19.0" prefWidth="156.0" text="Completed Exams:">
                      <font>
                         <Font size="18.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Label>
-                  <ListView fx:id="CompletedExamList" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#completeExamsListViewClicked">
+                  <ListView fx:id="CompletedExamList" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#completeExamsListViewClicked" prefHeight="405.0" prefWidth="255.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -149,7 +161,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
                </HBox.margin>
             </VBox>
          </children>

@@ -46,6 +46,8 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			ComputerizedExamId.setToggleGroup(SelectType);
 			MonualExamId.setToggleGroup(SelectType);
 			MonualExamId.setId("whiteLabel");
+			Examcode.clear();
+			
 		}
 
 		public void setExam(Exam e) {

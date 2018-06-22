@@ -16,6 +16,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -41,15 +43,16 @@ public class TeacherMainFrame implements ControlledScreen {
 	@FXML ListView<ActiveExam> ActiveExamsList;
 	@FXML ListView<ExamReport> CompletedExamList;
 	@FXML Label welcome;
+	@FXML ImageView refresh;
 	@FXML Label username;
 	@FXML Label userid;
 	@FXML Pane userImage;
 	@FXML Label studentsInCourse;
-		
+	private final Image r = new Image("resources/refresh.png"); 
 
 	@Override public void runOnScreenChange() {
 		updateCompletedExamListView();
-		
+		refresh.setImage(r); 
 		updateActiveExamListView();
 		
 		/*Get Teachers personal info from database and set it beneath the TabPane "My info" on window/*/
@@ -137,6 +140,7 @@ public class TeacherMainFrame implements ControlledScreen {
 		UserController.logout();
 	}
 
+	@FXML
 	private void updateActiveExamListView() {
 		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
 		ActiveExamsList.getItems().clear();
