@@ -40,6 +40,7 @@ public class TeacherInitializeExam implements ControlledScreen {
 	@Override
 	public void runOnScreenChange() {
 		
+		examin.setText("Exam in:");
 		examsList.getItems().clear();
 		fieldComboB.getItems().clear();
 		courseComboB.getItems().clear();
