@@ -96,11 +96,11 @@ public class QuestionInExam extends Question {
 	 * overriding the equals method to be able to use hashMap and check for equal objects of this type
 	 * @param obj - the QuestionInExam to check equality to
 	 */
-	@SuppressWarnings("")
 	@Override public boolean equals(Object obj) {
 		if (this==obj)return true;
 		if(obj instanceof QuestionInExam) {
 			QuestionInExam q = (QuestionInExam) obj;
+			if(getAuthor()==null || q.getAuthor()==null) return false;
 			if ((super.equals(q) && q.getPointsValue()==PointsValue)) {
 				return (q.getStudentNote() == studentNote || (q.getStudentNote() != null && q.getStudentNote().equals(studentNote)))
 						&& (q.getInnerNote() == innerNote || (q.getInnerNote() != null && q.getInnerNote().equals(innerNote)));

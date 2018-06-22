@@ -158,7 +158,11 @@ public class ExamReport extends ActiveExam {
 			HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
 			if (studentiAnswers!=null)
 				for(QuestionInExam qie: studentiAnswers.keySet()) {
-					if(studentiAnswers.get(qie)!=qie.getCorrectAnswerIndex()) {
+					if (studentiAnswers.get(qie)==null) {
+						continue;
+					}
+					int correctIndex = qie.getCorrectAnswerIndex();
+					if(studentiAnswers.get(qie)!=correctIndex) {
 						studentiMistakes.put(qie, studentiAnswers.get(qie));
 					}
 				}
