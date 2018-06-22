@@ -229,5 +229,10 @@ public class SolvedExam extends ActiveExam{
 		}
 		return allNotes;
 	}
+	public void setCompletedTimeInMinutes(int completedTimeInMinutes) {
+		CompletedTimeInMinutes = completedTimeInMinutes;
+	}
+	
+	
 
 }

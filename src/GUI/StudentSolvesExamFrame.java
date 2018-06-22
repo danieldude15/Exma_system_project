@@ -249,10 +249,9 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			
 		boolean teacherApproved=false;
 		Student examSolver=new Student((Student)ClientGlobals.client.getUser());
-		String teachersScoreChangeNote=null;
-		int CompletedTimeInMinutes=(int) ((activeExam.getDuration()*60-timeSeconds)/60);
+		String teachersScoreChangeNote="";
 		SolvedExam sendToGenerateReport=new SolvedExam(score, teacherApproved, studentAnswers,
-				examSolver, teachersScoreChangeNote,null, CompletedTimeInMinutes,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),activeExam.getExam());
+				examSolver, teachersScoreChangeNote,null, 0,activeExam.getCode(),activeExam.getType(), activeExam.getDate(),activeExam.getActivator(),activeExam.getExam());
 
 		return sendToGenerateReport;
 	}

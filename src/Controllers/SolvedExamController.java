@@ -142,7 +142,6 @@ public class SolvedExamController {
 		o[0]=(ActiveExam)activeExam;
 		o[1]=(SolvedExam)solvedExam;
 		o[2]=(Student)s;
-		//o[3]=(XWPFDocument)doc;
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
 			try {

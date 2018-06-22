@@ -122,6 +122,7 @@ public class StudentStartExamFrame implements ControlledScreen{
                         studentsolvesExam.updateTimeLabel(studentsolvesExam.getTimeSeconds());
                         if (studentsolvesExam.getTimeSeconds() <= 0 || studentsolvesExam.isLocked()) {
                             timeline.stop();
+                            Globals.popUp(AlertType.INFORMATION, "Exam Locked", "Exam was locked remotlly");
                             studentsolvesExam.submitStudentsExam(false);
                         }
                       }
