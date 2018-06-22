@@ -156,21 +156,20 @@ public class ExamReport extends ActiveExam {
 			//first we create a hashmap of the uncorrect answers of student i
 			HashMap<QuestionInExam, Integer> studentiAnswers = solvedExams.get(i).getStudentsAnswers();
 			HashMap<QuestionInExam, Integer> studentiMistakes = new HashMap<>();
-			if (studentiAnswers!=null)
-				for(QuestionInExam qie: studentiAnswers.keySet()) {
-					if (studentiAnswers.get(qie)==null)
-						continue;
-					int correctIndex = qie.getCorrectAnswerIndex();
-					if(studentiAnswers.get(qie)!=correctIndex) {
-						studentiMistakes.put(qie, studentiAnswers.get(qie));
-					}
+			if (studentiAnswers==null) continue;
+			for(QuestionInExam qie: studentiAnswers.keySet()) {
+				if (studentiAnswers.get(qie)==null)
+					continue;
+				int correctIndex = qie.getCorrectAnswerIndex();
+				if(studentiAnswers.get(qie)!=correctIndex) {
+					studentiMistakes.put(qie, studentiAnswers.get(qie));
 				}
+			}
 			for (int j=i+1;j<solvedExams.size();j++) {
 				int similarCounter=0;
 				HashMap<QuestionInExam, Integer> studentjAnswers = solvedExams.get(j).getStudentsAnswers();
+				if(studentjAnswers==null) continue;
 				for(QuestionInExam qie: studentiMistakes.keySet()) {
-					if(studentjAnswers.get(qie)==null)
-						continue;
 					if(studentjAnswers.get(qie)!=null && studentjAnswers.get(qie)==studentiMistakes.get(qie)) {
 						similarCounter++;
 					}
