@@ -117,12 +117,18 @@ public class StudentStartExamFrame implements ControlledScreen{
                   new EventHandler() {
                     // KeyFrame event handler
                     public void handle(Event event) {
+                    	StudentSolvesExamFrame sse = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
                         studentsolvesExam.setTimeSeconds(studentsolvesExam.getTimeSeconds()-1);
                         // update timerLabel
                         studentsolvesExam.updateTimeLabel(studentsolvesExam.getTimeSeconds());
                         if (studentsolvesExam.getTimeSeconds() <= 0 || studentsolvesExam.isLocked()) {
                             timeline.stop();
+                            Globals.popUp(AlertType.INFORMATION, "Exam Locked", "Exam was locked remotlly");
                             studentsolvesExam.submitStudentsExam(false);
+                        }
+                        if (sse.timeChanged!=0) {
+                        	Globals.popUp(AlertType.INFORMATION, "Exam Time Changed", "Exam Time Changed remotlly");
+                        	sse.timeChanged=(long)0;
                         }
                       }
                 }));

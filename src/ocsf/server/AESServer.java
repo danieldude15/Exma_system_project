@@ -955,6 +955,9 @@ public class AESServer extends AbstractServer {
 			System.err.println("Did not find the active exam:" + e.toString());
 			return;
 		}
+		java.util.Date now = new java.util.Date();
+		int timeCompleted = (int) (((now.getTime()-e.getDate().getTime())/1000)/60);
+		solved.setCompletedTimeInMinutes(timeCompleted);
 		studentExams.add(solved);
 		studentsSolvedExams.put(e, studentExams);
 		ArrayList<Student> checkedout = studentsCheckOutFromActiveExam.get(e);

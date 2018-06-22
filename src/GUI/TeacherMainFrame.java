@@ -87,7 +87,7 @@ public class TeacherMainFrame implements ControlledScreen {
     		Timeline timeline = new Timeline();
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.getKeyFrames().add(
-                    new KeyFrame(Duration.seconds(10),
+                    new KeyFrame(Duration.seconds(5),
                       new EventHandler() {
                         // KeyFrame event handler
                         public void handle(Event event) {
