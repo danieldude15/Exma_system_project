@@ -58,7 +58,7 @@ public class StudentViewExamFrame implements ControlledScreen {
 		
 
 	
-	/*/
+	
 	/**
 	 * Set the info of the question on the window screen.
 	 */
@@ -238,6 +238,10 @@ public class StudentViewExamFrame implements ControlledScreen {
 		return this.solvedExam;
 	}
 	
+	/**
+	 * In case that the score has been changed by the teacher, he has the option to watch explanation.
+	 * @param event
+	 */
 	public void WatchScoreChangeExplanationByTheTeacher(ActionEvent event)
 	{
 		//changeScoreByTeacherNote.setVisible(true);

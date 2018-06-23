@@ -103,6 +103,11 @@ public class SolvedExamController {
 	}
 	
 
+	/**
+	 * Upload a manual exam back to the system.
+	 * @param solvedExam
+	 * @return true if it's succeed, otherwise return false.
+	 */
 	public static boolean UploadFile(SolvedExam solvedExam)
 	{
 		AESClient client = ClientGlobals.client;

@@ -74,17 +74,28 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		
 	}
 
-
+	/**
+	 * Set text on time label(set new time).
+	 * @param event
+	 */
 	@FXML public void refreshTimer(MouseEvent event) {
 		timeLeftLabel.setText(timeLeft);
 	}
 	
+	/**
+	 * Active exam setter.
+	 * @param activeE
+	 */
 	public void SetActiveExam(ActiveExam activeE) {
 		// TODO Auto-generated method stub
 		this.activeExam=activeE;
 		
 	}
 
+	/**
+	 * Active exam getter.
+	 * @return
+	 */
 	public ActiveExam GetActiveExam()
 	{
 		return this.activeExam;
@@ -150,7 +161,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 	
 	/**
-	 * The student can download the manual exam from the system.
+	 * Sets manual exam on screen (Good luck image,download button).
 	 * @throws IOException
 	 */
 	private void SetDownloadButtonOnScreen() {
@@ -176,7 +187,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 
 
 	/**
-	 * When the student pressed on Download button he can download the exam to any path he choose.
+	 * When the student is pressing on the Download button he gets the manual exam to his desktop.
 	 * @param event
 	 * @throws IOException
 	 */
@@ -199,13 +210,15 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	
 		
 
-		
+	/**
+	 * Sets true on activeExamIsLocked.
+	 */
 	public void lockExam() {
 		this.activeExamIsLocked=true;
 	}
 
 	/**
-	 * If the Active exam is locked then the student gets a pop-up that say it and get him back to his main window.
+	 * Return true if the exam is locked, otherwise return false.
 	 */
 	public boolean isLocked()
 	{
@@ -224,7 +237,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 	
 	/**
-	 * Submit process(check solved exam+sending SolvedExam to generate report in server+confirmation dialog for the student)
+	 * Submit process(check student's solved exam+sending SolvedExam to generate report in server+confirmation dialog for the student)
 	 * @param inTime
 	 */
 	public void submitStudentsExam(boolean inTime){
@@ -235,7 +248,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 	/** 
-	 * Build SolvedExam object.
+	 * Build SolvedExam object on submit process.
 	 * @param inTime 
 	 * @return SolvedExam
 	 */
@@ -322,7 +335,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 
 	/**
-	 * When student press submit he gets a confirmation dialog and can press ok for submit,
+	 * When the student is pressing on the submit button he gets a confirmation dialog and can press ok for submit(in that case the teacher gets the solved exam and needs to approve it),
 	 *  or cancel to go back to the exam.
 	 * @param inTime 
 	 * @param SolvedExam
@@ -361,6 +374,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	}
 	
 	
+	/**
+	 * When the student is pressing on the exit button he gets 0 on his exam and goes back to his main window.
+	 * @param event
+	 */
 	@FXML public void StudentPressedExitButton(ActionEvent event) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation");
@@ -374,11 +391,19 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 		}
 	}
 
+	/**
+	 * Sets the time when the teacher is changing the original time
+	 * @param extraTimeInMinutes
+	 */
 	public void updateExamTime(Long extraTimeInMinutes) {
 		timeChanged=extraTimeInMinutes;
 		setTimeSeconds(getTimeSeconds()+extraTimeInMinutes*60);
 	}
 
+	/**
+	 * Sets time label to the new time.
+	 * @param timeInSeconds
+	 */
 	public void updateTimeLabel(Long timeInSeconds) {
 		synchronized (timeSeconds) {
 			String hour = "" + timeInSeconds/60/60;
@@ -388,7 +413,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 			timeLeftLabel.setText(time);
 		}
 	}
-
+	/**
+	 * Sets the time in every second.
+	 * @param timeSeconds
+	 */
 	public void setTimeSeconds(Long timeSeconds) {
 		synchronized (timeSeconds) {
 			this.timeSeconds = timeSeconds;
@@ -402,6 +430,10 @@ public class StudentSolvesExamFrame implements ControlledScreen{
         }
 	}
 
+	/**
+	 * current time getter.
+	 * @return
+	 */
 	public Long getTimeSeconds() {
 		Long ret;
 		synchronized (timeSeconds) {

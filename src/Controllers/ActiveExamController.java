@@ -29,6 +29,11 @@ public class ActiveExamController {
 		return null;
 	}
 
+	/**
+	 * Send message to the server to get a specific active exam.
+	 * @param examCode
+	 * @return
+	 */
 	public static ActiveExam getActiveExam(String examCode) {
 		AESClient client = ClientGlobals.client;
 		ActiveExam activeExam;
@@ -45,7 +50,11 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-		
+
+	/**
+	 * Send message to the server to get all active exams.
+	 * @return
+	 */
 	public static ArrayList<ActiveExam> GetAllActiveExams() {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -60,7 +69,11 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Send message to the server to lock an Active exam.
+	 * @param activeExam
+	 */
 	public static void lockExam(ActiveExam activeExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -105,13 +118,12 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-	/*/
 	
 	/**
-	 * Send message to the server to add the student to the list of the Active exam.
+	 *  Send message to the server to add the student to the list of the Active exam.
 	 * @param s
 	 * @param ae
-	 * @return 
+	 * @return
 	 */
 	public static Boolean StudentCheckedInToActiveExam(Student s,ActiveExam ae)
 	{
@@ -156,6 +168,12 @@ public class ActiveExamController {
 		}
 	}
 
+	/**
+	 * Send message to the server to find out if the student is in exam at the moment.
+	 * @param s
+	 * @param ae
+	 * @return
+	 */
 	public static boolean studentIsInActiveExam(Student s,ActiveExam ae) {
 		Object[] sendObject=new Object[2];
 		sendObject[0]=(Student)s;

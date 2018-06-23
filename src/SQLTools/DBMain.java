@@ -748,6 +748,11 @@ public class DBMain {
 	}
 
 
+	/**
+	 * Get all student's solved exams from database.
+	 * @param s
+	 * @return ArrayList of student's solved exams.
+	 */
 	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
 	{
 		try {

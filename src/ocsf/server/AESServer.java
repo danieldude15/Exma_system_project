@@ -595,6 +595,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
+	/**
+	 * This method is in use when the student asks a manual exam(he gets it from the system).
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void GetStudentsManualExam(ConnectionToClient client, Object o) throws IOException {
 		SolvedExam se = (SolvedExam)o;
 		String filePath = studentsExamsPath+"\\"+se.getStudent().getID()+"\\"+se.examIdToString()+".doc";
@@ -802,7 +808,7 @@ public class AESServer extends AbstractServer {
     }
 
     /**
-	 * Send to DBMain a request to pull object solved exams from database.
+	 * Send to DBMain a request to pull solved exams from database.
 	 * @param client
 	 * @param o
 	 * @throws IOException
@@ -937,7 +943,12 @@ public class AESServer extends AbstractServer {
  		
 	}
 	
-	
+	/**
+	 * Return true if the student is in active exam at the moment, otherwise return false.
+	 * @param s
+	 * @param ae
+	 * @return
+	 */
 	private boolean isInActiveExam(Student s,ActiveExam ae) {
 		if (studentsInExam.get(ae)==null) return false;
 		else return studentsInExam.get(ae).contains(s);
