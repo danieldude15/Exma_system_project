@@ -86,7 +86,7 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Label>
-                        <ImageView fx:id="refresh" fitHeight="26.0" fitWidth="36.0" onMouseClicked="#updateActiveExamListView" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="refresh" fitHeight="26.0" fitWidth="36.0" onMouseClicked="#refreshListViews" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                   <ListView fx:id="ActiveExamsList" onMouseClicked="#activeExamsListViewClicked">
@@ -94,14 +94,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets bottom="5.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </ListView>
-                  <Label fx:id="studentsInCourse" text="Students In Selected Course:">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
                   <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <Button fx:id="lockExamB" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockExamClicked" text="Lock Exam">
@@ -129,7 +124,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="258.0">
+            <VBox alignment="CENTER">
                <children>
                   <Label prefHeight="19.0" prefWidth="156.0" text="Completed Exams:">
                      <font>
@@ -139,7 +134,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="CompletedExamList" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#completeExamsListViewClicked" prefHeight="405.0" prefWidth="255.0">
+                  <ListView fx:id="CompletedExamList" onMouseClicked="#completeExamsListViewClicked">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -161,7 +156,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </VBox>
          </children>

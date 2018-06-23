@@ -1,13 +1,15 @@
 package Controllers;
 
-import logic.*;
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.Student;
+import logic.Teacher;
+import logic.iMessage;
+import ocsf.client.AESClient;
+import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
 public class ActiveExamController {
@@ -29,6 +31,11 @@ public class ActiveExamController {
 		return null;
 	}
 
+	/**
+	 * Send message to the server to get a specific active exam.
+	 * @param examCode
+	 * @return
+	 */
 	public static ActiveExam getActiveExam(String examCode) {
 		AESClient client = ClientGlobals.client;
 		ActiveExam activeExam;
@@ -45,7 +52,11 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-		
+
+	/**
+	 * Send message to the server to get all active exams.
+	 * @return
+	 */
 	public static ArrayList<ActiveExam> GetAllActiveExams() {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -60,7 +71,11 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Send message to the server to lock an Active exam.
+	 * @param activeExam
+	 */
 	public static void lockExam(ActiveExam activeExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -74,7 +89,10 @@ public class ActiveExamController {
 			}
 		}
 	}
-	
+	/**
+	 * Send message to the server to initialize an Active exam.
+	 * @param AE-ActiveExam
+	 */
 	public static void InitializeActiveExam(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -105,13 +123,12 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-	/*/
 	
 	/**
-	 * Send message to the server to add the student to the list of the Active exam.
+	 *  Send message to the server to add the student to the list of the Active exam.
 	 * @param s
 	 * @param ae
-	 * @return 
+	 * @return
 	 */
 	public static Boolean StudentCheckedInToActiveExam(Student s,ActiveExam ae)
 	{
@@ -156,6 +173,12 @@ public class ActiveExamController {
 		}
 	}
 
+	/**
+	 * Send message to the server to find out if the student is in exam at the moment.
+	 * @param s
+	 * @param ae
+	 * @return
+	 */
 	public static boolean studentIsInActiveExam(Student s,ActiveExam ae) {
 		Object[] sendObject=new Object[2];
 		sendObject[0]=(Student)s;

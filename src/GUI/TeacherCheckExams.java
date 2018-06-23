@@ -11,10 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import logic.ExamReport;
 import logic.Globals;
@@ -41,6 +42,7 @@ public class TeacherCheckExams implements ControlledScreen {
 	@FXML ImageView doneImage;
 	
 	@Override public void runOnScreenChange() {
+		doneImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/completed-stamp.png")));
 		doneImage.setVisible(false);
 		approveB.setDisable(false);
 		examid.setText(completedExam.getExam().examIdToString());

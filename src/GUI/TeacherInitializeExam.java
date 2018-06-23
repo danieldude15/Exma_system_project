@@ -1,6 +1,9 @@
 package GUI;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ExamController;
@@ -8,17 +11,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import logic.*;
-import ocsf.client.ClientGlobals;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import logic.Course;
+import logic.Exam;
+import logic.Field;
+import logic.Globals;
+import logic.Teacher;
+import ocsf.client.ClientGlobals;
 
 
 
 
-public class TeacherInitializeExam implements ControlledScreen {
+public class TeacherInitializeExam implements  ControlledScreen {
 
 
 	
@@ -39,7 +49,7 @@ public class TeacherInitializeExam implements ControlledScreen {
 	
 	@Override
 	public void runOnScreenChange() {
-		
+			
 		examin.setText("Exam in:");
 		examsList.getItems().clear();
 		fieldComboB.getItems().clear();
@@ -47,6 +57,9 @@ public class TeacherInitializeExam implements ControlledScreen {
 		teacherFieldsLoading();
 	}
 
+	/**
+	 * Loads all the teacher's fields
+	 */
 	private void teacherFieldsLoading() {
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		if(teachersFields==null) 
@@ -55,6 +68,10 @@ public class TeacherInitializeExam implements ControlledScreen {
 		fieldComboB.setItems(list);
 	}
 
+	/**
+	 * 
+	 * @param event- When we choosing a field we put all the courses in combo box
+	 */
 	@FXML 
 	public void filterByField(ActionEvent event) {
 			if(fieldComboB.getSelectionModel().getSelectedItem()!=null) 
@@ -70,6 +87,10 @@ public class TeacherInitializeExam implements ControlledScreen {
 		
 	}
 	
+	/**
+	 * 
+	 * @param event- When we choosing a course we bring all the exam 
+	 */
 	@FXML 
 	public void filterByCourse(ActionEvent event) 
 	{
@@ -85,6 +106,10 @@ public class TeacherInitializeExam implements ControlledScreen {
 		}			 
 	 }
     
+	/**
+	 * When you click the View button we will go to the window which is displaying the exam
+	 * @param event
+	 */
 	@FXML
     public void MyViewHandler (ActionEvent event) {
 		if(examsList.getSelectionModel().getSelectedItem()!=null)
@@ -94,7 +119,10 @@ public class TeacherInitializeExam implements ControlledScreen {
 			Globals.mainContainer.setScreen(ClientGlobals.ViewPlainExamID);
 		}
 		}        
-   
+   /**
+    * When you click the Run button we will go to the window which selected the exam type and its code
+    * @param event
+    */
 	@FXML
     public void MyActiveHandler(ActionEvent event) {
 		if(examsList.getSelectionModel().getSelectedItem()!=null) {
@@ -102,12 +130,16 @@ public class TeacherInitializeExam implements ControlledScreen {
                Globals.mainContainer.setScreen(ClientGlobals.TeacherActiveExamID);
 		}
 			 	}
-		
+	/**
+	 * Return to the previous window when you press the Back button
+	 * @param event
+	 */
 	@FXML
     public void CancelButtonPressed(ActionEvent event)
 		    {
 		     Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 		    }
+
 
 	}
 

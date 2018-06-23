@@ -1,12 +1,29 @@
 package SQLTools;
 
-import com.mysql.jdbc.Statement;
-import logic.*;
-import ocsf.server.ServerGlobals;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.mysql.jdbc.Statement;
+
+import logic.Course;
+import logic.Exam;
+import logic.ExamReport;
+import logic.Field;
+import logic.Globals;
+import logic.Principle;
+import logic.Question;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
+import ocsf.server.ServerGlobals;
 
 
 public class DBMain {
@@ -748,6 +765,11 @@ public class DBMain {
 	}
 
 
+	/**
+	 * Get all student's solved exams from database.
+	 * @param s
+	 * @return ArrayList of student's solved exams.
+	 */
 	public ArrayList<SolvedExam> getStudentsSolvedExams(Student s) 
 	{
 		try {
@@ -818,7 +840,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * This method  add exam to data base
+ * @param e-exam
+ * @return
+ */
 	public int addexam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addexam,Statement.RETURN_GENERATED_KEYS);
@@ -855,7 +881,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+	/**
+	 * This method  delete exam from data base
+	 * @param e-exam
+	 * @return
+	 */
 	public int deleteExam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(deleteExam);
@@ -1107,7 +1137,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+	/**
+	 * This method  get all question in this course
+	 * @param o -course
+	 * @return
+	 */
 	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {

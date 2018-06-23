@@ -1,14 +1,14 @@
 package Controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import logic.Course;
 import logic.Exam;
 import logic.Teacher;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class ExamController {
@@ -43,6 +43,11 @@ public class ExamController {
 		return null;
 	}
 
+	/**
+	 * Sending to server request to delete exam
+	 * @param exam
+	 * @return
+	 */
 	public static int deleteExam(Exam exam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -57,7 +62,10 @@ public class ExamController {
 		} 
 		return 0;
 	}
-
+/**
+ * Sending to server request to add exam
+ * @param exam
+ */
 	public static void  addExam(Exam exam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

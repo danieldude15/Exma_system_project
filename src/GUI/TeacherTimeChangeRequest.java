@@ -1,11 +1,11 @@
 package GUI;
 
-import Controllers.ActiveExamController;
+
 import Controllers.ControlledScreen;
 import Controllers.TimeChangeController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import logic.ActiveExam;
@@ -14,8 +14,6 @@ import logic.Teacher;
 import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class TeacherTimeChangeRequest implements ControlledScreen{
 
@@ -33,12 +31,15 @@ public class TeacherTimeChangeRequest implements ControlledScreen{
 		Errorrequest.setVisible(false);
 		Errortime.setVisible(false);
 	}
-
+/**
+ * When you click the submit button we check if the request contains an explanation and amount of time
+ * @param event
+ */
 	@FXML
 	private void SubmitRequest (ActionEvent event)
 	{
 		//If some of the fields is empty, then the teacher get an error.
-		if(SelectNewTime.getText().isEmpty()) {
+		if(SelectNewTime.getText().isEmpty()&& SelectNewTime.getText().matches(("[0-9]+"))) {
 			Errortime.setVisible(true);
 		}
 		else if(RequestExplenation.getText().isEmpty())
@@ -53,13 +54,19 @@ public class TeacherTimeChangeRequest implements ControlledScreen{
 	    	Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	    }
 	}
-
+	/**
+	 * Return to the previous window when you press the Back button
+	 * @param event
+	 */
 	@FXML
 	public void CancelButtonPressed(ActionEvent event)
 	{
 		Globals.mainContainer.setScreen(ClientGlobals.TeacherMainID);
 	}
-
+	/**
+	 * When we want to go this windows we send the specific ActiveExam
+	 * @param ActiveExam
+	 */
 	public void SetActiveExam(ActiveExam selectedItem) {
 		activeexamselect=selectedItem;
 		
