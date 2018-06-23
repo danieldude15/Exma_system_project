@@ -59,12 +59,13 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			examview=e;
 			
 		}
-		@FXML
+		
 		
 /**
  * 	active the exam when you click the active button
  * @param event
  */
+		@FXML
 		public void ActiveButtonPressed(ActionEvent event)
 		{
 			String code=new String(Examcode.getText());
