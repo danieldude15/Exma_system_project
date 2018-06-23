@@ -39,7 +39,7 @@ public class TeacherTimeChangeRequest implements ControlledScreen{
 	private void SubmitRequest (ActionEvent event)
 	{
 		//If some of the fields is empty, then the teacher get an error.
-		if(SelectNewTime.getText().isEmpty()) {
+		if(SelectNewTime.getText().isEmpty()&& SelectNewTime.getText().matches(("[0-9]+"))) {
 			Errortime.setVisible(true);
 		}
 		else if(RequestExplenation.getText().isEmpty())
