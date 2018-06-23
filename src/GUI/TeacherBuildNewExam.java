@@ -61,7 +61,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
  	String notestd=null;
  	String notetech=null;
  	ImageView imageView;
- 	private final Image v = new Image("resources/v.png"); 
+ 	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
  	
 	@Override
 	public void runOnScreenChange() {

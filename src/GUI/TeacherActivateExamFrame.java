@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -33,11 +35,18 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 		@FXML RadioButton MonualExamId;
 		@FXML Button Cancel;
 		@FXML Button Active;
-		//@FXML JFXDate Date;
+		@FXML ImageView computerizedImage;
+		@FXML ImageView manualImage;
+		
 		Exam examview;	
 		int type;
 		@Override
 		public void runOnScreenChange() {
+			
+			
+			computerizedImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/computerized.png")));
+			manualImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/manual.png")));
+			
 			ToggleGroup SelectType = new ToggleGroup();
 			ExamId.setText("Exam id : "+examview.examIdToString());
 			Durationid.setText("Duration: "+ examview.getDuration());

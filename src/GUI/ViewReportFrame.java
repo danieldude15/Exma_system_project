@@ -324,9 +324,9 @@ public class ViewReportFrame implements ControlledScreen {
         devBarChart.getData().clear();
         XYChart.Series series = new XYChart.Series();
         for(int i=0;i<10;i++) {
-        	String name = i*10 + "-" + (i*10+9);
-        	if (i==9)
-        		name = i*10 + "-" + (i*10+10);
+        	String name = (i*10+1) + "-" + (i*10+10);
+        	if (i==0)
+        		name = "0-10";
         	series.getData().add(new XYChart.Data(name, dev.get(i)));
         	
         } 
