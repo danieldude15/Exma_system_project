@@ -88,7 +88,7 @@ public class ClientApplication extends Application {
 		AnchorPane root = new AnchorPane();
 		root.getChildren().addAll(Globals.mainContainer);
 		Scene scene = new Scene(root);
-		Image icon = new Image("resources/images/icon.png");
+		Image icon = new Image(this.getClass().getResourceAsStream("resources/images/icon.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
