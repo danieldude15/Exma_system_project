@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -33,11 +35,18 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 		@FXML RadioButton MonualExamId;
 		@FXML Button Cancel;
 		@FXML Button Active;
-		//@FXML JFXDate Date;
+		@FXML ImageView computerizedImage;
+		@FXML ImageView manualImage;
+		
 		Exam examview;	
 		int type;
 		@Override
 		public void runOnScreenChange() {
+			
+			
+			computerizedImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/computerized.png")));
+			manualImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/manual.png")));
+			
 			ToggleGroup SelectType = new ToggleGroup();
 			ExamId.setText("Exam id : "+examview.examIdToString());
 			Durationid.setText("Duration: "+ examview.getDuration());
@@ -51,11 +60,20 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			Examcode.clear();
 			
 		}
-
+/**
+ * When we want to active an exam this function passes the exam that we want to active
+ * @param e-exam
+ */
 		public void setExam(Exam e) {
 			examview=e;
 			
 		}
+		
+		
+/**
+ * 	active the exam when you click the active button
+ * @param event
+ */
 		@FXML
 		public void ActiveButtonPressed(ActionEvent event)
 		{
@@ -112,13 +130,21 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			}
 			
 		}
+		/**
+		 * 
+		 * @param s-string
+		 * @return true if the string contains letters and numbers and false if is not
+		 */
 		public boolean isValid(String s) {
 		    String n = ".*[0-9].*";
 		    String A = ".*[A-Z].*";
 		    String a = ".*[a-z].*";
 		    return s.matches(n) &&( s.matches(a) || s.matches(A));
 		}
-		
+		/**
+		 * Return to the previous window when you press the Back button
+		 * @param event
+		 */
 		@FXML
 	    public void CancelButtonPressed(ActionEvent event)
 			    {

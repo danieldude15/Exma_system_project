@@ -1,9 +1,6 @@
 package GUI;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ExamController;
@@ -13,27 +10,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import logic.Course;
-import logic.Exam;
-import logic.Field;
-import logic.Globals;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.Teacher;
+import logic.*;
 import ocsf.client.ClientGlobals;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class TeacherBuildNewExam implements ControlledScreen {
 	
@@ -43,7 +31,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
 	
 	private windowType type = windowType.Build;
 	
-	HashMap<String,QuestionInExam> questionsinexam = new HashMap<>();
+	
 	HashMap<String,Question> questions = new HashMap<>();
 	HashMap<String,TextField> scores = new HashMap<>();
 	HashMap<String,TextField> noteTeacherts = new HashMap<>();
@@ -73,7 +61,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
  	String notestd=null;
  	String notetech=null;
  	ImageView imageView;
- 	private final Image v = new Image("resources/v.png"); 
+ 	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
  	
 	@Override
 	public void runOnScreenChange() {
@@ -93,7 +81,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
 			windowTypeid.setText("Build New Exam");
 			labelselectcourse.setVisible(true);
 			labelselectfield.setVisible(true);
-			questionsinexam.clear();
+			
 			questions.clear();
 			scores.clear();
 			noteTeacherts.clear();
@@ -113,6 +101,9 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}
 	}
 
+/**
+ * Loads all the teacher's fields
+ */
 	private void teacherFieldsLoading() {
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		if(teachersFields==null) 
@@ -121,6 +112,10 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		fieldComboB.setItems(list);
 	}
 
+	/**
+	 * - When we choosing a field we put all the courses in combo box
+	 * @param event
+	 */
 	@FXML 
 	public void filterByField(ActionEvent event) {
 		if(fieldComboB.getSelectionModel().getSelectedItem()!=null) {
@@ -135,6 +130,10 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		System.out.println(courseComboB.getItems().toString());
 		
 	}
+	/**
+	 * 
+	 * @param event- When we choosing a course we bring all the question 
+	 */
 	
 	@FXML 
 	public void filterByCourse(ActionEvent event) 
@@ -148,6 +147,9 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}			 
 	 }
 	
+	/**
+	 * we take the question and and send in questionAdder and we get hbox and put in questionlist
+	 */
 	private void setQuestionsListInVBox() {
 		if(type.equals(windowType.Build))
 		{
@@ -167,7 +169,11 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}
 	}
 	
-	
+	/**
+	 * They take all the details about the question and create hbox
+	 * @param q - Question
+	 * @return h
+	 */
 	private HBox questionAdder(Question q) {
 		HBox hbox = new HBox();
 		hbox.setStyle("-fx-border-color:black;"
@@ -248,7 +254,11 @@ public class TeacherBuildNewExam implements ControlledScreen {
 	
 	}
 	
-
+/**
+ * Once we change the field of score we call this function that updates the score
+ * @author Niv Mizrahi
+ *
+ */
 	private class MyAddRemoveEdit implements EventHandler<KeyEvent>{ 
 	
 	@Override
@@ -277,6 +287,12 @@ public class TeacherBuildNewExam implements ControlledScreen {
 	    }
 	}
 
+	/**
+	 * Calculates in real time the amount
+	 * @param curKey -questionId
+	 * @param c -the char of the event
+	 * @param backspace -if the event is result of press on backspace
+	 */
 	private void calcNewScore(String curKey, char c,boolean backspace) {
 		String cur ="";
 		if (backspace) {
@@ -294,12 +310,20 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		totalScore.setText("Total Score: "+Integer.toString(sum));
 	}
 
+	/**
+	 * Return to the previous window when you press the Back button
+	 * @param event
+	 */
+	@FXML
     public void CancelButtonPressed(ActionEvent event)
     {
     	
     		Globals.mainContainer.setScreen(ClientGlobals.TeacherManageExamsID);
     }
-    
+     /**
+      * Create an exam when you click the Create button
+      * @param event
+      */
 	@FXML
 	public void CreatelButtonPressed(ActionEvent event)
 	{
@@ -346,21 +370,21 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}
 		}
 	}
-
+ /**
+  * This function distinguishes between which window we want to build or edit
+  * @param type - build or edit
+  */
 	public void setType(windowType type) {
 		this.type = type;
 		
 	}
-
+/**
+ * When we want to change an exam this function passes the exam that we want to edit
+ * @param exam
+ */
 	public void setExam(Exam exam) {
 		examedit=exam;
 		
 	}
 	
-	public boolean isValid(String s) {
-	    String n = ".*[0-9].*";
-	    String A = ".*[A-Z].*";
-	    String a = ".*[a-z].*";
-	    return s.matches(n) &&( s.matches(a) || s.matches(A));
-	}
 }

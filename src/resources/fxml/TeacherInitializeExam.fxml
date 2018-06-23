@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -73,23 +72,16 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </RadioButton>
-                  <ImageView accessibleHelp="Computerized Exam" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="computerizedImage" accessibleHelp="Computerized Exam" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="60.0" />
                      </HBox.margin>
-                     <image>
-                        <Image url="@../computerized.png" />
-                     </image>
                   </ImageView>
                   <RadioButton id="whiteLabel" fx:id="MonualExamId" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></RadioButton>
-                  <ImageView accessibleHelp="Manual Exam" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../manual.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="manualImage" accessibleHelp="Manual Exam" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" top="10.0" />

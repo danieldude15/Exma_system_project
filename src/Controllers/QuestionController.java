@@ -93,7 +93,11 @@ public class QuestionController {
 		}
 		return 0;
 	}
-
+/**
+ * A function that returns all the questions of this course
+ * @param c-Course
+ * @return ArrayList<Question>
+ */
 	public static ArrayList<Question> getCourseQuestions(Course c) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

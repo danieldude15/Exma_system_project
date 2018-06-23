@@ -89,7 +89,10 @@ public class ActiveExamController {
 			}
 		}
 	}
-	
+	/**
+	 * Send message to the server to initialize an Active exam.
+	 * @param AE-ActiveExam
+	 */
 	public static void InitializeActiveExam(ActiveExam AE) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

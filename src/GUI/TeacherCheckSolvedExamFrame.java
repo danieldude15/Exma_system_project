@@ -35,8 +35,8 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 
 	private SolvedExam solvedExam = null;
 	private HashMap<QuestionInExam, TextField> teacherNotesH = new HashMap<>();
-	private final Image v = new Image("resources/v.png"); 
-	private final Image x = new Image("resources/x.png"); 
+	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
+	private final Image x = new Image(this.getClass().getResourceAsStream("/resources/x.png")); 
 	
 	@FXML VBox questionsView;
 	@FXML TextField newScore;
@@ -52,6 +52,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 	@FXML Button approveB;
 
 	@Override public void runOnScreenChange() {
+		doneImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/completed-stamp.png")));
 		questionsView.getChildren().clear();
 		errorLabel.setVisible(false);
 		newScore.setText("");

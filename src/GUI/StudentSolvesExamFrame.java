@@ -59,7 +59,7 @@ public class StudentSolvesExamFrame implements ControlledScreen{
 	private final String whiteLabel=new String("whiteLabel");
 	private final String blackLabel=new String("blackLabel");
 	
-	private final Image v = new Image("resources/GoodLuck.jpg");
+	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/GoodLuck.jpg"));
     private final Background yellowBackground = new Background( new BackgroundFill( Color.web( "#95ab35" ), CornerRadii.EMPTY, Insets.EMPTY ) );
 	
 	@Override public void runOnScreenChange() {		

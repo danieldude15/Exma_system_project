@@ -33,8 +33,8 @@ public class StudentViewExamFrame implements ControlledScreen {
 	
 	private SolvedExam solvedExam;
 	private HashMap<QuestionInExam, Integer> studentsAnswers;
-	private final Image v = new Image("resources/v.png"); 
-	private final Image x = new Image("resources/x.png"); 
+	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
+	private final Image x = new Image(this.getClass().getResourceAsStream("/resources/x.png")); 
 	private final String blackLabel=new String("blackLabel");
 	private final String redLabel=new String("redLabel");
 

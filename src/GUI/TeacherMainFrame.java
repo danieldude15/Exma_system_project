@@ -47,8 +47,7 @@ public class TeacherMainFrame implements ControlledScreen {
 	@FXML Label username;
 	@FXML Label userid;
 	@FXML Pane userImage;
-	@FXML Label studentsInCourse;
-	private final Image r = new Image("resources/refresh.png"); 
+	private final Image r = new Image(this.getClass().getResourceAsStream("/resources/refresh.png")); 
 
 	@Override public void runOnScreenChange() {
 		updateCompletedExamListView();
@@ -126,20 +125,21 @@ public class TeacherMainFrame implements ControlledScreen {
 	
 	@FXML public void completeExamsListViewClicked(MouseEvent event) {
 		ActiveExamsList.getSelectionModel().clearSelection();
-		studentsInCourse.setText("Students In Selected Course:");
 	}
 	
 	@FXML public void activeExamsListViewClicked(MouseEvent event) {
 		CompletedExamList.getSelectionModel().clearSelection();
-		//ActiveExam aExam = ActiveExamsList.getSelectionModel().getSelectedItem();
-		//if (aExam!=null)
-			//studentsInCourse.setText("Students In Selected Course:"+UserController.getStudentsInCourse(aExam.getCourse()).size());
 	}
 	
 	@FXML public void logout(ActionEvent event) {
 		UserController.logout();
 	}
 
+	@FXML public void refreshListViews(MouseEvent event) {
+		updateActiveExamListView();
+		updateCompletedExamListView();
+	}
+	
 	@FXML
 	private void updateActiveExamListView() {
 		TeacherAExams=ActiveExamController.getTeachersActiveExams((Teacher) ClientGlobals.client.getUser());
