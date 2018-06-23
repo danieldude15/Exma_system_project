@@ -120,6 +120,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}
 	}
 
+
 	private void teacherFieldsLoading() {
 		teachersFields = CourseFieldController.getTeacherFields((Teacher) ClientGlobals.client.getUser());
 		if(teachersFields==null) 
@@ -174,7 +175,11 @@ public class TeacherBuildNewExam implements ControlledScreen {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param q - y7ttf6
+	 * @return h
+	 */
 	private HBox questionAdder(Question q) {
 		HBox hbox = new HBox();
 		hbox.setStyle("-fx-border-color:black;"
