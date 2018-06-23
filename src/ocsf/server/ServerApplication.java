@@ -8,7 +8,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Globals;
-import logic.iMessage;
 
 public class ServerApplication extends Application {
 

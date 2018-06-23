@@ -16,7 +16,12 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import logic.*;
+import logic.Course;
+import logic.ExamReport;
+import logic.Globals;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
 import ocsf.client.ClientGlobals;
 
 @SuppressWarnings({"rawtypes","unchecked"})

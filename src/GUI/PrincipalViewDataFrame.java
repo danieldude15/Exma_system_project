@@ -1,6 +1,17 @@
 package GUI;
 
-import Controllers.*;
+import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+
+import Controllers.ControlledScreen;
+import Controllers.CourseFieldController;
+import Controllers.ExamController;
+import Controllers.QuestionController;
+import Controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,17 +19,20 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import logic.*;
+import logic.Course;
+import logic.Exam;
+import logic.Field;
+import logic.Globals;
+import logic.Question;
+import logic.User;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
 
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
 
@@ -52,9 +66,6 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         updateExamsList();
         updateFieldsList();
         updateCoursesList();
-        m_coursesList.setFocusTraversable(false);
-        m_teachersList.setFocusTraversable(false);
-        m_studentsList.setFocusTraversable(false);
     }
 
     @FXML
@@ -88,15 +99,18 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
             if(isNumeric(m_searchBox.getText())){
                 if (m_questionsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewQuestionFrame.setQuestion(m_questionsMap.get(Integer.parseInt(m_searchBox.getText())));
+                    m_searchBox.setText("");
                     Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewQuestionID);
                 }else if (m_examsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
                     viewExamFrame.setExam(m_examsMap.get(Integer.parseInt(m_searchBox.getText())));
+                    m_searchBox.setText("");
                     Globals.mainContainer.setScreen(ClientGlobals.ViewPlainExamID);
                 }else if (m_fieldsMap.containsKey(Integer.parseInt(m_searchBox.getText()))){
                         viewFieldFrame.setField(m_fieldsMap.get(Integer.parseInt(m_searchBox.getText())));
+                        m_searchBox.setText("");
                         Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewFieldID);
                 } else {
-                	Globals.popUp(Alert.AlertType.WARNING, "not Entry" ,"There is no such Entry in DataBase");
+                	Globals.popUp(Alert.AlertType.WARNING, "No Entry" ,"There is no such Entry in DataBase");
                 }
             }else {
             	Globals.popUp(Alert.AlertType.WARNING, "Invalid character" ,"You used Invalid characters, please enter Numerical ID.");
@@ -115,6 +129,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_examsMap = new HashMap<>();
         m_fieldsMap = new HashMap<>();
         m_studentsAndTeachersMap = new HashMap<>();
+        m_studentsList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
+        m_teachersList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
+        m_coursesList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
     }
 
     // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )

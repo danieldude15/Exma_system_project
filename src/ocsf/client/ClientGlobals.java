@@ -1,8 +1,8 @@
 package ocsf.client;
 
-import GUI.ClientFrame;
-
 import java.io.IOException;
+
+import GUI.ClientFrame;
 
 public class ClientGlobals {
 	

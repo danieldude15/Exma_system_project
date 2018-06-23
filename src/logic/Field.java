@@ -1,9 +1,9 @@
 package logic;
 
-import Controllers.CourseFieldController;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import Controllers.CourseFieldController;
 
 /**
  * this entity Field is the Subject of any group of courses for example mathematics or physiscs.

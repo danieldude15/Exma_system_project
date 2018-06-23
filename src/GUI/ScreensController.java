@@ -37,7 +37,8 @@ package GUI;
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- */ 
+ */
+
 import java.util.HashMap;
 
 import Controllers.ControlledScreen;
@@ -154,7 +155,8 @@ public class ScreensController  extends StackPane {
             	double width = ((javafx.scene.layout.Region)screens.get(name)).getPrefWidth();
             	double height = ((javafx.scene.layout.Region)screens.get(name)).getPrefHeight();
             	Globals.primaryStage.setHeight(height+30);
-        		Globals.primaryStage.setWidth(width+20);
+        		Globals.primaryStage.setWidth(width+5);
+        		Globals.primaryStage.setResizable(false);
             }
             return true;
         } else {

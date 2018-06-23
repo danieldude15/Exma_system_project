@@ -6,16 +6,23 @@ import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ReportController;
 import Controllers.UserController;
-import GUI.ViewReportFrame.type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import logic.Course;
 import logic.ExamReport;
-import logic.*;
+import logic.Globals;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
 import ocsf.client.ClientGlobals;
 
 
@@ -44,7 +51,9 @@ public class PrincipalReportsFrame implements ControlledScreen {
     
     @Override public void runOnScreenChange() {
     	if (allStudents==null) {
-	    	allStudents = UserController.getAllStudents(); 
+	    	allStudents = UserController.getAllStudents();
+			ObservableList<User> list = FXCollections.observableArrayList(allStudents);
+			m_studentsList.setItems(list);
     	} 
     }
 
@@ -56,6 +65,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.STUDENT);
         	pvrf.setStudent(s);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
     	} else if (selected.equals(m_teachersTab)) {
@@ -64,6 +74,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.TEACHER);
         	pvrf.setTeacher(t);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_coursesTab)) {
@@ -72,6 +83,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
         	pvrf.setWindowType(ViewReportFrame.type.COURSE);
         	pvrf.setCourse(c);
+			pvrf.setMe(ViewReportFrame.user.Principle);
         	Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
         	return;
         } else if (selected.equals(m_examsTab)) {

@@ -25,8 +25,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import logic.Globals;
 import logic.AesWordDoc;
+import logic.Globals;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
@@ -83,6 +83,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			changeNote.setDisable(true);
 			doneImage.setVisible(true);
 			approveB.setVisible(false);
+			for(QuestionInExam qie: teacherNotesH.keySet()) {
+				teacherNotesH.get(qie).setDisable(true);
+			}
 		}
 		
 	}
@@ -224,6 +227,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 				approveB.setVisible(false);
 				score.setDisable(true);
 				changeNote.setDisable(true);
+				for(QuestionInExam qie: teacherNotesH.keySet()) {
+					teacherNotesH.get(qie).setDisable(true);
+				}
 			} else {
 				//Failed To insert!
 			}

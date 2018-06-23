@@ -3,15 +3,11 @@ package GUI;
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import logic.Globals;
 import logic.Question;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 
 public class PrincipalViewQuestionFrame implements ControlledScreen {
