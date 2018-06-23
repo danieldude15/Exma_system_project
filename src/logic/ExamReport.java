@@ -234,23 +234,23 @@ public class ExamReport extends ActiveExam {
 	public static HashMap<Integer, Integer> calcDeviationFromInts(ArrayList<Integer> values) {
 		Integer[] devValues = new Integer[] {0,0,0,0,0,0,0,0,0,0};
 		for(Integer num: values) {
-			if (num>=90)
+			if (num>90)
 				devValues[9]++;
-			else if (num>=80)
+			else if (num>80)
 				devValues[8]++;
-			else if (num>=70)
+			else if (num>70)
 				devValues[7]++;
-			else if (num>=60)
+			else if (num>60)
 				devValues[6]++;
-			else if (num>=50)
+			else if (num>50)
 				devValues[5]++;
-			else if (num>=40)
+			else if (num>40)
 				devValues[4]++;
-			else if (num>=30)
+			else if (num>30)
 				devValues[3]++;
-			else if (num>=20)
+			else if (num>20)
 				devValues[2]++;
-			else if (num>=10)
+			else if (num>10)
 				devValues[1]++;
 			else 
 				devValues[0]++;
