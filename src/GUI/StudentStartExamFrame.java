@@ -43,10 +43,8 @@ public class StudentStartExamFrame implements ControlledScreen{
 	
 	
 	/**
-	 * When student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
+	 * When the student pressed on start exam button and fields are filled correct the method send the active exam to StudentSolvesExamFrame class.
 	 */
-
-	
 	@FXML public void StartExamButtonPressed(ActionEvent event)
 	{
 		idError.setText("");
@@ -88,7 +86,10 @@ public class StudentStartExamFrame implements ControlledScreen{
 		
 	}
 			
-	
+	/**
+	 * Initiate Timer for active exam.
+	 * @param active
+	 */
 	@SuppressWarnings("rawtypes")
 	private void startStudentsExam(ActiveExam active) {
 		StudentSolvesExamFrame studentsolvesExam = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);

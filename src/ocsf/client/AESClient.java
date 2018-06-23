@@ -203,18 +203,30 @@ public class AESClient extends AbstractClient{
 	}
 
 	
+	/**
+	 * Send message to the principle in case that there is a new time change request for an active exam.
+	 * @param o
+	 */
 	private void newTimeChangeRequest(Object o) {
 		PrincipalMainFrame principalMainFrame = (PrincipalMainFrame) Globals.mainContainer.getController(ClientGlobals.PrincipalMainID);
 		principalMainFrame.setNewRequestArrived(true);
 	}
 	
 
+	/**
+	 * Send message to the students in case that the principle approved time change request(to update new time).
+	 * @param o
+	 */
 	private void studentUpdateExamTime(Object o) {
 		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);
 		if (o instanceof Long)
 			sef.updateExamTime((Long)o);
 	}
 	
+	/**
+	 * Send message to the students in case that the teacher locked the exam(to lock their exams).
+	 * @param o
+	 */
 	private void handleExamLocked(Object o) {
 		System.err.println("Locking Studetns Exam");
 		StudentSolvesExamFrame sef = (StudentSolvesExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentSolvesExamID);

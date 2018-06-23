@@ -36,45 +36,6 @@ public class StudentMainFrame implements ControlledScreen{
 
 	
 
-	/*Do not delete! I keep it in case I will need it in the future.
-	@Override
-	public void runOnScreenChange() {
-		// TODO Auto-generated method stub
-		courseNameAndExamId.clear();
-		
-		//Get all student solved exams from database and set it to the ListView field on window
-		ArrayList<SolvedExam> mySolvedExam = SolvedExamController.getSolvedExams((Student)ClientGlobals.client.getUser());
-		ArrayList<String> solveExamsFields= new ArrayList<String>();
-		if(mySolvedExam!=null)
-			{
-			solveExamsFields.add("All");
-			for (SolvedExam s:mySolvedExam) {
-				
-				String courseName = s.getCourse().getName();
-				String solvedExamGrade=Integer.toString(s.getScore());
-				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
-				solveExamsFields.add(courseName+"                                                        "
-						+ "                                                    "+solvedExamGrade+"\n");
-				solveExamsFields.add("A"+"                                                        "
-						+ "                                                    "+"99"+"\n");
-				
-			}
-			Collections.sort(solveExamsFields);
-			ObservableList<String> list;
-			if (solveExamsFields.size()==1) //Student has not solve any exam yet.
-			{
-				solveExamsFields.remove(0);
-				solveExamsFields.add("You Have No Assigned Solved Exams...");
-			}
-			list = FXCollections.observableArrayList(solveExamsFields);
-			solvedExamsList.setItems(list);//Insert all student's solved exams(courseName+grade) into the ListView "solvedExamList"
-			
-		}
-		setStudentInfo();
-	}
-	/*/
-	
-
 	
 	@Override
 	public void runOnScreenChange() {
@@ -90,25 +51,7 @@ public class StudentMainFrame implements ControlledScreen{
 		}
 		ObservableList<SolvedExam> solveds = FXCollections.observableArrayList(myAprovedSolvedExam);
 		solvedExamsList.setItems(solveds);
-		/*
-		if(!(mySolvedExam.isEmpty()))//If student has already did at least one exam.
-			{
-			//solvedExamsList.getItems().add("All");
-			for (SolvedExam s:mySolvedExam)//Add all student's solved exams to the ListView. 
-			{	
-				String courseName = s.getCourse().getName();
-				String solvedExamGrade=Integer.toString(s.getScore());
-				courseNameAndExamId.put(courseName, Integer.toString(s.getID()));
-				if (s.isTeacherApproved())
-					solvedExamsList.getItems().add(courseName+"                                                        "
-						+ "                                          "+solvedExamGrade+"\n");
-			}
-		}
-		else
-			solvedExamsList.getItems().add("You Have No Assigned Solved Exams...");
 		
-		Collections.sort(solvedExamsList.getItems());//Sort the ListView by alphabet.
-		/*/
 		setStudentInfo();
 		
 		
@@ -121,7 +64,7 @@ public class StudentMainFrame implements ControlledScreen{
 	
 	
 	/**
-	 * Set student personal info on the window screen.
+	 * Sets student's personal info on the window screen.
 	 */
 	private void setStudentInfo()
 	{
@@ -138,7 +81,7 @@ public class StudentMainFrame implements ControlledScreen{
 	
 	
 	/**
-	 * In case that take exam button was pressed by student the start exam window opens.
+	 * In case that take exam button was pressed by the student,the start exam window opens.
 	 */
 	public void TakeExamButtonPressed(ActionEvent event)
 	{
@@ -148,7 +91,7 @@ public class StudentMainFrame implements ControlledScreen{
 	
 	
 	/**
-	 * In case that view exam button was pressed by student the chosen solved exam opens.
+	 * In case that view exam button was pressed by the student the chosen solved exam opens.
 	 */
 	public void ViewExamButtonPressed(ActionEvent event)
 	{
@@ -161,28 +104,7 @@ public class StudentMainFrame implements ControlledScreen{
 			Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
 			return;
 		}
-		/*
-		if((String)solvedExamsList.getSelectionModel().getSelectedItem()!=null &&
-				!(((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("You Have No Assigned Solved Exams...")) 
-				&& !((String)solvedExamsList.getSelectionModel().getSelectedItem()).equals("All"))
-		{
-			String[] CourseNameAndGrade=(String[])solvedExamsList.getSelectionModel().getSelectedItem().split(" ");
-			
-			for (SolvedExam s:mySolvedExam)
-			{
-				String ExamId= Integer.toString(s.getID());
-				//if the Student pressed on some course from the list we check that the student actually did the exam on that course.
-				if(s.getCourse().getName().equals(CourseNameAndGrade[0]) && ExamId.equals(courseNameAndExamId.get(CourseNameAndGrade[0])))
-				{
-					studentViewExam.SetSolvedExam(s);//Send student solved exam to the studentViewExam window.
-					Globals.mainContainer.setScreen(ClientGlobals.StudentViewExamID);
-					return;
-				}
 
-			}
-			
-		}
-		/*/
 		//if student pressed to view solved exam and didn't choose any course name, he gets an error.
 		else
 		{
