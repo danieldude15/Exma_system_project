@@ -1,11 +1,9 @@
 package GUI;
 
-import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.TimeChangeController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import logic.ActiveExam;
@@ -13,9 +11,6 @@ import logic.Globals;
 import logic.Teacher;
 import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class TeacherTimeChangeRequest implements ControlledScreen{
 

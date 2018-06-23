@@ -1,5 +1,7 @@
 package GUI;
 
+import java.util.ArrayList;
+
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.ReportController;
@@ -9,12 +11,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import logic.*;
+import logic.Course;
+import logic.ExamReport;
+import logic.Globals;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
 import ocsf.client.ClientGlobals;
-
-import java.util.ArrayList;
 
 
 /**

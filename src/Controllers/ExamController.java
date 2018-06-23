@@ -1,14 +1,14 @@
 package Controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import logic.Course;
 import logic.Exam;
 import logic.Teacher;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class ExamController {

@@ -1,5 +1,7 @@
 package GUI;
 
+import java.util.ArrayList;
+
 import Controllers.ActiveExamController;
 import Controllers.ControlledScreen;
 import Controllers.SolvedExamController;
@@ -26,8 +28,6 @@ import logic.ExamReport;
 import logic.Globals;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
-
-import java.util.ArrayList;
 
 
 public class TeacherMainFrame implements ControlledScreen {

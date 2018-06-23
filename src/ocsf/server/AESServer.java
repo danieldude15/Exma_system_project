@@ -4,7 +4,6 @@ package ocsf.server;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -37,6 +36,7 @@ import logic.Teacher;
 import logic.TimeChangeRequest;
 import logic.User;
 import logic.iMessage;
+
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	

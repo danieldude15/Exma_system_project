@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import javax.swing.filechooser.FileSystemView;
-
 import GUI.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Scene;

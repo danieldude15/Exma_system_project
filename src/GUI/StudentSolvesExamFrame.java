@@ -1,25 +1,6 @@
 package GUI;
 
 
-import Controllers.ActiveExamController;
-import Controllers.ControlledScreen;
-import Controllers.SolvedExamController;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import logic.*;
-import ocsf.client.ClientGlobals;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,6 +9,35 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import javax.swing.filechooser.FileSystemView;
+
+import Controllers.ActiveExamController;
+import Controllers.ControlledScreen;
+import Controllers.SolvedExamController;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.Globals;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
 public class StudentSolvesExamFrame implements ControlledScreen{

@@ -1,13 +1,15 @@
 package Controllers;
 
-import logic.*;
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.Student;
+import logic.Teacher;
+import logic.iMessage;
+import ocsf.client.AESClient;
+import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
 public class ActiveExamController {

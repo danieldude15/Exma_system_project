@@ -1,9 +1,5 @@
 package ocsf.client;
 
-import java.awt.event.MouseWheelEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import GUI.PrincipalMainFrame;
@@ -11,9 +7,12 @@ import GUI.StudentSolvesExamFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import logic.*;
-
-import java.io.IOException;
+import logic.Globals;
+import logic.Principle;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
+import logic.iMessage;
 
 /**
  * This is the subclass of AbstractClient that is changed by the Team to work as expected 

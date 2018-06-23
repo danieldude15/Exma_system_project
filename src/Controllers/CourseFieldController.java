@@ -1,5 +1,8 @@
 package Controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import logic.Course;
 import logic.Field;
 import logic.Teacher;
@@ -7,11 +10,6 @@ import logic.User;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javafx.util.Callback;
 
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
