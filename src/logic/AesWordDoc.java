@@ -7,6 +7,10 @@ import java.util.ArrayList;
 
 public class AesWordDoc implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2955938781660056312L;
 	private String examId=null;
 	private String fileName=null;	
 	private int size=0;
