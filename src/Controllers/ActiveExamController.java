@@ -28,10 +28,13 @@ public class ActiveExamController {
 		}
 		return null;
 	}
-
+/**
+ * we send exam code and if he exists we get the exam if not we get null
+ * @param examCode -String
+ * @return ActiveExam in case of true or null in the case of false
+ */
 	public static ActiveExam getActiveExam(String examCode) {
 		AESClient client = ClientGlobals.client;
-		ActiveExam activeExam;
 		iMessage msg;
 		if(client.isConnected()) {
 			try {

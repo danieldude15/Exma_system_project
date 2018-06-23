@@ -106,6 +106,11 @@ public class CourseFieldController {
 		} 
 		return null;
 	}
+	/**
+	 * A function which returns all course of the Field
+	 * @param f-Field
+	 * @return ArrayList<Course>
+	 */
 	public static ArrayList<Course> getFieldCourses(Field f) {
 		if(f==null) return null;
 		AESClient client = ClientGlobals.client;

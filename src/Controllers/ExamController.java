@@ -57,7 +57,10 @@ public class ExamController {
 		} 
 		return 0;
 	}
-
+/**
+ * 
+ * @param exam
+ */
 	public static void  addExam(Exam exam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

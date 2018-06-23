@@ -49,12 +49,20 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			Examcode.clear();
 			
 		}
-
+/**
+ * When we want to active an exam this function passes the exam that we want to active
+ * @param e-exam
+ */
 		public void setExam(Exam e) {
 			examview=e;
 			
 		}
 		@FXML
+		
+/**
+ * 	active the exam when you click the active button
+ * @param event
+ */
 		public void ActiveButtonPressed(ActionEvent event)
 		{
 			String code=new String(Examcode.getText());
@@ -110,13 +118,21 @@ public class TeacherActivateExamFrame implements ControlledScreen  {
 			}
 			
 		}
+		/**
+		 * 
+		 * @param s-string
+		 * @return true if the string contains letters and numbers and false if is not
+		 */
 		public boolean isValid(String s) {
 		    String n = ".*[0-9].*";
 		    String A = ".*[A-Z].*";
 		    String a = ".*[a-z].*";
 		    return s.matches(n) &&( s.matches(a) || s.matches(A));
 		}
-		
+		/**
+		 * Return to the previous window when you press the Back button
+		 * @param event
+		 */
 		@FXML
 	    public void CancelButtonPressed(ActionEvent event)
 			    {
