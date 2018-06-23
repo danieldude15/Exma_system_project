@@ -840,7 +840,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * This method  add exam to data base
+ * @param e-exam
+ * @return
+ */
 	public int addexam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addexam,Statement.RETURN_GENERATED_KEYS);
@@ -877,7 +881,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+	/**
+	 * This method  delete exam from data base
+	 * @param e-exam
+	 * @return
+	 */
 	public int deleteExam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(deleteExam);
@@ -1129,7 +1137,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+	/**
+	 * This method  get all question in this course
+	 * @param o -course
+	 * @return
+	 */
 	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {

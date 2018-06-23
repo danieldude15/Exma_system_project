@@ -113,8 +113,8 @@ public class TeacherBuildNewExam implements ControlledScreen {
 	}
 
 	/**
-	 * 
-	 * @param event- When we choosing a field we put all the courses in combo box
+	 * - When we choosing a field we put all the courses in combo box
+	 * @param event
 	 */
 	@FXML 
 	public void filterByField(ActionEvent event) {
@@ -314,6 +314,7 @@ public class TeacherBuildNewExam implements ControlledScreen {
 	 * Return to the previous window when you press the Back button
 	 * @param event
 	 */
+	@FXML
     public void CancelButtonPressed(ActionEvent event)
     {
     	
