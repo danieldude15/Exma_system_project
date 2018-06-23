@@ -29,7 +29,7 @@ public class StudentStartExamFrame implements ControlledScreen{
 	@FXML TextField studentId;
 	@FXML Label examCodeError;
 	@FXML Label idError;
-	private Timeline timeline;
+	public Timeline timeline;
 	private Long timeSeconds;
 	
 	@Override

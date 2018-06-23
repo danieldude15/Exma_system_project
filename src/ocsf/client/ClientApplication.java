@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
-import GUI.ClientFrame;
+import javax.swing.filechooser.FileSystemView;
+
 import GUI.ScreensController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -27,6 +27,16 @@ public class ClientApplication extends Application {
 	}
 	
 	@Override public void start(Stage primaryStage) throws Exception {
+		try {
+			File fileLog = new File(System.getProperty("java.io.tmpdir")+"\\ClientLog.txt");
+			fileLog.createNewFile();
+			System.setOut(new PrintStream(fileLog));
+			File errorLog = new File(System.getProperty("java.io.tmpdir")+"\\ClientErrorLog.txt");
+			errorLog.createNewFile();
+			System.setErr(new PrintStream(errorLog));
+		} catch (Exception e) {
+			
+		}
 		boolean connected = false;
 		File f = new File(ClientGlobals.ConfigfileName);
 		if(f.exists() && !f.isDirectory()) { 

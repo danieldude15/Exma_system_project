@@ -1,17 +1,24 @@
 package Controllers;
 
-import logic.*;
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.filechooser.FileSystemView;
+
+import GUI.StudentStartExamFrame;
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.ExamReport;
+import logic.Globals;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.iMessage;
+import ocsf.client.AESClient;
+import ocsf.client.ClientGlobals;
 /**
  *  This controller is responsible for all information that has to do with solved exams
  *  it has functionality such as adding/editing solved exams also getting solved exams for informational purpeses.
@@ -109,11 +116,11 @@ public class SolvedExamController {
 			studentsFile.initArray((int) examFile.length());
 								
 			FileInputStream fis = new FileInputStream(examFile);
+			@SuppressWarnings("resource")
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			
 			bis.read(studentsFile.getMybytearray(),0,(int) examFile.length());
 			try {
-				iMessage msg = new iMessage("yourExamFile", studentsFile);
 				Object[] o=new Object[2];	
 				o[0]=(AesWordDoc)studentsFile;
 				o[1]=(SolvedExam)solvedExam;
@@ -152,5 +159,7 @@ public class SolvedExamController {
 				e.printStackTrace();
 			}
 		} 
+		StudentStartExamFrame sse = (StudentStartExamFrame) Globals.mainContainer.getController(ClientGlobals.StudentStartExamID);
+		sse.timeline.stop();
 	}
 }

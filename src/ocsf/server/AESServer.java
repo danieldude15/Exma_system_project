@@ -1,23 +1,42 @@
 package ocsf.server;
 
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.filechooser.FileSystemView;
+
 import SQLTools.DBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import logic.*;
-
-import java.io.*;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PrimitiveIterator.OfDouble;
-
-import javax.swing.filechooser.FileSystemView;
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.Course;
+import logic.Exam;
+import logic.ExamReport;
+import logic.Field;
+import logic.Globals;
+import logic.Principle;
+import logic.Question;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.TimeChangeRequest;
+import logic.User;
+import logic.iMessage;
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	
@@ -74,6 +93,19 @@ public class AESServer extends AbstractServer {
 		
 		setupServerFolders();
 		
+		
+		try {
+			File fileLog = new File(serverDirPath+"\\ServerLog.txt");
+			fileLog.createNewFile();
+			System.setOut(new PrintStream(fileLog));
+			File errorLog = new File(serverDirPath+"\\ServerErrorLog.txt");
+			errorLog.createNewFile();
+			System.setErr(new PrintStream(errorLog));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
 		//AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
 		
@@ -568,10 +600,11 @@ public class AESServer extends AbstractServer {
 		String filePath = studentsExamsPath+"\\"+se.getStudent().getID()+"\\"+se.examIdToString()+".doc";
 		
 		File examFile = new File(filePath);
+		AesWordDoc myExamFileDes;
+		myExamFileDes = new AesWordDoc(filePath);
 
 		// if the directory does not exist, create it
 		if (examFile.exists()) {
-			AesWordDoc myExamFileDes = new AesWordDoc(filePath);
 			myExamFileDes.setSize((int) examFile.length());
 			myExamFileDes.initArray((int) examFile.length());
 			
@@ -583,12 +616,13 @@ public class AESServer extends AbstractServer {
 				System.err.println("Could Not read from the Exam File Buffer");
 				e.printStackTrace();
 			}
-			
-			iMessage msg = new iMessage("yourExamFile", myExamFileDes);
-			client.sendToClient(msg);
 	    } else {
-	    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath());
+	    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath() + " sending empty file");
+			myExamFileDes.setSize((int) examFile.length());
+			myExamFileDes.initArray((int) examFile.length());
 	    }
+		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+		client.sendToClient(msg);
 	}
 	
 	private void getAllTeachers(ConnectionToClient client) throws IOException {

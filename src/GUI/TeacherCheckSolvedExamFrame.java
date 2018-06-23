@@ -83,6 +83,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			changeNote.setDisable(true);
 			doneImage.setVisible(true);
 			approveB.setVisible(false);
+			for(QuestionInExam qie: teacherNotesH.keySet()) {
+				teacherNotesH.get(qie).setDisable(true);
+			}
 		}
 		
 	}
@@ -224,6 +227,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 				approveB.setVisible(false);
 				score.setDisable(true);
 				changeNote.setDisable(true);
+				for(QuestionInExam qie: teacherNotesH.keySet()) {
+					teacherNotesH.get(qie).setDisable(true);
+				}
 			} else {
 				//Failed To insert!
 			}
