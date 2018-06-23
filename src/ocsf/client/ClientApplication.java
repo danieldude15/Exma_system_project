@@ -7,9 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
+
 import GUI.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import logic.Globals;
@@ -35,6 +37,8 @@ public class ClientApplication extends Application {
 		} catch (Exception e) {
 			
 		}
+		
+		
 		boolean connected = false;
 		File f = new File(ClientGlobals.ConfigfileName);
 		if(f.exists() && !f.isDirectory()) { 
@@ -84,6 +88,8 @@ public class ClientApplication extends Application {
 		AnchorPane root = new AnchorPane();
 		root.getChildren().addAll(Globals.mainContainer);
 		Scene scene = new Scene(root);
+		Image icon = new Image("resources/images/icon.png");
+		primaryStage.getIcons().add(icon);
 		primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
 	        try {

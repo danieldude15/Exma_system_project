@@ -6,6 +6,7 @@ import GUI.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logic.Globals;
 
@@ -28,6 +29,8 @@ public class ServerApplication extends Application {
         Group root = new Group();
         root.getChildren().addAll(Globals.mainContainer);
         Scene scene = new Scene(root);
+        Image icon = new Image("resources/images/icon.png");
+		primaryStage.getIcons().add(icon);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(closeUpdate ->
 	    {
