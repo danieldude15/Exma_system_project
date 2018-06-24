@@ -9,8 +9,12 @@ import logic.Globals;
 import logic.Question;
 import ocsf.client.ClientGlobals;
 
-
+/**
+ * Manages The screen where the principal views a question placed in the database.
+ */
 public class PrincipalViewQuestionFrame implements ControlledScreen {
+
+    /* Fields Start */
 
     private Question question;
 
@@ -24,11 +28,14 @@ public class PrincipalViewQuestionFrame implements ControlledScreen {
     @FXML private Label m_questionAuthor;
     @FXML private Button m_backButton;
 
+    /* Fields End */
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
+    /* Constructors Start */
 
+    /**
+     * Sets the 'Principal View Question' screen.
+     * Updating all labels present.
+     */
     @Override
     public void runOnScreenChange() {
         if(question != null) {
@@ -43,12 +50,30 @@ public class PrincipalViewQuestionFrame implements ControlledScreen {
         }
     }
 
+    /* Constructors End */
+
+    /* Getters and Setters Start */
 
     /**
-     *  method returns you to ViewData screen
+     * Sets the question to be displayed for the Principal.
+     * @param question - to be displayed.
+     */
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    /* Getters and Setters End */
+
+    /* Methods Start */
+
+    /**
+     * Returns to View School Data screen.
+     * @param event - Click on 'Back' button.
      */
     @FXML
     public void backToViewData(ActionEvent event) {
         Globals.mainContainer.setScreen(ClientGlobals.PrincipalViewDataID);
     }
+
+    /* Methods End */
 }

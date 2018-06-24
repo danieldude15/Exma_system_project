@@ -21,15 +21,31 @@ import ocsf.client.ClientGlobals;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Manages The screen where a Reports is viewed by a teacher or the principal.
+ */
 @SuppressWarnings({"rawtypes","unchecked"})
 public class ViewReportFrame implements ControlledScreen {
-	
+
+	/* Enums Start */
+
+	/**
+	 * Defines a types of users.
+	 */
 	enum user {
 		Principle , Teacher
 	}
+
+	/**
+	 * Defines a types of reports.
+	 */
 	public enum type {
 		STUDENT,TEACHER,COURSE,EXAM
 	}
+
+	/* Enums End */
+
+	/* Fields Start */
 	
 	@FXML Label infoTitle1;
 	@FXML Label infoTitle2;
@@ -63,7 +79,16 @@ public class ViewReportFrame implements ControlledScreen {
 	private Teacher teacher =null;
 	private Course course=null;
 	private ExamReport examReport=null;
-	
+
+	/* Fields End */
+
+	/* Constructors Start */
+
+	/**
+	 * Sets the 'View Report' screen.
+	 * Updating all the lists present in the screen before it is displayed.
+	 * Generating
+	 */
 	@Override public void runOnScreenChange() {
 		leftListView.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);			// overrides the click on items in the listview
 		secondLeftListView.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
@@ -84,7 +109,10 @@ public class ViewReportFrame implements ControlledScreen {
 		}
 
 	}
-	
+
+	/**
+	 * Hides all Elements in this view.
+	 */
 	private void hideAll() {
 		infoTitle1.setVisible(false);
 		infoTitle2.setVisible(false);
@@ -106,14 +134,92 @@ public class ViewReportFrame implements ControlledScreen {
 		cheatLabel.setVisible(false);
 	}
 
+	/* Constructors End */
+
+	/* Getters and Setters Start */
+
+	/**
+	 * Returns the type of Report displayed.
+	 * @return The type of the window.
+	 */
+	public type getWindowType() {
+		return windowType;
+	}
+
+	/**
+	 * Sets the type of report to be displayed.
+	 * @param windowType - The type of window to be shown.
+	 */
+	public void setWindowType(type windowType) {
+		this.windowType = windowType;
+	}
+
+	/**
+	 * Sets the Student, report of which will be displayed.
+	 * @param student - Student to be displayed.
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	/**
+	 * Sets the Teacher, report of which will be displayed.
+	 * @param teacher - Teacher to be displayed
+	 */
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	/**
+	 * Sets the Course, report of which will be displayed.
+	 * @param course - Course to be displayed.
+	 */
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	/**
+	 * Sets the examReport to be displayed.
+	 * @param examReport - ExamReport to be displayed.
+	 */
+	public void setExamReport(ExamReport examReport) {
+		this.examReport = examReport;
+	}
+
+	/**
+	 * Returns the user currently viewing the data.
+	 * @return me - User logged in.
+	 */
+	public user getMe() {
+		return me;
+	}
+
+	/**
+	 * Sets the user currently viewing the data.
+	 * @param me - User logged in.
+	 */
+	public void setMe(user me) {
+		this.me = me;
+	}
+
+	/* Getters and Setters End */
+
+	/* Methods Start */
+
+	/**
+	 * Returns to View Reports screen of Principal, or Teacher Check Exam screen of Teacher.
+	 * @param event - Click on 'Back' button.
+	 */
 	@FXML public void backToReports(ActionEvent event) {
 		if(getMe()==user.Principle)
 			Globals.mainContainer.setScreen(ClientGlobals.PrincipalReportsID);
 		else 
 			Globals.mainContainer.setScreen(ClientGlobals.TeacherCheckExamsID);
 	}
-	
-	
+
+	/**
+	 * Sets the screen up according to what is required from a report on an Exam.
+	 */
 	private void setupExamReportView() {
 		if(examReport==null) {
 			backToReports(null);
@@ -163,6 +269,9 @@ public class ViewReportFrame implements ControlledScreen {
 		
 	}
 
+	/**
+	 * Sets the screen up according to what is required from a report on a Course.
+	 */
 	private void setupCourseView() {
 		if(course==null) {
 			backToReports(null);
@@ -213,7 +322,10 @@ public class ViewReportFrame implements ControlledScreen {
 		
 		leftListViewLabel.setText("Exam History:");
 	}
-	
+
+	/**
+	 * Sets the screen up according to what is required from a report on an Teacher.
+	 */
 	private void setupTeacherView() {
 		ArrayList<ExamReport> allExams = ReportController.getAllExamReport();
 		ArrayList<ExamReport> teachersExams = new ArrayList<>();
@@ -258,7 +370,10 @@ public class ViewReportFrame implements ControlledScreen {
 		infoValue3.setVisible(true);
 		leftListViewLabel.setText("Exam History:");		
 	}
-	
+
+	/**
+	 * Sets the screen up according to what is required from a report on an Student.
+	 */
 	private void setupStudentView() {
 		ArrayList<SolvedExam> studentExams = SolvedExamController.getSolvedExamsByUser(student);
 		float avg = ExamReport.calcAvg(studentExams);
@@ -292,30 +407,11 @@ public class ViewReportFrame implements ControlledScreen {
 		leftListViewLabel.setText("Exam History:");
 	}
 
-	public type getWindowType() {
-		return windowType;
-	}
-
-	public void setWindowType(type windowType) {
-		this.windowType = windowType;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
-	}
-
-	public void setCourse(Course course) {
-		this.course = course;
-	}
-
-	public void setExamReport(ExamReport examReport) {
-		this.examReport = examReport;
-	}
-	
+	/**
+	 * Updates the BarChart according to the report's data.
+	 * @param dev - data to be shown in the chart
+	 * @param seriesName - name of the series to be shown.
+	 */
 	private void updateBarChart(HashMap<Integer, Integer> dev, String seriesName) {
         xAxis.setLabel("Score Range");    
         xAxis.setId("whiteLabel");
@@ -333,14 +429,5 @@ public class ViewReportFrame implements ControlledScreen {
         devBarChart.getData().add(series);
 	}
 
-	public user getMe() {
-		return me;
-	}
-
-	public void setMe(user me) {
-		this.me = me;
-	}
-	
-	
-
+	/* Methods End */
 }

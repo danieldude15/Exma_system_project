@@ -1,29 +1,12 @@
 package SQLTools;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.mysql.jdbc.Statement;
+import logic.*;
+import ocsf.server.ServerGlobals;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.mysql.jdbc.Statement;
-
-import logic.Course;
-import logic.Exam;
-import logic.ExamReport;
-import logic.Field;
-import logic.Globals;
-import logic.Principle;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.User;
-import ocsf.server.ServerGlobals;
 
 
 public class DBMain {
@@ -502,7 +485,7 @@ public class DBMain {
  * return the name of course by id course and id field
  * @param courseID - int
  * @param fieldID - int
- * @return CourseName - String 
+ * @return CourseName - String
  */
 	public String getCourseName(int courseID,int fieldID){
 		try {
@@ -672,12 +655,12 @@ public class DBMain {
 	
 	/**
 	 * this methods returns a solved exam by parameters
-	 * @param examid
-	 * @param courseid
-	 * @param fieldid
-	 * @param teacherid
-	 * @param code
-	 * @return
+	 * @param examid - ID of the Exam
+	 * @param courseid - ID of the Course
+	 * @param fieldid - ID of the Field
+	 * @param teacherid - ID of the Teacher
+	 * @param code - Code of the Exam.
+	 * @return ArrayList of the Solved Exams
 	 */
 	public ArrayList<SolvedExam> getSolvedExams(int examid, int courseid, int fieldid, int teacherid, String code, int type, Date date) {
 		try {
@@ -725,11 +708,12 @@ public class DBMain {
 		}
 		return null;
 	}
-/**
- * return the exam by id from data base
- * @param examIdString - string
- * @return
- */
+
+	/**
+	 * Gets Exam from database using an SQL query.
+	 * @param examIdString - ID of the Exam to be fetched.
+	 * @return an Exam
+	 */
 	public Exam getExam(String examIdString) {
 		try {
 			int[] examid = Exam.parseId(examIdString);
@@ -856,7 +840,12 @@ public class DBMain {
 		}
 		return null;
 	}
-	
+
+	/**
+	 *
+	 * @param o
+	 * @return
+	 */
 	public ArrayList<Exam> getTeachersExams(Teacher o) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(getTeachrsExams);
@@ -881,7 +870,7 @@ public class DBMain {
 /**
  * This method  add exam to data base
  * @param e-exam
- * @return
+ * @return confirmation integer.
  */
 	public int addexam(Exam e) {
 		try {
@@ -922,7 +911,7 @@ public class DBMain {
 	/**
 	 * This method  delete exam from data base
 	 * @param e-exam
-	 * @return
+	 * @return confirmation integer.
 	 */
 	public int deleteExam(Exam e) {
 		try {
@@ -936,11 +925,12 @@ public class DBMain {
 		}
 		return 0;
 	}
-/**
- * insert solved exam to data base
- * @param se - SolvedExam
- * @return mount of lines who get effect by insert solved exam
- */
+
+	/**
+	 * Inserts a Solved Exam into the database using SQL query.
+	 * @param se - SolvedExam to be inserted into the database.
+	 * @return confirmation integer.
+	 */
 	public Integer InsertSolvedExam(SolvedExam se) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addSolvedExam,Statement.RETURN_GENERATED_KEYS);
@@ -1036,7 +1026,7 @@ public class DBMain {
 	return null;
 }
 	/**
-	 * 
+	 *
 	 * @param eReport - ExamReport
 	 * @return  mount of lines who get effect by insert completed exam
 	 */
@@ -1077,8 +1067,13 @@ public class DBMain {
 			e.printStackTrace();
 		}
 			return 0;
-		}
+	}
 
+    /**
+     * Deletes given ExamReport from the database using an SQL query.
+     * @param eReport - ExamReport to be deleted.
+     * @return confirmation integer.
+     */
 	private int deleteExamReport(ExamReport eReport) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(deleteExamReport);
@@ -1132,6 +1127,12 @@ public class DBMain {
 		return null;
 	}
 
+
+    /**
+     * Gets Questions which the specified Teacher wrote.
+     * @param o - Teacher whose questions the user wants to fetch.
+     * @return ArrayList of Questions.
+     */
 	public ArrayList<Question> getTeachersQuestions(Teacher o) {
 		Teacher t = (Teacher) o;
 		try {
@@ -1162,6 +1163,11 @@ public class DBMain {
 		return null;
 	}
 
+    /**
+     * Gets Courses associated with the given Question.
+     * @param o - Question which courses the user wants to fetch.
+     * @return ArrayList of Courses.
+     */
 	public ArrayList<Course> getQuestionCourses(Object o) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(questionCourses);
@@ -1191,7 +1197,7 @@ public class DBMain {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method  get all question in this course
 	 * @param o -course
@@ -1232,7 +1238,7 @@ public class DBMain {
 		return null;
 	}
 
-	
+
 	/**
 	 * get Questions in exam by giving examid
 	 * @param examid -String
@@ -1298,6 +1304,11 @@ public class DBMain {
 		return 0;
 	}
 
+    /**
+     * Adds a new Question into the database using an SQL query.
+     * @param q - Question to be added
+     * @return confirmation integer.
+     */
 	public int addQuestion(Question q) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addQuestion,Statement.RETURN_GENERATED_KEYS);
@@ -1333,7 +1344,12 @@ public class DBMain {
 		}
 		return 0;
 	}
-	
+
+    /**
+     * Edits an existing Question in the database using an SQL query.
+     * @param q - Question to be edited.
+     * @return confirmation integer.
+     */
 	public int editQuestion(Question q) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(editQuestion);
@@ -1356,6 +1372,11 @@ public class DBMain {
 		return 0;
 	}
 
+    /**
+     * Gets Courses which the student takes from the database using an SQL query.
+     * @param o - Studnet, courses of which to be fetched
+     * @return ArrayList of Courses
+     */
 	public ArrayList<Course> getStudentsCourses(User o) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(getStudentsCourses);

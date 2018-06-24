@@ -14,7 +14,7 @@
                   <ListView fx:id="m_studentsList" prefHeight="200.0" prefWidth="200.0" />
                </content>
           </Tab>
-          <Tab fx:id="m_teachersTab" onSelectionChanged="#teacherTabSeleted" text="Teachers">
+          <Tab fx:id="m_teachersTab" onSelectionChanged="#teacherTabSelected" text="Teachers">
                <content>
                   <ListView fx:id="m_teachersList" prefHeight="200.0" prefWidth="200.0" />
                </content>
