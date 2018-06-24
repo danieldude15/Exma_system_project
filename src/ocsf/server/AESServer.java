@@ -620,9 +620,15 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 	/**
+<<<<<<< HEAD
 	 * Method that update a new solved exam on the database.
 	 * @param client
 	 * @param o
+=======
+	 * 	this method update Solved Exam in the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+>>>>>>> branch 'master' of https://Itzik710@bitbucket.org/Petachok/automatic_exam_system.git
 	 * @throws IOException
 	 */
 	private void updateSolvedExam(ConnectionToClient client, Object o) throws IOException {
@@ -644,9 +650,9 @@ public class AESServer extends AbstractServer {
 
 
 	/**
-	 * Method that retrieves all courses which are belong to the student from the database.
-	 * @param client
-	 * @param o
+	 * 	this method get Students Courses from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
 	 * @throws IOException
 	 */
 	private void getStudentsCourses(ConnectionToClient client, Object o) throws IOException {
