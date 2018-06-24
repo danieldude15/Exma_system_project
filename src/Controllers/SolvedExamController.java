@@ -59,6 +59,11 @@ public class SolvedExamController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to get all completed exams reports.
+	 * @param user
+	 * @return
+	 */
 	public static ArrayList<ExamReport> getCompletedExams(Teacher user) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -73,6 +78,11 @@ public class SolvedExamController {
 		return null;
 	}
 
+	/**
+	 * Gets a manual solved exam from the student.
+	 * @param se
+	 * @return
+	 */
 	public static AesWordDoc getStudentsManulaExam(SolvedExam se) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -88,6 +98,11 @@ public class SolvedExamController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to update a solved exam.
+	 * @param solvedExam
+	 * @return
+	 */
 	public static int updateSolvedExam(SolvedExam solvedExam) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

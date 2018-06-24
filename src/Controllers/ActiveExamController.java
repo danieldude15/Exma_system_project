@@ -107,7 +107,11 @@ public class ActiveExamController {
 		return;
 	}
 	
-	
+	/**
+	 * Send message to the server to get a manual exam(manual exam from the system).
+	 * @param activeExam
+	 * @return
+	 */
 	public static AesWordDoc GetManualExam(ActiveExam activeExam)
 	{
 		AESClient client = ClientGlobals.client;

@@ -141,6 +141,11 @@ public class CourseFieldController {
 		return null;
 	}
 
+	/**
+	 * A function which returns all fields of the teacher.
+	 * @param f
+	 * @return
+	 */
 	public static ArrayList<Teacher> getFieldTeachers(Field f) {
 		if (f == null) return null;
 		AESClient client = ClientGlobals.client;
@@ -173,6 +178,11 @@ public class CourseFieldController {
 		return null;
 	}
 
+	/**
+	 * A function which returns all courses of the student.
+	 * @param user
+	 * @return
+	 */
 	public static ArrayList<Course> getStudentCourses(User user) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

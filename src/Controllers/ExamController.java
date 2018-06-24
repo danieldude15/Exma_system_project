@@ -28,6 +28,10 @@ public class ExamController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to get all exams.
+	 * @return
+	 */
 	public static ArrayList<Exam> getAllExams(){
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -44,7 +48,7 @@ public class ExamController {
 	}
 
 	/**
-	 * Sending to server request to delete exam
+	 * Sending to server a request to delete exam
 	 * @param exam
 	 * @return
 	 */
@@ -63,7 +67,7 @@ public class ExamController {
 		return 0;
 	}
 /**
- * Sending to server request to add exam
+ * Sending to server a request to add exam.
  * @param exam
  */
 	public static void  addExam(Exam exam) {
@@ -82,6 +86,11 @@ public class ExamController {
 	
 	}
 
+	/**
+	 * Sending to server a request to get all course exams.
+	 * @param C
+	 * @return
+	 */
 	public static ArrayList<Exam> getcourseExams(Course C){
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
