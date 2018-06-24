@@ -127,7 +127,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
     	m_coursesList.setItems(list);
     }
     
-    @FXML public void teacherTabSeleted(Event event) {
+    @FXML public void teacherTabSelected(Event event) {
     	if (allTeachers==null) {
 	    	allTeachers = UserController.getAllTeachers(); 
     	} 
