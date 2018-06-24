@@ -60,14 +60,22 @@ public class AESServer extends AbstractServer {
 	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
 	 */
 	private HashMap<ActiveExam, ArrayList<Student>> studentsCheckOutFromActiveExam;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an arraylist of solvedexams who contain all the solved exam
+	 */
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
-	
+	/**
+	 * HashMap with Key of SolvedExam and Value that holds an AesWordDoc who contain all the word doc
+	 */
 	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an TimeChangeRequest who contain all the Time Change Request
+	 */
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an Timeline who contain all the clock of hitch exam
+	 */
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
 	
@@ -76,7 +84,14 @@ public class AESServer extends AbstractServer {
 	String studentsExamsPath = serverDirPath+"\\Students_Exams";
 	
 	String examFilesPath = serverDirPath+"\\Exam_Files";
-	
+
+	/**
+	 * constructor that connect to database and  gets the port for connecting clients
+	 * @param DBHost - the host address of the database
+	 * @param DBUser - the username to connect to in the host
+	 * @param DBPass - the password for the user
+	 * @param port - the port for the server to listen on
+	 */
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
@@ -111,6 +126,9 @@ public class AESServer extends AbstractServer {
 		
 	}
 
+	/**
+	 * this function will create the server folders to manage students exams and hold all console logs and error logs as well as exams created by teachers for manual exams
+	 */
 	private void setupServerFolders() {
 		
 		File theDir = new File(serverDirPath);
@@ -144,6 +162,12 @@ public class AESServer extends AbstractServer {
 		}
 	}
 
+	/**
+	 * this function handles msgs from clients, it knows what the client requested by the command in the iMessage recieved from him
+	 * 
+	 * @param msg - an Object that must be instanceof iMessage
+	 * @param client - the client who sent this msg
+	 */
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("Got msg from:" + client + "message: " + msg);
 		if(!(msg instanceof iMessage)) {
@@ -299,7 +323,12 @@ public class AESServer extends AbstractServer {
 	}
 
 
-
+	/**
+	 * when a client disconnects he sends a msg to the server notifying it to log the user out of the server 
+	 * @param client - the client sending the msg
+	 * @param o - the user that is logged in
+	 * @throws IOException - in case it fails to close the connection to the client it receives
+	 */
 	private void disconnectClient(ConnectionToClient client, Object o) throws IOException {
 		client.close();
 		if (o instanceof User) {
@@ -482,7 +511,7 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-		
+	
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {

@@ -91,14 +91,25 @@ public class AESClient extends AbstractClient{
 		
 	}
 
+	/**
+	 * this method will copy the msg received from the server to a local variable that will later be used by whoever requested the msg
+	 * @param serverMsg - the msg recieved from the server
+	 */
 	private void copyServerMsg(Object serverMsg) {
 		msg = (iMessage) serverMsg;
 	}
 
+	/**
+	 * simply logs the fact that the connection has been closed
+	 */
 	protected void connectionClosed() {
 		System.out.println("connection Closed!");
 	}
 
+	/**
+	 * this returns the iMessage the client currently holds
+	 * @return
+	 */
 	public iMessage getMsg() {
 		return msg;
 	}
@@ -171,6 +182,9 @@ public class AESClient extends AbstractClient{
    */
 	protected void connectionEstablished() {}
 
+	/**
+	 * this will be called if the server sent a msg that its closing and we should disconnect from it.
+	 */
 	private void closeAESApplication() {
 		Platform.runLater(() -> { 
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -185,6 +199,11 @@ public class AESClient extends AbstractClient{
 	  
 	//  ################################################# Team Start Adding Functions From Here ############################
 	
+	/**
+	 * will set the information of the logged in user to the correct permissions by user type
+	 * 
+	 * @param o - the user that logged in successfully
+	 */
 	private void Login(Object o) {
 		if (o==null) {
 			msg.setCommand("ERROR");
@@ -232,11 +251,17 @@ public class AESClient extends AbstractClient{
 		sef.lockExam();
 	}
 
+	/**
+	 * in case a login failed the command will be set the string msg to notify the controller that tried to log in that it failed
+	 */
 	private void showFailedAuth() {
 		msg.setCommand("failedAuth");
 		me = null;
 	}
 
+	/**
+	 * alreadyLoggedIn function will notify the controller that this user is aleady logged in and will not allow him to connect
+	 */
 	private void alreadyLoggedIn() {
 		msg.setCommand("AlreadyLoggedIn");
 		me = null;
