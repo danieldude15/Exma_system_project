@@ -60,14 +60,22 @@ public class AESServer extends AbstractServer {
 	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
 	 */
 	private HashMap<ActiveExam, ArrayList<Student>> studentsCheckOutFromActiveExam;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an arraylist of solvedexams who contain all the solved exam
+	 */
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
-	
+	/**
+	 * HashMap with Key of SolvedExam and Value that holds an AesWordDoc who contain all the word doc
+	 */
 	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an TimeChangeRequest who contain all the Time Change Request
+	 */
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an Timeline who contain all the clock of hitch exam
+	 */
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
 	
