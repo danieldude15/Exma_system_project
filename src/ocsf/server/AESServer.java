@@ -619,12 +619,24 @@ public class AESServer extends AbstractServer {
 			im = new iMessage("studentInExam",false);
 		client.sendToClient(im);
 	}
+	/**
+	 * 	this method update Solved Exam in the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void updateSolvedExam(ConnectionToClient client, Object o) throws IOException {
 		Integer updatestatus = sqlcon.UpdateSolvedExam((SolvedExam)o);
 		iMessage im = new iMessage("solvedExamupdated",updatestatus);
 		client.sendToClient(im);
 	}
 	
+	/**
+	 * 	this method get Question In Exam from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<QuestionInExam> questions = sqlcon.getQuestionsInExam((String)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
@@ -632,38 +644,69 @@ public class AESServer extends AbstractServer {
 	}
 
 
-
+	/**
+	 * 	this method get Students Courses from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getStudentsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getStudentsCourses((User)o);
 		iMessage im = new iMessage("studentsCourses",courses);
 		client.sendToClient(im);
 	}
 	
+	/**
+	 * 	this method get Teacher Completed Exams from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<ExamReport> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
 		iMessage im = new iMessage("TeacherCompletedExams", completedExams);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method delete Question from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void deleteQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.deleteQuestion((Question) o);
 		iMessage im = new iMessage("deletedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 		
 	}
-	
+	/**
+	 * 	this method add Question from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void addQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addQuestion((Question) o);
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method add Exam from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void addExam(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addexam((Exam) o);
 		iMessage im = new iMessage("addExam", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method  get All Students from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getAllStudents(ConnectionToClient client) throws IOException {
 		ArrayList<User> students = sqlcon.GetAllUsersByType(0);
 		iMessage im = new iMessage("allStudents",students);
@@ -705,19 +748,34 @@ public class AESServer extends AbstractServer {
 		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
 		client.sendToClient(msg);
 	}
-	
+	/**
+	 * 	this method  get All Teachers from the data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getAllTeachers(ConnectionToClient client) throws IOException {
 		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
 		iMessage im = new iMessage("allTeachers",teachers);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method  edit Question to  data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
 		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method  delete Exam from data base
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void deleteExam(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.deleteExam((Exam) o);
 		iMessage im = new iMessage("deletedExam", new Integer(effectedRowCount));
