@@ -1,13 +1,5 @@
 package ocsf.client;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
-
-
 import GUI.ScreensController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,15 +9,26 @@ import javafx.stage.Stage;
 import logic.Globals;
 import logic.iMessage;
 
+import java.io.*;
+
 
 public class ClientApplication extends Application {
-	
+
+	/**
+	 * Main method of Client Application
+	 * @param args arguments provided externally
+	 */
 	public static void main(String args[]) {
 		Globals.application = "client";
 		ClientGlobals.initialArgs = args;
 		launch(args);
 	}
-	
+
+	/**
+	 * Starts the Client Application.
+	 * @param primaryStage Stage of the Client Application
+	 * @throws Exception
+	 */
 	@Override public void start(Stage primaryStage) throws Exception {
 		try {
 			File fileLog = new File(System.getProperty("java.io.tmpdir")+"\\ClientLog.txt");
@@ -77,7 +80,7 @@ public class ClientApplication extends Application {
 		Globals.primaryStage = primaryStage;
 		
 		
-		leadAllScreens();
+		loadAllScreens();
 		
 		if(connected) {
 			Globals.mainContainer.setScreen(ClientGlobals.LogInID);
@@ -106,8 +109,11 @@ public class ClientApplication extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();	
 	}
-	
-	private void leadAllScreens() {
+
+	/**
+	 * Loads all GUI screens used by the system.
+	 */
+	private void loadAllScreens() {
 		ScreensController mainContainer = Globals.mainContainer;
 		if (!mainContainer.loadScreen(ClientGlobals.LogInID, ClientGlobals.LogInPath)) {
         	System.out.println("failed to load "+ ClientGlobals.LogInID);
