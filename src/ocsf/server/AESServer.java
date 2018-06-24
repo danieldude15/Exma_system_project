@@ -619,12 +619,23 @@ public class AESServer extends AbstractServer {
 			im = new iMessage("studentInExam",false);
 		client.sendToClient(im);
 	}
+	/**
+	 * Method that update a new solved exam on the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void updateSolvedExam(ConnectionToClient client, Object o) throws IOException {
 		Integer updatestatus = sqlcon.UpdateSolvedExam((SolvedExam)o);
 		iMessage im = new iMessage("solvedExamupdated",updatestatus);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all questions which are belong to the exam from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getQuestionInExam(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<QuestionInExam> questions = sqlcon.getQuestionsInExam((String)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
@@ -632,38 +643,67 @@ public class AESServer extends AbstractServer {
 	}
 
 
-
+	/**
+	 * Method that retrieves all courses which are belong to the student from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getStudentsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getStudentsCourses((User)o);
 		iMessage im = new iMessage("studentsCourses",courses);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all examReport which are belong to the teacher from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getTeacherCompletedExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<ExamReport> completedExams = sqlcon.getTeachersCompletedExams((Teacher) o);
 		iMessage im = new iMessage("TeacherCompletedExams", completedExams);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that deletes question from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void deleteQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.deleteQuestion((Question) o);
 		iMessage im = new iMessage("deletedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 		
 	}
-	
+	/**
+	 * Method that adds a question to the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void addQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addQuestion((Question) o);
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that adds an exam to the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void addExam(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addexam((Exam) o);
 		iMessage im = new iMessage("addExam", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all students from the database.
+	 * @param client
+	 * @throws IOException
+	 */
 	private void getAllStudents(ConnectionToClient client) throws IOException {
 		ArrayList<User> students = sqlcon.GetAllUsersByType(0);
 		iMessage im = new iMessage("allStudents",students);
@@ -705,37 +745,61 @@ public class AESServer extends AbstractServer {
 		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
 		client.sendToClient(msg);
 	}
-	
+	/**
+	 * Method that retrieves all teachers from the database.
+	 * @param client
+	 * @throws IOException
+	 */
 	private void getAllTeachers(ConnectionToClient client) throws IOException {
 		ArrayList<User> teachers = sqlcon.GetAllUsersByType(1);
 		iMessage im = new iMessage("allTeachers",teachers);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * Method that edit question from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void editQuestion(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.editQuestion((Question) o);
 		iMessage im = new iMessage("editedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-
+	/**
+	 * Method that delete an exam from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void deleteExam(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.deleteExam((Exam) o);
 		iMessage im = new iMessage("deletedExam", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all fields which are belong to the teacher from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getTeacherFields(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Field> fields = sqlcon.getTeacherFields((Teacher)o);
 		iMessage im = new iMessage("TeacherFields", fields);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * Method that remove user from connectedUsers(so he can login again in the future).
+	 * @param o
+	 */
 	private void logoutFunctionality(Object o) {
 		User user = (User) o;
 		if(connectedUsers.remove(user)!=null)
 			System.out.println("Logged out User: "+ o );
 	}
-	
+	/**
+	 * Method that clears studentsInExam and studentsSolvedExams HashMaps.
+	 */
 	public void clearHashes() {
 		connectedUsers.clear();
 		if (studentsInExam!=null) {
@@ -749,31 +813,55 @@ public class AESServer extends AbstractServer {
 			}
 		}
 	}
-	
+	/**
+	 * Method that retrieves all questions which are belong to course from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getCourseQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.CourseQuestions((Course)o);
 		iMessage im = new iMessage("CourseQuestions", questions);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all courses which are belong to field from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getFieldCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> Courses = sqlcon.getFieldCourses((Field)o);
 		iMessage im = new iMessage("FieldCourses",Courses);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * Method that retrieves all teachers who are belong to the field from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getFieldTeachers(ConnectionToClient client, Object o) throws IOException{
 		ArrayList<Teacher> teachers = sqlcon.getFieldTeachers((Field)o);
 		iMessage im = new iMessage("FieldTeachers",teachers);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves all exams which are belong to course from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getcourseExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Exam> exams = sqlcon.getcourseExams((Course) o);
 		iMessage im = new iMessage("TeachersExams",exams);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * Method that retrieves a response via client for a time changing request(to all students).
+	 * @param o
+	 * @throws IOException
+	 */
 	private void timeChangeRequestResponse(Object o) throws IOException {
 		if (o instanceof TimeChangeRequest) {
 			TimeChangeRequest tc = (TimeChangeRequest) o;
@@ -792,6 +880,11 @@ public class AESServer extends AbstractServer {
 		
 	}
 	
+	/**
+	 * Method that update all HashMaps of active exam.
+	 * @param code
+	 * @param newTime
+	 */
 	private void updateActiveExamHashmaps(String code,Long newTime) {
 		ActiveExam ae = activeExams.get(code);
 		Object obj;
@@ -822,6 +915,12 @@ public class AESServer extends AbstractServer {
 		}		
 	}
 
+	/**
+	 * Method that retrieves all questions that was written by teacher from the database.
+	 * @param client
+	 * @param o
+	 * @throws IOException
+	 */
 	private void getTeacherQuestions(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Question> questions = sqlcon.getTeachersQuestions((Teacher)o);
 		iMessage im = new iMessage("TeachersQuestions", questions);
