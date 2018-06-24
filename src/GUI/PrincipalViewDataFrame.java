@@ -1,17 +1,6 @@
 package GUI;
 
-import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-
-import Controllers.ControlledScreen;
-import Controllers.CourseFieldController;
-import Controllers.ExamController;
-import Controllers.QuestionController;
-import Controllers.UserController;
+import Controllers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,22 +8,24 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import logic.Course;
-import logic.Exam;
-import logic.Field;
-import logic.Globals;
-import logic.Question;
-import logic.User;
+import logic.*;
 import ocsf.client.ClientGlobals;
 
+import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+
+/**
+ * Manages The screen where the principal views all the data placed in the database.
+ */
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
+
+    /* Fields Start */
 
     @FXML private TabPane m_dataTabPane;
     @FXML private Tab m_studentsTab;
@@ -56,8 +47,15 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
     private HashMap<Integer, Question> m_questionsMap;
     private HashMap<Integer, Exam> m_examsMap;
     private HashMap<Integer, Field> m_fieldsMap;
-    private HashMap<Integer, User> m_studentsAndTeachersMap;
 
+    /* Fields End */
+
+    /* Constructors Start */
+
+    /**
+     * Sets the 'Principal School Data' screen.
+     * Updating all the lists present in the screen before it is displayed.
+     */
     @Override
     public void runOnScreenChange() {
         updateStudentsList();
@@ -68,6 +66,29 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         updateCoursesList();
     }
 
+    /**
+     * Initializes the frame by initializing hashmap instances and disabling listviews that have no additional info to be displayed.
+     * @param location - no use in this method.
+     * @param resources - no use in this method.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        m_questionsMap = new HashMap<>();
+        m_examsMap = new HashMap<>();
+        m_fieldsMap = new HashMap<>();
+        m_studentsList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
+        m_teachersList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
+        m_coursesList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
+    }
+
+    /* Constructors End */
+
+    /* Methods Start */
+
+    /**
+     * Determines which additional data has to be displayed, and shows it in a new window accordingly.
+     * @param event - Click on 'View Data' button registered by system.
+     */
     @FXML
     public void viewData(ActionEvent event){
 
@@ -118,23 +139,20 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }
     }
 
+    /**
+     * Returns to Main Menu screen.
+     * @param event - Click on 'Back' button.
+     */
     @FXML
     public void backToMainMenu(ActionEvent event){
         Globals.mainContainer.setScreen(ClientGlobals.PrincipalMainID);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        m_questionsMap = new HashMap<>();
-        m_examsMap = new HashMap<>();
-        m_fieldsMap = new HashMap<>();
-        m_studentsAndTeachersMap = new HashMap<>();
-        m_studentsList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
-        m_teachersList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
-        m_coursesList.addEventFilter(MouseEvent.MOUSE_PRESSED, Event::consume);
-    }
-
-    // method handles selection of text box in which you enter id to manually search for data ( selection disabled on the current tab )
+    /**
+     * Handles selection of text box in which you enter id to manually search for data
+     * selection cleared on the current tab.
+     * @param mouseEvent - Click on mouse Event registered by system.
+     */
     @FXML
     public void onTextBoxMouseClick(MouseEvent mouseEvent) {
         Node tabContent = m_dataTabPane.getSelectionModel().getSelectedItem().getContent();
@@ -142,30 +160,31 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         currentListView.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Handles click on the Teachers tab, shows Students list.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onStudentsTabSelection(Event event) {
-        if(!m_studentsList.getSelectionModel().isEmpty())
-            m_studentsList.getSelectionModel().clearSelection();
         if(m_searchBtn!=null)
             m_searchBtn.setDisable(true);
     }
 
+    /**
+     * Handles click on the Teachers tab, shows Teachers list.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onTeachersTabSelection(Event event) {
-        if(!m_teachersList.getSelectionModel().isEmpty())
-            m_teachersList.getSelectionModel().clearSelection();
-        try{
-            m_searchBtn.setDisable(true);
-        }catch (NullPointerException e){
-            System.out.println(e.getClass().getName() + "No Object Yet");
-        }
         m_searchBtn.setDisable(true);
     }
 
+    /**
+     * Method handles click on the Courses tab, shows Questions list. if an item was selected, selection is cleared.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onQuestionsTabSelection(Event event) {
-        if(m_questionsList.getItems().isEmpty())
-            updateQuestionsList();
         if(!m_questionsList.getSelectionModel().isEmpty())
             m_questionsList.getSelectionModel().clearSelection();
         try{
@@ -177,10 +196,12 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }
     }
 
+    /**
+     * Handles click on the Courses tab, shows Exams list. if an item was selected, selection is cleared.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onExamsTabSelection(Event event) {
-        if(m_examsList.getItems().isEmpty())
-            updateExamsList();
         if(!m_examsList.getSelectionModel().isEmpty())
             m_examsList.getSelectionModel().clearSelection();
         try{
@@ -192,10 +213,12 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }
     }
 
+    /**
+     * Handles click on the Courses tab, shows Fields list. if an item was selected, selection is cleared.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onFieldsTabSelection(Event event) {
-        if(m_fieldsList.getItems().isEmpty())
-            updateFieldsList();
         if(!m_fieldsList.getSelectionModel().isEmpty())
             m_fieldsList.getSelectionModel().clearSelection();
         try{
@@ -207,22 +230,24 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }
     }
 
+    /**
+     * Handles click on the Courses tab, shows Courses list.
+     * @param event - Click on mouse Event registered by system.
+     */
     @FXML
     public void onCoursesTabSelection(Event event) {
         if(m_coursesList.getItems().isEmpty()){
             updateCoursesList();
         }
-        if(!m_coursesList.getSelectionModel().isEmpty())
-            m_coursesList.getSelectionModel().clearSelection();
         m_searchBtn.setDisable(true);
     }
 
     /**
-     *  method checks if the entered id is a number
-     * @param str - ID entered manually by the user
-     * @return True - string is a number, false - string has non-numerical characters in it
+     * Checks if the entered id is a number.
+     * @param str - ID entered manually by the user.
+     * @return True - string is a number, false - string has non-numerical characters in it.
      */
-    public static boolean isNumeric(String str)
+    private static boolean isNumeric(String str)
     {
         NumberFormat formatter = NumberFormat.getInstance();
         ParsePosition pos = new ParsePosition(0);
@@ -230,12 +255,14 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         return str.length() == pos.getIndex();
     }
 
+    /**
+     * Updates the ListView of Students by fetching all students from database through a query.
+     */
     private void updateStudentsList(){
         ArrayList<User> m_studentsToBeDisplayed = UserController.getAllStudents();
         ArrayList<String> toBeDisplayed = new ArrayList<>();
         if (m_studentsToBeDisplayed != null) {
             for (User student : m_studentsToBeDisplayed) {
-                m_studentsAndTeachersMap.put(student.getID(), student);
                 toBeDisplayed.add(student.toString());
             }
         }
@@ -244,12 +271,14 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_studentsList.setItems(list);
     }
 
+    /**
+     * Updates the ListView of Teachers by fetching all teachers from database through a query.
+     */
     private void updateTeachersList(){
         ArrayList<User> m_teachersToBeDisplayed = UserController.getAllTeachers();
         ArrayList<String> toBeDisplayed = new ArrayList<>();
         if (m_teachersToBeDisplayed != null) {
             for (User teacher : m_teachersToBeDisplayed) {
-                m_studentsAndTeachersMap.put(teacher.getID(), teacher);
                 toBeDisplayed.add(teacher.toString());
             }
         }
@@ -258,6 +287,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_teachersList.setItems(list);
     }
 
+    /**
+     * Updates the ListView of Questions by fetching all questions from database through a query.
+     */
     private void updateQuestionsList() {
         ArrayList<Question> m_questionsToBeDisplayed = QuestionController.getAllQuestions();
         ArrayList<String> basicQuestionInfo = new ArrayList<>();
@@ -273,6 +305,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         }
     }
 
+    /**
+     * Updates the ListView of Exams by fetching all exams from database through a query.
+     */
     private void updateExamsList() {
         ArrayList<Exam> m_examsToBeDisplayed = ExamController.getAllExams();
         ArrayList<String> basicExamInfo = new ArrayList<>();
@@ -288,6 +323,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_examsList.setItems(list1);
     }
 
+    /**
+     * Updates the ListView of Fields by fetching all fields from database through a query.
+     */
     private void updateFieldsList() {
         ArrayList<Field> m_fieldsToBeDisplayed = CourseFieldController.getAllFields();
         ArrayList<String> basicFieldInfo = new ArrayList<>();
@@ -303,6 +341,9 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         m_fieldsList.setItems(list1);
     }
 
+    /**
+     * Updates the ListView of Courses by fetching all courses from database through a query.
+     */
     private void updateCoursesList(){
         ArrayList<Course> m_coursesToBeDisplayed = CourseFieldController.getAllCourses();
         ArrayList<String> coursesInfo = new ArrayList<>();
@@ -316,4 +357,6 @@ public class PrincipalViewDataFrame implements Initializable , ControlledScreen 
         ObservableList<String> list1 = FXCollections.observableArrayList(coursesInfo);
         m_coursesList.setItems(list1);
     }
+
+    /* Methods End */
 }
