@@ -1,6 +1,17 @@
 package GUI;
 
-import Controllers.*;
+import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+
+import Controllers.ControlledScreen;
+import Controllers.CourseFieldController;
+import Controllers.ExamController;
+import Controllers.QuestionController;
+import Controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,17 +19,20 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import logic.*;
+import logic.Course;
+import logic.Exam;
+import logic.Field;
+import logic.Globals;
+import logic.Question;
+import logic.User;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
 
 public class PrincipalViewDataFrame implements Initializable , ControlledScreen {
 

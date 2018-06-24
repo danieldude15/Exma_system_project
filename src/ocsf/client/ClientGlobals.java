@@ -1,8 +1,8 @@
 package ocsf.client;
 
-import GUI.ClientFrame;
-
 import java.io.IOException;
+
+import GUI.ClientFrame;
 
 public class ClientGlobals {
 	
@@ -64,7 +64,7 @@ public class ClientGlobals {
 	public static final String ClientConnectionScreenID = "Client Configuration";
 	public static final String ClientConnectionScreenPath = "/resources/fxml/ClientGui.fxml";	
 
-	public static final String ConfigfileName = "ConnectionConfig.txt";
+	public static final String ConfigfileName = System.getProperty("java.io.tmpdir")+"\\ConnectionConfig.txt";
 	
 	/*		General Screens	end			*/
 	

@@ -1,6 +1,9 @@
 package GUI;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Controllers.ControlledScreen;
 import Controllers.CourseFieldController;
 import Controllers.SolvedExamController;
@@ -18,9 +21,6 @@ import logic.Globals;
 import logic.SolvedExam;
 import logic.Student;
 import ocsf.client.ClientGlobals;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class StudentMainFrame implements ControlledScreen{
 

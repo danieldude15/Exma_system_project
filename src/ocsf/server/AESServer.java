@@ -1,23 +1,42 @@
 package ocsf.server;
 
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.filechooser.FileSystemView;
+
 import SQLTools.DBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import logic.*;
+import logic.ActiveExam;
+import logic.AesWordDoc;
+import logic.Course;
+import logic.Exam;
+import logic.ExamReport;
+import logic.Field;
+import logic.Globals;
+import logic.Principle;
+import logic.Question;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.TimeChangeRequest;
+import logic.User;
+import logic.iMessage;
 
-import java.io.*;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PrimitiveIterator.OfDouble;
-
-import javax.swing.filechooser.FileSystemView;
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
 	
@@ -41,14 +60,22 @@ public class AESServer extends AbstractServer {
 	 * It will check if all the students in the course submitted the exam by removing the student frmo the arraylist
 	 */
 	private HashMap<ActiveExam, ArrayList<Student>> studentsCheckOutFromActiveExam;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an arraylist of solvedexams who contain all the solved exam
+	 */
 	private HashMap<ActiveExam, ArrayList<SolvedExam>> studentsSolvedExams;
-	
+	/**
+	 * HashMap with Key of SolvedExam and Value that holds an AesWordDoc who contain all the word doc
+	 */
 	private  HashMap<SolvedExam,AesWordDoc> solvedExamWordFiles;
 	
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an TimeChangeRequest who contain all the Time Change Request
+	 */
 	private HashMap<ActiveExam, TimeChangeRequest> timeChangeRequests;
-	
+	/**
+	 * HashMap with Key of ActiveExam and Value that holds an Timeline who contain all the clock of hitch exam
+	 */
 	private HashMap<ActiveExam, Timeline> examTimelines;
 
 	
@@ -57,7 +84,14 @@ public class AESServer extends AbstractServer {
 	String studentsExamsPath = serverDirPath+"\\Students_Exams";
 	
 	String examFilesPath = serverDirPath+"\\Exam_Files";
-	
+
+	/**
+	 * constructor that connect to database and  gets the port for connecting clients
+	 * @param DBHost - the host address of the database
+	 * @param DBUser - the username to connect to in the host
+	 * @param DBPass - the password for the user
+	 * @param port - the port for the server to listen on
+	 */
 	public AESServer(String DBHost,String DBUser, String DBPass,int port) {
 		super(port);
 		sqlcon = new DBMain(DBHost, DBUser, DBPass);
@@ -75,10 +109,26 @@ public class AESServer extends AbstractServer {
 		setupServerFolders();
 		
 		
+		try {
+			File fileLog = new File(serverDirPath+"\\ServerLog.txt");
+			fileLog.createNewFile();
+			System.setOut(new PrintStream(fileLog));
+			File errorLog = new File(serverDirPath+"\\ServerErrorLog.txt");
+			errorLog.createNewFile();
+			System.setErr(new PrintStream(errorLog));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 		//AddToWordFileList(nivsExam,doc);//Add the word file to the list of word files.
 		
 	}
 
+	/**
+	 * this function will create the server folders to manage students exams and hold all console logs and error logs as well as exams created by teachers for manual exams
+	 */
 	private void setupServerFolders() {
 		
 		File theDir = new File(serverDirPath);
@@ -112,6 +162,12 @@ public class AESServer extends AbstractServer {
 		}
 	}
 
+	/**
+	 * this function handles msgs from clients, it knows what the client requested by the command in the iMessage recieved from him
+	 * 
+	 * @param msg - an Object that must be instanceof iMessage
+	 * @param client - the client who sent this msg
+	 */
 	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("Got msg from:" + client + "message: " + msg);
 		if(!(msg instanceof iMessage)) {
@@ -267,7 +323,12 @@ public class AESServer extends AbstractServer {
 	}
 
 
-
+	/**
+	 * when a client disconnects he sends a msg to the server notifying it to log the user out of the server 
+	 * @param client - the client sending the msg
+	 * @param o - the user that is logged in
+	 * @throws IOException - in case it fails to close the connection to the client it receives
+	 */
 	private void disconnectClient(ConnectionToClient client, Object o) throws IOException {
 		client.close();
 		if (o instanceof User) {
@@ -397,7 +458,10 @@ public class AESServer extends AbstractServer {
 			System.err.println(ae + "not found in studentsInExam HashMap!");
 		}
 	}
-	
+	/**
+	 * this method set Active Exam Timeline in the hashmap
+	 * @param ae - ActiveExam 
+	 */
 	private void setActiveExamTimeline(ActiveExam ae) {
 		Long examTime = (long) ae.getDuration()*60;
 		TimeChangeRequest tcr = timeChangeRequests.get(ae);
@@ -450,7 +514,13 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-		
+
+	/**
+	 * 	this method get all teachers active exam
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {
@@ -461,37 +531,68 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("TeachersActiveExams",ac);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method lock active exam
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void lockActiveExams(ConnectionToClient client, Object o) throws IOException {
 		lockActiveExam((ActiveExam) o);
 		client.sendToClient(new iMessage("lockedExam", null));
 	}
-	
+	/**
+	 * 	this method get all courses question
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
 		iMessage im = new iMessage("QuestionCourses",courses);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method get all  students in the course
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 
 	private void studentsInCourse(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Student> students = sqlcon.GetAllStudentsInCourse((Course)o);
 		iMessage im = new iMessage("studentsInCourse",students);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method get all teacher  exams 
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getTeachersExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Exam> exams = sqlcon.getTeachersExams((Teacher) o);
 		iMessage im = new iMessage("TeachersExams",exams);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method get all fields courses
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getFieldsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getFieldsCourses(o);
 		iMessage im = new iMessage("FieldsCourses",courses);
 		client.sendToClient(im);
 	}
 	
+	/**
+	 * 	this method get all time change request
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getAllTimeChangeRequest(ConnectionToClient client) throws IOException {
 		ArrayList<TimeChangeRequest> result = new ArrayList<>();
 		for (ActiveExam activeExam : timeChangeRequests.keySet()) {
@@ -500,7 +601,12 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("allTimeChangeRequests",result);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method get all time change request
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void studentIsInActiveExam(ConnectionToClient client, Object obj) throws IOException {
 		Object[] o=(Object[])obj;
 		
@@ -551,6 +657,7 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("addedQuestion", new Integer(effectedRowCount));
 		client.sendToClient(im);
 	}
+	
 	private void addExam(ConnectionToClient client, Object o) throws IOException {
 		int effectedRowCount = sqlcon.addexam((Exam) o);
 		iMessage im = new iMessage("addExam", new Integer(effectedRowCount));
@@ -574,10 +681,11 @@ public class AESServer extends AbstractServer {
 		String filePath = studentsExamsPath+"\\"+se.getStudent().getID()+"\\"+se.examIdToString()+".doc";
 		
 		File examFile = new File(filePath);
+		AesWordDoc myExamFileDes;
+		myExamFileDes = new AesWordDoc(filePath);
 
 		// if the directory does not exist, create it
 		if (examFile.exists()) {
-			AesWordDoc myExamFileDes = new AesWordDoc(filePath);
 			myExamFileDes.setSize((int) examFile.length());
 			myExamFileDes.initArray((int) examFile.length());
 			
@@ -589,12 +697,13 @@ public class AESServer extends AbstractServer {
 				System.err.println("Could Not read from the Exam File Buffer");
 				e.printStackTrace();
 			}
-			
-			iMessage msg = new iMessage("yourExamFile", myExamFileDes);
-			client.sendToClient(msg);
 	    } else {
-	    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath());
+	    	System.err.println("Could not find students exam file:" + examFile.getAbsolutePath() + " sending empty file");
+			myExamFileDes.setSize((int) examFile.length());
+			myExamFileDes.initArray((int) examFile.length());
 	    }
+		iMessage msg = new iMessage("yourExamFile", myExamFileDes);
+		client.sendToClient(msg);
 	}
 	
 	private void getAllTeachers(ConnectionToClient client) throws IOException {

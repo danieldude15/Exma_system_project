@@ -1,5 +1,9 @@
 package GUI;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import Controllers.ControlledScreen;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +17,6 @@ import logic.Field;
 import logic.Globals;
 import logic.Teacher;
 import ocsf.client.ClientGlobals;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 public class PrincipalViewFieldFrame implements Initializable, ControlledScreen {
 

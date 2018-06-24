@@ -1,21 +1,24 @@
 package GUI;
 
+import java.util.HashMap;
+
 import Controllers.ControlledScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import logic.Globals;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
-
-import java.util.HashMap;
 
 public class StudentViewExamFrame implements ControlledScreen {
 
@@ -30,8 +33,8 @@ public class StudentViewExamFrame implements ControlledScreen {
 	
 	private SolvedExam solvedExam;
 	private HashMap<QuestionInExam, Integer> studentsAnswers;
-	private final Image v = new Image("resources/v.png"); 
-	private final Image x = new Image("resources/x.png"); 
+	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
+	private final Image x = new Image(this.getClass().getResourceAsStream("/resources/x.png")); 
 	private final String blackLabel=new String("blackLabel");
 	private final String redLabel=new String("redLabel");
 

@@ -1,5 +1,8 @@
 package Controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import logic.Course;
 import logic.Field;
 import logic.Teacher;
@@ -7,11 +10,6 @@ import logic.User;
 import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.ClientGlobals;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javafx.util.Callback;
 
 @SuppressWarnings("unchecked")
 public class CourseFieldController {
@@ -106,6 +104,11 @@ public class CourseFieldController {
 		} 
 		return null;
 	}
+	/**
+	 * A function which returns all course of the Field
+	 * @param f-Field
+	 * @return ArrayList<Course>
+	 */
 	public static ArrayList<Course> getFieldCourses(Field f) {
 		if(f==null) return null;
 		AESClient client = ClientGlobals.client;

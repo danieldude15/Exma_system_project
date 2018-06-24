@@ -1,12 +1,29 @@
 package SQLTools;
 
-import com.mysql.jdbc.Statement;
-import logic.*;
-import ocsf.server.ServerGlobals;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.mysql.jdbc.Statement;
+
+import logic.Course;
+import logic.Exam;
+import logic.ExamReport;
+import logic.Field;
+import logic.Globals;
+import logic.Principle;
+import logic.Question;
+import logic.QuestionInExam;
+import logic.SolvedExam;
+import logic.Student;
+import logic.Teacher;
+import logic.User;
+import ocsf.server.ServerGlobals;
 
 
 public class DBMain {
@@ -291,7 +308,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return all user whit the same type
+ * @param type - int
+ * @return ArrayList<User>
+ */
 	public ArrayList<User> GetAllUsersByType(int type) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllUsersByType);
@@ -322,6 +343,11 @@ public class DBMain {
 		return null;
 	}
 
+/**
+ * return all user in specific course
+ * @param course - Course
+ * @return ArrayList<Student>
+ */
 
 	public ArrayList<Student> GetAllStudentsInCourse(Course course) {
 		try {
@@ -349,7 +375,10 @@ public class DBMain {
 	}
 	
 	// ######################### COURSE FIELD HANDELING  ####################################
-
+/**
+ * return all the fields
+ * @return ArrayList<Field>
+ */
 	public ArrayList<Field> getAllFields(){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllFields);
@@ -367,7 +396,10 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return all the courses
+ * @return ArrayList<Course>
+ */
 	public ArrayList<Course> getAllCourses(){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllCourses);
@@ -386,7 +418,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return all the fields of specific teacher
+ * @param o - Teacher
+ * @return ArrayList<Field>
+ */
 	public ArrayList<Field> getTeacherFields(Teacher o) {
 		ArrayList<Field> fields = new ArrayList<Field>();
 		try {
@@ -408,7 +444,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return all the courses of all the fields we send
+ * @param o -Object (ArrayList<Field>)
+ * @return ArrayList<Course>
+ */
 	@SuppressWarnings("unchecked")
 	public ArrayList<Course> getFieldsCourses(Object o) {
 		ArrayList<Field> fields = (ArrayList<Field>) o;
@@ -458,7 +498,12 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return the name of course by id course and id field
+ * @param courseID - int
+ * @param fieldID - int
+ * @return CourseName - String 
+ */
 	public String getCourseName(int courseID,int fieldID){
 		try {
 			PreparedStatement prst = conn.prepareStatement(getCourse);
@@ -510,7 +555,10 @@ public class DBMain {
 	}
 
 	//  #############################   EXAM HANDELING    ##################################
-
+/**
+ * return all the exam from the data base
+ * @return ArrayList<Exam>
+ */
 	public ArrayList<Exam> getAllExams() {
 		try {
 			PreparedStatement prst = conn.prepareStatement(getAllExams);
@@ -579,7 +627,10 @@ public class DBMain {
 		return null;
 	}
 
-
+/**
+ * return all the exam reports from the data base
+ * @return  ArrayList<ExamReport>
+ */
 	public ArrayList<ExamReport> getAllExamReports() {
 		ArrayList<ExamReport> completedExams = new ArrayList<ExamReport>();
 		try {
@@ -674,7 +725,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * return the exam by id from data base
+ * @param examIdString - string
+ * @return
+ */
 	public Exam getExam(String examIdString) {
 		try {
 			int[] examid = Exam.parseId(examIdString);
@@ -823,7 +878,11 @@ public class DBMain {
 		}
 		return null;
 	}
-
+/**
+ * This method  add exam to data base
+ * @param e-exam
+ * @return
+ */
 	public int addexam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addexam,Statement.RETURN_GENERATED_KEYS);
@@ -860,7 +919,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+	/**
+	 * This method  delete exam from data base
+	 * @param e-exam
+	 * @return
+	 */
 	public int deleteExam(Exam e) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(deleteExam);
@@ -873,7 +936,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+/**
+ * insert solved exam to data base
+ * @param se - SolvedExam
+ * @return mount of lines who get effect by insert solved exam
+ */
 	public Integer InsertSolvedExam(SolvedExam se) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(addSolvedExam,Statement.RETURN_GENERATED_KEYS);
@@ -905,7 +972,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+	/**
+	 * Update solved exam in data base
+	 * @param se - SolvedExam
+	 * @return mount of lines hoe get effect by insert solved exam
+	 */
 	public Integer UpdateSolvedExam(SolvedExam se) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(updateSolvedExam);
@@ -931,7 +1002,11 @@ public class DBMain {
 		}
 		return 0;
 	}
-
+/**
+ * return all the exam of specific course
+ * @param o - Course
+ * @return ArrayList<Exam>
+ */
 	public ArrayList<Exam> getcourseExams(Course o) {
 		try {
 		PreparedStatement prst = conn.prepareStatement(getcourseExams);
@@ -960,7 +1035,11 @@ public class DBMain {
 	}
 	return null;
 }
-	
+	/**
+	 * 
+	 * @param eReport - ExamReport
+	 * @return  mount of lines who get effect by insert completed exam
+	 */
 	public int insertCompletedExam(ExamReport eReport) {
 		/*
 		 * `examid`, `courseid`, `fieldid`, `autherid`,
@@ -1112,7 +1191,12 @@ public class DBMain {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * This method  get all question in this course
+	 * @param o -course
+	 * @return ArrayList<Question>
+	 */
 	public ArrayList<Question> CourseQuestions(Course o) {
 		Course c = (Course) o;
 		try {
@@ -1148,10 +1232,11 @@ public class DBMain {
 		return null;
 	}
 
+	
 	/**
 	 * get Questions in exam by giving examid
-	 * @param examid
-	 * @return
+	 * @param examid -String
+	 * @return ArrayList<QuestionInExam>
 	 */
 	public ArrayList<QuestionInExam> getQuestionsInExam(String examid) {
 		int eid = Exam.parseId(examid)[2];
@@ -1197,8 +1282,8 @@ public class DBMain {
 
 	/**
 	 * this function deletes a question from database!
-	 * @param q
-	 * @return
+	 * @param q - Question
+	 * @return mount of lines who get effect by delete question
 	 */
 	public int deleteQuestion(Question q) {
 		try {

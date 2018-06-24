@@ -25,8 +25,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import logic.Globals;
 import logic.AesWordDoc;
+import logic.Globals;
 import logic.QuestionInExam;
 import logic.SolvedExam;
 import ocsf.client.ClientGlobals;
@@ -35,8 +35,8 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 
 	private SolvedExam solvedExam = null;
 	private HashMap<QuestionInExam, TextField> teacherNotesH = new HashMap<>();
-	private final Image v = new Image("resources/v.png"); 
-	private final Image x = new Image("resources/x.png"); 
+	private final Image v = new Image(this.getClass().getResourceAsStream("/resources/v.png")); 
+	private final Image x = new Image(this.getClass().getResourceAsStream("/resources/x.png")); 
 	
 	@FXML VBox questionsView;
 	@FXML TextField newScore;
@@ -52,6 +52,7 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 	@FXML Button approveB;
 
 	@Override public void runOnScreenChange() {
+		doneImage.setImage(new Image(this.getClass().getResourceAsStream("/resources/images/completed-stamp.png")));
 		questionsView.getChildren().clear();
 		errorLabel.setVisible(false);
 		newScore.setText("");
@@ -83,6 +84,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 			changeNote.setDisable(true);
 			doneImage.setVisible(true);
 			approveB.setVisible(false);
+			for(QuestionInExam qie: teacherNotesH.keySet()) {
+				teacherNotesH.get(qie).setDisable(true);
+			}
 		}
 		
 	}
@@ -224,6 +228,9 @@ public class TeacherCheckSolvedExamFrame implements ControlledScreen {
 				approveB.setVisible(false);
 				score.setDisable(true);
 				changeNote.setDisable(true);
+				for(QuestionInExam qie: teacherNotesH.keySet()) {
+					teacherNotesH.get(qie).setDisable(true);
+				}
 			} else {
 				//Failed To insert!
 			}

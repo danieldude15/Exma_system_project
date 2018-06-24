@@ -1,20 +1,5 @@
 package GUI;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import logic.Globals;
-import logic.iMessage;
-import ocsf.client.AESClient;
-import ocsf.client.ClientApplication;
-import ocsf.client.ClientGlobals;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +7,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import Controllers.ControlledScreen;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import logic.Globals;
+import ocsf.client.AESClient;
+import ocsf.client.ClientGlobals;
 
 public class ClientFrame implements ControlledScreen ,Initializable {
 	
