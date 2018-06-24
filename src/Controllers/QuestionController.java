@@ -49,6 +49,11 @@ public class QuestionController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to get all courses where the question belongs to.
+	 * @param question
+	 * @return
+	 */
 	public static ArrayList<Course> getQuestionCourses(Question question) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -64,6 +69,11 @@ public class QuestionController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to get all questions in exam.
+	 * @param examid
+	 * @return
+	 */
 	public static ArrayList<QuestionInExam> getQuestionsInExam(String examid) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -79,6 +89,11 @@ public class QuestionController {
 		return null;
 	}
 	
+	/**
+	 * Sending to server a request to delete question from database.
+	 * @param q
+	 * @return
+	 */
 	public static int deleteQuestion(Question q) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -114,6 +129,11 @@ public class QuestionController {
 
 	}
 
+	/**
+	 * Sending to server a request to add question to database.
+	 * @param q
+	 * @return
+	 */
 	public static int addQuestion(Question q) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -132,6 +152,11 @@ public class QuestionController {
 		return 0;
 	}
 
+	/**
+	 * Sending to server a request to edit question.
+	 * @param q
+	 * @return
+	 */
 	public static int editQuestion(Question q) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

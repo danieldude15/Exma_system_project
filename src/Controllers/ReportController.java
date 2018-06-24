@@ -27,6 +27,10 @@ public class ReportController {
 			return null;
 	}
 	
+	/**
+	 * Sending to server a request to get all exams report.
+	 * @return
+	 */
 	public static ArrayList<ExamReport> getAllExamReport(){
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {

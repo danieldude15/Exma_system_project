@@ -45,6 +45,9 @@ public class UserController {
 		
 	}
 
+	/**
+	 * Sending to server a request to logout the user from system.
+	 */
 	public static void logout() {
 		try {
 			if (ClientGlobals.client!=null)
@@ -67,6 +70,10 @@ public class UserController {
 		return null;
 	}
 
+	/**
+	 * Sending to server a request to get all students.
+	 * @return
+	 */
 	public static ArrayList<User> getAllStudents() {
 		try {
 			if (ClientGlobals.client!=null) {
@@ -79,6 +86,10 @@ public class UserController {
 		return null;
 	}
 
+	/**
+	 * Sending to server request to get all teachers.
+	 * @return
+	 */
 	public static ArrayList<User> getAllTeachers() {
 		try {
 			if (ClientGlobals.client!=null) {

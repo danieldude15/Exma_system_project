@@ -26,7 +26,11 @@ public class TimeChangeController {
 		return null;
 	}
 
-
+	
+	/**
+	 * Sending to server a request of new time changing for an active exam.
+	 * @param tcr
+	 */
 	public static void requestNewTimeChangeForActiveExam(TimeChangeRequest tcr) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
@@ -42,6 +46,10 @@ public class TimeChangeController {
 	}
 
 
+	/**
+	 * Sending to server a request to get response for time changing request.
+	 * @param TCR
+	 */
 	public static void sendResponse(TimeChangeRequest TCR) {
 		AESClient client = ClientGlobals.client;
 		if(client.isConnected()) {
