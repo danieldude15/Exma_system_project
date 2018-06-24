@@ -439,7 +439,10 @@ public class AESServer extends AbstractServer {
 			System.err.println(ae + "not found in studentsInExam HashMap!");
 		}
 	}
-	
+	/**
+	 * this method set Active Exam Timeline in the hashmap
+	 * @param ae - ActiveExam 
+	 */
 	private void setActiveExamTimeline(ActiveExam ae) {
 		Long examTime = (long) ae.getDuration()*60;
 		TimeChangeRequest tcr = timeChangeRequests.get(ae);
@@ -492,7 +495,12 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-		
+	/**
+	 * 	this method get all teachers active exam
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getTeachersActiveExams(ConnectionToClient client,Object o) throws IOException {
 		ArrayList<ActiveExam> ac = new ArrayList<>();
 		for(String activeExamCode: activeExams.keySet()) {
@@ -503,37 +511,68 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("TeachersActiveExams",ac);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method lock active exam
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void lockActiveExams(ConnectionToClient client, Object o) throws IOException {
 		lockActiveExam((ActiveExam) o);
 		client.sendToClient(new iMessage("lockedExam", null));
 	}
-	
+	/**
+	 * 	this method get all courses question
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getQuestionCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getQuestionCourses(o);
 		iMessage im = new iMessage("QuestionCourses",courses);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method get all  students in the course
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 
 	private void studentsInCourse(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Student> students = sqlcon.GetAllStudentsInCourse((Course)o);
 		iMessage im = new iMessage("studentsInCourse",students);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method get all teacher  exams 
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getTeachersExams(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Exam> exams = sqlcon.getTeachersExams((Teacher) o);
 		iMessage im = new iMessage("TeachersExams",exams);
 		client.sendToClient(im);
 	}
-	
+	/**
+	 * 	this method get all fields courses
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getFieldsCourses(ConnectionToClient client, Object o) throws IOException {
 		ArrayList<Course> courses = sqlcon.getFieldsCourses(o);
 		iMessage im = new iMessage("FieldsCourses",courses);
 		client.sendToClient(im);
 	}
 	
+	/**
+	 * 	this method get all time change request
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void getAllTimeChangeRequest(ConnectionToClient client) throws IOException {
 		ArrayList<TimeChangeRequest> result = new ArrayList<>();
 		for (ActiveExam activeExam : timeChangeRequests.keySet()) {
@@ -542,7 +581,12 @@ public class AESServer extends AbstractServer {
 		iMessage im = new iMessage("allTimeChangeRequests",result);
 		client.sendToClient(im);
 	}
-
+	/**
+	 * 	this method get all time change request
+	 * @param client- ConnectionToClient
+	 * @param o -Object
+	 * @throws IOException
+	 */
 	private void studentIsInActiveExam(ConnectionToClient client, Object obj) throws IOException {
 		Object[] o=(Object[])obj;
 		
