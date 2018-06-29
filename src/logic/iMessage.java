@@ -52,7 +52,7 @@ public class iMessage implements Serializable{
 	
 	/**
 	 * setObj
-	 * @param obj to set to
+	 * @param o to set to
 	 */
 	public void setObj(Object o) {
 		obj=o;
@@ -71,5 +71,20 @@ public class iMessage implements Serializable{
 	 */
 	@Override public String toString() {
 		return new String("command:"+command + " --- Object:" + obj);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj)
+			return true;
+		if(obj instanceof iMessage){
+			iMessage message = (iMessage)obj;
+			if(!message.getCommand().equals(getCommand()))
+				return false;
+			if(!message.getObj().equals(getObj()))
+				return false;
+			return true;
+		}
+		return false;
 	}
 }
