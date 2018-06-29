@@ -84,52 +84,7 @@ public class PrincipalReportsFrame implements ControlledScreen {
 	 */
     @FXML public void viewReportButtonPressed(ActionEvent event){
     	Tab selected = m_reportsTabPane.getSelectionModel().getSelectedItem();
-
-		if(!m_searchBox.getText().equals("")){
-			if(isNumeric(m_searchBox.getText())) {
-				if (m_studentsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
-					Student s = new Student(m_studentsMap.get(Integer.parseInt(m_searchBox.getText())));
-					if (s == null) return;
-					ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
-					pvrf.setWindowType(ViewReportFrame.type.STUDENT);
-					pvrf.setStudent(s);
-					pvrf.setMe(ViewReportFrame.user.Principle);
-					m_searchBox.setText("");
-					Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
-					return;
-				} else if (m_teachersMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
-					Teacher t = new Teacher(m_teachersMap.get(Integer.parseInt(m_searchBox.getText())));
-					if (t == null) return;
-					ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
-					pvrf.setWindowType(ViewReportFrame.type.TEACHER);
-					pvrf.setTeacher(t);
-					pvrf.setMe(ViewReportFrame.user.Principle);
-					m_searchBox.setText("");
-					Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
-					return;
-				} else if (m_coursesMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
-					Course c = m_coursesMap.get(Integer.parseInt(m_searchBox.getText()));
-					if (c == null) return;
-					ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
-					pvrf.setWindowType(ViewReportFrame.type.COURSE);
-					pvrf.setCourse(c);
-					pvrf.setMe(ViewReportFrame.user.Principle);
-					m_searchBox.setText("");
-					Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
-					return;
-				} else if (m_examReportsMap.containsKey(Integer.parseInt(m_searchBox.getText()))) {
-					ExamReport ex = m_examReportsMap.get(Integer.parseInt(m_searchBox.getText()));
-					if (ex == null) return;
-					ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
-					pvrf.setWindowType(ViewReportFrame.type.EXAM);
-					pvrf.setExamReport(ex);
-					pvrf.setMe(ViewReportFrame.user.Principle);
-					m_searchBox.setText("");
-					Globals.mainContainer.setScreen(ClientGlobals.ViewReportID);
-					return;
-				}
-			}else
-					if (selected.equals(m_studentsTab)) {
+    	if (selected.equals(m_studentsTab)) {
     		Student s = new Student(m_studentsList.getSelectionModel().getSelectedItem());
         	if (s==null) return;
         	ViewReportFrame pvrf = (ViewReportFrame) Globals.mainContainer.getController(ClientGlobals.ViewReportID);
