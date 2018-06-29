@@ -68,7 +68,7 @@ class loginTest {
 
         String username = "nathan";
         String password = "1234";
-        iMessage expected = new iMessage("Principle",new User(307975052,"nathan","1234","nathan khutorskoy"));
+        iMessage expected = new iMessage("Principle",new User(307975052,"nathan","1234","Nathan Khutorskoy"));
 
         iMessage message = UserController.login(username,password);
 
@@ -96,7 +96,7 @@ class loginTest {
 
         String username = "itzik";
         String password = "1234";
-        iMessage expected = new iMessage("Student",new User(305112732,"itzik","1234","itzik mizrahi"));
+        iMessage expected = new iMessage("Student",new User(305112732,"itzik","1234","Itzik Mizrahi"));
 
         iMessage message = UserController.login(username,password);
 
