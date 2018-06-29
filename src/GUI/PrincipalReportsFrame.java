@@ -128,7 +128,6 @@ public class PrincipalReportsFrame implements ControlledScreen {
 				Globals.popUp(Alert.AlertType.WARNING, "Invalid character" ,"You used Invalid characters, please enter Numerical ID.");
 			}
 		}
-    }
 
 	/**
 	 * Returns to Main Menu screen.
