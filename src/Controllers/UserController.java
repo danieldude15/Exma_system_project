@@ -1,20 +1,15 @@
 package Controllers;
 
+import logic.*;
+import ocsf.client.ClientGlobals;
+
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javafx.scene.control.Alert.AlertType;
-import logic.Course;
-import logic.Globals;
-import logic.Student;
-import logic.User;
-import logic.iMessage;
-import ocsf.client.ClientGlobals;
 
 @SuppressWarnings("unchecked")
 public class UserController {
 
-	public static void login(String username, String password) {
+	public static iMessage login(String username, String password) {
 		User u = new User(0,username,password,null);
 		iMessage msg = new iMessage("login",u);
 		try {
@@ -32,17 +27,12 @@ public class UserController {
 			case "Principle":
 				Globals.mainContainer.setScreen(ClientGlobals.PrincipalMainID);
 				break;
-			case "AlreadyLoggedIn":
-				Globals.popUp(AlertType.INFORMATION, "Failed to Log-In", "You Are Already Logged In From Another Computer!\n Please LogOut And Then Try Again.");
-				break;
-			case "failedAuth":
-				Globals.popUp(AlertType.INFORMATION,"Failed to Log-In","UserName or Password are incorrect.");
-				break;
 			}
+			return message;
 		} catch (IOException e) {
 			ClientGlobals.handleIOException(e);
 		}
-		
+		return null;
 	}
 
 	/**

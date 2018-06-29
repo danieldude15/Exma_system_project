@@ -39,8 +39,6 @@ package GUI;
  * holder.
  */
 
-import java.util.HashMap;
-
 import Controllers.ControlledScreen;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -51,10 +49,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import logic.Globals;
+
+import java.util.HashMap;
 
 /**
  *
@@ -74,9 +73,6 @@ public class ScreensController  extends StackPane {
     public ScreensController() {
         super();
         Globals.mainContainer=this;
-        ProgressIndicator bar = new ProgressIndicator(-1);
-        bar.setPrefSize(200, 24);
-
     }
 
     //Add the screen to the collection

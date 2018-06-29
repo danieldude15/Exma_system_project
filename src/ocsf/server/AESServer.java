@@ -1,41 +1,20 @@
 package ocsf.server;
 
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.filechooser.FileSystemView;
-
 import SQLTools.DBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import logic.ActiveExam;
-import logic.AesWordDoc;
-import logic.Course;
-import logic.Exam;
-import logic.ExamReport;
-import logic.Field;
-import logic.Globals;
-import logic.Principle;
-import logic.Question;
-import logic.QuestionInExam;
-import logic.SolvedExam;
-import logic.Student;
-import logic.Teacher;
-import logic.TimeChangeRequest;
-import logic.User;
-import logic.iMessage;
+import logic.*;
+
+import javax.swing.filechooser.FileSystemView;
+import java.io.*;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class AESServer extends AbstractServer {
@@ -1024,7 +1003,7 @@ public class AESServer extends AbstractServer {
 			}
 			if (connectedUsers.get(user)!=null && connectedUsers.get(user).isAlive()) {
 				//sending back same user to indicate user is already logged in!
-				result = new iMessage("loggedInAlready",o);
+				result = new iMessage("loggedInAlready",null);
 			} else {
 				connectedUsers.put(user, client);
 			}
