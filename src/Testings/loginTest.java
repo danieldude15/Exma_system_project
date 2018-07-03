@@ -22,36 +22,21 @@ import ocsf.server.ServerGlobals;
 
 class loginTest {
 
+	static AESClientMock client;
+	static AESServerMock server;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
         Globals.mainContainer = new ScreensController();
 
-        AESServer server = new AESServer("localhost/aes", "aesUser","QxU&v&HMm0t&",5555);
-        AESClient client = new AESClient("localhost",5555);
-
-        ServerGlobals.server = server;
-        ClientGlobals.client = client;
-
-        try {
-            server.listen();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            client.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        client = new AESClientMock();
+        server = new AESServerMock(client);
+        client.setMockServer(server);
 
 	}
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
-		ClientGlobals.client.closeConnection();
-        ServerGlobals.server.close();
 	}
 
 	@BeforeEach
@@ -66,11 +51,12 @@ class loginTest {
     @Test
     void loginPrincipleSuccessfulTest() {
 
-        String username = "nathan";
+        String username = "Principal_test";
         String password = "1234";
-        iMessage expected = new iMessage("Principle",new User(307975052,"nathan","1234","Nathan Khutorskoy"));
+        iMessage expected = new iMessage("Principle",
+        		new User(999,"Principal_test","1234","Principal Test"));
 
-        iMessage message = UserController.login(username,password);
+        iMessage message = UserController.login(username,password,client);
 
         if (message != null) {
             assertEquals(expected.toString(),message.toString());
@@ -80,11 +66,12 @@ class loginTest {
     @Test
     void loginTeacherSuccessfulTest() {
 
-        String username = "daniel";
-        String password = "tibi";
-        iMessage expected = new iMessage("Teacher",new User(302218136,"daniel","tibi","Daniel Tibi"));
+        String username = "Teacher_test";
+        String password = "1234";
+        iMessage expected = new iMessage("Teacher",
+        		new User(888,"Teacher_test","1234","Teacher Test"));
 
-        iMessage message = UserController.login(username,password);
+        iMessage message = UserController.login(username,password,client);
 
         if (message != null) {
             assertEquals(expected.toString(),message.toString());
@@ -94,11 +81,12 @@ class loginTest {
     @Test
     void loginStudentSuccessfulTest() {
 
-        String username = "itzik";
+        String username = "Student_test";
         String password = "1234";
-        iMessage expected = new iMessage("Student",new User(305112732,"itzik","1234","Itzik Mizrahi"));
+        iMessage expected = new iMessage("Student",
+        		new User(777,"Student_test","1234","Student Test"));
 
-        iMessage message = UserController.login(username,password);
+        iMessage message = UserController.login(username,password,client);
 
         if (message != null) {
             assertEquals(expected.toString(),message.toString());
@@ -108,11 +96,11 @@ class loginTest {
     @Test
     void loginPrinciplePasswordIncorrectTest(){
 
-        String username = "nathan";
+        String username = "Principal_test";
         String password = "123";
         iMessage expected = new iMessage("failedAuth",null);
 
-        iMessage message = UserController.login(username,password);
+        iMessage message = UserController.login(username,password,client);
 
         if (message != null) {
             assertEquals(expected.toString(),message.toString());
@@ -122,11 +110,11 @@ class loginTest {
     @Test
     void loginPrincipleUserNameIncorrectTest(){
 
-        String username = "natha";
+        String username = "Principal_";
         String password = "1234";
         iMessage expected = new iMessage("failedAuth",null);
 
-        iMessage message = UserController.login(username,password);
+        iMessage message = UserController.login(username,password,client);
 
         if (message != null) {
             assertEquals(expected.toString(),message.toString());
@@ -136,12 +124,12 @@ class loginTest {
     @Test
     void loginPrincipleAgainFailsTest() {
 
-        String username = "nathan";
+        String username = "Principal_test";
         String password = "1234";
         iMessage expected = new iMessage("AlreadyLoggedIn",null);
 
-        UserController.login(username,password);
-        iMessage messageFailed = UserController.login(username,password);
+        UserController.login(username,password,client);
+        iMessage messageFailed = UserController.login(username,password,client);
 
         if (messageFailed != null) {
             assertEquals(expected.toString(),messageFailed.toString());
@@ -155,8 +143,7 @@ class loginTest {
         String password = "";
         iMessage expected = new iMessage("failedAuth",null);
 
-        UserController.login(username,password);
-        iMessage messageFailed = UserController.login(username,password);
+        iMessage messageFailed = UserController.login(username,password,client);
 
         if (messageFailed != null) {
             assertEquals(expected.toString(),messageFailed.toString());

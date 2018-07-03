@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import logic.Globals;
 import logic.iMessage;
+import ocsf.client.ClientGlobals;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +36,7 @@ public class LoginFrame implements ControlledScreen,Initializable {
 		if (userfield.getText().equals("") || passwordfield.getText().equals("")) {
 			error.setText("* You Must Fill In Both UserName And Password");
 		} else {
-			iMessage message = UserController.login(userfield.getText(),passwordfield.getText());
+			iMessage message = UserController.login(userfield.getText(),passwordfield.getText(),ClientGlobals.client);
 			if(message.getCommand().equals("failedAuth"))
 				Globals.popUp(Alert.AlertType.INFORMATION,"Failed to Log-In","UserName or Password are incorrect.");
 			if(message.getCommand().equals("AlreadyLoggedIn"))

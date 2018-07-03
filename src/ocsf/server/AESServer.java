@@ -2,6 +2,7 @@ package ocsf.server;
 
 
 import SQLTools.DBMain;
+import SQLTools.IDBMain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
@@ -17,11 +18,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
-public class AESServer extends AbstractServer {
+public class AESServer extends AbstractServer implements IAESServer{
 	
 	
 	private DBMain sqlcon;
-	private HashMap<User,ConnectionToClient> connectedUsers;
+	private HashMap<User,IConnectionToClient> connectedUsers;
 	
 	/**
 	 * easy acces to active exams
@@ -106,6 +107,13 @@ public class AESServer extends AbstractServer {
 	}
 
 	/**
+	 * this constructor is built for Testing envirenment DO NOT USE THIS FOR FUNCTIONAL SERVER
+	 */
+	public AESServer() {
+		super();
+		connectedUsers = new HashMap<>();
+	}
+	/**
 	 * this function will create the server folders to manage students exams and hold all console logs and error logs as well as exams created by teachers for manual exams
 	 */
 	private void setupServerFolders() {
@@ -147,7 +155,7 @@ public class AESServer extends AbstractServer {
 	 * @param msg - an Object that must be instanceof iMessage
 	 * @param client - the client who sent this msg
 	 */
-	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+	@Override public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("Got msg from:" + client + "message: " + msg);
 		if(!(msg instanceof iMessage)) {
 			System.out.println("msg from client is not of type iMessage!");
@@ -165,7 +173,7 @@ public class AESServer extends AbstractServer {
 				disconnectClient(client,o);
 				break;
 			case "login":
-				loginFunctionality(client, o);
+				loginFunctionality(client, sqlcon ,o);
 				break;
 			case "getTeachersFields":
 				getTeacherFields(client,o);
@@ -938,27 +946,27 @@ public class AESServer extends AbstractServer {
 		client.sendToClient(im);
 	}
 
-	private void loginFunctionality(ConnectionToClient client,Object o) throws IOException {
+	public void loginFunctionality(IConnectionToClient client,IDBMain sqlcon, Object o) throws IOException {
 		User user = (User) o;
 		iMessage result=null;
 		String login = "login";
-		user = sqlcon.UserLogIn((User)o);
-		if (user==null) {
+		User userfromDB = sqlcon.getUserByUserName(user.getUserName());
+		if (userfromDB==null || !user.getPassword().equals(userfromDB.getPassword())) {
 			//user login authentication failed
 			result = new iMessage("loginFailedAuthentication",null);
 		} else {
-			if (user instanceof Teacher) {
-				result = new iMessage(login,new Teacher((Teacher) user));
-			} else if(user instanceof Principle) {
-				result = new iMessage(login,new Principle((Principle) user));
-			} else if(user instanceof Student) {
-				result = new iMessage(login,new Student((Student) user));
+			if (userfromDB instanceof Teacher) {
+				result = new iMessage(login,new Teacher((Teacher) userfromDB));
+			} else if(userfromDB instanceof Principal) {
+				result = new iMessage(login,new Principal((Principal) userfromDB));
+			} else if(userfromDB instanceof Student) {
+				result = new iMessage(login,new Student((Student) userfromDB));
 			}
-			if (connectedUsers.get(user)!=null && connectedUsers.get(user).isAlive()) {
+			if (connectedUsers.get(userfromDB)!=null && connectedUsers.get(userfromDB).isAlive()) {
 				//sending back same user to indicate user is already logged in!
 				result = new iMessage("loggedInAlready",null);
 			} else {
-				connectedUsers.put(user, client);
+				connectedUsers.put(userfromDB, client);
 			}
 		}
 		client.sendToClient(result);
@@ -986,7 +994,7 @@ public class AESServer extends AbstractServer {
 			if (activeExams.get(tc.getActiveExam().getCode())!=null) {
 				timeChangeRequests.put(tc.getActiveExam(), tc);
 				for(User u: connectedUsers.keySet()) {
-					if(u instanceof Principle) {
+					if(u instanceof Principal) {
 						connectedUsers.get(u).sendToClient(new iMessage("newTimeChangeRequest", tc));
 						break;
 					}
