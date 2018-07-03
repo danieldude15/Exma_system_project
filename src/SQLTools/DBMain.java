@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class DBMain {
+public class DBMain implements IDBMain{
 	private String host;
 	private String user;
 	private String pass;
@@ -225,10 +225,10 @@ public class DBMain {
 
 	// #########################  USER HANDELING  ###########################################
 	
-	public User UserLogIn(User u) {
+	public User getUserByUserName(String userName) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(login);
-			prst.setString(1,u.getUserName());
+			prst.setString(1,userName);
 			System.out.println("SQL:"+prst);
 			if (prst.execute()) {
 				ResultSet rs = prst.getResultSet();
@@ -238,14 +238,13 @@ public class DBMain {
 					String password = rs.getString(3);
 					String fullname = rs.getString(4);
 					int type = rs.getInt(5);
-					if (!password.equals(u.getPassword())) return null;
 					switch(type) {
 					case 0:
 						return new Student(userid,username,password,fullname);
 					case 1:
 						return new Teacher(userid,username,password,fullname);
 					case 2:
-						return new Principle(userid,username,password,fullname);
+						return new Principal(userid,username,password,fullname);
 					}
 
 				}
@@ -262,7 +261,7 @@ public class DBMain {
 	 * @param id - ID of the user
 	 * @return	User of the specified ID
 	 */
-	public User getUser(int id) {
+	public User getUserById(int id) {
 		try {
 			PreparedStatement prst = conn.prepareStatement(getUserThroughID);
 			prst.setInt(1,id);
@@ -281,7 +280,7 @@ public class DBMain {
 						case 1:
 							return new Teacher(userid,username,password,fullname);
 						case 2:
-							return new Principle(userid,username,password,fullname);
+							return new Principal(userid,username,password,fullname);
 					}
 				}
 			}
@@ -315,7 +314,7 @@ public class DBMain {
 					else if (type==1)
 						result.add(new Teacher(userid,username,password,fullname));
 					else if (type==2)
-						result.add(new Principle(userid,username,password,fullname));
+						result.add(new Principal(userid,username,password,fullname));
 					else return null;
 				}
 			}
@@ -528,7 +527,7 @@ public class DBMain {
 			ArrayList<Teacher> result = new ArrayList<>();
 			while(rs.next()) {
 				int teacherid = rs.getInt(1);
-				result.add(((Teacher)getUser(teacherid)));
+				result.add(((Teacher)getUserById(teacherid)));
 			}
 			return result;
 		} catch (SQLException e) {
@@ -555,7 +554,7 @@ public class DBMain {
 				int teacherId = rs.getInt(5);
 				Course course = new Course(rs.getInt(4), getCourseName(rs.getInt(4),rs.getInt(3)), new Field(rs.getInt(3),getFieldName(rs.getInt(3))));
 				questions = getQuestionsInExam(Exam.examIdToString(examid,course.getId(),course.getField().getID()));
-				result.add(new Exam(examid, course, duration, (Teacher)getUser(teacherId), questions));
+				result.add(new Exam(examid, course, duration, (Teacher)getUserById(teacherId), questions));
 			}
 			return result;
 		} catch (SQLException e) {
@@ -589,7 +588,7 @@ public class DBMain {
 					int examid = rs.getInt(1);
 					int courseid = rs.getInt(2);
 					int fieldid = rs.getInt(3);
-					Teacher activator = (Teacher) getUser(rs.getInt(5));
+					Teacher activator = (Teacher) getUserById(rs.getInt(5));
 					String code = rs.getString(6);
 					int type = rs.getInt(7);
 					Date dayActivated = rs.getDate(8);
@@ -632,7 +631,7 @@ public class DBMain {
 					int examid = rs.getInt(1);
 					int courseid = rs.getInt(2);
 					int fieldid = rs.getInt(3);
-					Teacher activator = (Teacher) getUser(rs.getInt(5));
+					Teacher activator = (Teacher) getUserById(rs.getInt(5));
 					String code = rs.getString(6);
 					int type = rs.getInt(7);
 					Date dayActivated = rs.getDate(8);
@@ -729,7 +728,7 @@ public class DBMain {
 				int duration = rs.getInt(2);
 				Course course = new Course(rs.getInt(3), rs.getString(4), new Field(rs.getInt(5),rs.getString(6)));
 				questions = getQuestionsInExam(Exam.examIdToString(id,course.getId(),course.getField().getID()));
-				return new Exam(id, course, duration, (Teacher)getUser(rs.getInt(7)), questions);
+				return new Exam(id, course, duration, (Teacher)getUserById(rs.getInt(7)), questions);
 			}
 			return null;
 		} catch (SQLException e) {
@@ -1116,7 +1115,7 @@ public class DBMain {
 				int answerIndex = rs.getInt(7);
 				int fieldsid = rs.getInt(8);
 				String teacherId = rs.getString(9);
-				Question question = new Question(questionid,(Teacher)getUser(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getFieldName(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
+				Question question = new Question(questionid,(Teacher)getUserById(Integer.parseInt(teacherId)), questionString, answers, new Field(fieldsid,getFieldName(fieldsid)), answerIndex,getQuestionCourses(Question.questionIDToString(questionid, fieldsid)));
 				result.add(question);
 			}
 			return result;
