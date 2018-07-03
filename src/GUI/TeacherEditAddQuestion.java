@@ -17,7 +17,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
@@ -50,7 +49,7 @@ public class TeacherEditAddQuestion implements ControlledScreen {
 	@FXML Label answerError;
 	@FXML Label fieldError;
 	@FXML Label courseError;
-	@FXML TextArea questionString;
+	@FXML TextField questionString;
 	@FXML ToggleGroup answers;
 	@FXML RadioButton answer1;
 	@FXML RadioButton answer2;
@@ -73,10 +72,6 @@ public class TeacherEditAddQuestion implements ControlledScreen {
 		fields.setItems(list);
 		fields.getSelectionModel().clearSelection();
 		
-		if (question==null) {
-			backToMenu(null);
-		}
-		
 		if (type.equals(windowType.ADD)) {
 			questionID.setText("Add New Question");
 			questionString.setText("");
@@ -90,6 +85,10 @@ public class TeacherEditAddQuestion implements ControlledScreen {
 			if (answers.getSelectedToggle()!=null)
 				answers.getSelectedToggle().setSelected(false);
 		} else if (type.equals(windowType.EDIT)){
+			if (question==null) {
+				backToMenu(null);
+				return;
+			}
 			questionID.setText("Edit Question: " + question.questionIDToString());
 			questionString.setText(question.getQuestionString());
 			ta1.setText(question.getAnswer(1));
