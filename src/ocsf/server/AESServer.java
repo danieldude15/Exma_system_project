@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
-public class AESServer extends AbstractServer {
+public class AESServer extends AbstractServer implements IAESServer{
 	
 	
 	private DBMain sqlcon;
@@ -147,7 +147,7 @@ public class AESServer extends AbstractServer {
 	 * @param msg - an Object that must be instanceof iMessage
 	 * @param client - the client who sent this msg
 	 */
-	@Override protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+	@Override public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("Got msg from:" + client + "message: " + msg);
 		if(!(msg instanceof iMessage)) {
 			System.out.println("msg from client is not of type iMessage!");
