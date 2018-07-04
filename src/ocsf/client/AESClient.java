@@ -8,7 +8,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import logic.Globals;
-import logic.Principle;
+import logic.Principal;
 import logic.Student;
 import logic.Teacher;
 import logic.User;
@@ -20,7 +20,7 @@ import logic.iMessage;
  * @author Group-12
  *
  */
-public class AESClient extends AbstractClient{
+public class AESClient extends AbstractClient implements IAESClient{
 	/**
 	 * when signed in this "me" will hold the User information that is logged in
 	 */
@@ -49,7 +49,7 @@ public class AESClient extends AbstractClient{
 	 *
 	 * @param ServerMsg this will always be an iMessage type of object
 	 */
-	protected void handleMessageFromServer(Object ServerMsg){
+	public void handleMessageFromServer(Object ServerMsg){
 		this.msg = (iMessage) ServerMsg;
 		System.out.println("Got msg from Server:" + msg);
 		if(!(ServerMsg instanceof iMessage)) {
@@ -210,9 +210,9 @@ public class AESClient extends AbstractClient{
 		} else if (o instanceof Teacher) {
 			msg.setCommand("Teacher");
 			me = new Teacher((Teacher)o);
-		} else if(o instanceof Principle) {
+		} else if(o instanceof Principal) {
 			msg.setCommand("Principle");
-			me = new Principle((Principle)o);
+			me = new Principal((Principal)o);
 		} else if(o instanceof Student) {
 			msg.setCommand("Student");
 			me = new Student((Student)o);
@@ -266,5 +266,7 @@ public class AESClient extends AbstractClient{
 		msg.setCommand("AlreadyLoggedIn");
 		me = null;
 	}
+
+
 	
 }

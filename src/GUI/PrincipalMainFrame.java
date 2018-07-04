@@ -19,7 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import logic.Globals;
-import logic.Principle;
+import logic.Principal;
 import logic.TimeChangeRequest;
 import ocsf.client.ClientGlobals;
 
@@ -86,7 +86,7 @@ public class PrincipalMainFrame implements ControlledScreen {
 
         refreshRequestListView();
         
-        Principle p = (Principle) ClientGlobals.client.getUser();
+        Principal p = (Principal) ClientGlobals.client.getUser();
 
         welcome.setText("Welcome: " + p.getName());
         username.setText("UserName: " + p.getUserName());

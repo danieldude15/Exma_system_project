@@ -3,7 +3,7 @@ package logic;
 import java.io.Serializable;
 
 
-public class Principle extends User implements Serializable{
+public class Principal extends User implements Serializable{
 
 	
 	/**
@@ -18,7 +18,7 @@ public class Principle extends User implements Serializable{
 	 * @param Password - used to authenticat user credentials
 	 * @param Name - full name string
 	 */
-	public Principle(int id,String userName, String Password, String Name) {
+	public Principal(int id,String userName, String Password, String Name) {
 		super(id,userName, Password, Name);
 	}
 	
@@ -26,7 +26,7 @@ public class Principle extends User implements Serializable{
 	 * copy constructor;
 	 * @param p - the principle we want to copy
 	 */
-	public Principle(Principle p) {
+	public Principal(Principal p) {
 		super(p.getID(),new String(p.getUserName()),new String(p.getPassword()),new String(p.getName()));
 	}
 	

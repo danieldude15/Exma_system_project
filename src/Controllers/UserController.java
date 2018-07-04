@@ -2,6 +2,7 @@ package Controllers;
 
 import logic.*;
 import ocsf.client.ClientGlobals;
+import ocsf.client.IAESClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 @SuppressWarnings("unchecked")
 public class UserController {
 
-	public static iMessage login(String username, String password) {
+	public static iMessage login(String username, String password, IAESClient client) {
 		User u = new User(0,username,password,null);
 		iMessage msg = new iMessage("login",u);
 		try {
-			ClientGlobals.client.sendToServer(msg);
-			iMessage message = ClientGlobals.client.getResponseFromServer();
+			client.sendToServer(msg);
+			iMessage message = client.getResponseFromServer();
 			String usertype = message.getCommand();
 			u = (User)message.getObj();
 			switch (usertype) {
