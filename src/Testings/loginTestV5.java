@@ -14,17 +14,17 @@ import logic.Globals;
 import logic.User;
 import logic.iMessage;
 
-class loginTest {
+class loginTestV5 {
 
-	static AESClientMock client;
-	static AESServerMock server;
+	static AESClientStub client;
+	static AESServerStub server;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
         Globals.mainContainer = new ScreensController();
 
-        client = new AESClientMock();
-        server = new AESServerMock(client);
+        client = new AESClientStub();
+        server = new AESServerStub(client);
         client.setMockServer(server);
 
 	}

@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import ocsf.server.IConnectionToClient;
 
-public class ConnectionToClientMock implements IConnectionToClient {
+public class ConnectionToClientStub implements IConnectionToClient {
 
-	AESClientMock clientMock;
+	AESClientStub clientMock;
 	
-	public ConnectionToClientMock(AESClientMock clientMock) {
+	public ConnectionToClientStub(AESClientStub clientMock) {
 		this.clientMock=clientMock;
 	}
 

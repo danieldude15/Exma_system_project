@@ -6,11 +6,11 @@ import logic.iMessage;
 import ocsf.client.AESClient;
 import ocsf.client.IAESClient;
 
-public class AESClientMock implements IAESClient{
+public class AESClientStub implements IAESClient{
 
-	AESServerMock mockServer;
+	AESServerStub mockServer;
 	iMessage message;
-	public AESClientMock() {
+	public AESClientStub() {
 	}
 
 	@Override
@@ -27,11 +27,11 @@ public class AESClientMock implements IAESClient{
 		
 	}
 
-	public AESServerMock getMockServer() {
+	public AESServerStub getMockServer() {
 		return mockServer;
 	}
 
-	public void setMockServer(AESServerMock mockServer) {
+	public void setMockServer(AESServerStub mockServer) {
 		this.mockServer = mockServer;
 	}
 
