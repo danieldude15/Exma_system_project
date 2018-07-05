@@ -1,12 +1,13 @@
 package Testings;
 
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import Controllers.UserController;
 import GUI.ScreensController;
@@ -14,14 +15,14 @@ import logic.Globals;
 import logic.User;
 import logic.iMessage;
 
-class loginTest {
+public class LoginTesting {
 
 	static AESClientMock client;
 	static AESServerMock server;
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-
-        Globals.mainContainer = new ScreensController();
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		Globals.mainContainer = new ScreensController();
 
         client = new AESClientMock();
         server = new AESServerMock(client);
@@ -29,21 +30,20 @@ class loginTest {
 
 	}
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
-	@BeforeEach
-	void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 	}
 
-	@AfterEach
-	void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 	}
 
-
-    @Test
-    void loginPrincipleSuccessfulTest() {
+	@Test
+    public void loginPrincipleSuccessfulTest() {
 
         String username = "Principal_test";
         String password = "1234";
@@ -58,7 +58,7 @@ class loginTest {
     }
 
     @Test
-    void loginTeacherSuccessfulTest() {
+    public void loginTeacherSuccessfulTest() {
 
         String username = "Teacher_test";
         String password = "1234";
@@ -73,7 +73,7 @@ class loginTest {
     }
 
     @Test
-    void loginStudentSuccessfulTest() {
+    public void loginStudentSuccessfulTest() {
 
         String username = "Student_test";
         String password = "1234";
@@ -88,7 +88,7 @@ class loginTest {
     }
 
     @Test
-    void loginPrinciplePasswordIncorrectTest(){
+    public void loginPrinciplePasswordIncorrectTest(){
 
         String username = "Principal_test";
         String password = "123";
@@ -102,7 +102,7 @@ class loginTest {
     }
 
     @Test
-    void loginPrincipleUserNameIncorrectTest(){
+    public void loginPrincipleUserNameIncorrectTest(){
 
         String username = "Principal_";
         String password = "1234";
@@ -116,7 +116,7 @@ class loginTest {
     }
 
     @Test
-    void loginPrincipleAgainFailsTest() {
+    public void loginPrincipleAgainFailsTest() {
 
         String username = "Principal_test";
         String password = "1234";
@@ -131,7 +131,7 @@ class loginTest {
     }
 
     @Test
-    void loginEmptyFieldsTest() {
+    public void loginEmptyFieldsTest() {
 
         String username = "";
         String password = "";
@@ -143,5 +143,7 @@ class loginTest {
             assertEquals(expected.toString(),messageFailed.toString());
         }
     }
+	
+	
 
 }
