@@ -1,21 +1,19 @@
 package Testings;
 
 
-import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
 
 import logic.iMessage;
-import ocsf.client.AESClient;
 import ocsf.server.AESServer;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.IAESServer;
 
-public class AESServerMock implements IAESServer {
+public class AESServerStub implements IAESServer {
 
-	AESClientMock clientMock;
+	AESClientStub clientMock;
 	AESServer realServer;
 	
-	public AESServerMock(AESClientMock cm) {
+	public AESServerStub(AESClientStub cm) {
 		clientMock = cm;
 		realServer = new AESServer();
 	}
@@ -31,14 +29,14 @@ public class AESServerMock implements IAESServer {
 		String cmd = new String(m.getCommand());
 		Object o = m.getObj();
 		switch(cmd) {
-		case "login":
-			try {
-				realServer.loginFunctionality(new ConnectionToClientMock(clientMock),new DBMainMock(), o);
-			} catch (IOException e) {
-				// this should never catch because we are not really sending IO to anyone.
-				// this is a test.
-			}
-			break;
+			case "login":
+				try {
+					realServer.loginFunctionality(new ConnectionToClientStub(clientMock),new DBMainStub(), o);
+				} catch (IOException e) {
+					// this should never catch because we are not really sending IO to anyone.
+					// this is a test.
+				}
+				break;
 		} 
 	}
 
