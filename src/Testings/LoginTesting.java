@@ -1,7 +1,6 @@
 package Testings;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
