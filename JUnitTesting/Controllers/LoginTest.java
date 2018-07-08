@@ -51,7 +51,9 @@ class LoginTest {
         ClientGlobals.client.closeConnection();
         ServerGlobals.server.close();
     }
-
+    /**
+     * Login prinicpal test succeeded.
+     */
     @Test
     void loginPrincipleSuccessfulTest() {
 
@@ -65,7 +67,9 @@ class LoginTest {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login teacher test succeeded.
+     */
     @Test
     void loginTeacherSuccessfulTest() {
 
@@ -79,7 +83,9 @@ class LoginTest {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login student test succeeded.
+     */
     @Test
     void loginStudentSuccessfulTest() {
 
@@ -93,7 +99,9 @@ class LoginTest {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login principal failed because of an incorect password.
+     */
     @Test
     void loginPrinciplePasswordIncorrectTest(){
 
@@ -107,7 +115,9 @@ class LoginTest {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login principal failed because of incorect username(user does not exist).
+     */
     @Test
     void loginPrincipleUserNameIncorrectTest(){
 
@@ -121,7 +131,9 @@ class LoginTest {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login in succeed on first try, but has been failed on second try.
+     */
     @Test
     void loginPrincipleAgainFailsTest() {
 
@@ -136,7 +148,9 @@ class LoginTest {
             assertEquals(expected.toString(),messageFailed.toString());
         }
     }
-
+    /**
+     * Login failed because that there are an empty fields on username and password textfields.
+     */
     @Test
     void loginEmptyFieldsTest() {
 

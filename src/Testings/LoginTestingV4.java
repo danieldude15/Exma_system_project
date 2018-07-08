@@ -40,7 +40,9 @@ public class LoginTestingV4 {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	/**
+	 * Login principal test succeeded.
+	 */
 	@Test
     public void loginPrincipleSuccessfulTest() {
 
@@ -55,7 +57,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+	/**
+	 * Login teacher test succeeded.
+	 */
     @Test
     public void loginTeacherSuccessfulTest() {
 
@@ -70,7 +74,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login student test succeeded.
+     */
     @Test
     public void loginStudentSuccessfulTest() {
 
@@ -85,7 +91,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login principle test has been failed because of an incorrect password.
+     */
     @Test
     public void loginPrinciplePasswordIncorrectTest(){
 
@@ -99,7 +107,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login principle test has been failed because of an incorrect username(user does not exist).
+     */
     @Test
     public void loginPrincipleUserNameIncorrectTest(){
 
@@ -113,7 +123,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),message.toString());
         }
     }
-
+    /**
+     * Login in succeed on first try, but has been failed on second try.
+     */
     @Test
     public void loginPrincipleAgainFailsTest() {
 
@@ -128,7 +140,9 @@ public class LoginTestingV4 {
             assertEquals(expected.toString(),messageFailed.toString());
         }
     }
-
+    /**
+     * Login failed because that there are an empty fields on username and password textfields.
+     */
     @Test
     public void loginEmptyFieldsTest() {
 
