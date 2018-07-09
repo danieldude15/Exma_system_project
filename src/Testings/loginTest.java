@@ -26,26 +26,23 @@ class loginTest {
 	static AESServerMock server;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-
+		//preventing null pointer exception when trying to change screens
         Globals.mainContainer = new ScreensController();
-
-        client = new AESClientMock();
-        server = new AESServerMock(client);
-        client.setMockServer(server);
-
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
+	static void tearDownAfterClass() throws Exception {}
 
 	@BeforeEach
 	void setUp() throws Exception {
+		//for each test we want an independent client and server
+		client = new AESClientMock();
+        server = new AESServerMock(client);
+        client.setMockServer(server);
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
-	}
+	void tearDown() throws Exception {}
 
 
     @Test
