@@ -21,25 +21,24 @@ public class LoginTestingV4 {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		//preventing null pointer exception when a user logs in and should see his main screen.
 		Globals.mainContainer = new ScreensController();
-
-        client = new AESClientStub();
-        server = new AESServerStub(client);
-        client.setMockServer(server);
-
 	}
 
 	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	public static void tearDownAfterClass() throws Exception {}
 
 	@Before
 	public void setUp() throws Exception {
+		//making sure no test depends on another. creating different stub client and server for each test
+		 client = new AESClientStub();
+	     server = new AESServerStub(client);
+	     client.setMockServer(server);
 	}
 
 	@After
-	public void tearDown() throws Exception {
-	}
+	public void tearDown() throws Exception {}
+	
 	/**
 	 * Login principal test succeeded.
 	 */
