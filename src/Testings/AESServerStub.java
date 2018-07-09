@@ -13,11 +13,11 @@ import ocsf.server.IAESServer;
  */
 public class AESServerStub implements IAESServer {
 
-	AESClientStub clientMock;
+	AESClientStub clientStub;
 	AESServer realServer;
 	
 	public AESServerStub(AESClientStub cm) {
-		clientMock = cm;
+		clientStub = cm;
 		realServer = new AESServer();
 	}
 	/**
@@ -37,7 +37,7 @@ public class AESServerStub implements IAESServer {
 			case "login":
 				try {
 					//Here we are using in the real login functionality so we can test login(avoiding from writing the same code twice) .
-					realServer.loginFunctionality(new ConnectionToClientStub(clientMock),new DBMainStub(), o);
+					realServer.loginFunctionality(new ConnectionToClientStub(clientStub),new DBMainStub(), o);
 				} catch (IOException e) {
 					// this should never catch because we are not really sending IO to anyone.
 					// this is a test.
