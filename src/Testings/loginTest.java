@@ -1,8 +1,6 @@
 package Testings;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -15,10 +13,6 @@ import GUI.ScreensController;
 import logic.Globals;
 import logic.User;
 import logic.iMessage;
-import ocsf.client.AESClient;
-import ocsf.client.ClientGlobals;
-import ocsf.server.AESServer;
-import ocsf.server.ServerGlobals;
 
 class loginTest {
 
